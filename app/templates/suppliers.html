@@ -227,6 +227,9 @@
 
   {% include 'footer.html' %}
 
+  {% include 'partials/image_lightbox.html' %}
+  <script src="{% static 'js/lightbox.js' %}"></script>
+
   <script>
     function openSupplierModal(supplierId) {
       // Fetch supplier details using AJAX or render them directly
