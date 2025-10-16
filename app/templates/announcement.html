@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CIAnext - Announcements</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="bg-white">
+    
+        {% include 'navbar.html' %}
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white py-24">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-4xl mx-auto">
+                <i class="fas fa-bullhorn text-6xl mb-6 opacity-90"></i>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                    Important Announcements
+                </h1>
+                <p class="text-xl md:text-2xl opacity-90 leading-relaxed">
+                    Stay updated with the latest news, offers, and important updates from CIA MachineryHub
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-wrap gap-4 items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Announcements</h2>
+                    
+                    <div class="flex flex-wrap gap-3">
+                        <!-- Filter Dropdown -->
+                        <div class="relative">
+                            <select id="filterSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                                <option value="all" {% if current_filter == 'all' %}selected{% endif %}>All Announcements</option>
+                                <option value="critical" {% if current_filter == 'critical' %}selected{% endif %}>Critical Only</option>
+                              <!--  <option value="latest" {% if current_filter == 'latest' %}selected{% endif %}>Latest</option> -->
+                            </select>
+                        </div>
+                        
+                        <!-- Show Inactive Toggle -->
+                        <label class="flex items-center space-x-2 cursor-pointer">
+                            <input type="checkbox" id="showInactive" class="hidden" {% if show_inactive %}checked{% endif %}>
+                            <div class="w-10 h-6 bg-gray-300 rounded-full relative">
+                                <div class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 transition-transform"></div>
+                            </div>
+                            <span class="text-sm text-gray-700">Show Inactive</span>
+                        </label>
+                        
+                        <!-- Clear Filters Button -->
+                        <button id="clearFilters" class="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg transition">
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Announcements Section -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                {% if critical_announcement %}
+                <!-- Latest Announcement -->
+                <div class="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl p-8 mb-8 shadow-2xl">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center mb-3">
+                                <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm font-semibold mr-3">URGENT</span>
+                                <span class="text-white/80 text-sm">{{ critical_announcement.date|date:"F d, Y" }}</span>
+                            </div>
+                            <h2 class="text-2xl font-bold mb-3">{{ critical_announcement.title }}</h2>
+                            <p class="text-lg leading-relaxed mb-4">
+                                {{ critical_announcement.content|truncatewords:50 }}
+                            </p>
+                            <a href="{% url 'announcement_detail' critical_announcement.id %}" class="inline-flex items-center text-white hover:text-yellow-200 transition">
+                                Read More <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Recent Announcements -->
+                <div class="grid gap-6">
+                    {% for announcement in announcements %}
+                    {% if not announcement.is_critical or announcement != critical_announcement %}
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 {% if not announcement.is_active %}border-gray-400 opacity-70{% else %}border-blue-500{% endif %}">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mr-4">
+                                <div class="w-10 h-10 {% if not announcement.is_active %}bg-gray-200{% else %}bg-blue-100{% endif %} rounded-full flex items-center justify-center">
+                                    <i class="fas fa-bullhorn {% if not announcement.is_active %}text-gray-500{% else %}text-blue-600{% endif %}"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    {% if announcement.is_critical %}
+                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold mr-3">URGENT</span>
+                                    {% else %}
+                                    <span class="{% if not announcement.is_active %}bg-gray-200 text-gray-600{% else %}bg-blue-100 text-blue-800{% endif %} px-3 py-1 rounded-full text-sm font-semibold mr-3">
+                                        {% if not announcement.is_active %}INACTIVE{% else %}ANNOUNCEMENT{% endif %}
+                                    </span>
+                                    {% endif %}
+                                    <span class="text-gray-500 text-sm">{{ announcement.date|date:"F d, Y" }}</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">{{ announcement.title }}</h3>
+                                <p class="text-gray-600 leading-relaxed mb-3">
+                                    {{ announcement.content|truncatewords:30 }}
+                                </p>
+                                <a href="{% url 'announcement_detail' announcement.id %}" class="text-blue-600 hover:text-blue-800 transition font-medium">
+                                    Read More →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% empty %}
+                    <div class="text-center py-8">
+                        <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600 text-lg">No announcements available at the moment.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Newsletter Signup -->
+                <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-2xl p-8 mt-12">
+                    <div class="text-center">
+                        <i class="fas fa-envelope text-4xl mb-4 text-yellow-400"></i>
+                        <h2 class="text-2xl font-bold mb-4">Stay Updated</h2>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            Subscribe to our newsletter to receive the latest announcements, deals, and industry news directly in your inbox.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
+                            <input type="email" placeholder="Enter your email address" class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                            <button class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-lg font-semibold transition">
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterSelect = document.getElementById('filterSelect');
+            const showInactive = document.getElementById('showInactive');
+            const clearFilters = document.getElementById('clearFilters');
+            const toggleSwitch = document.querySelector('.w-10.h-6');
+
+            // Toggle switch functionality
+            if (showInactive && toggleSwitch) {
+                showInactive.addEventListener('change', updateFilters);
+                
+                // Style the toggle based on initial state
+                if (showInactive.checked) {
+                    toggleSwitch.style.backgroundColor = '#10B981';
+                    toggleSwitch.querySelector('div').style.transform = 'translateX(16px)';
+                }
+
+                // Click handler for the toggle switch
+                toggleSwitch.parentElement.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showInactive.checked = !showInactive.checked;
+                    updateFilters();
+                });
+            }
+
+            // Filter select change
+            if (filterSelect) {
+                filterSelect.addEventListener('change', updateFilters);
+            }
+
+            // Clear filters button
+            if (clearFilters) {
+                clearFilters.addEventListener('click', function() {
+                    filterSelect.value = 'all';
+                    if (showInactive) {
+                        showInactive.checked = false;
+                        toggleSwitch.style.backgroundColor = '#D1D5DB';
+                        toggleSwitch.querySelector('div').style.transform = 'translateX(0)';
+                    }
+                    updateFilters();
+                });
+            }
+
+            function updateFilters() {
+                const params = new URLSearchParams();
+                
+                // Add filter parameter
+                if (filterSelect && filterSelect.value !== 'all') {
+                    params.set('filter', filterSelect.value);
+                }
+                
+                // Add show_inactive parameter
+                if (showInactive && showInactive.checked) {
+                    params.set('show_inactive', 'true');
+                }
+
+                // Update toggle switch appearance
+                if (showInactive && toggleSwitch) {
+                    if (showInactive.checked) {
+                        toggleSwitch.style.backgroundColor = '#10B981';
+                        toggleSwitch.querySelector('div').style.transform = 'translateX(16px)';
+                    } else {
+                        toggleSwitch.style.backgroundColor = '#D1D5DB';
+                        toggleSwitch.querySelector('div').style.transform = 'translateX(0)';
+                    }
+                }
+
+                // Redirect with new parameters
+                const queryString = params.toString();
+                window.location.href = queryString ? `?${queryString}` : window.location.pathname;
+            }
+        });
+    </script>
+</body>
+</html>

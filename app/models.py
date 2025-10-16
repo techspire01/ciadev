@@ -1,0 +1,164 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.conf import settings
+from django.utils import timezone
+import datetime
+from django.utils.translation import gettext_lazy as _
+
+# Create your models here.
+class Announcement(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+    is_critical = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    referral_url = models.TextField(blank=True, null=True)
+    image1 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
+    image2 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
+    image3 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-date']
+    
+    def __str__(self):
+        return f"{self.title} - {self.date.strftime('%Y-%m-%d')}"
+
+class Supplier(models.Model):
+    name = models.CharField(max_length=255, unique=True)  # enforce unique name  
+    founder_name = models.CharField(max_length=255, blank=True, null=True)
+
+    website_url = models.TextField(blank=True, null=True)
+    logo_url = models.TextField(blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
+    category = models.CharField(max_length=255, blank=True, null=True)
+    sub_category1 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category2 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category3 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category4 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category5 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category6 = models.CharField(max_length=255, blank=True, null=True)
+    product_image1_url = models.TextField(blank=True, null=True)
+    product_image2_url = models.TextField(blank=True, null=True)
+    product_image3_url = models.TextField(blank=True, null=True)
+    product_image4_url = models.TextField(blank=True, null=True)
+    product_image5_url = models.TextField(blank=True, null=True)
+    product_image6_url = models.TextField(blank=True, null=True)
+    product_image7_url = models.TextField(blank=True, null=True)
+    product_image8_url = models.TextField(blank=True, null=True)
+    product_image9_url = models.TextField(blank=True, null=True)
+    product_image10_url = models.TextField(blank=True, null=True)
+    email = models.EmailField(max_length=255, blank=True, null=True)
+    contact_person_name = models.CharField(max_length=255, blank=True, null=True)
+    person_image_url = models.TextField(blank=True, null=True)
+
+    # Product fields
+    product1 = models.CharField(max_length=255, blank=True, null=True)
+    product2 = models.CharField(max_length=255, blank=True, null=True)
+    product3 = models.CharField(max_length=255, blank=True, null=True)
+    product4 = models.CharField(max_length=255, blank=True, null=True)
+    product5 = models.CharField(max_length=255, blank=True, null=True)
+    product6 = models.CharField(max_length=255, blank=True, null=True)
+    product7 = models.CharField(max_length=255, blank=True, null=True)
+    product8 = models.CharField(max_length=255, blank=True, null=True)
+    product9 = models.CharField(max_length=255, blank=True, null=True)
+    product10 = models.CharField(max_length=255, blank=True, null=True)
+
+    # Split address fields
+    door_number = models.CharField(max_length=50, blank=True, null=True)
+    street = models.CharField(max_length=255, blank=True, null=True)
+    area = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    pin_code = models.CharField(max_length=6, blank=True, null=True)
+
+    # Expanded business details
+    business_description = models.TextField(blank=True, null=True)
+
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+
+    # New fields
+    gstno = models.CharField(max_length=15, blank=True, null=True)
+    instagram = models.TextField(blank=True, null=True)
+    facebook = models.TextField(blank=True, null=True)
+    total_employees = models.IntegerField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    cia_id = models.PositiveIntegerField(unique=True, blank=True, null=True)  # CIA serial id
+
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.cia_id:
+            # Assign next available cia_id (serialized, no gaps)
+            existing_ids = Supplier.objects.exclude(pk=self.pk).order_by('cia_id').values_list('cia_id', flat=True)
+            next_id = 1
+            for eid in existing_ids:
+                if eid != next_id:
+                    break
+                next_id += 1
+            self.cia_id = next_id
+        super().save(*args, **kwargs)
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        return self.create_user(email, password, **extra_fields)
+
+class CustomUser(AbstractUser):
+    username = None
+    email = models.EmailField(_('email address'), unique=True)
+    
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        swappable = 'AUTH_USER_MODEL'
+
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        return timezone.now() < self.created_at + datetime.timedelta(minutes=10)
+
+class PhotoGallery(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to="photogallery/images/", blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-uploaded_at']
+
+    def __str__(self):
+        return self.title or f"Photo {self.id}"
+
+class IndexHover(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    caption = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to="index_hover/images/", blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title

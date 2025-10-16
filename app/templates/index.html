@@ -1,0 +1,381 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CIAnext - Coimbatore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="bg-white">
+
+  {% include 'navbar.html' %}
+
+  <section class="w-full relative px-0 py-0 shadow-lg shadow-black/30" style="height: calc(70vh - 2cm);">
+    <!-- Dimming Overlay with Caption -->
+    <div class="absolute inset-0 z-20 rounded-xl flex items-center justify-center pointer-events-none" style="background-color: rgba(136, 178, 233, 0.2);">
+      <div class="text-center text-white p-4 bg-black/50 rounded-lg backdrop-blur-sm max-w-sm">
+        <h2 class="text-xl md:text-2xl font-bold mb-2 text-yellow-100">Discover Industrial Excellence</h2>
+        <p class="text-sm md:text-base opacity-90 mb-3">Explore our diverse industrial sectors</p>
+        <button id="browseBtn" class="bg-yellow-400 hover:bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold transition-all duration-300 pointer-events-auto text-sm">
+          Browse Catalog
+        </button>
+      </div>
+    </div>
+
+    <div id="heroCarousel" class="grid grid-cols-7 grid-rows-2 gap-2.5 h-full w-full transition-all duration-200 ease-in-out relative z-10">
+      <!-- Container 1 - Large hero (spans 3x2) -->
+      <div class="col-span-3 row-span-2 rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
+        <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
+        <div class="absolute bottom-8 left-8 text-white">
+          <h3 class="text-2xl font-bold mb-2">Industrial Excellence</h3>
+          <p class="text-base opacity-90">Connecting industries and fostering growth in Coimbatore's manufacturing sector</p>
+        </div>
+      </div>
+
+      <!-- Container 2 - Medium (spans 2x1) -->
+      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+        <img src="https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg" alt="Electrical Power Equipment" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <h4 class="text-lg font-bold">Electrical</h4>
+          <p class="text-sm opacity-80">Power solutions & equipment</p>
+        </div>
+      </div>
+
+      <!-- Container 3 - Small (spans 2x1) -->
+      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+        <img src="https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <h4 class="text-lg font-bold">Plastic</h4>
+          <p class="text-sm opacity-80">Manufacturing & molding</p>
+        </div>
+      </div>
+
+      <!-- Container 4 - Medium tall (spans 2x1) -->
+      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+        <img src="https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg" alt="Textile Manufacturing" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <h4 class="text-lg font-bold">Textile</h4>
+          <p class="text-sm opacity-80">Fabric & garment industry</p>
+        </div>
+      </div>
+
+      <!-- Container 5 - Small (spans 2x1) -->
+      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+        <img src="https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg" alt="Automation Equipment" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
+        <div class="absolute bottom-4 left-4 text-white">
+          <h4 class="text-lg font-bold">Automation</h4>
+          <p class="text-sm opacity-80">Smart manufacturing</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel Indicators -->
+    <div class="flex justify-center mt-8 space-x-2">
+      <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="0"></button>
+      <button class="carousel-dot active w-3 h-3 rounded-full bg-yellow-500 transition-all duration-300 scale-125 shadow-lg shadow-yellow-500/50" data-slide="1"></button>
+      <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="2"></button>
+    </div>
+  </section>
+
+    <!-- Categories Section -->
+    <section class="py-12 max-w-[1081px] mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">
+          Browse Industrial Categories
+        </h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Explore our diverse manufacturing and industrial sectors in Coimbatore
+        </p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="categories">
+        {% for category in categories %}
+          <a
+            href="{% url 'suppliers' %}?category={{ category|urlencode }}"
+            class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-md p-6 text-center card-hover group hover:shadow-xl transition-all duration-300"
+          >
+            <div
+              class="category-icon-circle w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300"
+            >
+              <span class="text-2xl font-bold text-white">{{ category|slice:":1"|upper }}</span>
+            </div>
+            <h3 class="font-semibold text-lg mb-1 text-gray-800">{{ category }}</h3>
+            <p class="text-gray-600 text-sm">{{ category_counts|get_item:category }}+ Companies</p>
+          </a>
+        {% endfor %}
+      </div>
+      <!-- View More Button -->
+      <div class="text-center mt-8">
+        <a
+          href="{% url 'category' %}"
+          class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-semibold px-8 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          View All Categories <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+  <!-- Featured Suppliers -->
+  <section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold mb-4 text-gray-800">
+          Featured Member Companies
+        </h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+          Innovative companies and businesses that are part of our association
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for supplier in featured_suppliers %}
+        <div class="supplier-card bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+          <!-- Image Section -->
+          <div class="relative h-48 flex-shrink-0">
+            {% if supplier.image_url %}
+              <img src="{{ supplier.image_url }}" alt="{{ supplier.name }}" class="w-full h-full object-cover"
+                   onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-image').style.display='flex';" />
+              <div class="fallback-image w-full h-full bg-gradient-to-br from-blue-500 to-blue-700 items-center justify-center" style="display: none;">
+                <span class="text-white text-4xl font-bold">{{ supplier.name|slice:":2"|upper }}</span>
+              </div>
+            {% elif supplier.logo_url %}
+              <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" class="w-full h-full object-contain bg-gray-50 p-4"
+                   onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-image').style.display='flex';" />
+              <div class="fallback-image w-full h-full bg-gradient-to-br from-green-500 to-green-700 items-center justify-center" style="display: none;">
+                <span class="text-white text-4xl font-bold">{{ supplier.name|slice:":2"|upper }}</span>
+              </div>
+            {% else %}
+              <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-700 flex items-center justify-center">
+                <div class="text-center">
+                  <i class="fas fa-building text-white text-3xl mb-2"></i>
+                  <span class="text-white text-2xl font-bold block">{{ supplier.name|slice:":2"|upper }}</span>
+                </div>
+              </div>
+            {% endif %}
+            <!-- Category Badge -->
+            <div class="absolute top-3 right-3">
+              <span class="bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg">
+                {{ supplier.category|default:"General" }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Content Section -->
+          <div class="p-6 flex-grow flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center mb-4">
+              {% if supplier.logo_url %}
+                <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" class="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                     onerror="this.style.display='none'; this.parentNode.querySelector('.logo-fallback').style.display='flex';" />
+                <div class="logo-fallback w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0" style="display: none;">
+                  {{ supplier.name|slice:":2"|upper }}
+                </div>
+              {% else %}
+                <div class="w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  {{ supplier.name|slice:":2"|upper }}
+                </div>
+              {% endif %}
+              <div class="ml-4 min-w-0 flex-grow">
+                <h3 class="font-bold text-lg text-blue-600 hover:text-blue-800 cursor-pointer transition truncate">
+                  {{ supplier.name }}
+                </h3>
+                <div class="flex items-center mt-1">
+                  <div class="flex text-yellow-400">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                  </div>
+                  <span class="text-gray-500 text-sm ml-2">4.5 (Reviews)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p class="text-gray-600 mb-4 text-sm line-clamp-3 flex-grow">
+              {{ supplier.business_description|default:"Innovative company providing quality solutions in the industrial sector." }}
+            </p>
+
+            <!-- Contact Info -->
+            <div class="space-y-2 mb-4">
+              <div class="flex items-start text-gray-500">
+                <i class="fas fa-map-marker-alt mr-2 text-blue-500 mt-1 flex-shrink-0"></i>
+                <span class="text-sm">
+                  {% if supplier.city and supplier.state %}
+                    {{ supplier.city }}, {{ supplier.state }}
+                  {% else %}
+                    Location information available
+                  {% endif %}
+                </span>
+              </div>
+              {% if supplier.email %}
+              <div class="flex items-center text-gray-500">
+                <i class="fas fa-envelope mr-2 text-blue-500 flex-shrink-0"></i>
+                <span class="text-sm truncate">{{ supplier.email }}</span>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Product Badge -->
+            {% if supplier.product1 %}
+            <div class="mb-4">
+              <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                {{ supplier.product1 }}
+              </span>
+            </div>
+            {% endif %}
+
+            <!-- Footer -->
+            <div class="flex justify-between items-center pt-4 border-t border-gray-200 mt-auto">
+              <div class="flex items-center text-blue-600 font-medium text-sm">
+                <i class="fas fa-phone-alt mr-2"></i>
+                <span>{{ supplier.phone_number|default:"Contact for details" }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="rounded -2l p-2 text-center mt-8">
+        <div class="inline-block bg-gradient-to-r from-blue-400 to-blue-500 text-white font-semibold px-8 py-3 rounded-full hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          <a href="{% url 'suppliers' %}">
+            View All Suppliers <i class="fas fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- About Us Section Above Footer -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Content Side -->
+          <div class="rounded-2xl p-10 text-center ">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+              Know About Us
+            </h2>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">
+              CIA MachineryHub is India's premier heavy equipment marketplace, connecting buyers and sellers since 2010. We've revolutionized how construction, mining, and industrial equipment is traded across the country.
+            </p>
+            <div class="space-y-4 mb-8">
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
+                  <i class="fas fa-shield-alt text-yellow-600 text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-800">Trusted Platform</h3>
+                  <p class="text-gray-600 text-sm">Over 15 years of reliable service</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <i class="fas fa-users text-blue-600 text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-800">Strong Community</h3>
+                  <p class="text-gray-600 text-sm">1,500+ verified suppliers nationwide</p>
+                </div>
+              </div>
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                  <i class="fas fa-tools text-green-600 text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="font-semibold text-gray-800">Wide Selection</h3>
+                  <p class="text-gray-600 text-sm">20,000+ machines across all categories</p>
+                </div>
+              </div>
+            </div>
+            <a href="{% url 'about' %}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+              Know About Us
+              <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+          </div>
+
+          <!-- Image Side -->
+          <div class="relative">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-4">
+                <img src="{% static 'images/resized_image_600x300 01.png' %}" alt="Heavy machinery warehouse" class="rounded-xl shadow-lg w-full h-48 object-cover hover:transform hover:scale-105 transition-transform duration-300 cursor-pointer lazy-load" loading="lazy">
+                <img src="{% static 'images/resized_image3_600x300 02.png' %}" alt="Construction equipment" class="rounded-xl shadow-lg w-full h-32 object-cover hover:transform hover:scale-105 transition-transform duration-300 cursor-pointer lazy-load" loading="lazy">
+              </div>
+              <div class="space-y-4 pt-8">
+                <img src="{% static 'images/resized_image4_600x300 03.png' %}" alt="Industrial equipment yard" class="rounded-xl shadow-lg w-full h-32 object-cover hover:transform hover:scale-105 transition-transform duration-300 cursor-pointer lazy-load" loading="lazy">
+                <img src="{% static 'images/resized_image_1920x1080.png' %}" alt="Machinery operations" class="rounded-xl shadow-lg w-full h-48 object-cover hover:transform hover:scale-105 transition-transform duration-300 cursor-pointer lazy-load" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% include 'footer.html' %}
+
+  <!-- Announcement Button & Bar -->
+  <div class="announcement-popup-container">
+    <a href="{% url 'announcement' %}">
+      <button class="announcement-btn" id="announcementBtn" title="Show Announcement">
+        <span class="announcement-btn-icon">📢</span>
+        <span class="announcement-btn-label">Announcement</span>
+      </button>
+    </a>
+  </div>
+
+  <script src="{% static 'js/script.js' %}"></script>
+
+  <script>
+  // --- Carousel Auto Slide ---
+  document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('heroCarousel');
+    const slides = Array.from(carousel.children);
+    const dots = document.querySelectorAll('.carousel-dot');
+    let current = 0;
+    let totalSlides = slides.length;
+    let interval = 4000; // 4 seconds
+
+    function showSlide(idx) {
+      slides.forEach((slide, i) => {
+        slide.style.display = (i === idx) ? 'block' : 'none';
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === idx);
+        dot.style.backgroundColor = i === idx ? '#facc15' : '#d1d5db';
+        dot.style.transform = i === idx ? 'scale(1.25)' : 'scale(1)';
+      });
+    }
+
+    // Initial setup: hide all except current
+    slides.forEach((slide, i) => { slide.style.display = i === current ? 'block' : 'none'; });
+
+    // Auto slide
+    setInterval(function() {
+      current = (current + 1) % totalSlides;
+      showSlide(current);
+    }, interval);
+
+    // Dot click
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', function() {
+        current = i;
+        showSlide(current);
+      });
+    });
+  });
+  </script>
+  </body>
+ </html>

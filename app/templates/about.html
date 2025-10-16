@@ -1,0 +1,788 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CIAnext - About</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+    <style>
+        /* Hero background animation */
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        /* Floating animation */
+        @keyframes floating {
+            0% { transform: translateY(0px) }
+            50% { transform: translateY(-15px) }
+            100% { transform: translateY(0px) }
+        }
+
+        /* Wave animation */
+        @keyframes wave {
+            0% { transform: rotate(0deg) }
+            25% { transform: rotate(5deg) }
+            75% { transform: rotate(-5deg) }
+            100% { transform: rotate(0deg) }
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0% { transform: scale(1) }
+            50% { transform: scale(1.05) }
+            100% { transform: scale(1) }
+        }
+
+        /* Text glow animation */
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 0px rgba(234, 179, 8, 0.5) }
+            50% { text-shadow: 0 0 15px rgba(234, 179, 8, 0.8) }
+            100% { text-shadow: 0 0 0px rgba(234, 179, 8, 0.5) }
+        }
+
+        /* Animated hero section */
+        .hero-animated {
+            animation: gradientBackground 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        /* Floating elements */
+        .floating-element {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        /* Animated icons */
+        .animated-icon {
+            transition: all 0.3s ease;
+        }
+        .animated-icon:hover {
+            animation: wave 0.8s ease infinite;
+        }
+
+        /* Glowing text */
+        .glow-text {
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        /* Animated card hover */
+        .animated-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .animated-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 14px 28px rgba(255, 255, 255, 0.1), 0 10px 10px rgba(0,0,0,0.08);
+        }
+
+        /* Animated underline */
+        .animated-underline {
+            position: relative;
+        }
+        .animated-underline:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: #f59e0b;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .animated-underline:hover:after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Scroll indicator animation */
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* Specific for team member image spin on hover */
+        .team-member-image-spin:hover img {
+            transform: rotate(360deg) scale(1.1);
+            transition: transform 0.8s ease-in-out;
+        }
+        .team-member-image-spin img {
+            transition: transform 0.5s ease-out;
+        }
+
+        /* Core Values Icon Bounce */
+        .core-value-icon-bounce:hover i {
+            animation: bounce 0.8s ease-in-out;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Advanced Gallery Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Gallery item enhanced animations */
+        .gallery-item {
+            animation: fadeInUp 0.6s ease-out;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-item img {
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            filter: brightness(1) saturate(1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(1.1) saturate(1.2);
+        }
+
+        /* Shimmer effect on hover */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background-size: 200% 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+            animation: shimmer 1s ease-in-out;
+        }
+
+        /* Stagger animation delays */
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+        .gallery-item:nth-child(7) { animation-delay: 0.7s; }
+        .gallery-item:nth-child(8) { animation-delay: 0.8s; }
+        .gallery-item:nth-child(9) { animation-delay: 0.9s; }
+        .gallery-item:nth-child(10) { animation-delay: 1.0s; }
+
+        /* Modern glassmorphism effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Enhanced section transitions */
+        section {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            min-width: 180px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 16px;
+            color: #3d2d29;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f59e0b;
+            color: white;
+        }
+
+        /* Collage Layout Styles */
+        .collage-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(8, 150px);
+            gap: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .collage-frame {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collage-frame:hover {
+            transform: scale(1.01);
+            z-index: 10;
+        }
+
+        .collage-frame img {
+            transition: all 0.3s ease;
+        }
+
+        .collage-frame:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Different sizes for collage items */
+        .collage-large {
+            grid-column: span 6;
+            grid-row: span 4;
+        }
+
+        .collage-medium {
+            grid-column: span 4;
+            grid-row: span 3;
+        }
+
+        .collage-small {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
+
+        .collage-wide {
+            grid-column: span 8;
+            grid-row: span 2;
+        }
+
+        .collage-tall {
+            grid-column: span 3;
+            grid-row: span 4;
+        }
+
+        @media (max-width: 768px) {
+            .collage-container {
+                grid-template-columns: repeat(6, 1fr);
+                grid-template-rows: repeat(12, 120px);
+                gap: 0;
+            }
+
+            .collage-large {
+                grid-column: span 6;
+                grid-row: span 3;
+            }
+
+            .collage-medium {
+                grid-column: span 3;
+                grid-row: span 2;
+            }
+
+            .collage-small {
+                grid-column: span 2;
+                grid-row: span 2;
+            }
+
+            .collage-wide {
+                grid-column: span 6;
+                grid-row: span 2;
+            }
+
+            .collage-tall {
+                grid-column: span 3;
+                grid-row: span 4;
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-white">
+    
+    {% include 'navbar.html' %}
+
+
+    <!-- Hero Section with Enhanced Animations -->
+    <section class="relative py-24 md:py-32 text-gray-800 bg-white border-b">
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Chinnavedampatti Industrial Association (CIA)</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-8">
+                An industry-led forum in Coimbatore that empowers MSMEs through networking, capability building and collective action.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#mission" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-100 hover:text-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Explore Our Mission
+                </a>
+                <a href="#team" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-100 hover:text-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Meet Our Team
+                </a>
+            </div>
+            <div class="mt-12">
+                <a href="#mission" class="text-gray-600 hover:text-yellow-700 transition-colors duration-300">
+                    <i class="fas fa-chevron-down text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Mission Section -->
+    <section id="mission" class="py-16 bg-gradient-to-br from-yellow-50 to-orange-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <div class="w-full">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Our Mission</h2>
+                    <div class="max-w-4xl mx-auto">
+                        <p class="text-gray-700 leading-relaxed mb-4 text-lg">
+                            The Chinnavedampatti Industrial Association (CIA), established in 2019, is dedicated to advancing Coimbatore's industrial sector, particularly in Chinnavedampatti. We focus on empowering micro and small industries by facilitating access to government benefits and promoting sustainable growth.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed text-lg">
+                            Our initiatives encompass industrial development, skill development workshops, technological advancements, and fostering inter-industry collaborations. We connect members to development programs and trade opportunities while representing MSME interests with industry bodies and government agencies.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Values Section -->
+    <section class="py-16 bg-gray-50 overflow-hidden">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4 glow-text">Our Core Values</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    These principles guide our actions and define our commitment to you.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md text-center animated-card" data-aos="flip-left" data-aos-delay="0">
+                    <div class="category-icon bg-white text-blue-600 mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce">
+                        <i class="fas fa-handshake text-3xl transform transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="font-semibold text-xl mb-2">Trust & Transparency</h3>
+                    <p class="text-gray-600">
+                        Building lasting relationships through honest dealings and clear information.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md text-center animated-card" data-aos="flip-left" data-aos-delay="0">
+                    <div class="category-icon bg-white text-green-600 mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce">
+                        <i class="fas fa-lightbulb text-3xl transform transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="font-semibold text-xl mb-2">Innovation</h3>
+                    <p class="text-gray-600">
+                        Continuously evolving our platform to meet the dynamic needs of the market.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md text-center animated-card" data-aos="flip-left" data-aos-delay="0">
+                    <div class="category-icon bg-white text-yellow-600 mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce">
+                        <i class="fas fa-users-gear text-3xl transform transition-transform duration-300"></i>
+                    </div>
+                    <h3 class="font-semibold text-xl mb-2">Customer Centricity</h3>
+                    <p class="text-gray-600">
+                        Placing our users at the heart of every decision and service we provide.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="w-full">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Our Story</h2>
+                <div class="max-w-full mx-auto">
+                    <p class="text-gray-700 leading-relaxed text-lg mb-6">
+                        Under the leadership of President Mr. N. DevaKumar, CIA represents various industrial sectors including robotics and automation, motors and pumps, corrugated box manufacturing, packaging solutions, kitchen equipment and food machinery, steel doors and safety lockers, printing machinery, CNC job works, metal and steel fabrication, and laser cutting and sheet bending.
+                    </p>
+                    <p class="text-gray-700 leading-relaxed text-lg mb-8">
+                        The association is committed to community engagement through initiatives like implementing CCTV surveillance for enhanced security, organizing annual flag hoisting ceremonies, and participating in disaster relief efforts such as the Kerala Flood Fund arrangements. We help member companies become more resilient, innovative and ready for new markets.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="rounded-xl p-5 text-center">
+                            <div class="text-yellow-500 mb-4">
+                                <i class="fas fa-check-circle text-4xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">500+</h3>
+                            <p class="text-gray-700">Member Companies</p>
+                        </div>
+                        <div class="rounded-xl p-5 text-center">
+                            <div class="text-yellow-500 mb-4">
+                                <i class="fas fa-check-circle text-4xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">8+</h3>
+                            <p class="text-gray-700">Industrial Sectors</p>
+                        </div>
+                        <div class="rounded-xl p-5 text-center">
+                            <div class="text-yellow-500 mb-4">
+                                <i class="fas fa-check-circle text-4xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">2019</h3>
+                            <p class="text-gray-700">Established</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section id="photo-gallery" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Photos Gallery</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Glimpses of our activities, events, and industrial achievements over the years
+                </p>
+            </div>
+
+            <!-- Dynamic Photo Gallery Grid -->
+            <div class="grid grid-cols-3 grid-rows-2 gap-6 w-full" style="min-height: 750px;">
+                {% for photo in latest_photos %}
+                <div class="gallery-item cursor-pointer" style="width: 500px; height: 500px;">
+                    {% if photo.image_url %}
+                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" style="width: 500px; height: 500px; object-fit: cover;" loading="lazy" />
+                    {% elif photo.image %}
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" style="width: 500px; height: 500px; object-fit: cover;" loading="lazy" />
+                    {% else %}
+                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <span class="text-gray-500">No Image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- View More Button -->
+            {% if show_view_more %}
+            <div class="text-center mt-8">
+                <a href="{% url 'photo_gallery' %}" class="inline-block bg-yellow-600 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    View More Photos
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- News Gallery Section -->
+    <section id="news-gallery" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">News Gallery</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Recent news, updates, and announcements from CIA
+                </p>
+            </div>
+
+            <!-- News Articles Collage -->
+            <div class="collage-container">
+                <!-- Large Featured Article -->
+                <div class="collage-frame collage-large">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fb38af586402948709f179b07e9d975f3?format=webp&width=800" alt="CIA Industrial Association News Feature" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+
+                <!-- Medium Article -->
+                <div class="collage-frame collage-medium">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F1b243ffc48ce46b1a1addfe0a32dd9ac?format=webp&width=800" alt="CIA Meeting Updates" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+
+                <!-- Small Articles -->
+                <div class="collage-frame collage-small">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fec625abd320846f89b96ba2cbc484802?format=webp&width=800" alt="CIA Community Initiatives" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+
+                <div class="collage-frame collage-small">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fd8ce20373a8d41548c7b90c10f11f9b6?format=webp&width=800" alt="Industrial Development Programs" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+
+                <!-- Wide Article -->
+                <div class="collage-frame collage-wide">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fe60d669494054f6787860254172b2343?format=webp&width=800" alt="CIA Industry Achievements" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+
+                <!-- Tall Article -->
+                <div class="collage-frame collage-tall">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F46cf09dfa5eb4188a6bf85e25b7bb19a?format=webp&width=800" alt="MSME Support Programs" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+
+                <!-- Medium Article -->
+                <div class="collage-frame collage-medium">
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F0aca8c8ed4f843aab938a92987775b84?format=webp&width=800" alt="Technology and Innovation News" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet the Team Section -->
+    <section id="team" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Meet Our Leadership</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    The volunteers and office‑bearers who steer CIA's initiatives.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Team Member 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
+                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
+                        <img src="{% static 'images/about deva.png' %}" alt="Mr. N. DevaKumar" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">N DevaKumar B.Com BL</h3>
+                    <p class="text-yellow-700 mb-2">President</p>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Whose forward-thinking approach continues to drive impactful initiatives for the industrial Community.
+                    </p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
+                            <i class="fab fa-linkedin-in text-xl animated-icon"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
+                            <i class="fab fa-twitter text-xl animated-icon"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
+                            <i class="fas fa-envelope text-xl animated-icon"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
+                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
+                        <img src="{% static 'images/Profile pic 1.png' %}" alt="Priya Malhotra" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">Priya Malhotra</h3>
+                    <p class="text-yellow-700 mb-2">Chief Operating Officer</p>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Priya ensures operational excellence and drives strategic partnerships across the globe.
+                    </p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
+                            <i class="fab fa-linkedin-in text-xl animated-icon"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
+                            <i class="fab fa-twitter text-xl animated-icon"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
+                            <i class="fas fa-envelope text-xl animated-icon"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
+                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
+                        <img src="{% static 'images/Profile pic 2.png' %}" alt="Vikram Patel" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-xl text-gray-800">Vikram Patel</h3>
+                    <p class="text-yellow-700 mb-2">Head of Technology</p>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Vikram leads our tech team, building robust and user-friendly solutions for our platform.
+                    </p>
+                    <div class="flex justify-center space-x-4">
+                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
+                            <i class="fab fa-linkedin-in text-xl animated-icon"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
+                            <i class="fab fa-twitter text-xl animated-icon"></i>
+                        </a>
+                        <a href="#" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
+                            <i class="fas fa-envelope text-xl animated-icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Call to Action -->
+    <section class="py-16 text-black" style="background-color: #ffffff">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 animate-pulse">
+                    List Your Machinery Business With Us
+                </h2>
+                <p class="text-lg mb-8">
+                    Join thousands of heavy equipment suppliers reaching customers across India and globally
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Get Started
+                    </a>
+                    <a href="#" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <!-- Scroll to top button -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="scrollToTopBtn" class="bg-yellow-500 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-yellow-600 transition-all duration-300 opacity-0 invisible">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize AOS animation library with simplified settings
+        AOS.init({
+            duration: 400,
+            easing: 'ease-in-out',
+            once: true,
+            disable: 'mobile'
+        });
+
+        // Scroll to top button functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        
+        window.addEventListener("scroll", () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove("opacity-0", "invisible");
+                scrollToTopBtn.classList.add("opacity-100", "visible");
+            } else {
+                scrollToTopBtn.classList.remove("opacity-100", "visible");
+                scrollToTopBtn.classList.add("opacity-0", "invisible");
+            }
+        });
+
+        scrollToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        // Floating animation for elements with specific delay
+        document.querySelectorAll('.floating-element').forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.5}s`;
+        });
+
+        // Smooth scrolling for nav links - Fixed to prevent auto scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const targetId = this.getAttribute('href');
+                if(targetId === '#' || !targetId) return;
+
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    const targetPosition = targetElement.offsetTop - 100;
+                    const currentPosition = window.pageYOffset;
+
+                    // Only scroll if we're not already near the target
+                    if(Math.abs(targetPosition - currentPosition) > 50) {
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- Announcement Button & Bar -->
+    <div class="announcement-popup-container">
+        <button class="announcement-btn" id="announcementBtn" title="Show Announcement">
+            <span class="announcement-btn-icon">📢</span>
+            <span class="announcement-btn-label">Announcement</span>
+        </button>
+        <div class="announcement-bar" id="announcementBar">
+            <span class="announcement-text">
+                <ul class="announcement-list">
+                    <li>🏢 CIA MachineryHub now offers verified supplier badges</li>
+                    <li>🎉 Exclusive deals available for registered users</li>
+                    <li>🤝 Contact us for partnership opportunities</li>
+                </ul>
+            </span>
+            <div class="announcement-footer">
+                <span>Learn more at <a href="{% url 'announcement' %}">View All Announcements</a></span>
+            </div>
+            <button class="announcement-close" id="announcementClose" title="Close">&times;</button>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
