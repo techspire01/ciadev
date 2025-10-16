@@ -280,7 +280,7 @@
                   <span>Product Gallery</span>
                 </div>
                 <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
-                  ${data.product_images.map(imageUrl => `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(data.name)} product image" class="h-32 w-full rounded-2xl border border-blue-100 object-cover shadow-sm" />`).join('')}
+                  ${data.product_images.map(imageUrl => `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(data.name)} product image" class="h-32 w-full cursor-zoom-in rounded-2xl border border-blue-100 object-cover shadow-sm" data-lightbox-src="${escapeHtml(imageUrl)}" data-lightbox-caption="${escapeHtml(data.name)} product showcase" loading="lazy" />`).join('')}
                 </div>
               </section>`
             : '';
