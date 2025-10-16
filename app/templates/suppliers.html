@@ -214,15 +214,14 @@
   </section>
 
   <!-- Modal Structure -->
-  <div id="supplierModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white rounded-lg p-6 w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">Supplier Details</h2>
-        <button onclick="closeSupplierModal()" class="text-gray-500 hover:text-gray-700">
-          <i class="fas fa-times"></i>
-        </button>
+  <div id="supplierModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+    <div class="supplier-modal-panel relative w-full max-w-5xl overflow-hidden rounded-3xl border border-blue-100 bg-white shadow-2xl">
+      <button onclick="closeSupplierModal()" class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-600 shadow-lg transition hover:text-blue-600">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="supplier-modal-scroll max-h-[90vh] overflow-y-auto">
+        <div id="modalContent" class="p-6 md:p-10"></div>
       </div>
-      <div id="modalContent"></div>
     </div>
   </div>
 
