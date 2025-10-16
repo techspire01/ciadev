@@ -439,9 +439,9 @@
             </article>`;
 
           const visualAssets = [
-            data.logo ? `<img src="${escapeHtml(data.logo)}" alt="${escapeHtml(data.name)} logo" class="h-24 w-24 rounded-2xl border border-blue-100 bg-white object-contain shadow-sm" />` : '',
-            data.image ? `<img src="${escapeHtml(data.image)}" alt="${escapeHtml(data.name)} facility image" class="h-48 w-full rounded-2xl border border-blue-100 object-cover shadow-sm" />` : '',
-            data.person_image ? `<img src="${escapeHtml(data.person_image)}" alt="${escapeHtml(data.contact_person_name || data.name)} portrait" class="h-24 w-24 rounded-full border border-blue-100 object-cover shadow-sm" />` : ''
+            data.logo ? `<img src="${escapeHtml(data.logo)}" alt="${escapeHtml(data.name)} logo" class="h-24 w-24 cursor-zoom-in rounded-2xl border border-blue-100 bg-white object-contain shadow-sm" data-lightbox-src="${escapeHtml(data.logo)}" data-lightbox-caption="${escapeHtml(data.name)} brand mark" loading="lazy" />` : '',
+            data.image ? `<img src="${escapeHtml(data.image)}" alt="${escapeHtml(data.name)} facility image" class="h-48 w-full cursor-zoom-in rounded-2xl border border-blue-100 object-cover shadow-sm" data-lightbox-src="${escapeHtml(data.image)}" data-lightbox-caption="${escapeHtml(data.name)} facility" loading="lazy" />` : '',
+            data.person_image ? `<img src="${escapeHtml(data.person_image)}" alt="${escapeHtml(data.contact_person_name || data.name)} portrait" class="h-24 w-24 cursor-zoom-in rounded-full border border-blue-100 object-cover shadow-sm" data-lightbox-src="${escapeHtml(data.person_image)}" data-lightbox-caption="${escapeHtml(data.contact_person_name || data.name)}" loading="lazy" />` : ''
           ].filter(Boolean).join('');
 
           const visualSection = visualAssets
