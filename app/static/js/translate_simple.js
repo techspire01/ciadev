@@ -37,76 +37,152 @@ function googleTranslateElementInit() {
  * Setup translation buttons (desktop + mobile)
  */
 function setupButtons() {
+  console.log('[setupButtons] Starting button setup...');
+
+  // Get all buttons (desktop and mobile)
   const btnEn = document.getElementById('translate-en');
   const btnTa = document.getElementById('translate-ta');
-  const mobileToggle = document.getElementById('mobileLanguageToggle');
-  const mobileLangSpan = document.getElementById('mobileLang');
   const btnEnMobile = document.getElementById('translate-en-mobile');
   const btnTaMobile = document.getElementById('translate-ta-mobile');
 
-  if (!btnEn && !btnTa && !mobileToggle && !btnEnMobile && !btnTaMobile) {
-    console.log('Translation controls not found, retrying...');
+  console.log('[setupButtons] Found buttons:', {
+    'translate-en': btnEn ? 'FOUND' : 'NOT FOUND',
+    'translate-ta': btnTa ? 'FOUND' : 'NOT FOUND',
+    'translate-en-mobile': btnEnMobile ? 'FOUND' : 'NOT FOUND',
+    'translate-ta-mobile': btnTaMobile ? 'FOUND' : 'NOT FOUND'
+  });
+
+  // Only retry if we have no buttons at all
+  if ((!btnEn && !btnTa) && (!btnEnMobile && !btnTaMobile)) {
+    console.log('[setupButtons] No translation buttons found, retrying in 1 second...');
     setTimeout(setupButtons, 1000);
     return;
   }
 
   currentLang = getCurrentLanguage();
+  console.log('[setupButtons] Current language from cookie:', currentLang);
   updateButtonStyles();
   updateMobileLabel();
 
-  // --- Desktop buttons ---
-  if (btnEn && btnTa) {
-    btnEn.onclick = (e) => {
-      e.preventDefault();
-      if (currentLang !== 'en') translateTo('en');
-    };
-    btnTa.onclick = (e) => {
-      e.preventDefault();
-      if (currentLang !== 'ta') translateTo('ta');
-    };
+  // Setup click handler function for both desktop and mobile buttons
+  function attachTranslateHandler(button, lang) {
+    if (button) {
+      console.log(`[setupButtons] Attaching handler to ${button.id} for language ${lang}`);
+
+      // Remove any previous handler to avoid stacking
+      button.onclick = null;
+      if (button._translateHandler) {
+        button.removeEventListener('click', button._translateHandler);
+      }
+
+      button._translateHandler = function handler(e) {
+        console.log(`[BUTTON CLICK] ${button.id} clicked for language ${lang}`);
+        console.log('[BUTTON CLICK] Event details:', e);
+        console.log('[BUTTON CLICK] Current language:', currentLang);
+        console.log('[BUTTON CLICK] Target language:', lang);
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (currentLang !== lang) {
+          console.log('[BUTTON CLICK] Language different, calling translateTo');
+          try {
+            translateTo(lang);
+            console.log('[BUTTON CLICK] translateTo called successfully');
+          } catch (error) {
+            console.error('[BUTTON CLICK] Error calling translateTo:', error);
+          }
+        } else {
+          console.log('[BUTTON CLICK] Language same, no translation needed');
+        }
+      };
+
+      button.addEventListener('click', button._translateHandler);
+      console.log(`[setupButtons] Successfully attached click handler to ${button.id}`);
+    } else {
+      console.log(`[setupButtons] Button not found, skipping: ${button ? button.id : 'unknown'}`);
+    }
   }
 
-  // --- Mobile buttons (explicit EN/TA buttons inside mobile menu) ---
-  if (btnEnMobile) {
-    btnEnMobile.onclick = (e) => {
-      e.preventDefault();
-      if (currentLang !== 'en') translateTo('en');
-    };
-  }
-  if (btnTaMobile) {
-    btnTaMobile.onclick = (e) => {
-      e.preventDefault();
-      if (currentLang !== 'ta') translateTo('ta');
-    };
+  // Set up all translation buttons
+  console.log('[setupButtons] Setting up desktop buttons...');
+  attachTranslateHandler(btnEn, 'en');
+  attachTranslateHandler(btnTa, 'ta');
+
+  console.log('[setupButtons] Setting up mobile buttons...');
+  attachTranslateHandler(btnEnMobile, 'en');
+  attachTranslateHandler(btnTaMobile, 'ta');
+
+  // Extra: If mobile menu is open, re-attach after a short delay to catch dynamic DOM
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (mobileMenu && mobileMenu.classList.contains('show')) {
+    setTimeout(() => {
+      console.log('[setupButtons] Mobile menu is open, re-attaching handlers...');
+      const btnEnMobile2 = document.getElementById('translate-en-mobile');
+      const btnTaMobile2 = document.getElementById('translate-ta-mobile');
+      attachTranslateHandler(btnEnMobile2, 'en');
+      attachTranslateHandler(btnTaMobile2, 'ta');
+      console.log('[setupButtons] Re-attached mobile handlers after menu open');
+    }, 350);
   }
 
-  console.log('Translation setup complete');
+  console.log('[setupButtons] Translation setup complete');
 }
 
 /**
  * Apply translation via Google Translate cookie
  */
 function translateTo(lang) {
-  console.log('Translating to:', lang);
+  console.log('Translating to:', lang, 'from:', currentLang);
 
-  // Correctly set cookies at all levels
-  const cookieValue = lang === 'en' ? '/en/en' : '/en/' + lang;
-  const cookieBase = 'googtrans=' + cookieValue + '; expires=Thu, 31 Dec 2099 23:59:59 GMT; path=/;';
+  try {
+    // Clear existing cookies first
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=' + window.location.hostname + ';';
 
-  document.cookie = cookieBase;
-  document.cookie = cookieBase + ' domain=' + window.location.hostname + ';';
+    // Set new translation cookies
+    const cookieValue = lang === 'en' ? '/en/en' : '/en/' + lang;
+    const cookieBase = 'googtrans=' + cookieValue + '; expires=Thu, 31 Dec 2099 23:59:59 GMT; path=/;';
 
-  currentLang = lang;
-  updateButtonStyles();
-  updateMobileLabel();
+    document.cookie = cookieBase;
+    document.cookie = cookieBase + ' domain=' + window.location.hostname + ';';
+    console.log('Translation cookies set successfully');
 
-  // Force re-translate if Google Translate is ready
-  const iframe = document.querySelector('iframe.goog-te-menu-frame');
-  if (iframe) {
-    console.log('Google iframe detected, forcing reload...');
-    setTimeout(() => window.location.reload(), 500);
-  } else {
-    console.log('No Google iframe yet, reloading...');
+    currentLang = lang;
+    updateButtonStyles();
+    updateMobileLabel();
+
+    // Check if we're in mobile view and close the mobile menu
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileMenu && mobileMenu.classList.contains('show')) {
+      mobileMenu.classList.remove('show');
+    }
+
+    // Force re-translate: Remove and re-insert Google Translate widget
+    const gteElem = document.getElementById('google_translate_element');
+    if (gteElem) {
+      gteElem.innerHTML = '';
+      setTimeout(() => {
+        if (typeof googleTranslateElementInit === 'function') {
+          googleTranslateElementInit();
+          console.log('[translateTo] Re-initialized Google Translate widget');
+        }
+        // Fallback: reload if still not translated after short delay
+        setTimeout(() => {
+          const iframe = document.querySelector('iframe.goog-te-menu-frame');
+          if (!iframe) {
+            console.log('[translateTo] No Google iframe after re-init, reloading page...');
+            window.location.reload();
+          }
+        }, 1000);
+      }, 200);
+    } else {
+      // If widget not found, reload as fallback
+      console.log('[translateTo] google_translate_element not found, reloading...');
+      setTimeout(() => window.location.reload(), 800);
+    }
+  } catch (err) {
+    console.error('Error during translation:', err);
     setTimeout(() => window.location.reload(), 800);
   }
 }
@@ -229,4 +305,71 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (err) {
     console.warn('Error reading pendingTranslate during DOMContentLoaded:', err);
   }
+
+  // --- Fix: Re-run setupButtons when mobile menu is opened ---
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+      // Wait for menu to render, then re-attach handlers
+      setTimeout(() => {
+        setupButtons();
+        console.log('[DOMContentLoaded] Re-ran setupButtons after mobile menu open');
+      }, 350);
+    });
+  }
+
+  // --- Additional Fix: Use MutationObserver to watch for dynamic DOM changes ---
+  // This ensures mobile translation buttons get handlers when they appear
+  const observer = new MutationObserver((mutations) => {
+    let shouldReSetup = false;
+
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList') {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            // Check if the added node or its descendants contain translation buttons
+            const hasTranslationButtons = node.querySelector &&
+              (node.querySelector('#translate-en-mobile') ||
+               node.querySelector('#translate-ta-mobile') ||
+               node.querySelector('#translate-en-mobile-menu') ||
+               node.querySelector('#translate-ta-mobile-menu') ||
+               node.id === 'translate-en-mobile' ||
+               node.id === 'translate-ta-mobile' ||
+               node.id === 'translate-en-mobile-menu' ||
+               node.id === 'translate-ta-mobile-menu');
+
+            if (hasTranslationButtons) {
+              console.log('[MutationObserver] Translation buttons detected in DOM, re-running setupButtons');
+              shouldReSetup = true;
+            }
+          }
+        });
+      }
+    });
+
+    if (shouldReSetup) {
+      // Small delay to ensure DOM is fully updated
+      setTimeout(() => {
+        setupButtons();
+      }, 100);
+    }
+  });
+
+  // Start observing changes to the entire document
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  console.log('[DOMContentLoaded] MutationObserver started to watch for translation buttons');
+
+  // --- Fix for mobile: delay Google Translate widget init slightly ---
+  setTimeout(() => {
+    if (typeof googleTranslateElementInit === 'function') {
+      googleTranslateElementInit();
+      console.log('[Fix] Google Translate initialized after delay');
+    } else {
+      console.warn('[Fix] googleTranslateElementInit not yet defined');
+    }
+  }, 1500);
 });

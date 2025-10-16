@@ -197,5 +197,93 @@
     </div>
   </nav>
 
-  <script src="{% static 'js/translate_simple.js' %}"></script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- Google Translate Setup -->
+  <script>
+  // Load Google Translate immediately
+  (function() {
+    const gtScript = document.createElement('script');
+    gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.body.appendChild(gtScript);
+  })();
+
+  let translateElement = null;
+
+  function googleTranslateElementInit() {
+    translateElement = new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages: 'en,ta',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+      autoDisplay: false
+    }, 'google_translate_element');
+
+    // Wait a bit for the widget to fully initialize
+    setTimeout(() => {
+      console.log('Google Translate initialized');
+    }, 1000);
+  }
+
+  // --- LANGUAGE SWITCH LOGIC ---
+  function setLanguage(lang) {
+    if (translateElement && typeof google !== 'undefined' && google.translate) {
+      try {
+        // Try to use Google Translate API directly
+        const translateInstance = google.translate.TranslateElement.getInstance();
+        if (translateInstance) {
+          translateInstance.setLang(lang);
+          console.log('Language set to:', lang);
+          return;
+        }
+      } catch (e) {
+        console.warn('Direct API call failed, using cookie method:', e);
+      }
+    }
+
+    // Fallback: Set cookies and reload
+    const cookieValue = lang === 'en' ? '/en/en' : '/en/' + lang;
+    document.cookie = 'googtrans=' + cookieValue + ';path=/;max-age=31536000';
+    document.cookie = 'googtrans=' + cookieValue + ';path=/;domain=' + window.location.hostname + ';max-age=31536000';
+
+    // Force reload to apply translation
+    setTimeout(() => {
+      window.location.reload();
+    }, 200);
+  }
+
+  function attachTranslateHandlers() {
+    const btns = [
+      '#translate-en', '#translate-ta',
+      '#translate-en-mobile', '#translate-ta-mobile'
+    ];
+    btns.forEach(id => {
+      const el = document.querySelector(id);
+      if (el) {
+        // Remove existing listeners to avoid duplicates
+        el.onclick = null;
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          const lang = id.includes('ta') ? 'ta' : 'en';
+          console.log('Button clicked:', id, 'Language:', lang);
+          setLanguage(lang);
+        });
+      }
+    });
+  }
+
+  // run once after DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initial attachment
+    attachTranslateHandlers();
+
+    // 🧠 Watch for new buttons in mobile menu after toggle
+    const observer = new MutationObserver(() => attachTranslateHandlers());
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // 🕐 re-run binding after mobile menu toggle delay
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => {
+        setTimeout(attachTranslateHandlers, 400);
+      });
+    }
+  });
+  </script>
