@@ -515,6 +515,11 @@
               </section>
             </div>
           `;
+
+          if (window.registerLightboxTargets) {
+            window.registerLightboxTargets(modalContent);
+          }
+
           document.getElementById('supplierModal').classList.remove('hidden');
         })
         .catch(error => {
