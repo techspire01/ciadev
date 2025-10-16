@@ -526,15 +526,15 @@
             </div>
 
             <!-- Dynamic Photo Gallery Grid -->
-            <div class="grid grid-cols-3 grid-rows-2 gap-6 w-full" style="min-height: 750px;">
+            <div class="photo-gallery-grid grid grid-cols-3 grid-rows-2 gap-6 w-full">
                 {% for photo in latest_photos %}
-                <div class="gallery-item cursor-pointer" style="width: 500px; height: 500px;">
+                <div class="gallery-item photo-gallery-item">
                     {% if photo.image_url %}
-                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" style="width: 500px; height: 500px; object-fit: cover;" loading="lazy" />
+                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="{{ photo.image_url }}" data-lightbox-caption="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
                     {% elif photo.image %}
-                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" style="width: 500px; height: 500px; object-fit: cover;" loading="lazy" />
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="{{ photo.image.url }}" data-lightbox-caption="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
                     {% else %}
-                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <div class="flex h-full w-full items-center justify-center bg-gray-200">
                             <span class="text-gray-500">No Image</span>
                         </div>
                     {% endif %}
