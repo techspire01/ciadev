@@ -181,6 +181,23 @@
             filter: brightness(1.1) saturate(1.2);
         }
 
+        .photo-gallery-grid {
+            min-height: 750px;
+        }
+
+        .photo-gallery-item {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+        }
+
+        .photo-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Shimmer effect on hover */
         .gallery-item::before {
             content: '';
