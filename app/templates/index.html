@@ -429,44 +429,39 @@
   </div>
 
   <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/book-showcase.js' %}"></script>
 
   <script>
-  // --- Carousel Auto Slide ---
+  // --- Showcase Pagination ---
   document.addEventListener('DOMContentLoaded', function() {
-    const carousel = document.getElementById('heroCarousel');
-    const slides = Array.from(carousel.children);
-    const dots = document.querySelectorAll('.carousel-dot');
-    let current = 0;
-    let totalSlides = slides.length;
-    let interval = 4000; // 4 seconds
+    const itemsPerPage = window.innerWidth < 768 ? 1 : (window.innerWidth < 1024 ? 2 : 3);
+    const showcaseItems = document.querySelectorAll('.showcase-item');
+    const totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
+    let currentPage = 0;
 
-    function showSlide(idx) {
-      slides.forEach((slide, i) => {
-        slide.style.display = (i === idx) ? 'block' : 'none';
+    function updateShowcase() {
+      const startIdx = currentPage * itemsPerPage;
+      const endIdx = startIdx + itemsPerPage;
+
+      showcaseItems.forEach((item, idx) => {
+        item.style.display = (idx >= startIdx && idx < endIdx) ? 'block' : 'none';
       });
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === idx);
-        dot.style.backgroundColor = i === idx ? '#facc15' : '#d1d5db';
-        dot.style.transform = i === idx ? 'scale(1.25)' : 'scale(1)';
-      });
+
+      document.getElementById('currentPage').textContent = currentPage + 1;
+      document.getElementById('totalPages').textContent = totalPages;
     }
 
-    // Initial setup: hide all except current
-    slides.forEach((slide, i) => { slide.style.display = i === current ? 'block' : 'none'; });
-
-    // Auto slide
-    setInterval(function() {
-      current = (current + 1) % totalSlides;
-      showSlide(current);
-    }, interval);
-
-    // Dot click
-    dots.forEach((dot, i) => {
-      dot.addEventListener('click', function() {
-        current = i;
-        showSlide(current);
-      });
+    document.getElementById('showcasePrevBtn')?.addEventListener('click', () => {
+      currentPage = (currentPage - 1 + totalPages) % totalPages;
+      updateShowcase();
     });
+
+    document.getElementById('showcaseNextBtn')?.addEventListener('click', () => {
+      currentPage = (currentPage + 1) % totalPages;
+      updateShowcase();
+    });
+
+    updateShowcase();
   });
   </script>
   </body>
