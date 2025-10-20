@@ -1,89 +1,160 @@
-// Book Showcase Flip Animation Script
+// Showcase Section with Fade-In and Slide Animations
 document.addEventListener('DOMContentLoaded', function() {
-  const showcaseItems = document.querySelectorAll('.showcase-item');
-  const showcaseBooks = document.querySelectorAll('.showcase-book');
+  const showcaseItems = document.querySelectorAll('.showcase-item-new');
+  const itemsPerPageDesktop = 3;
+  const itemsPerPageTablet = 2;
+  const itemsPerPageMobile = 1;
 
-  // Add flip animation on hover
-  showcaseBooks.forEach(book => {
-    const pageFlip = book.querySelector('.showcase-page-flip');
-    let isFlipped = false;
+  let currentPage = 0;
+  let itemsPerPage = getItemsPerPage();
+  let totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
 
-    book.addEventListener('mouseenter', function() {
-      if (!isFlipped) {
-        pageFlip.style.transform = 'rotateY(180deg)';
-        isFlipped = true;
+  function getItemsPerPage() {
+    if (window.innerWidth < 768) return itemsPerPageMobile;
+    if (window.innerWidth < 1024) return itemsPerPageTablet;
+    return itemsPerPageDesktop;
+  }
+
+  function updateShowcaseDisplay() {
+    const startIdx = currentPage * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+
+    showcaseItems.forEach((item, idx) => {
+      if (idx >= startIdx && idx < endIdx) {
+        item.style.display = 'block';
+        // Trigger fade-in animation
+        setTimeout(() => {
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+        }, 10);
+      } else {
+        item.style.display = 'none';
       }
     });
 
-    book.addEventListener('mouseleave', function() {
-      if (isFlipped) {
-        pageFlip.style.transform = 'rotateY(0deg)';
-        isFlipped = false;
+    // Update page counter
+    document.getElementById('currentPage').textContent = currentPage + 1;
+    document.getElementById('totalPages').textContent = totalPages;
+
+    // Update button states
+    const prevBtn = document.getElementById('showcasePrevBtn');
+    const nextBtn = document.getElementById('showcaseNextBtn');
+
+    if (prevBtn) {
+      prevBtn.style.opacity = currentPage === 0 ? '0.5' : '1';
+      prevBtn.style.pointerEvents = currentPage === 0 ? 'none' : 'auto';
+    }
+    if (nextBtn) {
+      nextBtn.style.opacity = currentPage === totalPages - 1 ? '0.5' : '1';
+      nextBtn.style.pointerEvents = currentPage === totalPages - 1 ? 'none' : 'auto';
+    }
+  }
+
+  function nextPage() {
+    if (currentPage < totalPages - 1) {
+      currentPage++;
+      updateShowcaseDisplay();
+    }
+  }
+
+  function prevPage() {
+    if (currentPage > 0) {
+      currentPage--;
+      updateShowcaseDisplay();
+    }
+  }
+
+  // Event listeners for navigation buttons
+  const prevBtn = document.getElementById('showcasePrevBtn');
+  const nextBtn = document.getElementById('showcaseNextBtn');
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', prevPage);
+    prevBtn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        prevPage();
       }
     });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', nextPage);
+    nextBtn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        nextPage();
+      }
+    });
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevPage();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextPage();
+    }
   });
 
-  // Touch/swipe support for flip on mobile
-  showcaseBooks.forEach(book => {
-    let startX = 0;
-    let startY = 0;
-    const pageFlip = book.querySelector('.showcase-page-flip');
-    let isFlipped = false;
+  // Touch/swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const showcaseGrid = document.querySelector('.showcase-grid');
 
-    book.addEventListener('touchstart', function(e) {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-    });
+  if (showcaseGrid) {
+    showcaseGrid.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
 
-    book.addEventListener('touchend', function(e) {
-      const endX = e.changedTouches[0].clientX;
-      const endY = e.changedTouches[0].clientY;
-      const diffX = Math.abs(startX - endX);
-      const diffY = Math.abs(startY - endY);
+    showcaseGrid.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, false);
+  }
 
-      // Only trigger flip if swipe is more horizontal than vertical
-      if (diffX > diffY && diffX > 30) {
-        isFlipped = !isFlipped;
-        pageFlip.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        nextPage(); // Swiped left
+      } else {
+        prevPage(); // Swiped right
       }
-    });
-  });
+    }
+  }
 
-  // Handle window resize for responsive pagination updates
+  // Handle window resize
   let resizeTimeout;
   window.addEventListener('resize', function() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(function() {
-      updatePagination();
+      const newItemsPerPage = getItemsPerPage();
+      if (newItemsPerPage !== itemsPerPage) {
+        itemsPerPage = newItemsPerPage;
+        totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
+        currentPage = Math.min(currentPage, totalPages - 1);
+        updateShowcaseDisplay();
+      }
     }, 250);
   });
 
-  function updatePagination() {
-    const itemsPerPage = window.innerWidth < 768 ? 1 : (window.innerWidth < 1024 ? 2 : 3);
-    const totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
-    const currentPageEl = document.getElementById('currentPage');
-    const totalPagesEl = document.getElementById('totalPages');
+  // Initial display
+  updateShowcaseDisplay();
 
-    if (totalPagesEl && currentPageEl) {
-      totalPagesEl.textContent = totalPages;
-      currentPageEl.textContent = Math.min(parseInt(currentPageEl.textContent), totalPages) || 1;
-    }
-  }
-
-  // Initialize pagination on load
-  updatePagination();
-
-  // Keyboard navigation for showcase
-  document.addEventListener('keydown', function(e) {
-    const showcasePrevBtn = document.getElementById('showcasePrevBtn');
-    const showcaseNextBtn = document.getElementById('showcaseNextBtn');
-
-    if (e.key === 'ArrowLeft' && showcasePrevBtn) {
-      e.preventDefault();
-      showcasePrevBtn.click();
-    } else if (e.key === 'ArrowRight' && showcaseNextBtn) {
-      e.preventDefault();
-      showcaseNextBtn.click();
-    }
+  // Add click handler to items for opening full view (optional)
+  showcaseItems.forEach((item) => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', function() {
+      const img = this.querySelector('img');
+      if (img && img.style.display !== 'none') {
+        // Could open lightbox here if desired
+        console.log('Clicked on:', this.querySelector('h3')?.textContent);
+      }
+    });
   });
 });
