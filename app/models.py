@@ -299,4 +299,20 @@ class SupplierListingRequest(models.Model):
     def __str__(self):
         return f"Listing request for {self.company_name} by {self.user.email}"
 
+class ContactInformation(models.Model):
+    email = models.EmailField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Contact Information"
+        verbose_name_plural = "Contact Information"
+
+    def __str__(self):
+        return f"Contact Information - {self.email or 'No Email'}"
+
 

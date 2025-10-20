@@ -48,4 +48,7 @@ urlpatterns = [
 
     # Supplier listing request
     path('request-supplier-listing/', views.request_supplier_listing_view, name='request_supplier_listing'),
+
+    # Contact page
+    path('contact/', views.contact, name='contact'),
 ]

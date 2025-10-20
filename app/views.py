@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.db import models
 import random
-from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest
+from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import Supplier
@@ -1107,3 +1107,12 @@ def send_user_listing_confirmation_email(user, listing_request):
         send_mail(subject, message_body, from_email, [user.email], fail_silently=False)
     except Exception as e:
         logger.exception("Failed to send user listing confirmation email: %s", e)
+
+def contact(request):
+    # Fetch contact information from database
+    contact_info = ContactInformation.objects.first()  # Get the first (and likely only) contact info record
+
+    context = {
+        'contact_info': contact_info,
+    }
+    return render(request, "contact.html", context)

@@ -1,12 +1,14 @@
-# TODO: Create Supplier Listing Request Form
+# Contact Page Implementation TODO
 
-## Tasks
-- [x] Add SupplierListingRequest model to models.py
-- [x] Add SupplierListingForm to forms.py
-- [x] Add request_supplier_listing_view to views.py
-- [x] Add URL pattern to urls.py
-- [x] Create request_supplier_listing.html template
-- [x] Update about.html "Get Started" button link
-- [x] Run migrations
-- [ ] Test form submission
-- [ ] Verify admin email notifications
+## Pending Tasks
+- [x] Add ContactInformation model to models.py with fields: email, phone, address, website, description
+- [x] Create database migration for the new ContactInformation model
+- [x] Add contact view in views.py to fetch contact info from DB and render template
+- [x] Add contact URL in urls.py for the new contact page
+- [x] Create contact.html template with navbar/footer includes and display contact information
+- [x] Update about.html to link "Contact Us" button to the new contact page
+
+## Followup Steps
+- [x] Run makemigrations and migrate commands
+- [x] Test the contact page functionality
+- [x] Verify the link from about.html works correctly

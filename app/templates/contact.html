@@ -1,0 +1,376 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CIAnext - Contact Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+    <style>
+        /* Hero background animation */
+        @keyframes gradientBackground {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        /* Floating animation */
+        @keyframes floating {
+            0% { transform: translateY(0px) }
+            50% { transform: translateY(-15px) }
+            100% { transform: translateY(0px) }
+        }
+
+        /* Wave animation */
+        @keyframes wave {
+            0% { transform: rotate(0deg) }
+            25% { transform: rotate(5deg) }
+            75% { transform: rotate(-5deg) }
+            100% { transform: rotate(0deg) }
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0% { transform: scale(1) }
+            50% { transform: scale(1.05) }
+            100% { transform: scale(1) }
+        }
+
+        /* Text glow animation */
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 0px rgba(234, 179, 8, 0.5) }
+            50% { text-shadow: 0 0 15px rgba(234, 179, 8, 0.8) }
+            100% { text-shadow: 0 0 0px rgba(234, 179, 8, 0.5) }
+        }
+
+        /* Animated hero section */
+        .hero-animated {
+            animation: gradientBackground 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        /* Floating elements */
+        .floating-element {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        /* Animated icons */
+        .animated-icon {
+            transition: all 0.3s ease;
+        }
+        .animated-icon:hover {
+            animation: wave 0.8s ease infinite;
+        }
+
+        /* Glowing text */
+        .glow-text {
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        /* Animated card hover */
+        .animated-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .animated-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 14px 28px rgba(255, 255, 255, 0.1), 0 10px 10px rgba(0,0,0,0.08);
+        }
+
+        /* Animated underline */
+        .animated-underline {
+            position: relative;
+        }
+        .animated-underline:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: #f59e0b;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .animated-underline:hover:after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Scroll indicator animation */
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Enhanced section transitions */
+        section {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Contact card styling */
+        .contact-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Map container */
+        .map-container {
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    {% include 'navbar.html' %}
+
+    <!-- Hero Section -->
+    <section class="relative py-20 bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 hero-animated overflow-hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6 glow-text">
+                    Contact Us
+                </h1>
+                <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                    Get in touch with the Chinnavedampatti Industrial Association. We're here to help you connect with the right machinery suppliers and support your business needs.
+                </p>
+            </div>
+        </div>
+
+        <!-- Floating elements -->
+        <div class="absolute top-20 left-10 w-16 h-16 bg-yellow-400 rounded-full opacity-20 floating-element"></div>
+        <div class="absolute bottom-20 right-10 w-12 h-12 bg-orange-400 rounded-full opacity-20 floating-element" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 right-20 w-8 h-8 bg-yellow-300 rounded-full opacity-30 floating-element" style="animation-delay: 4s;"></div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Details -->
+                <div class="space-y-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Get In Touch</h2>
+                        <p class="text-gray-600 leading-relaxed mb-8">
+                            Have questions about our services, need help finding suppliers, or want to join our network? Reach out to us using the contact information below.
+                        </p>
+                    </div>
+
+                    {% if contact_info %}
+                        <!-- Email -->
+                        {% if contact_info.email %}
+                        <div class="contact-card p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-envelope text-yellow-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Email</h3>
+                                    <a href="mailto:{{ contact_info.email }}" class="text-gray-600 hover:text-yellow-600 transition-colors">
+                                        {{ contact_info.email }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Phone -->
+                        {% if contact_info.phone %}
+                        <div class="contact-card p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-phone text-green-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Phone</h3>
+                                    <a href="tel:{{ contact_info.phone }}" class="text-gray-600 hover:text-green-600 transition-colors">
+                                        {{ contact_info.phone }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Address -->
+                        {% if contact_info.address %}
+                        <div class="contact-card p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt text-blue-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Address</h3>
+                                    <p class="text-gray-600">{{ contact_info.address }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Website -->
+                        {% if contact_info.website %}
+                        <div class="contact-card p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-globe text-purple-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Website</h3>
+                                    <a href="{{ contact_info.website }}" target="_blank" class="text-gray-600 hover:text-purple-600 transition-colors">
+                                        {{ contact_info.website }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Description -->
+                        {% if contact_info.description %}
+                        <div class="contact-card p-6 rounded-xl animated-card">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mt-1">
+                                    <i class="fas fa-info-circle text-indigo-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800 mb-2">About Us</h3>
+                                    <p class="text-gray-600 leading-relaxed">{{ contact_info.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="contact-card p-6 rounded-xl text-center">
+                            <div class="text-gray-500">
+                                <i class="fas fa-info-circle text-4xl mb-4"></i>
+                                <p>Contact information will be available soon.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Map Section -->
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Find Us</h2>
+                    <div class="map-container">
+                        <!-- Embedded Google Map (placeholder - replace with actual coordinates) -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.0!2d76.95!3d11.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTEuMDE2NjcwMDAwMDAwMac!5e0!3m2!1sen!2sin!4v1630000000000!5m2!1sen!2sin"
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">
+                        * Map shows approximate location. Please use the address above for precise directions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-gradient-to-r from-yellow-600 to-orange-600 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                Ready to Connect?
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Join our network of industrial suppliers and manufacturers. Let's build something great together.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="{% url 'suppliers' %}" class="bg-white text-yellow-600 px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Browse Suppliers
+                </a>
+                <a href="{% url 'about' %}" class="bg-transparent border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-yellow-600 transition-all duration-300">
+                    Learn More About Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <!-- Scroll to top button -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="scrollToTopBtn" class="bg-yellow-500 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-yellow-600 transition-all duration-300 opacity-0 invisible">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Initialize AOS animation library
+        AOS.init({
+            duration: 400,
+            easing: 'ease-in-out',
+            once: true,
+            disable: 'mobile'
+        });
+
+        // Scroll to top button functionality
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+
+        window.addEventListener("scroll", () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove("opacity-0", "invisible");
+                scrollToTopBtn.classList.add("opacity-100", "visible");
+            } else {
+                scrollToTopBtn.classList.remove("opacity-100", "visible");
+                scrollToTopBtn.classList.add("opacity-0", "invisible");
+            }
+        });
+
+        scrollToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
+
+    <!-- Announcement Button & Bar -->
+    <div class="announcement-popup-container">
+        <button class="announcement-btn" id="announcementBtn" title="Show Announcement">
+            <span class="announcement-btn-icon">📢</span>
+            <span class="announcement-btn-label">Announcement</span>
+        </button>
+        <div class="announcement-bar" id="announcementBar">
+            <span class="announcement-text">
+                <ul class="announcement-list">
+                    <li>🏢 CIA MachineryHub now offers verified supplier badges</li>
+                    <li>🎉 Exclusive deals available for registered users</li>
+                    <li>🤝 Contact us for partnership opportunities</li>
+                </ul>
+            </span>
+            <div class="announcement-footer">
+                <span>Learn more at <a href="{% url 'announcement' %}">View All Announcements</a></span>
+            </div>
+            <button class="announcement-close" id="announcementClose" title="Close">&times;</button>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

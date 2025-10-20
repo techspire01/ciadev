@@ -9,7 +9,7 @@ from django.conf import settings
 import json
 import logging
 
-from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest
+from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation
 from .forms import SupplierForm
 
 logger = logging.getLogger(__name__)
@@ -397,6 +397,34 @@ def notify_admin_on_new_edit_request(sender, instance, created, **kwargs):
         send_mail(subject, body, from_email, admin_list, fail_silently=False)
     except Exception as e:
         logger.exception("Failed to send admin notification for SupplierEditRequest: %s", e)
+
+@admin.register(ContactInformation)
+class ContactInformationAdmin(admin.ModelAdmin):
+    list_display = ('email', 'phone', 'address_preview', 'created_at', 'updated_at')
+    search_fields = ('email', 'phone', 'address', 'description')
+    list_filter = ('created_at', 'updated_at')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at')
+
+    fieldsets = (
+        ('Contact Details', {
+            'fields': ('email', 'phone', 'address')
+        }),
+        ('Additional Information', {
+            'fields': ('description',)
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def address_preview(self, obj):
+        """Display first 50 characters of address"""
+        if obj.address:
+            return obj.address[:50] + "..." if len(obj.address) > 50 else obj.address
+        return "-"
+    address_preview.short_description = "Address"
 
 # Register CustomUser with the admin site
 admin.site.register(CustomUser, CustomUserAdmin)
