@@ -1,5 +1,5 @@
 {% load static %}
-{% load custom_filters %}
+{% load static custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -181,6 +181,23 @@
             filter: brightness(1.1) saturate(1.2);
         }
 
+        .photo-gallery-grid {
+            min-height: 750px;
+        }
+
+        .photo-gallery-item {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
+        }
+
+        .photo-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Shimmer effect on hover */
         .gallery-item::before {
             content: '';
@@ -301,6 +318,7 @@
 
         .collage-frame img {
             transition: all 0.3s ease;
+            cursor: zoom-in;
         }
 
         .collage-frame:hover img {
@@ -508,15 +526,15 @@
             </div>
 
             <!-- Dynamic Photo Gallery Grid -->
-            <div class="grid grid-cols-3 grid-rows-2 gap-6 w-full" style="min-height: 750px;">
+            <div class="photo-gallery-grid grid grid-cols-3 grid-rows-2 gap-6 w-full">
                 {% for photo in latest_photos %}
-                <div class="gallery-item cursor-pointer" style="width: 500px; height: 500px;">
+                <div class="gallery-item photo-gallery-item">
                     {% if photo.image_url %}
-                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" style="width: 500px; height: 500px; object-fit: cover;" loading="lazy" />
+                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="{{ photo.image_url }}" data-lightbox-caption="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
                     {% elif photo.image %}
-                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" style="width: 500px; height: 500px; object-fit: cover;" loading="lazy" />
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="{{ photo.image.url }}" data-lightbox-caption="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
                     {% else %}
-                        <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <div class="flex h-full w-full items-center justify-center bg-gray-200">
                             <span class="text-gray-500">No Image</span>
                         </div>
                     {% endif %}
@@ -529,6 +547,44 @@
             <div class="text-center mt-8">
                 <a href="{% url 'photo_gallery' %}" class="inline-block bg-yellow-600 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
                     View More Photos
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Newspaper Gallery Section -->
+    <section id="newspaper-gallery" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Newspaper Gallery</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Newspaper cuttings and media coverage showcasing our achievements and activities
+                </p>
+            </div>
+
+            <!-- Dynamic Newspaper Gallery Grid -->
+            <div class="photo-gallery-grid grid grid-cols-3 grid-rows-2 gap-6 w-full">
+                {% for newspaper in latest_newspapers %}
+                <div class="gallery-item photo-gallery-item">
+                    {% if newspaper.image_url %}
+                        <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="{{ newspaper.image_url }}" data-lightbox-caption="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
+                    {% elif newspaper.image %}
+                        <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="{{ newspaper.image.url }}" data-lightbox-caption="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
+                    {% else %}
+                        <div class="flex h-full w-full items-center justify-center bg-gray-200">
+                            <span class="text-gray-500">No Image</span>
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- View More Button -->
+            {% if show_newspaper_view_more %}
+            <div class="text-center mt-8">
+                <a href="#" class="inline-block bg-yellow-600 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    View More Newspaper Cuttings
                 </a>
             </div>
             {% endif %}
@@ -549,36 +605,36 @@
             <div class="collage-container">
                 <!-- Large Featured Article -->
                 <div class="collage-frame collage-large">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fb38af586402948709f179b07e9d975f3?format=webp&width=800" alt="CIA Industrial Association News Feature" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fb38af586402948709f179b07e9d975f3?format=webp&width=800" alt="CIA Industrial Association News Feature" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fb38af586402948709f179b07e9d975f3?format=webp&width=1600" data-lightbox-caption="CIA Industrial Association News Feature" loading="lazy" />
                 </div>
 
                 <!-- Medium Article -->
                 <div class="collage-frame collage-medium">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F1b243ffc48ce46b1a1addfe0a32dd9ac?format=webp&width=800" alt="CIA Meeting Updates" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F1b243ffc48ce46b1a1addfe0a32dd9ac?format=webp&width=800" alt="CIA Meeting Updates" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F1b243ffc48ce46b1a1addfe0a32dd9ac?format=webp&width=1600" data-lightbox-caption="CIA Meeting Updates" loading="lazy" />
                 </div>
 
                 <!-- Small Articles -->
                 <div class="collage-frame collage-small">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fec625abd320846f89b96ba2cbc484802?format=webp&width=800" alt="CIA Community Initiatives" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fec625abd320846f89b96ba2cbc484802?format=webp&width=800" alt="CIA Community Initiatives" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fec625abd320846f89b96ba2cbc484802?format=webp&width=1600" data-lightbox-caption="CIA Community Initiatives" loading="lazy" />
                 </div>
 
                 <div class="collage-frame collage-small">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fd8ce20373a8d41548c7b90c10f11f9b6?format=webp&width=800" alt="Industrial Development Programs" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fd8ce20373a8d41548c7b90c10f11f9b6?format=webp&width=800" alt="Industrial Development Programs" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fd8ce20373a8d41548c7b90c10f11f9b6?format=webp&width=1600" data-lightbox-caption="Industrial Development Programs" loading="lazy" />
                 </div>
 
                 <!-- Wide Article -->
                 <div class="collage-frame collage-wide">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fe60d669494054f6787860254172b2343?format=webp&width=800" alt="CIA Industry Achievements" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fe60d669494054f6787860254172b2343?format=webp&width=800" alt="CIA Industry Achievements" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fe60d669494054f6787860254172b2343?format=webp&width=1600" data-lightbox-caption="CIA Industry Achievements" loading="lazy" />
                 </div>
 
                 <!-- Tall Article -->
                 <div class="collage-frame collage-tall">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F46cf09dfa5eb4188a6bf85e25b7bb19a?format=webp&width=800" alt="MSME Support Programs" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F46cf09dfa5eb4188a6bf85e25b7bb19a?format=webp&width=800" alt="MSME Support Programs" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F46cf09dfa5eb4188a6bf85e25b7bb19a?format=webp&width=1600" data-lightbox-caption="MSME Support Programs" loading="lazy" />
                 </div>
 
                 <!-- Medium Article -->
                 <div class="collage-frame collage-medium">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F0aca8c8ed4f843aab938a92987775b84?format=webp&width=800" alt="Technology and Innovation News" class="w-full h-full object-cover" loading="lazy" />
+                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F0aca8c8ed4f843aab938a92987775b84?format=webp&width=800" alt="Technology and Innovation News" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F0aca8c8ed4f843aab938a92987775b84?format=webp&width=1600" data-lightbox-caption="Technology and Innovation News" loading="lazy" />
                 </div>
             </div>
         </div>
@@ -594,74 +650,59 @@
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Team Member 1 -->
+                {% for member in leadership_members %}
                 <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
                     <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
-                        <img src="{% static 'images/about deva.png' %}" alt="Mr. N. DevaKumar" class="w-full h-full object-cover">
+                        {% if member.photo_url %}
+                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
+                        {% elif member.photo %}
+                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="flex items-center justify-center w-full h-full bg-gray-200">
+                                <i class="fas fa-user text-3xl text-gray-400"></i>
+                            </div>
+                        {% endif %}
                     </div>
-                    <h3 class="font-bold text-xl text-gray-800">N DevaKumar B.Com BL</h3>
-                    <p class="text-yellow-700 mb-2">President</p>
+                    <h3 class="font-bold text-xl text-gray-800">{{ member.name }}</h3>
+                    <p class="text-yellow-700 mb-2">{{ member.position }}</p>
+                    {% if member.bio %}
                     <p class="text-gray-600 text-sm mb-4">
-                        Whose forward-thinking approach continues to drive impactful initiatives for the industrial Community.
+                        {{ member.bio }}
                     </p>
+                    {% endif %}
                     <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
+                        {% if member.linkedin %}
+                        <a href="{% if member.linkedin|slice:":8" == "https://" or member.linkedin|slice:":7" == "http://" %}{{ member.linkedin }}{% else %}https://{{ member.linkedin }}{% endif %}" target="_blank" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
                             <i class="fab fa-linkedin-in text-xl animated-icon"></i>
                         </a>
-                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
+                        {% endif %}
+                        {% if member.twitter %}
+                        <a href="{% if member.twitter|slice:":8" == "https://" or member.twitter|slice:":7" == "http://" %}{{ member.twitter }}{% else %}https://{{ member.twitter }}{% endif %}" target="_blank" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
                             <i class="fab fa-twitter text-xl animated-icon"></i>
                         </a>
-                        <a href="#" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
+                        {% endif %}
+                        {% if member.facebook %}
+                        <a href="{% if member.facebook|slice:":8" == "https://" or member.facebook|slice:":7" == "http://" %}{{ member.facebook }}{% else %}https://{{ member.facebook }}{% endif %}" target="_blank" class="text-gray-500 hover:text-blue-700 transition-all duration-300">
+                            <i class="fab fa-facebook-f text-xl animated-icon"></i>
+                        </a>
+                        {% endif %}
+                        {% if member.instagram %}
+                        <a href="{% if member.instagram|slice:":8" == "https://" or member.instagram|slice:":7" == "http://" %}{{ member.instagram }}{% else %}https://{{ member.instagram }}{% endif %}" target="_blank" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
+                            <i class="fab fa-instagram text-xl animated-icon"></i>
+                        </a>
+                        {% endif %}
+                        {% if member.email %}
+                        <a href="mailto:{{ member.email }}" class="text-gray-500 hover:text-red-600 transition-all duration-300">
                             <i class="fas fa-envelope text-xl animated-icon"></i>
                         </a>
+                        {% endif %}
                     </div>
                 </div>
-                
-                <!-- Team Member 2 -->
-                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
-                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
-                        <img src="{% static 'images/Profile pic 1.png' %}" alt="Priya Malhotra" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800">Priya Malhotra</h3>
-                    <p class="text-yellow-700 mb-2">Chief Operating Officer</p>
-                    <p class="text-gray-600 text-sm mb-4">
-                        Priya ensures operational excellence and drives strategic partnerships across the globe.
-                    </p>
-                    <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
-                            <i class="fab fa-linkedin-in text-xl animated-icon"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
-                            <i class="fab fa-twitter text-xl animated-icon"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
-                            <i class="fas fa-envelope text-xl animated-icon"></i>
-                        </a>
-                    </div>
+                {% empty %}
+                <div class="col-span-full text-center py-12">
+                    <p class="text-gray-500 text-lg">No leadership members added yet.</p>
                 </div>
-                
-                <!-- Team Member 3 -->
-                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
-                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
-                        <img src="{% static 'images/Profile pic 2.png' %}" alt="Vikram Patel" class="w-full h-full object-cover">
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800">Vikram Patel</h3>
-                    <p class="text-yellow-700 mb-2">Head of Technology</p>
-                    <p class="text-gray-600 text-sm mb-4">
-                        Vikram leads our tech team, building robust and user-friendly solutions for our platform.
-                    </p>
-                    <div class="flex justify-center space-x-4">
-                        <a href="#" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
-                            <i class="fab fa-linkedin-in text-xl animated-icon"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
-                            <i class="fab fa-twitter text-xl animated-icon"></i>
-                        </a>
-                        <a href="#" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
-                            <i class="fas fa-envelope text-xl animated-icon"></i>
-                        </a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>

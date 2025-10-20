@@ -30,12 +30,7 @@ DEBUG = False
 
 
 ALLOWED_HOSTS = ['*']
-'''
-ALLOWED_HOSTS = ['10.86.214.51', 'localhost']
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".onrender.com"]
-ALLOWED_HOSTS = ["cianext.onrender.com", "localhost", "127.0.0.1"]
 
-'''
 
 
 
@@ -222,13 +217,13 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "mohanbabuscsda2023@sankara.ac.in"
-EMAIL_HOST_PASSWORD = "MohanHari2224@"  # Google App Password
-
+EMAIL_HOST_USER = "dezacodex@gmail.com"
+EMAIL_HOST_PASSWORD = "frvb wybw nhek rmoh"  # Google App Password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 AUTH_USER_MODEL = "app.CustomUser"
 

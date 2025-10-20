@@ -55,7 +55,7 @@
             <div class="flex items-center justify-between py-4">
                 <!-- Logo -->
                 <a href="{% url 'index' %}" class="flex items-center space-x-2">
-                    <img src="{% static 'images/CIA logo.png' ' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg">
+                    <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg">
                     <span class="text-2xl font-bold text-black">CIA<span class="text-yellow-700">mezo</span></span>
                 </a>
 
@@ -184,7 +184,7 @@
                             type="button"
                             class="social-login w-full bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 flex items-center justify-center"
                         >
-                            <img src="{% static 'images/CIA logo.png' ' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg logo-black-filter">
+                            <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg logo-black-filter">
                             CIA Members
                         </button>
                     </div>

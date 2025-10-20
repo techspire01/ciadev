@@ -1,5 +1,5 @@
 {% load static %}
-{% load custom_filters %}
+{% load static custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -214,19 +214,21 @@
   </section>
 
   <!-- Modal Structure -->
-  <div id="supplierModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-    <div class="bg-white rounded-lg p-6 w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">Supplier Details</h2>
-        <button onclick="closeSupplierModal()" class="text-gray-500 hover:text-gray-700">
-          <i class="fas fa-times"></i>
-        </button>
+  <div id="supplierModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+    <div class="supplier-modal-panel relative w-full max-w-5xl overflow-hidden rounded-3xl border border-blue-100 bg-white shadow-2xl">
+      <button onclick="closeSupplierModal()" class="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white text-gray-600 shadow-lg transition hover:text-blue-600">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="supplier-modal-scroll max-h-[90vh] overflow-y-auto">
+        <div id="modalContent" class="p-6 md:p-10"></div>
       </div>
-      <div id="modalContent"></div>
     </div>
   </div>
 
   {% include 'footer.html' %}
+
+  {% include 'partials/image_lightbox.html' %}
+  <script src="{% static 'js/lightbox.js' %}"></script>
 
   <script>
     function openSupplierModal(supplierId) {
@@ -235,86 +237,292 @@
         .then(response => response.json())
         .then(data => {
           const modalContent = document.getElementById('modalContent');
-          
-          // Create HTML for product images
-          let productImagesHtml = '';
-          if (data.product_images && data.product_images.length > 0) {
-            productImagesHtml = '<div class="mb-4"><h4 class="font-semibold mb-2">Product Images:</h4><div class="grid grid-cols-2 gap-2">';
-            data.product_images.forEach(imageUrl => {
-              productImagesHtml += `<img src="${imageUrl}" class="w-full h-32 object-cover rounded" />`;
-            });
-            productImagesHtml += '</div></div>';
-          }
-          
-          // Create HTML for subcategories
-          let subCategoriesHtml = '';
-          if (data.sub_categories && data.sub_categories.length > 0) {
-            subCategoriesHtml = '<div class="mb-4"><h4 class="font-semibold mb-2">Sub-Categories:</h4><div class="flex flex-wrap gap-2">';
-            data.sub_categories.forEach(subCategory => {
-              subCategoriesHtml += `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm">${subCategory}</span>`;
-            });
-            subCategoriesHtml += '</div></div>';
-          }
-          
-          // Modal layout: logo and images left, details right
-          modalContent.innerHTML = `
-            <div class="flex flex-col md:flex-row gap-8">
-              <div class="md:w-1/3 flex flex-col items-center justify-start gap-4">
-                ${data.logo ? `<img src="${data.logo}" class="w-24 h-24 object-contain rounded mb-2 border" />` : ''}
-                ${data.image ? `<img src="${data.image}" class="w-full h-40 object-cover rounded mb-2 border" />` : ''}
-                ${data.person_image ? `<img src="${data.person_image}" class="w-20 h-20 object-cover rounded mb-2 border" />` : ''}
-              </div>
-              <div class="md:w-2/3 flex flex-col gap-2">
-                <h3 class="text-2xl font-bold mb-2 flex items-center gap-2">
-                  ${data.name}
-                  ${data.logo ? `<img src="${data.logo}" class="w-8 h-8 object-contain rounded border" />` : ''}
-                </h3>
-                <p class="mb-2 text-gray-700 font-semibold">CIA ID: <span class="text-blue-700">${data.cia_id}</span></p>
-                <p class="mb-4 text-gray-700">${data.business_description || 'No description available'}</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <h4 class="font-semibold">Company Information</h4>
-                    <p><strong>Founder:</strong> ${data.founder_name || 'N/A'}</p>
-                    <p><strong>Website:</strong> ${data.website_url ? `<a href="${data.website_url}" target="_blank" class="text-blue-600">${data.website_url}</a>` : 'N/A'}</p>
-                    <p><strong>Category:</strong> ${data.category || 'N/A'}</p>
-                    <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
-                    <p><strong>Phone:</strong> ${data.phone_number || 'N/A'}</p>
-                  </div>
-                  <div>
-                    <h4 class="font-semibold">Contact Person</h4>
-                    <p><strong>Name:</strong> ${data.contact_person_name || 'N/A'}</p>
-                  </div>
-                </div>
-                
-                <div class="mb-4">
-                  <h4 class="font-semibold mb-2">Address</h4>
-                  <p>${data.door_number || ''} ${data.street || ''}</p>
-                  <p>${data.area || ''}, ${data.city || ''}, ${data.state || ''} - ${data.pin_code || ''}</p>
-                </div>
-                
-                ${subCategoriesHtml}
-                
-                <div class="mb-4">
-                  <h4 class="font-semibold mb-2">Products</h4>
-                  <ul class="list-disc pl-5">
-                    ${data.products && data.products.length > 0 ? data.products.map(product => `<li>${product}</li>`).join('') : '<li>No products listed</li>'}
-                  </ul>
-                </div>
 
-                <div class="mb-4">
-                  <h4 class="font-semibold mb-2">Additional Information</h4>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    ${data.gstno ? `<p><strong>GST No:</strong> ${data.gstno}</p>` : ''}
-                    ${data.total_employees ? `<p><strong>Total Employees:</strong> ${data.total_employees}</p>` : ''}
-                    ${data.instagram ? `<p><strong>Instagram:</strong> <a href="${data.instagram}" target="_blank" class="text-blue-600">${data.instagram}</a></p>` : ''}
-                    ${data.facebook ? `<p><strong>Facebook:</strong> <a href="${data.facebook}" target="_blank" class="text-blue-600">${data.facebook}</a></p>` : ''}
+          const escapeHtml = (value) => {
+            if (value === null || value === undefined) {
+              return '';
+            }
+            return String(value)
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+          };
+
+          const ensureUrlProtocol = (value) => {
+            if (!value) {
+              return '';
+            }
+            const trimmed = String(value).trim();
+            if (!trimmed) {
+              return '';
+            }
+            if (/^(https?:)?\/\//i.test(trimmed)) {
+              return trimmed.startsWith('http') ? trimmed : `https:${trimmed}`;
+            }
+            return `https://${trimmed}`;
+          };
+
+          const normalisePhone = (value) => {
+            if (!value) {
+              return '';
+            }
+            return String(value).replace(/[^0-9+]/g, '');
+          };
+
+          const formattedProducts = Array.isArray(data.products) ? data.products.filter(Boolean) : [];
+          const productItems = formattedProducts.length
+            ? formattedProducts.map(product => `<li class="flex items-start gap-2 text-sm text-gray-700"><i class="fas fa-check text-blue-500 mt-1"></i><span>${escapeHtml(product)}</span></li>`).join('')
+            : '<li class="text-sm text-gray-500">No products listed yet.</li>';
+
+          const productGallery = Array.isArray(data.product_images) && data.product_images.length
+            ? `<section class="space-y-3">
+                <div class="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <i class="fas fa-images text-blue-600"></i>
+                  <span>Product Gallery</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 md:grid-cols-3">
+                  ${data.product_images.map(imageUrl => `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(data.name)} product image" class="h-32 w-full cursor-zoom-in rounded-2xl border border-blue-100 object-cover shadow-sm" data-lightbox-src="${escapeHtml(imageUrl)}" data-lightbox-caption="${escapeHtml(data.name)} product showcase" loading="lazy" />`).join('')}
+                </div>
+              </section>`
+            : '';
+
+          const subCategorySection = Array.isArray(data.sub_categories) && data.sub_categories.filter(Boolean).length
+            ? `<section class="space-y-3">
+                <div class="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <i class="fas fa-layer-group text-blue-600"></i>
+                  <span>Focus Areas</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  ${data.sub_categories.filter(Boolean).map(subCategory => `<span class="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 shadow-sm">${escapeHtml(subCategory)}</span>`).join('')}
+                </div>
+              </section>`
+            : '';
+
+          const quickActions = [
+            data.phone_number
+              ? `<a href="tel:${normalisePhone(data.phone_number)}" class="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/30">
+                  <i class="fas fa-phone-alt"></i>
+                  <span>Call</span>
+                </a>`
+              : '',
+            data.email
+              ? `<a href="mailto:${encodeURIComponent(String(data.email))}" class="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/30">
+                  <i class="fas fa-envelope"></i>
+                  <span>Email</span>
+                </a>`
+              : '',
+            data.website_url
+              ? (() => {
+                  const url = ensureUrlProtocol(data.website_url);
+                  return url
+                    ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-white/30">
+                        <i class="fas fa-arrow-up-right-from-square"></i>
+                        <span>Visit Site</span>
+                      </a>`
+                    : '';
+                })()
+              : ''
+          ].filter(Boolean).join('');
+
+          const socialLinks = [
+            data.instagram
+              ? `<a href="${escapeHtml(ensureUrlProtocol(data.instagram))}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-pink-200 bg-pink-50 px-3 py-2 text-sm font-semibold text-pink-700 transition hover:-translate-y-0.5 hover:bg-pink-100">
+                  <i class="fab fa-instagram"></i>
+                  <span>Instagram</span>
+                </a>`
+              : '',
+            data.facebook
+              ? `<a href="${escapeHtml(ensureUrlProtocol(data.facebook))}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-700 transition hover:-translate-y-0.5 hover:bg-blue-100">
+                  <i class="fab fa-facebook-f"></i>
+                  <span>Facebook</span>
+                </a>`
+              : ''
+          ].filter(Boolean).join('');
+
+          const socialSection = socialLinks
+            ? `<section class="space-y-3">
+                <div class="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                  <i class="fas fa-share-nodes text-blue-600"></i>
+                  <span>Connect</span>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  ${socialLinks}
+                </div>
+              </section>`
+            : '';
+
+          const highlightCards = [
+            data.total_employees
+              ? `<div class="rounded-2xl border border-blue-100 bg-blue-50/60 p-5 text-center shadow-sm">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Team Size</p>
+                  <p class="mt-2 text-2xl font-bold text-blue-800">${escapeHtml(data.total_employees)}</p>
+                </div>`
+              : '',
+            data.gstno
+              ? `<div class="rounded-2xl border border-amber-100 bg-amber-50 p-5 text-center shadow-sm">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-amber-700">GST Number</p>
+                  <p class="mt-2 text-base font-semibold text-amber-800">${escapeHtml(data.gstno)}</p>
+                </div>`
+              : '',
+            data.city || data.state
+              ? `<div class="rounded-2xl border border-emerald-100 bg-emerald-50 p-5 text-center shadow-sm">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-emerald-700">Operating Region</p>
+                  <p class="mt-2 text-base font-semibold text-emerald-800">${escapeHtml([data.city, data.state].filter(Boolean).join(', '))}</p>
+                </div>`
+              : ''
+          ].filter(Boolean).join('');
+
+          const highlightSection = highlightCards
+            ? `<section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                ${highlightCards}
+              </section>`
+            : '';
+
+          const addressSegments = [
+            [data.door_number, data.street].filter(Boolean).join(' ').trim(),
+            [data.area, data.city].filter(Boolean).join(', ').trim(),
+            [data.state, data.pin_code].filter(Boolean).join(' - ').trim()
+          ].filter(segment => segment && segment.length);
+
+          const addressSection = `<section class="space-y-3">
+              <div class="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                <i class="fas fa-map-marker-alt text-blue-600"></i>
+                <span>Address</span>
+              </div>
+              <div class="space-y-1">
+                ${
+                  addressSegments.length
+                    ? addressSegments.map(segment => `<p class="text-sm text-gray-600">${escapeHtml(segment)}</p>`).join('')
+                    : '<p class="text-sm text-gray-500">Address details will be shared soon.</p>'
+                }
+              </div>
+            </section>`;
+
+          const contactPersonDetails = [
+            data.contact_person_name
+              ? `<p class="text-sm text-gray-700"><span class="font-semibold text-blue-700">Name:</span> ${escapeHtml(data.contact_person_name)}</p>`
+              : '',
+            data.contact_person_email
+              ? `<p class="text-sm text-gray-700"><span class="font-semibold text-blue-700">Email:</span> ${escapeHtml(data.contact_person_email)}</p>`
+              : '',
+            data.contact_person_phone
+              ? `<p class="text-sm text-gray-700"><span class="font-semibold text-blue-700">Phone:</span> ${escapeHtml(data.contact_person_phone)}</p>`
+              : ''
+          ].filter(Boolean).join('');
+
+          const contactPersonSection = `<article class="rounded-2xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
+              <h5 class="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-700">
+                <i class="fas fa-user-tie text-blue-600"></i>
+                Key Contact
+              </h5>
+              ${
+                contactPersonDetails ||
+                '<p class="text-sm text-gray-500">Contact person details will be provided soon.</p>'
+              }
+            </article>`;
+
+          const companyInfoSection = `<article class="rounded-2xl border border-blue-100 bg-blue-50/60 p-5 shadow-sm">
+              <h5 class="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-blue-700">
+                <i class="fas fa-building text-blue-600"></i>
+                Company Information
+              </h5>
+              <ul class="space-y-2 text-sm text-blue-900">
+                <li><span class="font-semibold text-blue-800">Founder:</span> ${escapeHtml(data.founder_name) || 'Not available'}</li>
+                <li><span class="font-semibold text-blue-800">Category:</span> ${escapeHtml(data.category) || 'Not specified'}</li>
+                <li><span class="font-semibold text-blue-800">Email:</span> ${escapeHtml(data.email) || 'Not listed'}</li>
+                <li><span class="font-semibold text-blue-800">Phone:</span> ${escapeHtml(data.phone_number) || 'Not listed'}</li>
+                <li><span class="font-semibold text-blue-800">Website:</span> ${
+                  data.website_url
+                    ? `<a href="${escapeHtml(ensureUrlProtocol(data.website_url))}" target="_blank" rel="noopener noreferrer" class="text-blue-700 underline decoration-blue-200 underline-offset-2">${escapeHtml(data.website_url)}</a>`
+                    : 'Not listed'
+                }</li>
+              </ul>
+            </article>`;
+
+          const visualAssets = [
+            data.logo ? `<img src="${escapeHtml(data.logo)}" alt="${escapeHtml(data.name)} logo" class="h-24 w-24 cursor-zoom-in rounded-2xl border border-blue-100 bg-white object-contain shadow-sm" data-lightbox-src="${escapeHtml(data.logo)}" data-lightbox-caption="${escapeHtml(data.name)} brand mark" loading="lazy" />` : '',
+            data.image ? `<img src="${escapeHtml(data.image)}" alt="${escapeHtml(data.name)} facility image" class="h-48 w-full cursor-zoom-in rounded-2xl border border-blue-100 object-cover shadow-sm" data-lightbox-src="${escapeHtml(data.image)}" data-lightbox-caption="${escapeHtml(data.name)} facility" loading="lazy" />` : '',
+            data.person_image ? `<img src="${escapeHtml(data.person_image)}" alt="${escapeHtml(data.contact_person_name || data.name)} portrait" class="h-24 w-24 cursor-zoom-in rounded-full border border-blue-100 object-cover shadow-sm" data-lightbox-src="${escapeHtml(data.person_image)}" data-lightbox-caption="${escapeHtml(data.contact_person_name || data.name)}" loading="lazy" />` : ''
+          ].filter(Boolean).join('');
+
+          const visualSection = visualAssets
+            ? `<div class="flex flex-col items-center gap-4">${visualAssets}</div>`
+            : '';
+
+          modalContent.innerHTML = `
+            <div class="space-y-8">
+              <section class="rounded-3xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 p-8 text-white shadow-lg">
+                <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                  <div class="space-y-3">
+                    <p class="text-sm uppercase tracking-[0.3em] text-blue-100">CIA Member Company</p>
+                    <h3 class="text-3xl font-semibold leading-tight">${escapeHtml(data.name) || 'Supplier'}</h3>
+                    <div class="flex flex-wrap gap-3 text-sm text-blue-100">
+                      <span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 font-medium">
+                        <i class="fas fa-id-card-alt text-white"></i>
+                        ${escapeHtml(data.cia_id) || 'Not assigned'}
+                      </span>
+                      ${
+                        data.category
+                          ? `<span class="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 font-medium">
+                              <i class="fas fa-tag text-white"></i>
+                              ${escapeHtml(data.category)}
+                            </span>`
+                          : ''
+                      }
+                    </div>
+                  </div>
+                  ${
+                    quickActions
+                      ? `<div class="flex flex-wrap items-center gap-3">${quickActions}</div>`
+                      : ''
+                  }
+                </div>
+              </section>
+              <section class="space-y-8 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                  ${
+                    visualSection
+                      ? `<aside class="flex flex-col items-center gap-4 lg:col-span-1">${visualSection}</aside>`
+                      : ''
+                  }
+                  <div class="${visualSection ? 'lg:col-span-2' : 'lg:col-span-3'} space-y-6">
+                    <article class="space-y-3">
+                      <h4 class="flex items-center gap-2 text-lg font-semibold text-gray-900">
+                        <i class="fas fa-circle-info text-blue-600"></i>
+                        Company Overview
+                      </h4>
+                      <p class="leading-relaxed text-gray-600">${escapeHtml(data.business_description) || 'This member company is part of CIAnext and is working on innovative solutions across domains.'}</p>
+                    </article>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      ${companyInfoSection}
+                      ${contactPersonSection}
+                    </div>
+                    ${socialSection}
+                    ${addressSection}
+                    <section class="space-y-3">
+                      <div class="flex items-center gap-2 text-sm font-semibold text-gray-800">
+                        <i class="fas fa-box-open text-blue-600"></i>
+                        <span>Products & Solutions</span>
+                      </div>
+                      <ul class="space-y-2">
+                        ${productItems}
+                      </ul>
+                    </section>
+                    ${subCategorySection}
+                    ${productGallery}
+                    ${highlightSection}
                   </div>
                 </div>
-                
-                ${productImagesHtml}
-              </div>
+              </section>
             </div>
           `;
+
+          if (window.registerLightboxTargets) {
+            window.registerLightboxTargets(modalContent);
+          }
+
           document.getElementById('supplierModal').classList.remove('hidden');
         })
         .catch(error => {
