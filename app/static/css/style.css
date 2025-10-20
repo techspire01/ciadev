@@ -1143,7 +1143,7 @@ img.lazy-load.loaded {
   }
 }
 
-/* Showcase Section Styles with Flip Animation */
+/* Showcase Section Styles with Fade-In and Slide Effects */
 .showcase-section {
   position: relative;
   overflow: hidden;
@@ -1154,27 +1154,29 @@ img.lazy-load.loaded {
   min-height: 300px;
 }
 
-.showcase-item {
-  animation: slideInUp 0.6s ease-out forwards;
+/* Fade-In and Slide Animation for Showcase Items */
+.showcase-item-new {
   opacity: 0;
+  transform: translateY(30px) translateX(0);
+  animation: fadeInSlideUp 0.7s ease-out forwards;
 }
 
-.showcase-item[data-index="0"] {
+.showcase-item-new[data-index="0"] {
   animation-delay: 0.1s;
 }
 
-.showcase-item[data-index="1"] {
-  animation-delay: 0.2s;
+.showcase-item-new[data-index="1"] {
+  animation-delay: 0.25s;
 }
 
-.showcase-item[data-index="2"] {
-  animation-delay: 0.3s;
+.showcase-item-new[data-index="2"] {
+  animation-delay: 0.4s;
 }
 
-@keyframes slideInUp {
+@keyframes fadeInSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -1182,39 +1184,113 @@ img.lazy-load.loaded {
   }
 }
 
-.showcase-book {
-  cursor: pointer;
+/* Fade-In animation for header */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+/* Image wrapper with smooth fade transition */
+.showcase-image-wrapper {
   position: relative;
+  perspective: 1000px;
 }
 
-.showcase-book:hover .showcase-page-flip {
-  transform: rotateY(15deg);
-}
-
-.showcase-page-flip {
+.showcase-image-wrapper img {
+  display: block;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  object-fit: cover;
 }
 
-.showcase-nav-btn {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Navigation buttons styling */
+.showcase-nav-btn-new {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.showcase-nav-btn:hover {
+.showcase-nav-btn-new:hover span {
+  transform: scale(1.15);
+  box-shadow: 0 12px 30px rgba(251, 191, 36, 0.5) !important;
+}
+
+.showcase-nav-btn-new:active span {
+  transform: scale(0.9);
+}
+
+/* Counter styling */
+.showcase-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+/* Smooth transition for page changes */
+.showcase-item-new.slide-out-left {
+  animation: slideOutLeft 0.5s ease-in forwards;
+}
+
+.showcase-item-new.slide-in-right {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-40px) translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px) translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+/* Hover effects for showcase items */
+.showcase-item-new {
+  cursor: pointer;
+  border-radius: 1rem;
+  background: white;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.showcase-item-new:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Image zoom effect on hover */
+.showcase-image-wrapper {
+  overflow: hidden;
+}
+
+.showcase-image-wrapper img:hover {
   transform: scale(1.1);
-  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.4);
-}
-
-.showcase-nav-btn:active {
-  transform: scale(0.95);
-}
-
-.showcase-pages {
-  font-weight: 500;
-  letter-spacing: 0.5px;
 }
 
 /* Mobile showcase adjustments */
@@ -1223,21 +1299,25 @@ img.lazy-load.loaded {
     padding: 3rem 1rem;
   }
 
-  .showcase-nav-btn {
-    width: 2.5rem;
-    height: 2.5rem;
+  .showcase-item-new {
+    animation-delay: 0.1s !important;
   }
 
-  .showcase-nav-btn i {
-    font-size: 0.875rem;
+  .showcase-item-new[data-index="1"],
+  .showcase-item-new[data-index="2"] {
+    animation-delay: 0.1s !important;
   }
 
-  .showcase-pages {
-    font-size: 0.875rem;
+  .showcase-counter {
+    font-size: 1rem;
   }
 
-  .showcase-book {
-    margin-left: 1.5rem;
+  .showcase-counter span {
+    line-height: 1;
+  }
+
+  .showcase-image-wrapper {
+    height: 240px;
   }
 }
 
