@@ -31,63 +31,63 @@
       </div>
     </div>
 
-    <div id="heroCarousel" class="grid grid-cols-7 grid-rows-2 gap-2.5 h-full w-full transition-all duration-200 ease-in-out relative z-10">
+    <div id="heroCarousel" class="hero-carousel-grid h-full w-full transition-all duration-200 ease-in-out relative z-10">
       <!-- Container 1 - Large hero (spans 3x2) -->
-      <div class="col-span-3 row-span-2 rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
+      <div class="carousel-item carousel-item-large rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
         <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
-        <div class="absolute bottom-8 left-8 text-white">
-          <h3 class="text-2xl font-bold mb-2">Industrial Excellence</h3>
-          <p class="text-base opacity-90">Connecting industries and fostering growth in Coimbatore's manufacturing sector</p>
+        <div class="absolute bottom-4 md:bottom-8 left-4 md:left-8 text-white max-w-xs md:max-w-none">
+          <h3 class="text-lg md:text-2xl font-bold mb-1 md:mb-2">Industrial Excellence</h3>
+          <p class="text-xs md:text-base opacity-90 hidden md:block">Connecting industries and fostering growth in Coimbatore's manufacturing sector</p>
         </div>
       </div>
 
       <!-- Container 2 - Medium (spans 2x1) -->
-      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+      <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
         <img src="https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg" alt="Electrical Power Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
-        <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Electrical</h4>
-          <p class="text-sm opacity-80">Power solutions & equipment</p>
+        <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
+          <h4 class="text-sm md:text-lg font-bold">Electrical</h4>
+          <p class="text-xs opacity-80 hidden md:block">Power solutions & equipment</p>
         </div>
       </div>
 
       <!-- Container 3 - Small (spans 2x1) -->
-      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+      <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
         <img src="https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
-        <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Plastic</h4>
-          <p class="text-sm opacity-80">Manufacturing & molding</p>
+        <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
+          <h4 class="text-sm md:text-lg font-bold">Plastic</h4>
+          <p class="text-xs opacity-80 hidden md:block">Manufacturing & molding</p>
         </div>
       </div>
 
       <!-- Container 4 - Medium tall (spans 2x1) -->
-      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+      <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
         <img src="https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg" alt="Textile Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
-        <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Textile</h4>
-          <p class="text-sm opacity-80">Fabric & garment industry</p>
+        <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
+          <h4 class="text-sm md:text-lg font-bold">Textile</h4>
+          <p class="text-xs opacity-80 hidden md:block">Fabric & garment industry</p>
         </div>
       </div>
 
       <!-- Container 5 - Small (spans 2x1) -->
-      <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
+      <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
         <img src="https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg" alt="Automation Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
-        <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Automation</h4>
-          <p class="text-sm opacity-80">Smart manufacturing</p>
+        <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
+          <h4 class="text-sm md:text-lg font-bold">Automation</h4>
+          <p class="text-xs opacity-80 hidden md:block">Smart manufacturing</p>
         </div>
       </div>
     </div>
 
     <!-- Carousel Indicators -->
-    <div class="flex justify-center mt-8 space-x-2">
-      <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="0"></button>
-      <button class="carousel-dot active w-3 h-3 rounded-full bg-yellow-500 transition-all duration-300 scale-125 shadow-lg shadow-yellow-500/50" data-slide="1"></button>
-      <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="2"></button>
+    <div class="carousel-indicators flex justify-center mt-4 md:mt-8 space-x-2 z-30">
+      <button class="carousel-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="0"></button>
+      <button class="carousel-dot active w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 transition-all duration-300 scale-125 shadow-lg shadow-yellow-500/50" data-slide="1"></button>
+      <button class="carousel-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="2"></button>
     </div>
   </section>
 
