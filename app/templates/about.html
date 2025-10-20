@@ -391,28 +391,7 @@
     {% include 'navbar.html' %}
 
 
-    <!-- Hero Section with Enhanced Animations -->
-    <section class="relative py-24 md:py-32 text-gray-800 bg-white border-b">
-        <div class="container mx-auto px-4 relative z-10 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6">Chinnavedampatti Industrial Association (CIA)</h1>
-            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-8">
-                An industry-led forum in Coimbatore that empowers MSMEs through networking, capability building and collective action.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#mission" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-100 hover:text-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Explore Our Mission
-                </a>
-                <a href="#team" class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-100 hover:text-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Meet Our Team
-                </a>
-            </div>
-            <div class="mt-12">
-                <a href="#mission" class="text-gray-600 hover:text-yellow-700 transition-colors duration-300">
-                    <i class="fas fa-chevron-down text-2xl"></i>
-                </a>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Our Mission Section -->
     <section id="mission" class="py-16 bg-gradient-to-br from-yellow-50 to-orange-50">
@@ -488,26 +467,26 @@
                     </p>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-                        <div class="rounded-xl p-5 text-center">
+                        <div class="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animated-card">
                             <div class="text-yellow-500 mb-4">
-                                <i class="fas fa-check-circle text-4xl"></i>
+                                <i class="fas fa-building text-4xl animate-pulse"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">500+</h3>
-                            <p class="text-gray-700">Member Companies</p>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="500">0</h3>
+                            <p class="text-gray-700 font-medium">Member Companies</p>
                         </div>
-                        <div class="rounded-xl p-5 text-center">
+                        <div class="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animated-card">
                             <div class="text-yellow-500 mb-4">
-                                <i class="fas fa-check-circle text-4xl"></i>
+                                <i class="fas fa-industry text-4xl animate-pulse"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">8+</h3>
-                            <p class="text-gray-700">Industrial Sectors</p>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="8">0</h3>
+                            <p class="text-gray-700 font-medium">Industrial Sectors</p>
                         </div>
-                        <div class="rounded-xl p-5 text-center">
+                        <div class="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animated-card">
                             <div class="text-yellow-500 mb-4">
-                                <i class="fas fa-check-circle text-4xl"></i>
+                                <i class="fas fa-calendar-alt text-4xl animate-pulse"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">2019</h3>
-                            <p class="text-gray-700">Established</p>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="2019">0</h3>
+                            <p class="text-gray-700 font-medium">Established</p>
                         </div>
                     </div>
                 </div>
@@ -557,10 +536,9 @@
     <section id="newspaper-gallery" class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Newspaper Gallery</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">News Gallery</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">
-                    Newspaper cuttings and media coverage showcasing our achievements and activities
-                </p>
+                    Recent news, updates, and announcements from CIA   </p>
             </div>
 
             <!-- Dynamic Newspaper Gallery Grid -->
@@ -591,54 +569,7 @@
         </div>
     </section>
 
-    <!-- News Gallery Section -->
-    <section id="news-gallery" class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">News Gallery</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    Recent news, updates, and announcements from CIA
-                </p>
-            </div>
-
-            <!-- News Articles Collage -->
-            <div class="collage-container">
-                <!-- Large Featured Article -->
-                <div class="collage-frame collage-large">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fb38af586402948709f179b07e9d975f3?format=webp&width=800" alt="CIA Industrial Association News Feature" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fb38af586402948709f179b07e9d975f3?format=webp&width=1600" data-lightbox-caption="CIA Industrial Association News Feature" loading="lazy" />
-                </div>
-
-                <!-- Medium Article -->
-                <div class="collage-frame collage-medium">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F1b243ffc48ce46b1a1addfe0a32dd9ac?format=webp&width=800" alt="CIA Meeting Updates" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F1b243ffc48ce46b1a1addfe0a32dd9ac?format=webp&width=1600" data-lightbox-caption="CIA Meeting Updates" loading="lazy" />
-                </div>
-
-                <!-- Small Articles -->
-                <div class="collage-frame collage-small">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fec625abd320846f89b96ba2cbc484802?format=webp&width=800" alt="CIA Community Initiatives" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fec625abd320846f89b96ba2cbc484802?format=webp&width=1600" data-lightbox-caption="CIA Community Initiatives" loading="lazy" />
-                </div>
-
-                <div class="collage-frame collage-small">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fd8ce20373a8d41548c7b90c10f11f9b6?format=webp&width=800" alt="Industrial Development Programs" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fd8ce20373a8d41548c7b90c10f11f9b6?format=webp&width=1600" data-lightbox-caption="Industrial Development Programs" loading="lazy" />
-                </div>
-
-                <!-- Wide Article -->
-                <div class="collage-frame collage-wide">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fe60d669494054f6787860254172b2343?format=webp&width=800" alt="CIA Industry Achievements" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2Fe60d669494054f6787860254172b2343?format=webp&width=1600" data-lightbox-caption="CIA Industry Achievements" loading="lazy" />
-                </div>
-
-                <!-- Tall Article -->
-                <div class="collage-frame collage-tall">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F46cf09dfa5eb4188a6bf85e25b7bb19a?format=webp&width=800" alt="MSME Support Programs" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F46cf09dfa5eb4188a6bf85e25b7bb19a?format=webp&width=1600" data-lightbox-caption="MSME Support Programs" loading="lazy" />
-                </div>
-
-                <!-- Medium Article -->
-                <div class="collage-frame collage-medium">
-                    <img src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F0aca8c8ed4f843aab938a92987775b84?format=webp&width=800" alt="Technology and Innovation News" class="h-full w-full cursor-zoom-in object-cover" data-lightbox-src="https://cdn.builder.io/api/v1/image/assets%2F966cb811668545aebb2398149919fdac%2F0aca8c8ed4f843aab938a92987775b84?format=webp&width=1600" data-lightbox-caption="Technology and Innovation News" loading="lazy" />
-                </div>
-            </div>
-        </div>
-    </section>
+   
 
     <!-- Meet the Team Section -->
     <section id="team" class="py-16 bg-gray-50">
@@ -719,11 +650,9 @@
                     Join thousands of heavy equipment suppliers reaching customers across India and globally
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    
                     <a href="#" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
-                        Get Started
-                    </a>
-                    <a href="#" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
-                        Learn More
+                        Contact Us
                     </a>
                 </div>
             </div>
@@ -801,6 +730,46 @@
                 }
             });
         });
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const increment = target / 200;
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current);
+                        setTimeout(updateCounter, 10);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        }
+
+        // Trigger counter animation when section is in view
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        const storySection = document.querySelector('#story');
+        if (storySection) {
+            observer.observe(storySection);
+        }
     </script>
 
     <!-- Announcement Button & Bar -->

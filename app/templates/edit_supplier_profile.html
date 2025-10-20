@@ -1,0 +1,146 @@
+{% load static %}
+{% load custom_filters %}
+{% load form_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIA - Edit Business Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <style>
+        .profile-background {
+            background: linear-gradient(135deg, #FFF9E5 0%, #f3f4f6 100%);
+        }
+
+        .form-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .section-title {
+            color: #004aad;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="profile-background min-h-screen">
+    {% include 'navbar.html' %}
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl w-full space-y-8">
+            <div class="form-container rounded-2xl p-8 border border-white/20">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Edit Business Profile</h2>
+                    <p class="text-gray-600">Update your business information. Changes will be reviewed by our admin team.</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="space-y-6">
+                        <div class="form-group">
+                            <label for="{{ form.message.id_for_label }}">Message *</label>
+                            {{ form.message }}
+                            {% if form.message.help_text %}
+                                <p class="text-sm text-gray-600 mt-1">{{ form.message.help_text }}</p>
+                            {% endif %}
+                            {% if form.message.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.message.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="{{ form.contact_phone.id_for_label }}">Contact Phone</label>
+                            {{ form.contact_phone }}
+                            {% if form.contact_phone.help_text %}
+                                <p class="text-sm text-gray-600 mt-1">{{ form.contact_phone.help_text }}</p>
+                            {% endif %}
+                            {% if form.contact_phone.errors %}
+                                <div class="text-red-500 text-sm mt-1">
+                                    {% for error in form.contact_phone.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                        <button type="submit" class="bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                            <i class="fas fa-paper-plane mr-2"></i>
+                            Submit Request
+                        </button>
+                        <a href="{% url 'profile' %}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-center">
+                            <i class="fas fa-times mr-2"></i>
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/signup.js' %}"></script>
+    <script>
+        // Handle category selection
+        document.getElementById('id_category').addEventListener('change', function() {
+            const newCategoryDiv = document.querySelector('[for="id_new_category"]').parentElement;
+            if (this.value === '__add_new__') {
+                newCategoryDiv.style.display = 'block';
+            } else {
+                newCategoryDiv.style.display = 'none';
+            }
+        });
+
+        // Initially hide new category field
+        const newCategoryDiv = document.querySelector('[for="id_new_category"]').parentElement;
+        if (document.getElementById('id_category').value !== '__add_new__') {
+            newCategoryDiv.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIA - Verify Profile Edit OTP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <style>
+        .login-background {
+            background: linear-gradient(135deg, #FFF9E5 0%, #f3f4f6 100%);
+        }
+
+        .form-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            transform: translateY(-1.5rem) scale(0.85);
+            color: #f59e0b;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            color: #6b7280;
+        }
+
+        .social-login {
+            transition: all 0.3s ease;
+        }
+
+        .social-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 0.5rem;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="login-background min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo -->
+                <a href="{% url 'index' %}" class="flex items-center space-x-2">
+                    <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg">
+                    <span class="text-2xl font-bold text-black">CIA<span class="text-yellow-700">mezo</span></span>
+                </a>
+
+                <!-- Right Side -->
+                <div class="flex items-center space-x-4">
+                    <a href="{% url 'index' %}" class="text-gray-700 hover:text-yellow-700 px-4 py-2 transition font-medium">
+                        <i class="fas fa-home mr-1"></i>Home
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="form-container rounded-2xl p-8 border border-white/20">
+                <div class="text-center">
+                    <div class="mx-auto h-16 w-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-envelope text-yellow-600 text-2xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
+                    <p class="text-gray-600 mb-6">We've sent a verification code to your email address. Please enter it below to confirm your profile changes.</p>
+                </div>
+
+                <form method="post" class="space-y-6">
+                    {% csrf_token %}
+
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="otp"
+                            name="otp"
+                            maxlength="6"
+                            class="otp-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                            placeholder="000000"
+                            required
+                        />
+                        <label for="otp" class="text-gray-600">Enter 6-digit OTP</label>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="text-center p-3 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-check mr-2"></i>
+                        Verify & Update Profile
+                    </button>
+
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">
+                            Didn't receive the code?
+                            <a href="#" onclick="resendOTP()" class="text-yellow-600 hover:text-yellow-700 font-medium">
+                                Resend OTP
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-focus on OTP input
+        const otpInput = document.getElementById('otp');
+        otpInput.focus();
+
+        // Only allow numbers
+        otpInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+
+            // Auto-submit when 6 digits are entered
+            if (this.value.length === 6) {
+                // Add a small delay for better UX
+                setTimeout(() => {
+                    this.form.submit();
+                }, 300);
+            }
+        });
+
+        // Prevent paste of non-numeric content
+        otpInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const paste = (e.clipboardData || window.clipboardData).getData('text');
+            const numericPaste = paste.replace(/[^0-9]/g, '').slice(0, 6);
+            this.value = numericPaste;
+
+            // Auto-submit if 6 digits
+            if (numericPaste.length === 6) {
+                setTimeout(() => {
+                    this.form.submit();
+                }, 300);
+            }
+        });
+
+        function resendOTP() {
+            // You can implement resend functionality here
+            alert('Resend OTP functionality would be implemented here');
+        }
+
+        // Add floating label animation
+        document.querySelectorAll('.input-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                if (this.value === '') {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+    </script>
+    <script src="{% static 'js/signup.js' %}"></script>
+</body>
+</html>

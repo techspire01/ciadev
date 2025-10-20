@@ -129,7 +129,7 @@ class CustomUser(AbstractUser):
         swappable = 'AUTH_USER_MODEL'
 
 class PasswordResetOTP(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     otp = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -194,5 +194,109 @@ class NewspaperGallery(models.Model):
 
     def __str__(self):
         return self.title or f"Newspaper Cutting {self.id}"
+
+class BookShowcase(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to="bookshowcase/images/", blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
+    order = models.PositiveIntegerField(default=0, help_text="Order for display")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', '-created_at']
+
+    def __str__(self):
+        return self.title or f"Book Image {self.id}"
+
+class SupplierEditRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField()  # User's message describing the requested changes
+    contact_phone = models.CharField(max_length=15, blank=True, null=True)  # Contact phone for the request
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    admin_notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviewed_requests')
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Edit request for {self.supplier.name} by {self.user.email}"
+
+class SupplierListingRequest(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+
+    # Company Information
+    company_name = models.CharField(max_length=255)
+    founder_name = models.CharField(max_length=255, blank=True, null=True)
+    website_url = models.TextField(blank=True, null=True)
+    logo_url = models.TextField(blank=True, null=True)
+    image_url = models.TextField(blank=True, null=True)
+
+    # Business Details
+    category = models.CharField(max_length=255, blank=True, null=True)
+    sub_category1 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category2 = models.CharField(max_length=255, blank=True, null=True)
+    sub_category3 = models.CharField(max_length=255, blank=True, null=True)
+
+    # Contact Information
+    email = models.EmailField(max_length=255)
+    contact_person_name = models.CharField(max_length=255, blank=True, null=True)
+    person_image_url = models.TextField(blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+
+    # Products (up to 10)
+    product1 = models.CharField(max_length=255, blank=True, null=True)
+    product2 = models.CharField(max_length=255, blank=True, null=True)
+    product3 = models.CharField(max_length=255, blank=True, null=True)
+    product4 = models.CharField(max_length=255, blank=True, null=True)
+    product5 = models.CharField(max_length=255, blank=True, null=True)
+    product6 = models.CharField(max_length=255, blank=True, null=True)
+    product7 = models.CharField(max_length=255, blank=True, null=True)
+    product8 = models.CharField(max_length=255, blank=True, null=True)
+    product9 = models.CharField(max_length=255, blank=True, null=True)
+    product10 = models.CharField(max_length=255, blank=True, null=True)
+
+    # Address
+    door_number = models.CharField(max_length=50, blank=True, null=True)
+    street = models.CharField(max_length=255, blank=True, null=True)
+    area = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    pin_code = models.CharField(max_length=6, blank=True, null=True)
+
+    # Additional Business Details
+    business_description = models.TextField(blank=True, null=True)
+    gstno = models.CharField(max_length=15, blank=True, null=True)
+    instagram = models.TextField(blank=True, null=True)
+    facebook = models.TextField(blank=True, null=True)
+    total_employees = models.IntegerField(blank=True, null=True)
+
+    # Request metadata
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    admin_notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviewed_listing_requests')
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Listing request for {self.company_name} by {self.user.email}"
 
 

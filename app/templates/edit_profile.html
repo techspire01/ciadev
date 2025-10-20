@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIA - Edit Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <style>
+        .edit-profile-background {
+            background: linear-gradient(135deg, #FFF9E5 0%, #f3f4f6 100%);
+        }
+
+        .edit-profile-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            transform: translateY(-1.5rem) scale(0.85);
+            color: #f59e0b;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            color: #6b7280;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+    </style>
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="edit-profile-background min-h-screen">
+    {% include 'navbar.html' %}
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="mx-auto h-16 w-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-user-edit text-yellow-600 text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h2>
+                <p class="text-gray-600">Update your personal information</p>
+            </div>
+
+            <div class="edit-profile-container rounded-2xl p-8 border border-white/20">
+                <form class="space-y-6" method="post">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-4 py-3 rounded relative" role="alert">
+                                <span class="block sm:inline">{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="input-group">
+                        {{ form.first_name }}
+                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                    </div>
+
+                    <div class="input-group">
+                        {{ form.last_name }}
+                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                    </div>
+
+                    <div class="input-group">
+                        {{ form.email }}
+                        <label for="{{ form.email.id_for_label }}">Email Address</label>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                    >
+                        <i class="fas fa-save mr-2"></i>
+                        Update Profile
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <a href="{% url 'profile' %}" class="text-yellow-600 hover:text-yellow-500 font-medium transition-colors duration-300">
+                        <i class="fas fa-arrow-left mr-1"></i>
+                        Back to Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/signup.js' %}"></script>
+</body>
+</html>

@@ -33,4 +33,19 @@ urlpatterns = [
 
     # AJAX endpoint for supplier categories
     path('get_supplier_categories/', views.get_supplier_categories, name='get_supplier_categories'),
+
+    # Profile management
+    path('profile/', views.profile_view, name='profile'),
+    path('edit-profile/', views.edit_profile_view, name='edit_profile'),
+    path('edit-supplier-profile/', views.edit_supplier_profile_view, name='edit_supplier_profile'),
+    path('verify-edit-otp/', views.verify_edit_otp, name='verify_edit_otp'),
+
+    # User creation and profile management
+    path('create-user/', views.create_user_view, name='create_user'),
+    path('verify-user-otp/', views.verify_user_otp, name='verify_user_otp'),
+    path('edit-profile/', views.edit_profile_view, name='edit_profile'),
+    path('verify-edit-otp/', views.verify_edit_otp, name='verify_edit_otp'),
+
+    # Supplier listing request
+    path('request-supplier-listing/', views.request_supplier_listing_view, name='request_supplier_listing'),
 ]

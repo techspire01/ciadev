@@ -12,6 +12,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
     <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
 </head>
 <body class="bg-white">
@@ -247,7 +248,7 @@
         </div>
         {% endfor %}
       </div>
-      <div class="rounded -2l p-2 text-center mt-8">
+      <div class="rounded-2xl p-2 text-center mt-8">
         <div class="inline-block bg-gradient-to-r from-blue-400 to-blue-500 text-white font-semibold px-8 py-3 rounded-full hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
           <a href="{% url 'suppliers' %}">
             View All Suppliers <i class="fas fa-arrow-right ml-2"></i>
@@ -257,6 +258,74 @@
     </div>
   </section>
 
+
+  <!-- Book Showcase Section -->
+  <section class="py-16 bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          Our Showcase
+        </h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Discover our featured images in an elegant book format
+        </p>
+      </div>
+
+      <div class="max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {% for image in book_showcase_images %}
+          <div class="book-frame relative group">
+            <!-- Book spine -->
+            <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-l-lg shadow-lg z-10 flex items-center justify-center">
+              <span class="text-white text-xs font-bold transform -rotate-90 whitespace-nowrap">{{ image.title|default:'Book'|truncatechars:8 }}</span>
+            </div>
+
+            <!-- Book cover -->
+            <div class="ml-8 bg-white rounded-r-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+              <div class="relative h-64">
+                {% if image.image_url %}
+                  <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" class="w-full h-full object-cover" crossorigin="anonymous" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center absolute inset-0" style="display: none;">
+                    <span class="text-gray-500 text-lg">{{ image.title|default:'No Image' }}</span>
+                  </div>
+                {% elif image.image %}
+                  <img src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="w-full h-full object-cover" crossorigin="anonymous" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center absolute inset-0" style="display: none;">
+                    <span class="text-gray-500 text-lg">{{ image.title|default:'No Image' }}</span>
+                  </div>
+                {% else %}
+                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                    <span class="text-gray-500 text-lg">{{ image.title|default:'No Image' }}</span>
+                  </div>
+                {% endif %}
+
+                <!-- Overlay with title -->
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                  <h4 class="text-white text-lg font-bold">{{ image.title|default:'Featured Image' }}</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-span-full text-center py-12">
+            <div class="book-frame relative">
+              <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-l-lg shadow-lg z-10 flex items-center justify-center">
+                <span class="text-white text-xs font-bold transform -rotate-90">Sample</span>
+              </div>
+              <div class="ml-8 bg-white rounded-r-lg shadow-xl overflow-hidden h-64 flex items-center justify-center">
+                <div class="text-center text-gray-500">
+                  <i class="fas fa-book text-4xl mb-4"></i>
+                  <p>No showcase images available</p>
+                  <p class="text-sm">Add images through the admin panel</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- About Us Section Above Footer -->
   <section class="py-16 bg-white">

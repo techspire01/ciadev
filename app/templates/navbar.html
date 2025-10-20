@@ -13,12 +13,17 @@
           {% if user.is_authenticated %}
             <!-- Profile Icon with Initials -->
             <div class="relative group">
-              <button id="profileBtn" class="w-10 h-10 bg-yellow-600 text-white rounded-full flex items-center justify-center font-bold text-lg focus:outline-none">
+              <a href="{% url 'profile' %}" class="w-10 h-10 bg-yellow-600 text-white rounded-full flex items-center justify-center font-bold text-lg focus:outline-none hover:bg-yellow-700 transition-colors">
                 {{ user.get_full_name|default:user.email|slice:":1"|upper }}
-              </button>
-              <button id="logoutBtn" class="w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-lg focus:outline-none transition-all duration-300 hover:bg-red-700 hidden">
-                <i class="fas fa-sign-out-alt text-sm"></i>
-              </button>
+              </a>
+              <div class="absolute hidden group-hover:block bg-white text-gray-700 mt-2 w-48 rounded shadow-lg z-[9999] border border-gray-200">
+                <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-yellow-100">
+                  <i class="fas fa-user mr-2"></i>Profile
+                </a>
+                <a href="{% url 'logout' %}" class="block px-4 py-2 hover:bg-red-100 text-red-600">
+                  <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+              </div>
             </div>
           {% else %}
             <a

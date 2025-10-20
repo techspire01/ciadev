@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIA - Verify User OTP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+    <style>
+        .verify-background {
+            background: linear-gradient(135deg, #FFF9E5 0%, #f3f4f6 100%);
+        }
+
+        .verify-container {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 0.5rem;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="verify-background min-h-screen">
+    {% include 'navbar.html' %}
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <div class="mx-auto h-16 w-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-key text-yellow-600 text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
+                <p class="text-gray-600">Enter the 6-digit verification code sent to your email</p>
+            </div>
+
+            <div class="verify-container rounded-2xl p-8 border border-white/20">
+                <form class="space-y-6" method="post">
+                    {% csrf_token %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-4 py-3 rounded relative" role="alert">
+                                <span class="block sm:inline">{{ message }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="input-group">
+                        <input
+                            id="otp"
+                            name="otp"
+                            type="text"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 otp-input"
+                            placeholder="000000"
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            autocomplete="one-time-code"
+                        >
+                        <label for="otp" class="text-gray-500">6-Digit Verification Code</label>
+                        <div class="absolute right-3 top-3 text-gray-400">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                    >
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Verify Code
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center space-y-2">
+                    <p class="text-sm text-gray-600">
+                        Didn't receive the code? Check your spam folder.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const otpInput = document.getElementById('otp');
+
+            otpInput.focus();
+
+            otpInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+
+                if (this.value.length === 6) {
+                    setTimeout(() => {
+                        this.form.submit();
+                    }, 300);
+                }
+            });
+
+            otpInput.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const paste = (e.clipboardData || window.clipboardData).getData('text');
+                const numericPaste = paste.replace(/[^0-9]/g, '').slice(0, 6);
+                this.value = numericPaste;
+
+                if (numericPaste.length === 6) {
+                    setTimeout(() => {
+                        this.form.submit();
+                    }, 300);
+                }
+            });
+        });
+    </script>
+    <script src="{% static 'js/signup.js' %}"></script>
+</body>
+</html>
