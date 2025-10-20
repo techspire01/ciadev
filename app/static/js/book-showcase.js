@@ -1,109 +1,228 @@
-// Book Showcase Animation Script
+// Showcase Section with Auto-Scroll and Rotating Circle Indicator
 document.addEventListener('DOMContentLoaded', function() {
-  const bookPages = document.querySelectorAll('.book-page');
-  const prevBtn = document.querySelector('.prev-page');
-  const nextBtn = document.querySelector('.next-page');
-
-  if (!bookPages.length || !prevBtn || !nextBtn) return;
+  const showcaseItems = document.querySelectorAll('.showcase-item-new');
+  const itemsPerPageDesktop = 3;
+  const itemsPerPageTablet = 2;
+  const itemsPerPageMobile = 1;
+  const AUTO_SCROLL_INTERVAL = 5000; // 5 seconds
 
   let currentPage = 0;
-  const totalPages = bookPages.length;
+  let itemsPerPage = getItemsPerPage();
+  let totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
+  let autoScrollTimer = null;
+  let isAutoScrolling = true;
 
-  function updatePages() {
-    bookPages.forEach((page, index) => {
-      if (index === currentPage) {
-        page.classList.add('active');
-        page.classList.remove('inactive');
-        page.style.transform = 'rotateY(0deg) translateZ(0px)';
-        page.style.zIndex = totalPages;
-      } else if (index < currentPage) {
-        page.classList.remove('active');
-        page.classList.add('inactive');
-        const rotation = -10 * (currentPage - index);
-        const translateZ = -50 * (currentPage - index);
-        page.style.transform = `rotateY(${rotation}deg) translateZ(${translateZ}px)`;
-        page.style.zIndex = totalPages - (currentPage - index);
+  const rotatingIndicator = document.getElementById('rotatingIndicator');
+  const circleDots = rotatingIndicator?.querySelector('.circle-dots');
+
+  function getItemsPerPage() {
+    if (window.innerWidth < 768) return itemsPerPageMobile;
+    if (window.innerWidth < 1024) return itemsPerPageTablet;
+    return itemsPerPageDesktop;
+  }
+
+  function updateShowcaseDisplay() {
+    const startIdx = currentPage * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+
+    showcaseItems.forEach((item, idx) => {
+      if (idx >= startIdx && idx < endIdx) {
+        item.style.display = 'block';
+        // Trigger fade-in animation
+        setTimeout(() => {
+          item.style.opacity = '1';
+          item.style.transform = 'translateY(0)';
+        }, 10);
       } else {
-        page.classList.remove('active', 'inactive');
-        page.style.transform = 'rotateY(10deg) translateZ(-50px)';
-        page.style.zIndex = totalPages - (index - currentPage);
+        item.style.display = 'none';
+      }
+    });
+
+    // Update rotating circle indicator
+    updateRotatingIndicator();
+
+    // Update button states
+    const prevBtn = document.getElementById('showcasePrevBtn');
+    const nextBtn = document.getElementById('showcaseNextBtn');
+
+    if (prevBtn) {
+      prevBtn.style.opacity = currentPage === 0 ? '0.5' : '1';
+      prevBtn.style.pointerEvents = currentPage === 0 ? 'none' : 'auto';
+    }
+    if (nextBtn) {
+      nextBtn.style.opacity = currentPage === totalPages - 1 ? '0.5' : '1';
+      nextBtn.style.pointerEvents = currentPage === totalPages - 1 ? 'none' : 'auto';
+    }
+  }
+
+  function updateRotatingIndicator() {
+    if (circleDots) {
+      const rotationStep = (360 / totalPages) * currentPage;
+      circleDots.style.transform = `rotate(${rotationStep}deg)`;
+    }
+  }
+
+  function startAutoScroll() {
+    if (autoScrollTimer) clearInterval(autoScrollTimer);
+    isAutoScrolling = true;
+    if (circleDots) {
+      circleDots.classList.remove('paused');
+    }
+
+    autoScrollTimer = setInterval(() => {
+      if (currentPage < totalPages - 1) {
+        currentPage++;
+      } else {
+        currentPage = 0;
+      }
+      updateShowcaseDisplay();
+    }, AUTO_SCROLL_INTERVAL);
+  }
+
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+    isAutoScrolling = false;
+    if (circleDots) {
+      circleDots.classList.add('paused');
+    }
+  }
+
+  function nextPage() {
+    stopAutoScroll();
+    if (currentPage < totalPages - 1) {
+      currentPage++;
+    } else {
+      currentPage = 0;
+    }
+    updateShowcaseDisplay();
+    // Resume auto-scroll after 2 seconds
+    setTimeout(startAutoScroll, 2000);
+  }
+
+  function prevPage() {
+    stopAutoScroll();
+    if (currentPage > 0) {
+      currentPage--;
+    } else {
+      currentPage = totalPages - 1;
+    }
+    updateShowcaseDisplay();
+    // Resume auto-scroll after 2 seconds
+    setTimeout(startAutoScroll, 2000);
+  }
+
+  // Event listeners for navigation buttons
+  const prevBtn = document.getElementById('showcasePrevBtn');
+  const nextBtn = document.getElementById('showcaseNextBtn');
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', prevPage);
+    prevBtn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        prevPage();
       }
     });
   }
 
-  function nextPage() {
-    if (currentPage < totalPages - 1) {
-      currentPage++;
-      updatePages();
-    }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', nextPage);
+    nextBtn.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        nextPage();
+      }
+    });
   }
 
-  function prevPage() {
-    if (currentPage > 0) {
-      currentPage--;
-      updatePages();
-    }
+  // Stop auto-scroll when hovering over showcase
+  const showcaseGrid = document.querySelector('.showcase-grid');
+  if (showcaseGrid) {
+    showcaseGrid.addEventListener('mouseenter', stopAutoScroll);
+    showcaseGrid.addEventListener('mouseleave', startAutoScroll);
   }
-
-  // Event listeners
-  nextBtn.addEventListener('click', nextPage);
-  prevBtn.addEventListener('click', prevPage);
 
   // Keyboard navigation
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight' || e.key === ' ') {
-      e.preventDefault();
-      nextPage();
-    } else if (e.key === 'ArrowLeft') {
+    if (e.key === 'ArrowLeft') {
       e.preventDefault();
       prevPage();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextPage();
     }
   });
 
-  // Touch/swipe support
-  let startX = 0;
-  let endX = 0;
+  // Touch/swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
 
-  document.querySelector('.book-pages').addEventListener('touchstart', function(e) {
-    startX = e.touches[0].clientX;
-  });
+  if (showcaseGrid) {
+    showcaseGrid.addEventListener('touchstart', function(e) {
+      stopAutoScroll();
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
 
-  document.querySelector('.book-pages').addEventListener('touchend', function(e) {
-    endX = e.changedTouches[0].clientX;
-    const diffX = startX - endX;
+    showcaseGrid.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+      // Resume auto-scroll after swipe
+      setTimeout(startAutoScroll, 2000);
+    }, false);
+  }
 
-    if (Math.abs(diffX) > 50) { // Minimum swipe distance
-      if (diffX > 0) {
-        nextPage(); // Swipe left
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = touchStartX - touchEndX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+        } else {
+          currentPage = 0;
+        }
       } else {
-        prevPage(); // Swipe right
+        if (currentPage > 0) {
+          currentPage--;
+        } else {
+          currentPage = totalPages - 1;
+        }
       }
+      updateShowcaseDisplay();
     }
+  }
+
+  // Handle window resize
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+      const newItemsPerPage = getItemsPerPage();
+      if (newItemsPerPage !== itemsPerPage) {
+        itemsPerPage = newItemsPerPage;
+        totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
+        currentPage = Math.min(currentPage, totalPages - 1);
+        updateShowcaseDisplay();
+      }
+    }, 250);
   });
 
-  // Auto-play functionality (optional)
-  let autoPlayInterval;
+  // Initial display and start auto-scroll
+  updateShowcaseDisplay();
+  startAutoScroll();
 
-  function startAutoPlay() {
-    autoPlayInterval = setInterval(() => {
-      if (currentPage < totalPages - 1) {
-        nextPage();
-      } else {
-        currentPage = 0;
-        updatePages();
+  // Add click handler to items for opening full view (optional)
+  showcaseItems.forEach((item) => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', function() {
+      const img = this.querySelector('img');
+      if (img && img.style.display !== 'none') {
+        console.log('Clicked on:', this.querySelector('h3')?.textContent);
       }
-    }, 3000); // Change page every 3 seconds
-  }
-
-  function stopAutoPlay() {
-    clearInterval(autoPlayInterval);
-  }
-
-  // Pause auto-play on hover
-  document.querySelector('.book-container').addEventListener('mouseenter', stopAutoPlay);
-  document.querySelector('.book-container').addEventListener('mouseleave', startAutoPlay);
-
-  // Initialize
-  updatePages();
-  startAutoPlay();
+    });
+  });
 });
