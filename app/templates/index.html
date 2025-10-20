@@ -272,20 +272,32 @@
         </p>
       </div>
 
-      <div class="max-w-7xl mx-auto">
-        <!-- Showcase Navigation Controls -->
-        <div class="flex items-center justify-center gap-6 mb-10 md:mb-16">
-          <button id="showcasePrevBtn" class="showcase-nav-btn-new group" title="Previous">
+      <div class="max-w-7xl mx-auto relative">
+        <!-- Showcase Navigation with Rotating Indicator -->
+        <div class="flex items-center justify-between mb-10 md:mb-16 px-4">
+          <!-- Left Navigation Button -->
+          <button id="showcasePrevBtn" class="showcase-nav-btn-new group absolute left-0 md:relative z-20" title="Previous">
             <span class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-500 group-hover:bg-yellow-600 text-white transition-all duration-300 shadow-lg group-hover:shadow-xl">
               <i class="fas fa-chevron-left"></i>
             </span>
           </button>
-          <div class="showcase-counter text-center flex-grow">
-            <span class="text-2xl font-bold text-yellow-600" id="currentPage">1</span>
-            <span class="text-gray-600 mx-2">/</span>
-            <span class="text-xl font-semibold text-gray-700" id="totalPages">1</span>
+
+          <!-- Rotating Circle Indicator (Center) -->
+          <div class="flex justify-center flex-grow mx-8">
+            <div class="showcase-rotating-circle" id="rotatingIndicator">
+              <div class="circle-dots">
+                <div class="dot dot-1"></div>
+                <div class="dot dot-2"></div>
+                <div class="dot dot-3"></div>
+              </div>
+              <div class="circle-center">
+                <i class="fas fa-images text-yellow-600"></i>
+              </div>
+            </div>
           </div>
-          <button id="showcaseNextBtn" class="showcase-nav-btn-new group" title="Next">
+
+          <!-- Right Navigation Button -->
+          <button id="showcaseNextBtn" class="showcase-nav-btn-new group absolute right-0 md:relative z-20" title="Next">
             <span class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-500 group-hover:bg-yellow-600 text-white transition-all duration-300 shadow-lg group-hover:shadow-xl">
               <i class="fas fa-chevron-right"></i>
             </span>
