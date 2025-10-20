@@ -1144,6 +1144,104 @@ img.lazy-load.loaded {
   }
 }
 
+/* Showcase Section Styles with Flip Animation */
+.showcase-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.showcase-grid {
+  position: relative;
+  min-height: 300px;
+}
+
+.showcase-item {
+  animation: slideInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.showcase-item[data-index="0"] {
+  animation-delay: 0.1s;
+}
+
+.showcase-item[data-index="1"] {
+  animation-delay: 0.2s;
+}
+
+.showcase-item[data-index="2"] {
+  animation-delay: 0.3s;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.showcase-book {
+  cursor: pointer;
+  position: relative;
+}
+
+.showcase-book:hover .showcase-page-flip {
+  transform: rotateY(15deg);
+}
+
+.showcase-page-flip {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.showcase-nav-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.showcase-nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.4);
+}
+
+.showcase-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.showcase-pages {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Mobile showcase adjustments */
+@media (max-width: 768px) {
+  .showcase-section {
+    padding: 3rem 1rem;
+  }
+
+  .showcase-nav-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .showcase-nav-btn i {
+    font-size: 0.875rem;
+  }
+
+  .showcase-pages {
+    font-size: 0.875rem;
+  }
+
+  .showcase-book {
+    margin-left: 1.5rem;
+  }
+}
+
 /* Performance optimizations */
 * {
   box-sizing: border-box;
