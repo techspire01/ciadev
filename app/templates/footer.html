@@ -1,107 +1,56 @@
 {% load static %}
 {% load custom_filters %}
 
-<footer class="bg-gray-100 text-gray-800 py-4 border-t border-gray-200">
+<footer class="bg-gray-100 text-gray-800 py-3 border-t border-gray-200">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
         <!-- Company Info -->
-        <div class="rounded-2xl p-5 border border-gray-100 text-center md:text-left">
-          <div class="flex items-center justify-center md:justify-start mb-2">
-            <img
-              src="{% static 'images/CIA logo.png' %}"
-              alt="CIA MachineryHub logo"
-              class="h-6 w-6 mr-2 rounded-lg"
-            />
-            <div>
-              <span class="text-sm font-bold">CIA</span>
-              <span class="text-sm font-bold text-yellow-600">Matrix</span>
+        <div class="p-3 text-center md:text-left">
+          <div class="flex items-center justify-center md:justify-start mb-2 gap-2">
+            <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-5 w-5 rounded" />
+            <div class="text-xs">
+              <span class="font-bold">CIA</span>
+              <span class="font-bold text-yellow-600"> Matrix</span>
             </div>
           </div>
           <div class="flex justify-center md:justify-start space-x-2">
-            <a
-              href="#"
-              class="w-6 h-6 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs"
-              ><i class="fab fa-facebook-f"></i
-            ></a>
-            <a
-              href="#"
-              class="w-6 h-6 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs"
-              ><i class="fab fa-twitter"></i
-            ></a>
-            <a
-              href="#"
-              class="w-6 h-6 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs"
-              ><i class="fab fa-linkedin-in"></i
-            ></a>
-            <a
-              href="#"
-              class="w-6 h-6 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs"
-              ><i class="fab fa-instagram"></i
-            ></a>
+            <a href="#" class="w-5 h-5 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="w-5 h-5 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="w-5 h-5 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="w-5 h-5 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs" title="Instagram"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
 
         <!-- Quick Links -->
-        <div class="rounded-2xl p-5 border border-gray-100 text-center">
-          <h4 class="text-sm font-bold mb-2 text-gray-800">Quick Links</h4>
-          <div class="flex justify-center space-x-4">
-            <a
-              href="{% url 'index' %}"
-              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs"
-            >
-              Home
-            </a>
-            <a
-              href="{% url 'about' %}"
-              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs"
-            >
-              About Us
-            </a>
-            <a
-              href="{% url 'category' %}"
-              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs"
-            >
-              Category
-            </a>
-            <a
-              href="{% url 'suppliers' %}"
-              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs"
-            >
-              Suppliers
-            </a>
+        <div class="p-3 text-center">
+          <h4 class="text-xs font-bold mb-2 text-gray-800">Links</h4>
+          <div class="flex justify-center gap-3 text-xs flex-wrap">
+            <a href="{% url 'index' %}" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">Home</a>
+            <a href="{% url 'about' %}" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">About</a>
+            <a href="{% url 'category' %}" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">Category</a>
+            <a href="{% url 'suppliers' %}" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">Suppliers</a>
           </div>
         </div>
 
-            <!-- Contact Info -->
-            <div class="rounded-2xl p-5 border border-gray-100 text-center md:text-right">
-              <h4 class="text-sm font-bold mb-2 text-gray-800">Contact Info</h4>
-              <div class="space-y-1">
-                <div class="flex items-start justify-center md:justify-end text-xs">
-                  <i class="fas fa-map-marker-alt text-yellow-600 mr-2 mt-0.5"></i>
-                  <span class="text-gray-600 text-left">CIA - Chinnavedampatti Industrial Association<br>No.10, OmSakthi Nagar, Chinnavedampatti,<br>Coimbatore - 641049, Tamil Nadu, India.</span>
-                </div>
-                <div class="flex items-center justify-center md:justify-end text-xs">
-                  <i class="fas fa-phone-alt text-yellow-600 mr-2"></i>
-                  <a href="tel:+919087133005" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">+91 9087133005</a>
-                </div>
-                <div class="flex items-center justify-center md:justify-end text-xs">
-                  <i class="fas fa-envelope text-yellow-600 mr-2"></i>
-                  <a href="mailto:contact@machineryhub.com" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">contact@machineryhub.com</a>
-                </div>
-              </div>
+        <!-- Contact Info -->
+        <div class="p-3 text-center md:text-right">
+          <h4 class="text-xs font-bold mb-1 text-gray-800">Contact</h4>
+          <div class="space-y-1 text-xs">
+            <div class="flex items-center justify-center md:justify-end gap-1">
+              <i class="fas fa-phone-alt text-yellow-600"></i>
+              <a href="tel:+919087133005" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">+91 9087133005</a>
             </div>
+            <div class="flex items-center justify-center md:justify-end gap-1">
+              <i class="fas fa-envelope text-yellow-600"></i>
+              <a href="mailto:contact@machineryhub.com" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300">contact@machineryhub.com</a>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Bottom Section -->
-      <div class="border-t border-gray-300 mt-3 pt-2">
-        <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs">
-          <div class="mb-2 md:mb-0">
-            <p>© 2025 CIA. All rights reserved.</p>
-          </div>
-          <div>
-            <p>Developed by <a href="https://www.sankara.ac.in/science-and-commerce/" target="_blank" class="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors duration-300">CODERS CLUB SANSAC</a></p>
-          </div>
-        </div>
+      <div class="border-t border-gray-300 mt-2 pt-2 text-center text-gray-500 text-xs">
+        <p>© 2025 CIA. All rights reserved. | Developed by <a href="https://www.sankara.ac.in/science-and-commerce/" target="_blank" class="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors duration-300">CODERS CLUB</a></p>
       </div>
     </div>
 </footer>
