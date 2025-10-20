@@ -259,91 +259,92 @@
   </section>
 
 
-  <!-- Book Showcase Section -->
-  <section class="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-gray-100 showcase-section">
+  <!-- Showcase Section with Fade-In and Slide Effects -->
+  <section class="py-12 md:py-20 bg-gradient-to-b from-white via-blue-50 to-white showcase-section relative overflow-hidden">
     <div class="container mx-auto px-4">
-      <div class="text-center mb-8 md:mb-12">
-        <h2 class="text-2xl md:text-4xl font-bold text-gray-800 mb-3 md:mb-4">
+      <!-- Section Header -->
+      <div class="text-center mb-12 md:mb-16 animate-fade-in-down">
+        <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
           Our Showcase
         </h2>
-        <p class="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-          Discover our featured images in an elegant book format
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Explore our curated collection of featured images showcasing our work and expertise
         </p>
       </div>
 
-      <div class="max-w-6xl mx-auto">
-        <!-- Showcase Navigation -->
-        <div class="flex items-center justify-between mb-6 md:mb-10 gap-4">
-          <button id="showcasePrevBtn" class="showcase-nav-btn flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full flex items-center justify-center transition-all duration-300 shadow-lg" title="Previous">
-            <i class="fas fa-chevron-left"></i>
+      <div class="max-w-7xl mx-auto">
+        <!-- Showcase Navigation Controls -->
+        <div class="flex items-center justify-center gap-6 mb-10 md:mb-16">
+          <button id="showcasePrevBtn" class="showcase-nav-btn-new group" title="Previous">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-500 group-hover:bg-yellow-600 text-white transition-all duration-300 shadow-lg group-hover:shadow-xl">
+              <i class="fas fa-chevron-left"></i>
+            </span>
           </button>
-          <div class="showcase-pages flex-grow text-center text-gray-600 text-sm md:text-base font-medium" id="showcasePages">
-            Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+          <div class="showcase-counter text-center flex-grow">
+            <span class="text-2xl font-bold text-yellow-600" id="currentPage">1</span>
+            <span class="text-gray-600 mx-2">/</span>
+            <span class="text-xl font-semibold text-gray-700" id="totalPages">1</span>
           </div>
-          <button id="showcaseNextBtn" class="showcase-nav-btn flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full flex items-center justify-center transition-all duration-300 shadow-lg" title="Next">
-            <i class="fas fa-chevron-right"></i>
+          <button id="showcaseNextBtn" class="showcase-nav-btn-new group" title="Next">
+            <span class="flex items-center justify-center w-12 h-12 rounded-full bg-yellow-500 group-hover:bg-yellow-600 text-white transition-all duration-300 shadow-lg group-hover:shadow-xl">
+              <i class="fas fa-chevron-right"></i>
+            </span>
           </button>
         </div>
 
-        <div class="showcase-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+        <!-- Showcase Grid with Fade-In Slide Effects -->
+        <div class="showcase-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {% for image in book_showcase_images %}
-          <div class="showcase-item book-frame relative group" data-index="{{ forloop.counter0 }}">
-            <!-- Book spine -->
-            <div class="absolute left-0 top-0 bottom-0 w-6 md:w-8 bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-l-lg shadow-lg z-10 flex items-center justify-center">
-              <span class="text-white text-xs font-bold transform -rotate-90 whitespace-nowrap">{{ image.title|default:'Book'|truncatechars:8 }}</span>
+          <div class="showcase-item-new relative group overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500" data-index="{{ forloop.counter0 }}">
+            <!-- Image Container with Fade/Slide Animation -->
+            <div class="relative h-64 md:h-80 overflow-hidden bg-gray-900 showcase-image-wrapper">
+              {% if image.image_url %}
+                <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" crossorigin="anonymous" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center absolute inset-0" style="display: none;">
+                  <span class="text-gray-600 text-center px-4">{{ image.title|default:'No Image' }}</span>
+                </div>
+              {% elif image.image %}
+                <img src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" crossorigin="anonymous" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center absolute inset-0" style="display: none;">
+                  <span class="text-gray-600 text-center px-4">{{ image.title|default:'No Image' }}</span>
+                </div>
+              {% else %}
+                <div class="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+                  <span class="text-gray-600 text-center px-4">{{ image.title|default:'No Image' }}</span>
+                </div>
+              {% endif %}
+
+              <!-- Gradient Overlay -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
 
-            <!-- Book cover with flip animation -->
-            <div class="showcase-book ml-6 md:ml-8 bg-white rounded-r-lg shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl" style="perspective: 1000px;">
-              <div class="relative h-48 md:h-64 showcase-page-flip" style="transform-style: preserve-3d; transition: transform 0.6s;">
-                {% if image.image_url %}
-                  <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" class="w-full h-full object-cover" crossorigin="anonymous" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center absolute inset-0" style="display: none;">
-                    <span class="text-gray-500 text-lg">{{ image.title|default:'No Image' }}</span>
-                  </div>
-                {% elif image.image %}
-                  <img src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="w-full h-full object-cover" crossorigin="anonymous" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center absolute inset-0" style="display: none;">
-                    <span class="text-gray-500 text-lg">{{ image.title|default:'No Image' }}</span>
-                  </div>
-                {% else %}
-                  <div class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                    <span class="text-gray-500 text-lg">{{ image.title|default:'No Image' }}</span>
-                  </div>
-                {% endif %}
-
-                <!-- Overlay with title -->
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 md:p-4">
-                  <h4 class="text-white text-sm md:text-lg font-bold">{{ image.title|default:'Featured Image' }}</h4>
-                </div>
+            <!-- Title Section -->
+            <div class="p-6 bg-white">
+              <h3 class="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{{ image.title|default:'Featured Image' }}</h3>
+              <div class="flex items-center text-sm text-gray-500">
+                <i class="fas fa-image mr-2 text-yellow-500"></i>
+                <span>Showcase Image</span>
               </div>
             </div>
           </div>
           {% empty %}
-          <div class="col-span-full text-center py-12">
-            <div class="book-frame relative">
-              <div class="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-yellow-600 to-yellow-700 rounded-l-lg shadow-lg z-10 flex items-center justify-center">
-                <span class="text-white text-xs font-bold transform -rotate-90">Sample</span>
-              </div>
-              <div class="ml-8 bg-white rounded-r-lg shadow-xl overflow-hidden h-64 flex items-center justify-center">
-                <div class="text-center text-gray-500">
-                  <i class="fas fa-book text-4xl mb-4"></i>
-                  <p>No showcase images available</p>
-                  <p class="text-sm">Add images through the admin panel</p>
-                </div>
-              </div>
+          <div class="col-span-full">
+            <div class="text-center py-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl">
+              <i class="fas fa-image text-6xl text-gray-300 mb-4"></i>
+              <p class="text-gray-600 text-lg font-medium">No showcase images available</p>
+              <p class="text-gray-500 text-sm mt-2">Add images through the admin panel to display them here</p>
             </div>
           </div>
           {% endfor %}
         </div>
       </div>
 
-      <!-- View All Pages Button -->
+      <!-- View All Button -->
       {% if book_showcase_images %}
-      <div class="text-center mt-8 md:mt-12">
-        <a href="{% url 'photo_gallery' %}" class="inline-flex items-center bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold px-6 md:px-8 py-2 md:py-3 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-          <i class="fas fa-images mr-2"></i>
-          View All Pages <i class="fas fa-arrow-right ml-2"></i>
+      <div class="text-center mt-12 md:mt-20">
+        <a href="{% url 'photo_gallery' %}" class="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500 via-yellow-600 to-orange-600 hover:from-yellow-600 hover:via-yellow-700 hover:to-orange-700 text-white font-bold px-8 md:px-10 py-3 md:py-4 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 text-base md:text-lg">
+          <i class="fas fa-images"></i>
+          View All Gallery <i class="fas fa-arrow-right"></i>
         </a>
       </div>
       {% endif %}
