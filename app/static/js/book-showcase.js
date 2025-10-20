@@ -1,109 +1,89 @@
-// Book Showcase Animation Script
+// Book Showcase Flip Animation Script
 document.addEventListener('DOMContentLoaded', function() {
-  const bookPages = document.querySelectorAll('.book-page');
-  const prevBtn = document.querySelector('.prev-page');
-  const nextBtn = document.querySelector('.next-page');
+  const showcaseItems = document.querySelectorAll('.showcase-item');
+  const showcaseBooks = document.querySelectorAll('.showcase-book');
 
-  if (!bookPages.length || !prevBtn || !nextBtn) return;
+  // Add flip animation on hover
+  showcaseBooks.forEach(book => {
+    const pageFlip = book.querySelector('.showcase-page-flip');
+    let isFlipped = false;
 
-  let currentPage = 0;
-  const totalPages = bookPages.length;
-
-  function updatePages() {
-    bookPages.forEach((page, index) => {
-      if (index === currentPage) {
-        page.classList.add('active');
-        page.classList.remove('inactive');
-        page.style.transform = 'rotateY(0deg) translateZ(0px)';
-        page.style.zIndex = totalPages;
-      } else if (index < currentPage) {
-        page.classList.remove('active');
-        page.classList.add('inactive');
-        const rotation = -10 * (currentPage - index);
-        const translateZ = -50 * (currentPage - index);
-        page.style.transform = `rotateY(${rotation}deg) translateZ(${translateZ}px)`;
-        page.style.zIndex = totalPages - (currentPage - index);
-      } else {
-        page.classList.remove('active', 'inactive');
-        page.style.transform = 'rotateY(10deg) translateZ(-50px)';
-        page.style.zIndex = totalPages - (index - currentPage);
+    book.addEventListener('mouseenter', function() {
+      if (!isFlipped) {
+        pageFlip.style.transform = 'rotateY(180deg)';
+        isFlipped = true;
       }
     });
-  }
 
-  function nextPage() {
-    if (currentPage < totalPages - 1) {
-      currentPage++;
-      updatePages();
+    book.addEventListener('mouseleave', function() {
+      if (isFlipped) {
+        pageFlip.style.transform = 'rotateY(0deg)';
+        isFlipped = false;
+      }
+    });
+  });
+
+  // Touch/swipe support for flip on mobile
+  showcaseBooks.forEach(book => {
+    let startX = 0;
+    let startY = 0;
+    const pageFlip = book.querySelector('.showcase-page-flip');
+    let isFlipped = false;
+
+    book.addEventListener('touchstart', function(e) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+
+    book.addEventListener('touchend', function(e) {
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = Math.abs(startX - endX);
+      const diffY = Math.abs(startY - endY);
+
+      // Only trigger flip if swipe is more horizontal than vertical
+      if (diffX > diffY && diffX > 30) {
+        isFlipped = !isFlipped;
+        pageFlip.style.transform = isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+      }
+    });
+  });
+
+  // Handle window resize for responsive pagination updates
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+      updatePagination();
+    }, 250);
+  });
+
+  function updatePagination() {
+    const itemsPerPage = window.innerWidth < 768 ? 1 : (window.innerWidth < 1024 ? 2 : 3);
+    const totalPages = Math.ceil(showcaseItems.length / itemsPerPage);
+    const currentPageEl = document.getElementById('currentPage');
+    const totalPagesEl = document.getElementById('totalPages');
+
+    if (totalPagesEl && currentPageEl) {
+      totalPagesEl.textContent = totalPages;
+      currentPageEl.textContent = Math.min(parseInt(currentPageEl.textContent), totalPages) || 1;
     }
   }
 
-  function prevPage() {
-    if (currentPage > 0) {
-      currentPage--;
-      updatePages();
-    }
-  }
+  // Initialize pagination on load
+  updatePagination();
 
-  // Event listeners
-  nextBtn.addEventListener('click', nextPage);
-  prevBtn.addEventListener('click', prevPage);
-
-  // Keyboard navigation
+  // Keyboard navigation for showcase
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight' || e.key === ' ') {
+    const showcasePrevBtn = document.getElementById('showcasePrevBtn');
+    const showcaseNextBtn = document.getElementById('showcaseNextBtn');
+
+    if (e.key === 'ArrowLeft' && showcasePrevBtn) {
       e.preventDefault();
-      nextPage();
-    } else if (e.key === 'ArrowLeft') {
+      showcasePrevBtn.click();
+    } else if (e.key === 'ArrowRight' && showcaseNextBtn) {
       e.preventDefault();
-      prevPage();
+      showcaseNextBtn.click();
     }
   });
-
-  // Touch/swipe support
-  let startX = 0;
-  let endX = 0;
-
-  document.querySelector('.book-pages').addEventListener('touchstart', function(e) {
-    startX = e.touches[0].clientX;
-  });
-
-  document.querySelector('.book-pages').addEventListener('touchend', function(e) {
-    endX = e.changedTouches[0].clientX;
-    const diffX = startX - endX;
-
-    if (Math.abs(diffX) > 50) { // Minimum swipe distance
-      if (diffX > 0) {
-        nextPage(); // Swipe left
-      } else {
-        prevPage(); // Swipe right
-      }
-    }
-  });
-
-  // Auto-play functionality (optional)
-  let autoPlayInterval;
-
-  function startAutoPlay() {
-    autoPlayInterval = setInterval(() => {
-      if (currentPage < totalPages - 1) {
-        nextPage();
-      } else {
-        currentPage = 0;
-        updatePages();
-      }
-    }, 3000); // Change page every 3 seconds
-  }
-
-  function stopAutoPlay() {
-    clearInterval(autoPlayInterval);
-  }
-
-  // Pause auto-play on hover
-  document.querySelector('.book-container').addEventListener('mouseenter', stopAutoPlay);
-  document.querySelector('.book-container').addEventListener('mouseleave', startAutoPlay);
-
-  // Initialize
-  updatePages();
-  startAutoPlay();
 });
