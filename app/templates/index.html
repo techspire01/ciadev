@@ -273,8 +273,7 @@
           Explore our curated collection of featured images showcasing our work and expertise
         </p>
       </div>
-
-      <div class="max-w-7xl mx-auto relative">
+   <div class="max-w-7xl mx-auto relative">
         <!-- Book Showcase -->
         <div class="book-container">
           <div class="book">
@@ -385,7 +384,7 @@
       <!-- Right-aligned Show More Link -->
       {% if book_showcase_images %}
       <div class="flex justify-end mt-4 max-w-7xl mx-auto px-4">
-        <a href="{% url 'photo_gallery' %}" class="inline-flex items-center space-x-2 text-yellow-600 hover:text-yellow-700 font-medium transition-all duration-300 group">
+        <a href="{% url 'book_showcase' %}" class="inline-flex items-center space-x-2 text-yellow-600 hover:text-yellow-700 font-medium transition-all duration-300 group">
           <span>Show more</span>
           <i class="fas fa-chevron-right text-sm transition-transform duration-300 group-hover:translate-x-1"></i>
         </a>

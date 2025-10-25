@@ -1126,3 +1126,13 @@ def contact(request):
         'contact_info': contact_info,
     }
     return render(request, "contact.html", context)
+
+def book_showcase(request):
+    # Fetch all book showcase images
+    book_photos = BookShowcase.objects.all()
+
+    context = {
+        'book_photos': book_photos,
+        'total_photos': book_photos.count()
+    }
+    return render(request, "book_showcase.html", context)

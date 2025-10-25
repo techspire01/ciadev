@@ -54,4 +54,7 @@ urlpatterns = [
 
     # Contact page
     path('contact/', views.contact, name='contact'),
+
+    # Book showcase page
+    path('book-showcase/', views.book_showcase, name='book_showcase'),
 ]
