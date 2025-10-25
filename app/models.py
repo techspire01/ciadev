@@ -187,6 +187,7 @@ class NewspaperGallery(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to="newspapergallery/images/", blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True, help_text="Manually entered date for the newspaper cutting")
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

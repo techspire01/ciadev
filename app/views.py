@@ -792,6 +792,16 @@ def photo_gallery(request):
     }
     return render(request, "photo_gallery.html", context)
 
+def news_gallery(request):
+    # Fetch all newspaper cuttings from NewspaperGallery in descending order
+    all_newspapers = NewspaperGallery.objects.all().order_by('-uploaded_at')
+
+    context = {
+        'all_newspapers': all_newspapers,
+        'total_newspapers': all_newspapers.count()
+    }
+    return render(request, "news_gallery.html", context)
+
 @require_GET
 def get_supplier_categories(request):
     """

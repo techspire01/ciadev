@@ -205,13 +205,13 @@ class LeadershipAdmin(admin.ModelAdmin):
 
 @admin.register(NewspaperGallery)
 class NewspaperGalleryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image_preview', 'image_url', 'uploaded_at')
-    list_filter = ('uploaded_at',)
+    list_display = ('title', 'image_preview', 'image_url', 'date', 'uploaded_at')
+    list_filter = ('uploaded_at', 'date')
     search_fields = ('title',)
     ordering = ('-uploaded_at',)
     readonly_fields = ('image_preview_large', 'uploaded_at')
     fieldsets = (
-        (None, {'fields': ('title', 'image_url', 'image_preview_large')}),
+        (None, {'fields': ('title', 'image_url', 'date', 'image_preview_large')}),
         ('Upload Information', {'fields': ('uploaded_at',)}),
     )
 

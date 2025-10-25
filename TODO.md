@@ -1,14 +1,13 @@
-# Contact Page Implementation TODO
+# TODO: Add Pop-Out Animation to Images in about.html
 
-## Pending Tasks
-- [x] Add ContactInformation model to models.py with fields: email, phone, address, website, description
-- [x] Create database migration for the new ContactInformation model
-- [x] Add contact view in views.py to fetch contact info from DB and render template
-- [x] Add contact URL in urls.py for the new contact page
-- [x] Create contact.html template with navbar/footer includes and display contact information
-- [x] Update about.html to link "Contact Us" button to the new contact page
+## Tasks
+- [x] Add CSS animations for lightbox fade-in and scale effects in about.html
+- [x] Update lightbox modal HTML to include animation classes
+- [x] Modify openLightbox() JavaScript function to add animation classes
+- [x] Modify closeLightbox() JavaScript function to handle animation timing
+- [x] Test the click functionality and animation in the browser (Django server running at http://127.0.0.1:8000/about)
 
-## Followup Steps
-- [x] Run makemigrations and migrate commands
-- [x] Test the contact page functionality
-- [x] Verify the link from about.html works correctly
+## Status
+- Plan approved by user
+- Implementation completed
+- Testing completed - animations working smoothly

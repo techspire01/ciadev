@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load tz %}
+
+{% block title %}News Gallery{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-center mb-8">News Gallery</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for newspaper in all_newspapers %}
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            {% if newspaper.image_url %}
+                <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title }}" class="w-full h-64 object-cover cursor-pointer" onclick="openLightbox('{{ newspaper.image_url|escapejs }}', '{{ newspaper.title|escapejs }}')">
+            {% elif newspaper.image %}
+                <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title }}" class="w-full h-64 object-cover cursor-pointer" onclick="openLightbox('{{ newspaper.image.url|escapejs }}', '{{ newspaper.title|escapejs }}')">
+            {% else %}
+                <div class="w-full h-64 bg-gray-200 flex items-center justify-center">
+                    <span class="text-gray-500">No Image</span>
+                </div>
+            {% endif %}
+            <div class="p-4">
+                <h3 class="text-lg font-semibold mb-2">{{ newspaper.title }}</h3>
+                {% if newspaper.date %}
+                    <p class="text-sm text-gray-600">{{ newspaper.date|date:"M d, Y" }}</p>
+                {% else %}
+                    <p class="text-sm text-gray-600">Date not specified</p>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <p class="text-gray-500 text-lg">No newspaper cuttings available yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="relative max-w-4xl max-h-full p-4">
+        <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain">
+        <button onclick="closeLightbox()" class="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center">&times;</button>
+    </div>
+</div>
+
+<script>
+function openLightbox(src, alt) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox-img').alt = alt;
+    document.getElementById('lightbox').classList.remove('hidden');
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.add('hidden');
+}
+
+// Close lightbox when clicking outside the image
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeLightbox();
+    }
+});
+</script>
+{% endblock %}

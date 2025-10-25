@@ -31,6 +31,9 @@ urlpatterns = [
     # Photo gallery page
     path('photo-gallery/', views.photo_gallery, name='photo_gallery'),
 
+    # News gallery page
+    path('news-gallery/', views.news_gallery, name='news_gallery'),
+
     # AJAX endpoint for supplier categories
     path('get_supplier_categories/', views.get_supplier_categories, name='get_supplier_categories'),
 
