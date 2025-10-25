@@ -1,0 +1,81 @@
+{% extends 'base_gallery.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %}Book Showcase{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-b from-gray-50 to-white min-h-screen py-12">
+    <div class="container mx-auto px-4 mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-4">Book Showcase</h1>
+        <p class="text-gray-600 text-center max-w-2xl mx-auto">All images that appear in the book showcase on the homepage.</p>
+    </div>
+
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for photo in book_photos %}
+            <div class="gallery-item group">
+                <div class="relative overflow-hidden rounded-xl shadow-lg bg-white">
+                    <a href="{% if photo.image_url %}{{ photo.image_url }}{% elif photo.image %}{{ photo.image.url }}{% endif %}"
+                       data-lightbox="book_gallery" 
+                       data-title="{{ photo.title }}"
+                       class="block aspect-square overflow-hidden">
+                        {% if photo.image_url %}
+                            <img src="{{ photo.image_url }}" 
+                                 alt="{{ photo.title }}" 
+                                 class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        {% elif photo.image %}
+                            <img src="{{ photo.image.url }}" 
+                                 alt="{{ photo.title }}" 
+                                 class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                <i class="fas fa-image text-gray-400 text-4xl"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div class="text-white text-center p-4">
+                                <i class="fas fa-search-plus text-2xl mb-2"></i>
+                                <p class="font-medium">Click to view</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="mt-3">
+                    <h3 class="font-semibold text-gray-800 group-hover:text-yellow-600 transition-colors duration-300">
+                        {{ photo.title|default:"Untitled" }}
+                    </h3>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full py-16 text-center">
+                <div class="max-w-md mx-auto">
+                    <i class="fas fa-images text-gray-300 text-5xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">No Book Showcase Images</h3>
+                    <p class="text-gray-500">Add images to the Book Showcase via the admin panel.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+<script>
+    lightbox.option({
+        'resizeDuration': 300,
+        'wrapAround': true,
+        'albumLabel': 'Image %1 of %2',
+        'fadeDuration': 300,
+        'showImageNumberLabel': true
+    });
+</script>
+{% endblock %}
