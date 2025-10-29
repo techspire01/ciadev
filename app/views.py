@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.db import models
 import random
-from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation
+from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import Supplier
@@ -71,6 +71,9 @@ def about(request):
     # Fetch all leadership members
     leadership_members = Leadership.objects.all()
 
+    # Fetch about information
+    about_info = About.objects.first()
+
     context = {
         'latest_photos': latest_photos,
         'total_photos': total_photos,
@@ -78,7 +81,8 @@ def about(request):
         'latest_newspapers': latest_newspapers,
         'total_newspapers': total_newspapers,
         'show_newspaper_view_more': total_newspapers > 6,
-        'leadership_members': leadership_members
+        'leadership_members': leadership_members,
+        'about_info': about_info
     }
     return render(request, "about.html", context)
 

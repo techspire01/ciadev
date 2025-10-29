@@ -9,7 +9,7 @@ from django.conf import settings
 import json
 import logging
 
-from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation
+from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About
 from .forms import SupplierForm
 
 logger = logging.getLogger(__name__)
@@ -425,6 +425,41 @@ class ContactInformationAdmin(admin.ModelAdmin):
             return obj.address[:50] + "..." if len(obj.address) > 50 else obj.address
         return "-"
     address_preview.short_description = "Address"
+
+@admin.register(About)
+class AboutAdmin(admin.ModelAdmin):
+    list_display = ('mission_preview', 'story_preview', 'member_companies', 'industrial_sectors', 'established_year', 'updated_at')
+    search_fields = ('mission', 'story')
+    list_filter = ('updated_at',)
+    ordering = ('-updated_at',)
+    readonly_fields = ('created_at', 'updated_at')
+
+    fieldsets = (
+        ('Content', {
+            'fields': ('mission', 'story')
+        }),
+        ('Statistics', {
+            'fields': ('member_companies', 'industrial_sectors', 'established_year')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    def mission_preview(self, obj):
+        """Display first 50 characters of mission"""
+        if obj.mission:
+            return obj.mission[:50] + "..." if len(obj.mission) > 50 else obj.mission
+        return "-"
+    mission_preview.short_description = "Mission"
+
+    def story_preview(self, obj):
+        """Display first 50 characters of story"""
+        if obj.story:
+            return obj.story[:50] + "..." if len(obj.story) > 50 else obj.story
+        return "-"
+    story_preview.short_description = "Story"
 
 # Register CustomUser with the admin site
 admin.site.register(CustomUser, CustomUserAdmin)
