@@ -174,10 +174,11 @@ class Leadership(models.Model):
     linkedin = models.TextField(blank=True, null=True)
     twitter = models.TextField(blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
+    dis_pos = models.PositiveIntegerField(default=0, help_text="Display position for ordering leadership cards")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['dis_pos', '-created_at']
 
     def __str__(self):
         return f"{self.name} - {self.position}"

@@ -176,13 +176,13 @@ class IndexHoverAdmin(admin.ModelAdmin):
 
 @admin.register(Leadership)
 class LeadershipAdmin(admin.ModelAdmin):
-    list_display = ('name', 'position', 'photo_preview', 'created_at')
+    list_display = ('name', 'position', 'dis_pos', 'photo_preview', 'created_at')
     list_filter = ('position', 'created_at')
     search_fields = ('name', 'position', 'bio')
-    ordering = ('-created_at',)
+    ordering = ('dis_pos', '-created_at')
     readonly_fields = ('photo_preview_large', 'created_at')
     fieldsets = (
-        (None, {'fields': ('name', 'position', 'bio', 'photo_url', 'photo_preview_large')}),
+        (None, {'fields': ('name', 'position', 'dis_pos', 'bio', 'photo_url', 'photo_preview_large')}),
         ('Social Media Links', {'fields': ('facebook', 'instagram', 'linkedin', 'twitter', 'email')}),
         ('Timestamps', {'fields': ('created_at',)}),
     )

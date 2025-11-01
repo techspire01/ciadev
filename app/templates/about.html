@@ -400,12 +400,16 @@
                 <div class="w-full">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Our Mission</h2>
                     <div class="max-w-4xl mx-auto">
-                        <p class="text-gray-700 leading-relaxed mb-4 text-lg">
-                            The Chinnavedampatti Industrial Association (CIA), established in 2020, is dedicated to advancing Coimbatore's industrial sector, particularly in Chinnavedampatti. We focus on empowering micro and small industries by facilitating access to government benefits and promoting sustainable growth.
-                        </p>
-                        <p class="text-gray-700 leading-relaxed text-lg">
-                            Our initiatives encompass industrial development, skill development workshops, technological advancements, and fostering inter-industry collaborations. We connect members to development programs and trade opportunities while representing MSME interests with industry bodies and government agencies.
-                        </p>
+                        {% if about_info.mission %}
+                            {{ about_info.mission|safe }}
+                        {% else %}
+                            <p class="text-gray-700 leading-relaxed mb-4 text-lg">
+                                The Chinnavedampatti Industrial Association (CIA), established in 2020, is dedicated to advancing Coimbatore's industrial sector, particularly in Chinnavedampatti. We focus on empowering micro and small industries by facilitating access to government benefits and promoting sustainable growth.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed text-lg">
+                                Our initiatives encompass industrial development, skill development workshops, technological advancements, and fostering inter-industry collaborations. We connect members to development programs and trade opportunities while representing MSME interests with industry bodies and government agencies.
+                            </p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -459,33 +463,37 @@
             <div class="w-full">
                 <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Our Story</h2>
                 <div class="max-w-full mx-auto">
-                    <p class="text-gray-700 leading-relaxed text-lg mb-6">
-                      CIA represents various industrial sectors including robotics and automation, motors and pumps, corrugated box manufacturing, packaging solutions, kitchen equipment and food machinery, steel doors and safety lockers, printing machinery, CNC job works, metal and steel fabrication, and laser cutting and sheet bending.
-                    </p>
-                    <p class="text-gray-700 leading-relaxed text-lg mb-8">
-                        The association is committed to community engagement through initiatives like implementing CCTV surveillance for enhanced security, organizing annual flag hoisting ceremonies, and participating in disaster relief efforts such as the Kerala Flood Fund arrangements. We help member companies become more resilient, innovative and ready for new markets.
-                    </p>
+                    {% if about_info.story %}
+                        {{ about_info.story|safe }}
+                    {% else %}
+                        <p class="text-gray-700 leading-relaxed text-lg mb-6">
+                          CIA represents various industrial sectors including robotics and automation, motors and pumps, corrugated box manufacturing, packaging solutions, kitchen equipment and food machinery, steel doors and safety lockers, printing machinery, CNC job works, metal and steel fabrication, and laser cutting and sheet bending.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed text-lg mb-8">
+                            The association is committed to community engagement through initiatives like implementing CCTV surveillance for enhanced security, organizing annual flag hoisting ceremonies, and participating in disaster relief efforts such as the Kerala Flood Fund arrangements. We help member companies become more resilient, innovative and ready for new markets.
+                        </p>
+                    {% endif %}
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                         <div class="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animated-card">
                             <div class="text-yellow-500 mb-4">
                                 <i class="fas fa-building text-4xl animate-pulse"></i>
                             </div>
-                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="500">161+</h3>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="{{ about_info.member_companies|default:161 }}">{{ about_info.member_companies|default:161 }}{% if about_info.member_companies %} +{% endif %}</h3>
                             <p class="text-gray-700 font-medium">Member Companies</p>
                         </div>
                         <div class="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animated-card">
                             <div class="text-yellow-500 mb-4">
                                 <i class="fas fa-industry text-4xl animate-pulse"></i>
                             </div>
-                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="8">20+ </h3>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="{{ about_info.industrial_sectors|default:20 }}">{{ about_info.industrial_sectors|default:20 }}{% if about_info.industrial_sectors %} +{% endif %}</h3>
                             <p class="text-gray-700 font-medium">Industrial Sectors</p>
                         </div>
                         <div class="bg-white rounded-xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 animated-card">
                             <div class="text-yellow-500 mb-4">
                                 <i class="fas fa-calendar-alt text-4xl animate-pulse"></i>
                             </div>
-                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="2019">2020</h3>
+                            <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-target="{{ about_info.established_year|default:2020 }}">{{ about_info.established_year|default:2020 }}</h3>
                             <p class="text-gray-700 font-medium">Established</p>
                         </div>
                     </div>
@@ -592,9 +600,9 @@
                 <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
                     <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
                         {% if member.photo_url %}
-                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
+                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer" onclick="openLightbox('{{ member.photo_url|escapejs }}', '{{ member.name|escapejs }}')">
                         {% elif member.photo %}
-                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover">
+                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer" onclick="openLightbox('{{ member.photo.url|escapejs }}', '{{ member.name|escapejs }}')">
                         {% else %}
                             <div class="flex items-center justify-center w-full h-full bg-gray-200">
                                 <i class="fas fa-user text-3xl text-gray-400"></i>
@@ -801,10 +809,10 @@
     </div>
 
     <!-- Lightbox Modal -->
-    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden opacity-0 scale-95 transition-all duration-300 ease-out">
-        <div class="relative max-w-4xl max-h-full p-4 transform transition-transform duration-300 ease-out">
-            <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain transition-transform duration-300 ease-out">
-            <button onclick="closeLightbox()" class="absolute top-2 right-2 text-white text-2xl bg-black bg-opacity-50 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-75 transition-all duration-200">&times;</button>
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300 ease-out">
+        <div class="relative w-full h-full p-4 flex items-center justify-center">
+            <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain transition-all duration-300 ease-out">
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center hover:bg-opacity-75 transition-all duration-200">&times;</button>
         </div>
     </div>
 
@@ -817,15 +825,15 @@
         lightbox.classList.remove('hidden');
         // Trigger animation
         requestAnimationFrame(() => {
-            lightbox.classList.remove('opacity-0', 'scale-95');
-            lightbox.classList.add('opacity-100', 'scale-100');
+            lightbox.classList.remove('opacity-0');
+            lightbox.classList.add('opacity-100');
         });
     }
 
     function closeLightbox() {
         const lightbox = document.getElementById('lightbox');
-        lightbox.classList.remove('opacity-100', 'scale-100');
-        lightbox.classList.add('opacity-0', 'scale-95');
+        lightbox.classList.remove('opacity-100');
+        lightbox.classList.add('opacity-0');
         // Wait for transition to complete before hiding
         setTimeout(() => {
             lightbox.classList.add('hidden');

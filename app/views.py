@@ -69,7 +69,7 @@ def about(request):
     total_newspapers = NewspaperGallery.objects.count()
 
     # Fetch all leadership members
-    leadership_members = Leadership.objects.all()
+    leadership_members = Leadership.objects.all().order_by('dis_pos', '-created_at')
 
     # Fetch about information
     about_info = About.objects.first()
