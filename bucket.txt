@@ -1,2 +1,0 @@
-access key id :54e860938be3205ffe6417a7bd1f787b
-seecret access key :071aa66b306ec77375453a63cedd4aa8fffb608f53eae96455e1da357f235782
