@@ -732,7 +732,7 @@ function setupSearchFunctionality() {
         // Debounce search requests
         searchTimeout = setTimeout(() => {
             fetchSearchSuggestions(query);
-        }, 300);
+        }, 150);
     });
 
     searchInput.addEventListener('focus', function() {
@@ -763,6 +763,17 @@ function setupSearchFunctionality() {
             searchInput.blur();
         }
     });
+
+    // Handle search button click
+    const searchButton = searchInput.parentElement.querySelector('button[title="Search"]');
+    if (searchButton) {
+        searchButton.addEventListener('click', function() {
+            const query = searchInput.value.trim();
+            if (query) {
+                performSearch(query);
+            }
+        });
+    }
 }
 
 function fetchSearchSuggestions(query) {
