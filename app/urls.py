@@ -57,5 +57,6 @@ urlpatterns = [
 
     # Book showcase page
     path('internship/', views.internship_view, name='internship'),
+    path('internship/submit/', views.intern_submit_view, name='intern_submit'),
     path('book-showcase/', views.book_showcase, name='book_showcase'),
 ]

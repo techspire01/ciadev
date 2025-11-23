@@ -16,10 +16,10 @@ class Announcement(models.Model):
     image1 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
     image2 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
     image3 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
-    
+
     class Meta:
         ordering = ['-date']
-    
+
     def __str__(self):
         return f"{self.title} - {self.date.strftime('%Y-%m-%d')}"
 
@@ -87,7 +87,7 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         if not self.cia_id:
             # Assign next available cia_id (serialized, no gaps)
@@ -119,7 +119,7 @@ class CustomUserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -335,3 +335,17 @@ class ContactInformation(models.Model):
         return f"Contact Information - {self.email or 'No Email'}"
 
 
+# New model for InternshipApplication
+class InternshipApplication(models.Model):
+    fullname = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    college = models.CharField(max_length=255)
+    degree = models.CharField(max_length=255)
+    year = models.CharField(max_length=50)
+    skills = models.TextField()
+    sector = models.CharField(max_length=100)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.fullname} ({self.email}) - {self.sector}"

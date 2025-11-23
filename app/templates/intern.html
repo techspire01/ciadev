@@ -102,7 +102,8 @@
   <div class="subhead">
     Connect with real industries. Fill in your details to explore opportunities with CIANext MSME partners.
   </div>
-  <form id="internForm" onsubmit="return submitForm(event)">
+  <form id="internForm" method="post" action="/internship/submit/">
+    {% csrf_token %}
     <label for="fullname">Full Name*</label>
     <input id="fullname" name="fullname" type="text" required />
     <label for="email">Email Address*</label>
@@ -141,12 +142,4 @@
     <button class="btn" type="submit">Submit Application</button>
   </form>
 </div>
-<script>
-  function submitForm(e){
-    e.preventDefault();
-    alert("✅ Thank you for applying to CIANext MSME internship! Our team will contact you if shortlisted.");
-    e.target.reset();
-    return false;
-  }
-</script>
 {% endblock %}

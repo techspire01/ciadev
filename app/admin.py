@@ -9,7 +9,7 @@ from django.conf import settings
 import json
 import logging
 
-from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About
+from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, InternshipApplication
 from .forms import SupplierForm
 
 logger = logging.getLogger(__name__)
@@ -463,3 +463,12 @@ class AboutAdmin(admin.ModelAdmin):
 
 # Register CustomUser with the admin site
 admin.site.register(CustomUser, CustomUserAdmin)
+from django.contrib import admin
+
+@admin.register(InternshipApplication)
+class InternshipApplicationAdmin(admin.ModelAdmin):
+    list_display = ('fullname', 'email', 'phone', 'college', 'degree', 'year', 'sector', 'submitted_at')
+    list_filter = ('sector', 'year')
+    search_fields = ('fullname', 'email', 'college', 'sector', 'year')
+    ordering = ('-submitted_at',)
+    date_hierarchy = 'submitted_at'
