@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.db import models
 import random
-from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About
+from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, Complaint
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import Supplier
@@ -79,6 +79,58 @@ def intern_submit_view(request):
         logger.exception("Failed to submit internship application: %s", e)
         from django.http import HttpResponse
         return HttpResponse('{"error": "Failed to submit application."}', content_type="application/json", status=500)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def submit_complaint(request):
+    complaint_text = request.POST.get('complaint') or request.POST.get('complaint_text')
+    contact_number = request.POST.get('contact_number')
+
+    if not complaint_text:
+        return JsonResponse({'error': 'Complaint text is required.'}, status=400)
+
+    try:
+        user = request.user if request.user.is_authenticated else None
+        complaint = Complaint.objects.create(
+            user=user,
+            complaint_text=complaint_text,
+            contact_number=contact_number
+        )
+
+        # Prepare email
+        subject = f"New Complaint Submitted - #{complaint.id}"
+        message = (
+            f"A new complaint has been submitted:\n\n"
+            f"Complaint ID: {complaint.id}\n"
+            f"User: {getattr(user, 'email', 'Anonymous')}\n"
+            f"Contact Number: {contact_number or 'N/A'}\n\n"
+            f"Complaint:\n{complaint_text}\n"
+        )
+
+        # Determine recipients: prefer EMAIL_HOST_USER and ADMINS if present
+        admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
+        recipients = []
+        if admin_email:
+            recipients.append(admin_email)
+        admins = getattr(settings, 'ADMINS', None)
+        if admins:
+            for a in admins:
+                try:
+                    recipients.append(a[1])
+                except Exception:
+                    continue
+
+        if recipients:
+            try:
+                send_mail(subject, message, admin_email or recipients[0], list(set(recipients)), fail_silently=False)
+            except Exception as e:
+                logger.exception("Failed sending complaint email: %s", e)
+
+        return JsonResponse({'message': 'Complaint submitted successfully.'}, status=201)
+    except Exception as e:
+        logger.exception("Failed to submit complaint: %s", e)
+        return JsonResponse({'error': 'Failed to submit complaint.'}, status=500)
 
 def index(request):
     # Fetch 3 random suppliers

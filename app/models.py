@@ -335,6 +335,19 @@ class ContactInformation(models.Model):
         return f"Contact Information - {self.email or 'No Email'}"
 
 
+class Complaint(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    complaint_text = models.TextField()
+    contact_number = models.CharField(max_length=20, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    resolved = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Complaint #{self.id} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
 # New model for InternshipApplication
 class InternshipApplication(models.Model):
     fullname = models.CharField(max_length=255)
