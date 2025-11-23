@@ -18,6 +18,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def internship_view(request):
+    return render(request, "intern.html")
+
 def index(request):
     # Fetch 3 random suppliers
     all_suppliers = list(Supplier.objects.all())

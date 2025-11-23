@@ -56,5 +56,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
 
     # Book showcase page
+    path('internship/', views.internship_view, name='internship'),
     path('book-showcase/', views.book_showcase, name='book_showcase'),
 ]

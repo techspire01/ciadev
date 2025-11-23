@@ -26,9 +26,14 @@
       <div class="text-center text-white p-4 bg-black/50 rounded-lg backdrop-blur-sm max-w-sm">
         <h2 class="text-xl md:text-2xl font-bold mb-2 text-yellow-100">Discover Industrial Excellence</h2>
         <p class="text-sm md:text-base opacity-90 mb-3">Explore our diverse industrial sectors</p>
-        <button id="browseBtn" class="bg-yellow-400 hover:bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold transition-all duration-300 pointer-events-auto text-sm">
+          <button id="browseBtn" class="bg-yellow-400 hover:bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold transition-all duration-300 pointer-events-auto text-sm">
           Browse Catalog
-        </button>
+          </button>
+          <a href="{% url 'intern' %}">
+            <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full font-semibold transition-all duration-300 ml-4 pointer-events-auto text-sm">
+              Internship
+            </button>
+          </a>
       </div>
     </div>
 
