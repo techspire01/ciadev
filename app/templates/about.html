@@ -675,6 +675,7 @@
     </section>
 
     {% include 'footer.html' %}
+{% include 'partials/floating_buttons.html' %}
 
     <!-- Scroll to top button -->
     <div class="fixed bottom-6 right-6 z-50">
@@ -786,26 +787,13 @@
             observer.observe(storySection);
         }
     </script>
-
-    <!-- Announcement Button & Bar -->
-    <div class="announcement-popup-container">
-        <button class="announcement-btn" id="announcementBtn" title="Show Announcement">
-            <span class="announcement-btn-icon">📢</span>
-            <span class="announcement-btn-label">Announcement</span>
-        </button>
-        <div class="announcement-bar" id="announcementBar">
-            <span class="announcement-text">
-                <ul class="announcement-list">
-                    <li>🏢 CIA MachineryHub now offers verified supplier badges</li>
-                    <li>🎉 Exclusive deals available for registered users</li>
-                    <li>🤝 Contact us for partnership opportunities</li>
-                </ul>
-            </span>
+    <!-- Announcement Banner -->          
             <div class="announcement-footer">
                 <span>Learn more at <a href="{% url 'announcement' %}">View All Announcements</a></span>
             </div>
             <button class="announcement-close" id="announcementClose" title="Close">&times;</button>
         </div>
+        
     </div>
 
     <!-- Lightbox Modal -->
