@@ -349,9 +349,9 @@ footer a:hover {
 /* Responsive Carousel Grid Layout */
 .hero-carousel-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* show 4 columns */
-  grid-template-rows: repeat(2, 1fr);    /* and 2 rows -> 4x2 */
-  gap: 0.75rem;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.625rem;
 }
 
 .carousel-item {
@@ -364,9 +364,13 @@ footer a:hover {
   transition: all 0.3s ease;
 }
 
-.carousel-item-large,
+.carousel-item-large {
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
 .carousel-item-medium {
-  grid-column: span 1; /* each item occupies one cell in the 4x2 grid */
+  grid-column: span 2;
   grid-row: span 1;
 }
 
@@ -394,34 +398,34 @@ footer a:hover {
 @media (max-width: 768px) {
   .w-full.min-h-screen {
     width: 100vw;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
-  /* Force a 4x2 grid on mobile so 8 items are visible (4 columns x 2 rows) */
   .hero-carousel-grid {
-    /* Mobile: show 5 columns in a single row so 5 items fit horizontally */
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 1fr;
-    grid-auto-rows: 120px; /* keep each cell a consistent height */
-    height: auto !important;
-    min-height: calc(120px + 1rem) !important;
-    gap: 6px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 50vh !important;
+    min-height: 350px !important;
+    gap: 8px;
   }
 
-  /* Make all items occupy a single cell in the 4x2 layout */
-  .carousel-item-large,
+  .carousel-item-large {
+    grid-column: span 2;
+    grid-row: span 1;
+    min-height: 200px;
+  }
+
   .carousel-item-medium {
     grid-column: span 1;
     grid-row: span 1;
-    min-height: auto;
+    min-height: 150px;
   }
 
   .carousel-item img {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    max-height: none;
   }
 
 /* Ensure mobile language container has roomy tap area */
@@ -458,14 +462,12 @@ footer a:hover {
     padding-right: 1rem;
   }
 
-  /* Force 4x2 layout on very small screens if requested */
   .hero-carousel-grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    grid-auto-rows: 120px;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 160px);
     height: auto !important;
-    min-height: calc(120px * 2 + 1rem) !important;
-    gap: 10px;
+    min-height: 800px !important;
+    gap: 12px;
   }
 
   .carousel-item {
@@ -568,99 +570,6 @@ footer a:hover {
 img {
   transition: opacity 0.3s ease;
 }
-
-/* ===== Hero: Professional polish ===== */
-/* Subtle, consistent cards, refined overlays and responsive breakpoints */
-.hero-carousel-grid, #heroCarousel {
-  gap: 12px;
-  align-items: stretch;
-}
-
-.carousel-item {
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: #0b0b0b;
-  box-shadow: 0 6px 18px rgba(16,24,40,0.12);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.carousel-item:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 12px 36px rgba(16,24,40,0.16);
-}
-
-/* Refined overlay that improves text contrast and looks professional */
-.carousel-item .absolute.inset-0 {
-  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.06) 100%);
-  backdrop-filter: blur(3px);
-}
-
-/* Caption style used inside each card */
-.carousel-item .card-caption, .carousel-item .absolute.bottom-4, .carousel-item .absolute.bottom-8 {
-  background: rgba(0,0,0,0.5);
-  display: block;
-  padding: 0.6rem 0.9rem;
-  border-radius: 10px;
-  backdrop-filter: blur(6px);
-  /* center captions horizontally across all tiles */
-  left: 50% !important;
-  right: auto !important;
-  transform: translateX(-50%) !important;
-  text-align: center;
-  width: calc(100% - 2rem);
-  max-width: 720px;
-}
-
-/* Tighter type and spacing for professional feel */
-.carousel-item h3, .carousel-item h4 {
-  margin: 0;
-  line-height: 1.1;
-  font-weight: 600;
-}
-
-/* Reduce noisy animations on small devices */
-@media (pointer: coarse) {
-  .carousel-item:hover { transform: none; box-shadow: 0 6px 18px rgba(16,24,40,0.12); }
-}
-
-/* Responsive: apply 5-across only for mid-size phones/tablets */
-@media (min-width: 420px) and (max-width: 768px) {
-  .hero-carousel-grid, #heroCarousel {
-    grid-template-columns: repeat(5, minmax(0,1fr)) !important;
-    grid-template-rows: 1fr !important;
-    grid-auto-rows: 120px !important;
-    gap: 8px !important;
-  }
-
-  #heroCarousel > div, .hero-carousel-grid > .carousel-item {
-    height: 120px !important;
-  }
-
-  .carousel-item .card-caption, .carousel-item .absolute.bottom-4, .carousel-item .absolute.bottom-8 {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.78rem;
-  }
-}
-
-/* Very small phones: 2 columns x 4 rows for readability */
-@media (max-width: 419px) {
-  .hero-carousel-grid, #heroCarousel {
-    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
-    grid-template-rows: repeat(4, 1fr) !important;
-    grid-auto-rows: 140px !important;
-    gap: 8px !important;
-  }
-
-  #heroCarousel > div, .hero-carousel-grid > .carousel-item {
-    height: 140px !important;
-  }
-
-  .carousel-item .card-caption, .carousel-item .absolute.bottom-4, .carousel-item .absolute.bottom-8 {
-    padding: 0.6rem 0.9rem;
-    font-size: 0.9rem;
-  }
-}
-
 
 img:not([src]) {
   opacity: 0;
@@ -997,26 +906,25 @@ img:not([src]) {
 
 /* Responsive hero grid and image showcase for mobile */
 @media (max-width: 768px) {
-  /* Mobile: show 5 columns in a single row for #heroCarousel so 5 items fit horizontally */
   #heroCarousel {
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 1fr;
-    grid-auto-rows: 120px;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 160px);
     height: auto !important;
-    min-height: calc(120px + 1rem) !important;
-    gap: 6px;
+    min-height: 800px !important;
+    gap: 8px;
   }
   #heroCarousel > div {
     grid-column: span 1;
     grid-row: span 1;
-    min-height: 110px;
-    height: 120px;
+    min-height: 140px;
+    height: 160px;
   }
   #heroCarousel img {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    min-height: 110px;
+    min-height: 140px;
+    max-height: 160px;
   }
   /* Overlay caption box for mobile */
   .absolute.bottom-8, .absolute.bottom-4 {
@@ -1504,44 +1412,6 @@ img.lazy-load.loaded {
   box-sizing: border-box;
 }
 
-/* Mobile hero overlap fixes: prevent hero images from scaling out of their grid and overlapping on small screens */
-@media (max-width: 768px) {
-  .hero-section {
-    height: auto !important;
-    min-height: 320px !important;
-    padding-bottom: 1rem;
-    overflow: visible;
-  }
-
-  /* Disable hover/scale effects that cause items to overlap on touch devices */
-  .hero-section .hero-container,
-  .hero-section #heroCarousel > div,
-  .hero-section .carousel-item {
-    transform: none !important;
-    z-index: auto !important;
-    box-shadow: none !important;
-  }
-
-  /* Make images stay contained within their card on mobile */
-  .hero-section .carousel-item img,
-  .hero-section #heroCarousel img {
-    object-fit: cover !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-height: none !important;
-  }
-
-  /* Ensure overlay/caption stays inside the card and doesn't float over other items */
-  .hero-section .absolute.inset-0 {
-    position: absolute;
-  }
-
-  .hero-section .absolute.bottom-4,
-  .hero-section .absolute.bottom-8 {
-    z-index: 30 !important;
-  }
-}
-
 /* Optimize font loading */
 body {
   font-display: swap;
@@ -1836,45 +1706,4 @@ a:focus-visible {
 .gallery-enhanced .gallery-item {
   will-change: transform;
   transform: translateZ(0);
-}
-
-/* Strong mobile overrides: force 5-across single-row layout and remove horizontal padding so five tiles fully fit */
-@media (max-width: 768px) {
-  .hero-section, .w-full.min-h-screen {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-
-  .hero-carousel-grid, #heroCarousel {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    grid-template-rows: 1fr !important;
-    grid-auto-rows: 110px !important;
-    gap: 4px !important;
-    height: auto !important;
-    min-height: calc(110px + 0.5rem) !important;
-  }
-
-  #heroCarousel > div, .hero-carousel-grid > .carousel-item {
-    grid-column: span 1 !important;
-    grid-row: span 1 !important;
-    min-height: 110px !important;
-    height: 110px !important;
-  }
-
-  .carousel-item img, #heroCarousel img {
-    object-fit: cover !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: block !important;
-  }
-
-  /* Make overlays slightly inset so captions don't overflow */
-  .hero-section .absolute.bottom-4,
-  .hero-section .absolute.bottom-8 {
-    left: 0.5rem !important;
-    right: 0.5rem !important;
-    bottom: 0.5rem !important;
-  }
 }

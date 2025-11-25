@@ -151,156 +151,61 @@ const containerSets = [
     `
 ];
 
-/* New multi-item carousel: show a fixed number of visible cards (e.g. 3)
-   and allow iterating through all items. This replaces the old slide-set
-   behavior which swapped groups of markup.
-*/
-function setupMultiVisibleCarousel(visibleCount = 3) {
+function updateCarousel() {
     const carousel = document.getElementById('heroCarousel');
-    if (!carousel) return;
+    const dots = document.querySelectorAll('.carousel-dot');
 
-    // Build a flat list of item elements from containerSets
-    const temp = document.createElement('div');
-    temp.innerHTML = containerSets.join('\n');
-    const items = Array.from(temp.children);
-    if (items.length === 0) return;
+    if (carousel) {
+        // Prevent any scroll behavior during transition
+        const preventScroll = (e) => e.preventDefault();
+        window.addEventListener('scroll', preventScroll, { passive: false });
 
-    // Responsive helper: choose visible count based on viewport
-    function chooseVisibleCount() {
-        if (window.matchMedia('(min-width:420px) and (max-width:768px)').matches) {
-            return 5;
-        }
-        if (window.matchMedia('(max-width:419px)').matches) {
-            return 2;
-        }
-        return 3; // default for desktop/tablet when carousel is used
-    }
+        // Add transitioning class for smooth animation
+        carousel.classList.add('transitioning');
 
-    // If caller didn't pass an explicit count, determine it now
-    visibleCount = visibleCount || chooseVisibleCount();
+        // Update content immediately for faster transitions
+        carousel.innerHTML = containerSets[currentSlide];
 
-    // Build viewport + track
-    carousel.innerHTML = '';
-    const viewport = document.createElement('div');
-    viewport.className = 'carousel-viewport';
-    const track = document.createElement('div');
-    track.className = 'carousel-track';
+        // Force reflow to ensure content is rendered
+        carousel.offsetHeight;
 
-    // Append items into the track
-    items.forEach(item => {
-        item.classList.add('carousel-slide-item');
-        // ensure slides have no width overrides
-        item.style.boxSizing = 'border-box';
-        track.appendChild(item);
-    });
+        // Remove transitioning class quickly
+        setTimeout(() => {
+            carousel.classList.remove('transitioning');
+        }, 50);
 
-    viewport.appendChild(track);
-    carousel.appendChild(viewport);
+        // Re-enable scroll after transition
+        setTimeout(() => {
+            window.removeEventListener('scroll', preventScroll);
+        }, 100);
 
-    // Insert controls (prev/next) if not present
-    let prevBtn = document.getElementById('heroPrevBtn');
-    let nextBtn = document.getElementById('heroNextBtn');
-    if (!prevBtn) {
-        prevBtn = document.createElement('button');
-        prevBtn.id = 'heroPrevBtn';
-        prevBtn.className = 'hero-nav-btn prev-btn';
-        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
-        carousel.appendChild(prevBtn);
-    }
-    if (!nextBtn) {
-        nextBtn = document.createElement('button');
-        nextBtn.id = 'heroNextBtn';
-        nextBtn.className = 'hero-nav-btn next-btn';
-        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
-        carousel.appendChild(nextBtn);
-    }
-
-    // Apply CSS rules for viewport/track/slide sizing (flex-based).
-    // To avoid fractional / partially visible slides, use exact percentage widths and remove gaps.
-    function injectCarouselStyles(count) {
-        const gap = 0; // no gap to ensure exact visibleCount fit
-        const injectedId = 'multiCarouselStyles';
-        let s = document.getElementById(injectedId);
-        if (s) s.remove();
-        const slidePct = (100 / count).toFixed(6);
-        const css = `
-        .carousel-viewport{overflow:hidden;width:100%;}
-        .carousel-track{display:flex;gap:${gap}px;transition:transform 0.45s ease;will-change:transform}
-        .carousel-track .carousel-slide-item{flex:0 0 ${slidePct}%; max-width:${slidePct}%; box-sizing:border-box;}
-        .hero-nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.9);border-radius:999px;border:none;padding:0.45rem 0.6rem;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.12);z-index:50}
-        .hero-nav-btn.prev-btn{left:8px}
-        .hero-nav-btn.next-btn{right:8px}
-        @media (max-width:420px){ .carousel-track .carousel-slide-item{flex:0 0 50%; max-width:50%;} }
-        `;
-        s = document.createElement('style');
-        s.id = injectedId;
-        s.textContent = css;
-        document.head.appendChild(s);
-    }
-
-    // inject styles for current visibleCount
-    injectCarouselStyles(visibleCount);
-
-    // State
-    let index = 0;
-    const maxIndex = Math.max(0, items.length - visibleCount);
-
-    function showIndex(i) {
-        index = Math.min(Math.max(0, i), maxIndex);
-        const slidePct = (100 / visibleCount);
-        const pct = index * slidePct;
-        track.style.transform = `translateX(-${pct}%)`;
-    }
-
-    function next() { showIndex(index + 1); }
-    function prev() { showIndex(index - 1); }
-
-    nextBtn.onclick = next;
-    prevBtn.onclick = prev;
-
-    // make slides clickable to navigate to category
-    Array.from(track.children).forEach(child => {
-        child.onclick = function(){ window.location.href = '/category/'; };
-    });
-
-    // expose for autoplay
-    carousel._mc = { next, prev, showIndex };
-
-    // initialize
-    showIndex(0);
-
-    // Rebuild on resize when crossing breakpoints (debounced)
-    let resizeTimer = null;
-    function handleResize() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            const newVisible = chooseVisibleCount();
-            if (newVisible !== visibleCount) {
-                // rebuild carousel with new visible count
-                setupMultiVisibleCarousel(newVisible);
+        // Update dots with animation
+        dots.forEach((dot, index) => {
+            if (index === currentSlide) {
+                dot.classList.add('active');
+                dot.classList.remove('bg-gray-300');
+                dot.classList.add('bg-yellow-500');
+                dot.style.transform = 'scale(1.25)';
+                dot.style.boxShadow = '0 0 10px rgba(251, 191, 36, 0.5)';
             } else {
-                // ensure styles reflect current count (e.g., after zoom)
-                injectCarouselStyles(visibleCount);
+                dot.classList.remove('active');
+                dot.classList.remove('bg-yellow-500');
+                dot.classList.add('bg-gray-300');
+                dot.style.transform = 'scale(1)';
+                dot.style.boxShadow = 'none';
             }
-        }, 150);
+        });
     }
-
-    // attach resize handler (store reference so we can remove if rebuilding)
-    window.removeEventListener('resize', carousel._mc && carousel._mc._resizeHandler);
-    carousel._mc._resizeHandler = handleResize;
-    window.addEventListener('resize', handleResize);
 }
 
 function nextSlide() {
     currentSlide = (currentSlide + 1) % totalSlides;
-    // initialize the new multi-visible carousel showing 3 items
-    setupMultiVisibleCarousel(3);
+    updateCarousel();
 }
 
 function prevSlide() {
     currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-    // ensure the multi-visible carousel is initialized
-    setupMultiVisibleCarousel(3);
+    updateCarousel();
 }
 
 // Language Toggle Functionality
@@ -385,8 +290,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Preload images first
     preloadImages();
 
-    // Initialize carousel (use multi-visible carousel)
-    setupMultiVisibleCarousel(3);
+    // Initialize carousel
+    updateCarousel();
     setupImageLoading();
     setupCarouselImageRedirect();
 
@@ -438,8 +343,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => {
             currentSlide = index;
-            // ensure the multi-visible carousel is initialized
-            setupMultiVisibleCarousel(3);
+            updateCarousel();
         });
     });
 
@@ -451,13 +355,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (carouselInterval) clearInterval(carouselInterval);
         carouselInterval = setInterval(() => {
             if (isPageVisible) {
-                // Prefer the new carousel API if available
-                const carouselEl = document.getElementById('heroCarousel');
-                if (carouselEl && carouselEl._mc && typeof carouselEl._mc.next === 'function') {
-                    carouselEl._mc.next();
-                } else {
-                    nextSlide();
-                }
+                nextSlide();
             }
         }, 2000); // Changed to 2 seconds
     }
