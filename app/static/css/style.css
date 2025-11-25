@@ -3,6 +3,68 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Gradient Animation for Hero Sections */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Elegant Background Pattern Animations */
+@keyframes patternFloat {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+    opacity: 0.05;
+  }
+  25% {
+    transform: translateX(10px) translateY(-10px);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translateX(0) translateY(-15px);
+    opacity: 0.1;
+  }
+  75% {
+    transform: translateX(-10px) translateY(-10px);
+    opacity: 0.08;
+  }
+}
+
+@keyframes patternPulse {
+  0%, 100% {
+    opacity: 0.05;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.12;
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes patternRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+@keyframes shimmerPattern {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 /* Import translate-specific styles */
 @import url('translate.css');
 
@@ -190,9 +252,9 @@ nav a:hover::after {
   }
 }
 
-/* Category cards enhancement */
+/* Elegant Card Hover Effects */
 .card-hover {
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
   background-color: #ffffff !important;
@@ -205,9 +267,10 @@ nav a:hover::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2));
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
+  z-index: 1;
 }
 
 .card-hover:hover::before {
@@ -215,27 +278,17 @@ nav a:hover::after {
 }
 
 .card-hover:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-18px) scale(1.03) rotateX(2deg);
+  box-shadow: 0 30px 60px rgba(59, 130, 246, 0.25), 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* Category icons animation */
-.category-icon-circle {
-  transition: all 0.4s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.card-hover:hover .category-icon-circle {
-  transform: scale(1.15) rotateY(360deg);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-/* Supplier cards animations */
+/* Enhanced Supplier Card Animations */
 .supplier-card {
-  transition: all 0.4s ease;
+  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
   background-color: #ffffff !important;
+  perspective: 1000px;
 }
 
 .supplier-card::after {
@@ -245,10 +298,11 @@ nav a:hover::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.3));
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.5s ease;
   pointer-events: none;
+  z-index: 2;
 }
 
 .supplier-card:hover::after {
@@ -256,16 +310,222 @@ nav a:hover::after {
 }
 
 .supplier-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  transform: translateY(-16px) scale(1.02) rotateX(3deg) rotateY(2deg);
+  box-shadow: 0 35px 80px rgba(59, 130, 246, 0.3), 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .supplier-card img {
-  transition: transform 0.4s ease;
+  transition: transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
 }
 
 .supplier-card:hover img {
+  transform: scale(1.15) rotate(3deg) skewY(-2deg);
+}
+
+/* Elegant Background Pattern Animations */
+@keyframes patternFloat {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+    opacity: 0.05;
+  }
+  25% {
+    transform: translateX(10px) translateY(-10px);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translateX(0) translateY(-15px);
+    opacity: 0.1;
+  }
+  75% {
+    transform: translateX(-10px) translateY(-10px);
+    opacity: 0.08;
+  }
+}
+
+@keyframes patternPulse {
+  0%, 100% {
+    opacity: 0.05;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.12;
+    filter: brightness(1.1);
+  }
+}
+
+@keyframes patternRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+@keyframes shimmerPattern {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Enhanced shine effect animation */
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Elegant floating animation */
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Elegant badge pulse animation */
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+  }
+}
+
+/* Icon floating animation */
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(2deg);
+  }
+}
+
+/* Category icon animation with floating effect */
+.category-icon-circle {
+  animation: floatUp 3s ease-in-out infinite;
+}
+
+/* Enhanced Button Animations - Elegant Ripple Effect */
+.view-companies-btn, .view-subcategory-companies-btn {
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.view-companies-btn::before, .view-subcategory-companies-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.view-companies-btn:hover::before, .view-subcategory-companies-btn:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.view-companies-btn:hover, .view-subcategory-companies-btn:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+/* Pulsing animation for badges */
+@keyframes badge-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+  }
+}
+
+.supplier-card .bg-gradient-to-r {
+  animation: badge-pulse 2s infinite;
+}
+
+/* Star ratings animation */
+.fa-star, .fa-star-half-alt {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.supplier-card:hover .fa-star,
+.supplier-card:hover .fa-star-half-alt {
+  transform: scale(1.15) rotate(15deg);
+  filter: brightness(1.3);
+}
+
+/* Card stagger animation on load */
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.card-hover, .supplier-card {
+  animation: cardSlideIn 0.6s ease-out forwards;
+}
+
+.card-hover:nth-child(1), .supplier-card:nth-child(1) { animation-delay: 0.1s; }
+.card-hover:nth-child(2), .supplier-card:nth-child(2) { animation-delay: 0.15s; }
+.card-hover:nth-child(3), .supplier-card:nth-child(3) { animation-delay: 0.2s; }
+.card-hover:nth-child(4), .supplier-card:nth-child(4) { animation-delay: 0.25s; }
+.card-hover:nth-child(5), .supplier-card:nth-child(5) { animation-delay: 0.3s; }
+.card-hover:nth-child(6), .supplier-card:nth-child(6) { animation-delay: 0.35s; }
+.card-hover:nth-child(7), .supplier-card:nth-child(7) { animation-delay: 0.4s; }
+.card-hover:nth-child(8), .supplier-card:nth-child(8) { animation-delay: 0.45s; }
+.card-hover:nth-child(n+9), .supplier-card:nth-child(n+9) { animation-delay: 0.5s; }
+
+/* Enhanced filter section animations */
+.filter-select, .filter-btn {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.filter-select:focus, .filter-btn:hover {
   transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+/* Icon animations */
+.fa-building {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.supplier-card:hover .fa-building {
+  transform: rotate(12deg) scale(1.15);
+}
+
+/* Text shadow animation on hover */
+.card-hover:hover h3, .supplier-card:hover h3 {
+  text-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Border animation effect */
+.card-hover, .supplier-card {
+  border-image: linear-gradient(45deg, #3b82f6 0%, #6366f1 100%) 1;
+  transition: all 0.4s ease;
+}
+
+.card-hover:hover, .supplier-card:hover {
+  border-image: linear-gradient(45deg, #6366f1 0%, #3b82f6 100%) 1;
 }
 
 /* Button animations */

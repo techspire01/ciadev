@@ -3,8 +3,6 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from .models import Supplier, CustomUser, SupplierEditRequest, SupplierListingRequest
 
-from .models import Complaint
-
 class SupplierForm(forms.ModelForm):
 
     category = forms.ChoiceField(required=False)
@@ -170,13 +168,3 @@ class SupplierListingForm(forms.ModelForm):
             'pin_code', 'business_description', 'phone_number',
             'gstno', 'instagram', 'facebook', 'total_employees'
         ]
-
-
-class ComplaintForm(forms.ModelForm):
-    class Meta:
-        model = Complaint
-        fields = ['complaint_text', 'contact_number']
-        widgets = {
-            'complaint_text': forms.Textarea(attrs={'rows':4, 'placeholder':'Describe your complaint...'}),
-            'contact_number': forms.TextInput(attrs={'placeholder': 'Contact number (optional)'}),
-        }

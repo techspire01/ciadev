@@ -9,7 +9,7 @@ from django.conf import settings
 import json
 import logging
 
-from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, InternshipApplication, Complaint
+from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About
 from .forms import SupplierForm
 
 logger = logging.getLogger(__name__)
@@ -364,15 +364,39 @@ def notify_admin_on_new_edit_request(sender, instance, created, **kwargs):
     if not created:
         return
 
+    try:
+        admin_list = [email for _, email in getattr(settings, 'ADMINS', [])]
+        if not admin_list:
+            admin_list = ['admin@cia.com']
 
-@admin.register(Complaint)
-class ComplaintAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'contact_number', 'created_at', 'resolved')
-    list_filter = ('resolved', 'created_at')
-    search_fields = ('complaint_text', 'contact_number', 'user__email')
-    ordering = ('-created_at',)
+        supplier_name = getattr(instance, 'supplier', None)
+        user_email = getattr(getattr(instance, 'user', None), 'email', 'unknown')
+        data = getattr(instance, 'requested_data', {})
+        # If JSON stored as string, attempt to convert to dict for readable message
+        if isinstance(data, str):
+            try:
+                data = json.loads(data)
+            except Exception:
+                pass
 
-    # Admin notification logic moved to signal handlers; removed inline code
+        message_lines = [
+            f"A supplier edit request has been submitted.",
+            f"User: {user_email}",
+            f"Supplier: {supplier_name}",
+            "Requested Changes:"
+        ]
+        if isinstance(data, dict):
+            for k, v in data.items():
+                message_lines.append(f"- {k}: {v}")
+        else:
+            message_lines.append(str(data))
+
+        subject = f"Supplier Edit Request: {supplier_name}"
+        body = "\n".join(message_lines)
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+        send_mail(subject, body, from_email, admin_list, fail_silently=False)
+    except Exception as e:
+        logger.exception("Failed to send admin notification for SupplierEditRequest: %s", e)
 
 @admin.register(ContactInformation)
 class ContactInformationAdmin(admin.ModelAdmin):
@@ -439,12 +463,3 @@ class AboutAdmin(admin.ModelAdmin):
 
 # Register CustomUser with the admin site
 admin.site.register(CustomUser, CustomUserAdmin)
-from django.contrib import admin
-
-@admin.register(InternshipApplication)
-class InternshipApplicationAdmin(admin.ModelAdmin):
-    list_display = ('fullname', 'email', 'phone', 'college', 'degree', 'year', 'sector', 'submitted_at')
-    list_filter = ('sector', 'year')
-    search_fields = ('fullname', 'email', 'college', 'sector', 'year')
-    ordering = ('-submitted_at',)
-    date_hierarchy = 'submitted_at'

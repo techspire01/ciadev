@@ -26,10 +26,9 @@
       <div class="text-center text-white p-4 bg-black/50 rounded-lg backdrop-blur-sm max-w-sm">
         <h2 class="text-xl md:text-2xl font-bold mb-2 text-yellow-100">Discover Industrial Excellence</h2>
         <p class="text-sm md:text-base opacity-90 mb-3">Explore our diverse industrial sectors</p>
-          <button id="browseBtn" class="bg-yellow-400 hover:bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold transition-all duration-300 pointer-events-auto text-sm">
+        <button id="browseBtn" class="bg-yellow-400 hover:bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold transition-all duration-300 pointer-events-auto text-sm">
           Browse Catalog
-          </button>
-          <!-- Internship button moved below categories -->
+        </button>
       </div>
     </div>
 
@@ -126,27 +125,6 @@
           class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-semibold px-8 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
           View All Categories <i class="fas fa-arrow-right ml-2"></i>
         </a>
-      </div>
-      <!-- Internship Available Container (enhanced styling) -->
-      <div class="mt-8 flex justify-center">
-        <div class="max-w-[1081px] w-full bg-white rounded-2xl shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4 border border-yellow-50">
-          <div class="flex items-start md:items-center gap-4">
-            <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-md">
-              <i class="fas fa-briefcase"></i>
-            </div>
-            <div>
-              <h3 class="text-xl font-bold text-gray-800">Internships Available</h3>
-              <p class="text-sm text-gray-600 mt-1 md:mt-0">Paid & unpaid internships with member companies — gain real industry experience.</p>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-end">
-            <a href="{% url 'internship' %}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-5 py-2 rounded-full transition duration-200 shadow">
-              View Internships
-              <i class="fas fa-arrow-right ml-3"></i>
-            </a>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -484,7 +462,14 @@
   {% include 'footer.html' %}
 
   <!-- Announcement Button & Bar -->
-  {% include 'partials/floating_buttons.html' %}
+  <div class="announcement-popup-container">
+    <a href="{% url 'announcement' %}">
+      <button class="announcement-btn" id="announcementBtn" title="Show Announcement">
+        <span class="announcement-btn-icon">📢</span>
+        <span class="announcement-btn-label">Announcement</span>
+      </button>
+    </a>
+  </div>
 
   <script src="{% static 'js/script.js' %}"></script>
   <script src="{% static 'js/book-showcase.js' %}"></script>

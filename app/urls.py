@@ -11,9 +11,6 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('suppliers/', views.suppliers, name='suppliers'),
     
-    # Supplier detail page with dynamic URL
-    path('supplier/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
-    
     # Authentication URLs
     path("login/", views.login_view, name="login"),
     path("logout/", views.user_logout, name="logout"),
@@ -59,8 +56,8 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
 
     # Book showcase page
-    path('internship/', views.internship_view, name='internship'),
-    path('internship/submit/', views.intern_submit_view, name='intern_submit'),
-    path('complaint/submit/', views.submit_complaint, name='submit_complaint'),
     path('book-showcase/', views.book_showcase, name='book_showcase'),
+
+    # Student portal page
+    path('student/', views.student, name='student'),
 ]

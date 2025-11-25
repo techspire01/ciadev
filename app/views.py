@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.db import models
 import random
-from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, Complaint
+from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import Supplier
@@ -17,120 +17,6 @@ from django.conf import settings
 import logging
 
 logger = logging.getLogger(__name__)
-
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
-
-def internship_view(request):
-    return render(request, "intern.html")
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def intern_submit_view(request):
-    fullname = request.POST.get('fullname')
-    email = request.POST.get('email')
-    phone = request.POST.get('phone')
-    college = request.POST.get('college')
-    degree = request.POST.get('degree')
-    year = request.POST.get('year')
-    skills = request.POST.get('skills')
-    sector = request.POST.get('sector')
-
-    if not all([fullname, email, phone, college, degree, year, skills, sector]):
-        from django.http import HttpResponse
-        return HttpResponse('{"error": "Please fill all required fields."}', content_type="application/json", status=400)
-
-    # Save to database
-    try:
-        from .models import InternshipApplication
-        application = InternshipApplication.objects.create(
-            fullname=fullname,
-            email=email,
-            phone=phone,
-            college=college,
-            degree=degree,
-            year=year,
-            skills=skills,
-            sector=sector,
-        )
-        application.save()
-
-        # Send notification email
-        subject = "New Internship Application Submitted"
-        message = (
-            f"New internship application received:\n\n"
-            f"Full Name: {fullname}\n"
-            f"Email: {email}\n"
-            f"Phone: {phone}\n"
-            f"College: {college}\n"
-            f"Degree: {degree}\n"
-            f"Year: {year}\n"
-            f"Skills: {skills}\n"
-            f"Sector Interested: {sector}"
-        )
-        from django.conf import settings
-        admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
-        if admin_email:
-            send_mail(subject, message, admin_email, [admin_email], fail_silently=False)
-
-        from django.http import HttpResponse
-        return HttpResponse('{"message": "Application submitted successfully."}', content_type="application/json", status=201)
-    except Exception as e:
-        logger.exception("Failed to submit internship application: %s", e)
-        from django.http import HttpResponse
-        return HttpResponse('{"error": "Failed to submit application."}', content_type="application/json", status=500)
-
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def submit_complaint(request):
-    complaint_text = request.POST.get('complaint') or request.POST.get('complaint_text')
-    contact_number = request.POST.get('contact_number')
-
-    if not complaint_text:
-        return JsonResponse({'error': 'Complaint text is required.'}, status=400)
-
-    try:
-        user = request.user if request.user.is_authenticated else None
-        complaint = Complaint.objects.create(
-            user=user,
-            complaint_text=complaint_text,
-            contact_number=contact_number
-        )
-
-        # Prepare email
-        subject = f"New Complaint Submitted - #{complaint.id}"
-        message = (
-            f"A new complaint has been submitted:\n\n"
-            f"Complaint ID: {complaint.id}\n"
-            f"User: {getattr(user, 'email', 'Anonymous')}\n"
-            f"Contact Number: {contact_number or 'N/A'}\n\n"
-            f"Complaint:\n{complaint_text}\n"
-        )
-
-        # Determine recipients: prefer EMAIL_HOST_USER and ADMINS if present
-        admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
-        recipients = []
-        if admin_email:
-            recipients.append(admin_email)
-        admins = getattr(settings, 'ADMINS', None)
-        if admins:
-            for a in admins:
-                try:
-                    recipients.append(a[1])
-                except Exception:
-                    continue
-
-        if recipients:
-            try:
-                send_mail(subject, message, admin_email or recipients[0], list(set(recipients)), fail_silently=False)
-            except Exception as e:
-                logger.exception("Failed sending complaint email: %s", e)
-
-        return JsonResponse({'message': 'Complaint submitted successfully.'}, status=201)
-    except Exception as e:
-        logger.exception("Failed to submit complaint: %s", e)
-        return JsonResponse({'error': 'Failed to submit complaint.'}, status=500)
 
 def index(request):
     # Fetch 3 random suppliers
@@ -544,85 +430,6 @@ def supplier_details(request, supplier_id):
         return JsonResponse(data)
     except Supplier.DoesNotExist:
         return JsonResponse({"error": "Supplier not found"}, status=404)
-
-def supplier_detail_page(request, supplier_name):
-    """Display full supplier detail page with unique URL based on company name"""
-    try:
-        from urllib.parse import unquote
-        import re
-
-        # Try a few strategies to resolve the supplier name from the slug
-        normalized_name = unquote(supplier_name).replace('-', ' ').strip()
-
-        # 1) Direct case-insensitive exact match
-        try:
-            supplier = Supplier.objects.get(name__iexact=normalized_name)
-        except Supplier.DoesNotExist:
-            supplier = None
-
-        # 2) If not found, try a normalized token-score matching across all suppliers
-        if not supplier:
-            def normalize(s):
-                return re.sub(r'[^a-z0-9 ]', ' ', (s or '').lower()).strip()
-
-            target = normalize(normalized_name)
-            if target:
-                target_tokens = set(t for t in target.split() if t)
-                best = None
-                best_score = 0
-                # iterate suppliers and compute token intersection score
-                for cand in Supplier.objects.all():
-                    cand_norm = normalize(cand.name)
-                    cand_tokens = set(t for t in cand_norm.split() if t)
-                    if not cand_tokens:
-                        continue
-                    score = len(target_tokens & cand_tokens)
-                    # boost exact substring matches
-                    if target in cand_norm or cand_norm in target:
-                        score += 1
-                    if score > best_score:
-                        best_score = score
-                        best = cand
-                if best and best_score > 0:
-                    supplier = best
-
-        # If still not found, return 404 now (avoid later NoneType errors)
-        if not supplier:
-            from django.http import HttpResponseNotFound
-            return HttpResponseNotFound('<h1>Supplier Not Found</h1><p>The supplier you are looking for does not exist.</p>')
-        
-        # Collect all non-empty subcategories
-        sub_categories = []
-        for i in range(1, 7):
-            sub_category = getattr(supplier, f'sub_category{i}', None)
-            if sub_category:
-                sub_categories.append(sub_category)
-
-        # Prepare product images URLs
-        product_images = []
-        for i in range(1, 11):
-            image_url = getattr(supplier, f'product_image{i}_url', None)
-            if image_url:
-                product_images.append(image_url)
-        
-        # Prepare products list
-        products = []
-        for i in range(1, 11):
-            product = getattr(supplier, f'product{i}', None)
-            if product:
-                products.append(product)
-
-        context = {
-            'supplier': supplier,
-            'sub_categories': sub_categories,
-            'product_images': product_images,
-            'products': products,
-        }
-        return render(request, 'supplier_detail.html', context)
-    except Supplier.DoesNotExist:
-        # Return a 404 response with a custom error message
-        from django.http import HttpResponseNotFound
-        return HttpResponseNotFound('<h1>Supplier Not Found</h1><p>The supplier you are looking for does not exist.</p>')
 
 @require_GET
 def companies_by_category(request):
@@ -1333,3 +1140,6 @@ def book_showcase(request):
         'total_photos': book_photos.count()
     }
     return render(request, "book_showcase.html", context)
+
+def student(request):
+    return render(request, "student.html")

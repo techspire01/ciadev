@@ -390,23 +390,131 @@
     
     {% include 'navbar.html' %}
 
+    <!-- Hero Section with Unique Design -->
+    <section class="relative py-20 overflow-hidden group bg-gradient-to-br from-slate-700 via-amber-800 to-orange-900">
+        <!-- Animated Background Blobs -->
+        <div class="absolute top-0 left-10 w-72 h-72 bg-amber-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob"></div>
+        <div class="absolute top-0 right-10 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-slate-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob animation-delay-4000"></div>
+        
+        <!-- Floating Particles -->
+        <div class="absolute top-1/4 left-1/4 w-1 h-1 bg-amber-300 rounded-full opacity-50 animate-float"></div>
+        <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-indigo-300 rounded-full opacity-40 animate-float animation-delay-1000"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-slate-300 rounded-full opacity-30 animate-float animation-delay-2000"></div>
+        
+        <!-- Dark Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30 group-hover:from-black/20 group-hover:via-transparent group-hover:to-black/20 transition-all duration-700"></div>
+        
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <div class="max-w-2xl mx-auto">
+                <!-- Animated Badge with Glow Effect -->
+                <div class="inline-block mb-6 px-6 py-3 rounded-full bg-gradient-to-r from-amber-500/30 to-orange-500/20 backdrop-blur-lg border border-amber-400/50 group-hover:from-amber-600/40 group-hover:to-orange-600/30 transition-all duration-700 transform hover:scale-110 shadow-lg hover:shadow-2xl hover:shadow-amber-500/40 animate-pulse-gentle">
+                    <span class="text-white font-semibold text-sm flex items-center gap-2"><i class="fas fa-building text-amber-300 group-hover:animate-bounce"></i> Our Organization</span>
+                </div>
+                
+                <!-- Main Heading with Glow and Scale Effect -->
+                <h1 class="text-5xl md:text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-200 to-amber-200 drop-shadow-2xl group-hover:scale-110 transition-transform duration-700 animate-text-shimmer">
+                    About CIAnext
+                </h1>
+                
+                <!-- Decorative Line with Animation -->
+                <div class="flex items-center justify-center gap-3 mb-6">
+                    <div class="h-1 w-12 bg-gradient-to-r from-transparent to-amber-400/70 rounded animate-slide-left"></div>
+                    <div class="w-2 h-2 rounded-full bg-gradient-to-b from-amber-400 to-orange-400 animate-pulse"></div>
+                    <div class="h-1 w-12 bg-gradient-to-l from-transparent to-orange-400/70 rounded animate-slide-right"></div>
+                </div>
+                
+                <!-- Subheading with Fade Animation -->
+                <p class="text-lg md:text-xl text-white/95 drop-shadow-lg animate-fade-up group-hover:text-white transition-all duration-500">
+                    Empowering Coimbatore's industrial sector and advancing MSME growth
+                </p>
+            </div>
+        </div>
+        
+        <!-- Add animations to style tag -->
+        <style>
+            @keyframes blob {
+                0%, 100% { transform: translate(0, 0) scale(1); }
+                33% { transform: translate(30px, -50px) scale(1.1); }
+                66% { transform: translate(-20px, 20px) scale(0.9); }
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0px) translateX(0px); }
+                50% { transform: translateY(-20px) translateX(10px); }
+            }
+            @keyframes text-shimmer {
+                0%, 100% { filter: brightness(1); }
+                50% { filter: brightness(1.1); }
+            }
+            @keyframes slide-left {
+                from { transform: scaleX(0); transform-origin: right; }
+                to { transform: scaleX(1); transform-origin: right; }
+            }
+            @keyframes slide-right {
+                from { transform: scaleX(0); transform-origin: left; }
+                to { transform: scaleX(1); transform-origin: left; }
+            }
+            @keyframes fade-up {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes pulse-gentle {
+                0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+                50% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            }
+            .animate-blob {
+                animation: blob 7s infinite;
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            .animate-text-shimmer {
+                animation: text-shimmer 3s ease-in-out infinite;
+            }
+            .animate-slide-left {
+                animation: slide-left 0.8s ease-out forwards;
+            }
+            .animate-slide-right {
+                animation: slide-right 0.8s ease-out forwards;
+            }
+            .animate-fade-up {
+                animation: fade-up 0.8s ease-out;
+            }
+            .animate-pulse-gentle {
+                animation: pulse-gentle 2s infinite;
+            }
+            .animation-delay-1000 {
+                animation-delay: 1s;
+            }
+            .animation-delay-2000 {
+                animation-delay: 2s;
+            }
+            .animation-delay-4000 {
+                animation-delay: 4s;
+            }
+        </style>
+    </section>
 
 
-
-    <!-- Our Mission Section -->
-    <section id="mission" class="py-16 bg-gradient-to-br from-yellow-50 to-orange-50">
-        <div class="container mx-auto px-4">
-            <div class="bg-white rounded-xl shadow-lg p-8">
+    <section id="mission" class="relative py-20 overflow-hidden group" style="background-image: url('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1920&q=80'); background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover;">
+        <!-- Dark Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black/75 via-black/70 to-black/65 group-hover:from-black/70 group-hover:via-black/65 group-hover:to-black/60 transition-all duration-700"></div>
+        
+        <!-- Animated Pattern Overlay -->
+        <div class="absolute inset-0 opacity-5 group-hover:opacity-8 transition-opacity duration-700" style="background-image: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1200 600\"><defs><pattern id=\"factory\" width=\"150\" height=\"150\" patternUnits=\"userSpaceOnUse\"><g opacity=\"0.3\"><rect x=\"20\" y=\"30\" width=\"50\" height=\"80\" fill=\"none\" stroke=\"white\" stroke-width=\"1.5\"/><rect x=\"40\" y=\"20\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"white\" stroke-width=\"1.5\"/><rect x=\"48\" y=\"10\" width=\"5\" height=\"15\" fill=\"white\" opacity=\"0.4\"/><circle cx=\"60\" cy=\"50\" r=\"12\" fill=\"none\" stroke=\"white\" stroke-width=\"1.5\"/><line x1=\"30\" y1=\"110\" x2=\"90\" y2=\"110\" stroke=\"white\" stroke-width=\"1\"/><polygon points=\"70,30 85,30 77,15\" fill=\"white\" opacity=\"0.3\"/></g></pattern></defs><rect width=\"1200\" height=\"600\" fill=\"url(%23factory)\"/></svg>'); animation: patternPulse 4s ease-in-out infinite;"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl p-10 md:p-12">
                 <div class="w-full">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Our Mission</h2>
+                    <h2 class="text-4xl font-bold text-white mb-8 text-center drop-shadow-lg">Our Mission</h2>
                     <div class="max-w-4xl mx-auto">
                         {% if about_info.mission %}
-                            {{ about_info.mission|safe }}
+                            <div class="text-white drop-shadow-md leading-relaxed text-lg">{{ about_info.mission|safe }}</div>
                         {% else %}
-                            <p class="text-gray-700 leading-relaxed mb-4 text-lg">
-                                The Chinnavedampatti Industrial Association (CIA), established in 2020, is dedicated to advancing Coimbatore's industrial sector, particularly in Chinnavedampatti. We focus on empowering micro and small industries by facilitating access to government benefits and promoting sustainable growth.
+                            <p class="text-white leading-relaxed mb-6 text-lg drop-shadow-md">
+                                The Chinnavedampatti Industrial Association (CIA), established in 2020, is dedicated to advancing Coimbatore's industrial sector, particularly in Chinnavedampathi. We focus on empowering micro and small industries by facilitating access to government benefits and promoting sustainable growth.
                             </p>
-                            <p class="text-gray-700 leading-relaxed text-lg">
+                            <p class="text-white leading-relaxed text-lg drop-shadow-md">
                                 Our initiatives encompass industrial development, skill development workshops, technological advancements, and fostering inter-industry collaborations. We connect members to development programs and trade opportunities while representing MSME interests with industry bodies and government agencies.
                             </p>
                         {% endif %}
@@ -427,7 +535,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-xl shadow-md text-center animated-card" data-aos="flip-left" data-aos-delay="0">
-                    <div class="category-icon bg-white text-blue-600 mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce">
+                    <div class="category-icon bg-white text-amber-600 mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce">
                         <i class="fas fa-handshake text-3xl transform transition-transform duration-300"></i>
                     </div>
                     <h3 class="font-semibold text-xl mb-2">Trust & Transparency</h3>
@@ -618,22 +726,22 @@
                     {% endif %}
                     <div class="flex justify-center space-x-4">
                         {% if member.linkedin %}
-                        <a href="{% if member.linkedin|slice:":8" == "https://" or member.linkedin|slice:":7" == "http://" %}{{ member.linkedin }}{% else %}https://{{ member.linkedin }}{% endif %}" target="_blank" class="text-gray-500 hover:text-blue-600 transition-all duration-300">
+                        <a href="{% if member.linkedin|slice:":8" == "https://" or member.linkedin|slice:":7" == "http://" %}{{ member.linkedin }}{% else %}https://{{ member.linkedin }}{% endif %}" target="_blank" class="text-gray-500 hover:text-amber-600 transition-all duration-300">
                             <i class="fab fa-linkedin-in text-xl animated-icon"></i>
                         </a>
                         {% endif %}
                         {% if member.twitter %}
-                        <a href="{% if member.twitter|slice:":8" == "https://" or member.twitter|slice:":7" == "http://" %}{{ member.twitter }}{% else %}https://{{ member.twitter }}{% endif %}" target="_blank" class="text-gray-500 hover:text-blue-400 transition-all duration-300">
+                        <a href="{% if member.twitter|slice:":8" == "https://" or member.twitter|slice:":7" == "http://" %}{{ member.twitter }}{% else %}https://{{ member.twitter }}{% endif %}" target="_blank" class="text-gray-500 hover:text-amber-400 transition-all duration-300">
                             <i class="fab fa-twitter text-xl animated-icon"></i>
                         </a>
                         {% endif %}
                         {% if member.facebook %}
-                        <a href="{% if member.facebook|slice:":8" == "https://" or member.facebook|slice:":7" == "http://" %}{{ member.facebook }}{% else %}https://{{ member.facebook }}{% endif %}" target="_blank" class="text-gray-500 hover:text-blue-700 transition-all duration-300">
+                        <a href="{% if member.facebook|slice:":8" == "https://" or member.facebook|slice:":7" == "http://" %}{{ member.facebook }}{% else %}https://{{ member.facebook }}{% endif %}" target="_blank" class="text-gray-500 hover:text-amber-700 transition-all duration-300">
                             <i class="fab fa-facebook-f text-xl animated-icon"></i>
                         </a>
                         {% endif %}
                         {% if member.instagram %}
-                        <a href="{% if member.instagram|slice:":8" == "https://" or member.instagram|slice:":7" == "http://" %}{{ member.instagram }}{% else %}https://{{ member.instagram }}{% endif %}" target="_blank" class="text-gray-500 hover:text-pink-600 transition-all duration-300">
+                        <a href="{% if member.instagram|slice:":8" == "https://" or member.instagram|slice:":7" == "http://" %}{{ member.instagram }}{% else %}https://{{ member.instagram }}{% endif %}" target="_blank" class="text-gray-500 hover:text-amber-600 transition-all duration-300">
                             <i class="fab fa-instagram text-xl animated-icon"></i>
                         </a>
                         {% endif %}
@@ -666,7 +774,7 @@
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
 
-                    <a href="{% url 'contact' %}" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <a href="{% url 'contact' %}" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-amber-800 transition-all duration-300 shadow-lg hover:shadow-xl">
                         Contact Us
                     </a>
                 </div>
@@ -675,7 +783,6 @@
     </section>
 
     {% include 'footer.html' %}
-{% include 'partials/floating_buttons.html' %}
 
     <!-- Scroll to top button -->
     <div class="fixed bottom-6 right-6 z-50">
@@ -787,13 +894,26 @@
             observer.observe(storySection);
         }
     </script>
-    <!-- Announcement Banner -->          
+
+    <!-- Announcement Button & Bar -->
+    <div class="announcement-popup-container">
+        <button class="announcement-btn" id="announcementBtn" title="Show Announcement">
+            <span class="announcement-btn-icon">📢</span>
+            <span class="announcement-btn-label">Announcement</span>
+        </button>
+        <div class="announcement-bar" id="announcementBar">
+            <span class="announcement-text">
+                <ul class="announcement-list">
+                    <li>🏢 CIA MachineryHub now offers verified supplier badges</li>
+                    <li>🎉 Exclusive deals available for registered users</li>
+                    <li>🤝 Contact us for partnership opportunities</li>
+                </ul>
+            </span>
             <div class="announcement-footer">
                 <span>Learn more at <a href="{% url 'announcement' %}">View All Announcements</a></span>
             </div>
             <button class="announcement-close" id="announcementClose" title="Close">&times;</button>
         </div>
-        
     </div>
 
     <!-- Lightbox Modal -->
