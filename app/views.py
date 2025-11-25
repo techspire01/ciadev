@@ -545,6 +545,85 @@ def supplier_details(request, supplier_id):
     except Supplier.DoesNotExist:
         return JsonResponse({"error": "Supplier not found"}, status=404)
 
+def supplier_detail_page(request, supplier_name):
+    """Display full supplier detail page with unique URL based on company name"""
+    try:
+        from urllib.parse import unquote
+        import re
+
+        # Try a few strategies to resolve the supplier name from the slug
+        normalized_name = unquote(supplier_name).replace('-', ' ').strip()
+
+        # 1) Direct case-insensitive exact match
+        try:
+            supplier = Supplier.objects.get(name__iexact=normalized_name)
+        except Supplier.DoesNotExist:
+            supplier = None
+
+        # 2) If not found, try a normalized token-score matching across all suppliers
+        if not supplier:
+            def normalize(s):
+                return re.sub(r'[^a-z0-9 ]', ' ', (s or '').lower()).strip()
+
+            target = normalize(normalized_name)
+            if target:
+                target_tokens = set(t for t in target.split() if t)
+                best = None
+                best_score = 0
+                # iterate suppliers and compute token intersection score
+                for cand in Supplier.objects.all():
+                    cand_norm = normalize(cand.name)
+                    cand_tokens = set(t for t in cand_norm.split() if t)
+                    if not cand_tokens:
+                        continue
+                    score = len(target_tokens & cand_tokens)
+                    # boost exact substring matches
+                    if target in cand_norm or cand_norm in target:
+                        score += 1
+                    if score > best_score:
+                        best_score = score
+                        best = cand
+                if best and best_score > 0:
+                    supplier = best
+
+        # If still not found, return 404 now (avoid later NoneType errors)
+        if not supplier:
+            from django.http import HttpResponseNotFound
+            return HttpResponseNotFound('<h1>Supplier Not Found</h1><p>The supplier you are looking for does not exist.</p>')
+        
+        # Collect all non-empty subcategories
+        sub_categories = []
+        for i in range(1, 7):
+            sub_category = getattr(supplier, f'sub_category{i}', None)
+            if sub_category:
+                sub_categories.append(sub_category)
+
+        # Prepare product images URLs
+        product_images = []
+        for i in range(1, 11):
+            image_url = getattr(supplier, f'product_image{i}_url', None)
+            if image_url:
+                product_images.append(image_url)
+        
+        # Prepare products list
+        products = []
+        for i in range(1, 11):
+            product = getattr(supplier, f'product{i}', None)
+            if product:
+                products.append(product)
+
+        context = {
+            'supplier': supplier,
+            'sub_categories': sub_categories,
+            'product_images': product_images,
+            'products': products,
+        }
+        return render(request, 'supplier_detail.html', context)
+    except Supplier.DoesNotExist:
+        # Return a 404 response with a custom error message
+        from django.http import HttpResponseNotFound
+        return HttpResponseNotFound('<h1>Supplier Not Found</h1><p>The supplier you are looking for does not exist.</p>')
+
 @require_GET
 def companies_by_category(request):
     category = request.GET.get('category', '')

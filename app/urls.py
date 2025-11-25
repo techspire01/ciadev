@@ -11,6 +11,9 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('suppliers/', views.suppliers, name='suppliers'),
     
+    # Supplier detail page with dynamic URL
+    path('supplier/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
+    
     # Authentication URLs
     path("login/", views.login_view, name="login"),
     path("logout/", views.user_logout, name="logout"),
