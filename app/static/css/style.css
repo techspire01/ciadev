@@ -374,56 +374,6 @@ footer a:hover {
   grid-row: span 1;
 }
 
-/* Tablet responsiveness */
-@media (max-width: 1024px) {
-  #heroSection {
-    height: auto !important;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-
-  #heroSection > div:first-child {
-    position: static !important;
-    height: auto !important;
-    width: 100% !important;
-    inset: auto !important;
-  }
-
-  #heroSection > div:first-child > div {
-    position: static !important;
-    max-width: none !important;
-  }
-
-  .hero-carousel-grid {
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto;
-    height: auto !important;
-    min-height: auto !important;
-    gap: 0.5rem;
-    max-height: 280px;
-  }
-
-  .carousel-item-large {
-    grid-column: span 2;
-    grid-row: span 1;
-    height: 120px;
-    overflow: hidden;
-  }
-
-  .carousel-item-medium {
-    grid-column: span 1;
-    grid-row: span 1;
-    height: 120px;
-    overflow: hidden;
-  }
-
-  .carousel-item img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-}
-
 /* Mobile Carousel Responsiveness */
 @media (max-width: 768px) {
   #heroSection {
@@ -476,12 +426,17 @@ footer a:hover {
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #000;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
 
   .carousel-item img {
     object-fit: cover;
     width: 100%;
     height: 100%;
+    display: block;
   }
 
   .carousel-item h3,
