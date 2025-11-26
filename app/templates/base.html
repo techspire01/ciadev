@@ -3,8 +3,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="CIA MachineryHub - Connect with machinery suppliers in Tamil Nadu">
+    <meta name="theme-color" content="#fbbf24">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CIA Hub">
+    <meta name="application-name" content="CIA MachineryHub">
+    
     <title>{% block title %}CIA MachineryHub{% endblock %}</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/CIA logo.png' %}">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -90,6 +103,28 @@
                     });
                 });
             })();
+
+            // PWA Install Prompt
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show your custom install button
+                const installButton = document.getElementById('pwaInstallBtn');
+                if (installButton) {
+                    installButton.style.display = 'block';
+                }
+            });
+
+            // Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('{% static "js/service-worker.js" %}').then(function(registration) {
+                    console.log('Service Worker registered:', registration);
+                }).catch(function(err) {
+                    console.log('Service Worker registration failed:', err);
+                });
+            }
         </script>
 
         {% block extra_js %}{% endblock %}

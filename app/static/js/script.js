@@ -185,13 +185,13 @@ function updateCarousel() {
                 dot.classList.add('active');
                 dot.classList.remove('bg-gray-300');
                 dot.classList.add('bg-yellow-500');
-                dot.style.transform = 'scale(1.25)';
-                dot.style.boxShadow = '0 0 10px rgba(251, 191, 36, 0.5)';
+                dot.style.transform = 'scale(0.6)';
+                dot.style.boxShadow = '0 0 3px rgba(251, 191, 36, 0.15)';
             } else {
                 dot.classList.remove('active');
                 dot.classList.remove('bg-yellow-500');
                 dot.classList.add('bg-gray-300');
-                dot.style.transform = 'scale(1)';
+                dot.style.transform = 'scale(0.6)';
                 dot.style.boxShadow = 'none';
             }
         });

@@ -376,56 +376,123 @@ footer a:hover {
 
 /* Tablet responsiveness */
 @media (max-width: 1024px) {
+  #heroSection {
+    height: auto !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  #heroSection > div:first-child {
+    position: static !important;
+    height: auto !important;
+    width: 100% !important;
+    inset: auto !important;
+  }
+
+  #heroSection > div:first-child > div {
+    position: static !important;
+    max-width: none !important;
+  }
+
   .hero-carousel-grid {
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    height: 60vh !important;
-    min-height: 400px !important;
-  }
-
-  .carousel-item-large {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-
-  .carousel-item-medium {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-}
-
-/* Mobile Carousel Responsiveness */
-@media (max-width: 768px) {
-  .w-full.min-h-screen {
-    width: 100vw;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .hero-carousel-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    height: 50vh !important;
-    min-height: 350px !important;
-    gap: 8px;
+    grid-template-rows: auto;
+    height: auto !important;
+    min-height: auto !important;
+    gap: 0.5rem;
+    max-height: 280px;
   }
 
   .carousel-item-large {
     grid-column: span 2;
     grid-row: span 1;
-    min-height: 200px;
+    height: 120px;
+    overflow: hidden;
   }
 
   .carousel-item-medium {
     grid-column: span 1;
     grid-row: span 1;
-    min-height: 150px;
+    height: 120px;
+    overflow: hidden;
   }
 
   .carousel-item img {
     object-fit: cover;
     width: 100%;
     height: 100%;
+  }
+}
+
+/* Mobile Carousel Responsiveness */
+@media (max-width: 768px) {
+  #heroSection {
+    height: auto !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  #heroSection > div:first-child {
+    position: static !important;
+    height: auto !important;
+    width: 100% !important;
+    inset: auto !important;
+    display: none;
+  }
+
+  .w-full.min-h-screen {
+    width: 100vw;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .hero-carousel-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto !important;
+    min-height: auto !important;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    max-height: 620px;
+  }
+
+  .carousel-item-large {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 110px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-item-medium {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 110px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-item {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .carousel-item img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+
+  .carousel-item h3,
+  .carousel-item h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .carousel-item p {
+    font-size: 0.65rem;
+    display: none;
   }
 
 /* Ensure mobile language container has roomy tap area */
@@ -440,61 +507,67 @@ footer a:hover {
   .supplier-card:hover {
     transform: translateY(-4px);
   }
-
-  /* Adjust font sizes for mobile */
-  #heroCarousel h3 {
-    font-size: 1.125rem;
-  }
-
-  #heroCarousel h4 {
-    font-size: 0.875rem;
-  }
-
-  #heroCarousel p {
-    font-size: 0.75rem;
-  }
 }
 
 /* Extra small screen carousel fixes */
 @media (max-width: 480px) {
+  #heroSection {
+    height: auto !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  #heroSection > div:first-child {
+    position: static !important;
+    height: auto !important;
+    width: 100% !important;
+    inset: auto !important;
+    display: none;
+  }
+
   .w-full.min-h-screen {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .hero-carousel-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 160px);
+    grid-template-rows: auto;
     height: auto !important;
-    min-height: 800px !important;
-    gap: 12px;
+    min-height: auto !important;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    max-height: 660px;
   }
 
   .carousel-item {
     grid-column: span 1;
     grid-row: span 1;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    min-height: 140px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 110px;
+    width: 100%;
   }
 
   .carousel-item-large {
     grid-column: span 1;
     grid-row: span 1;
+    height: 110px;
+    overflow: hidden;
   }
 
   .carousel-item-medium {
     grid-column: span 1;
     grid-row: span 1;
+    height: 110px;
+    overflow: hidden;
   }
 
   .carousel-item img {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    min-height: 140px;
-    max-height: 160px;
   }
 
   .carousel-item h3 {
@@ -733,20 +806,21 @@ img:not([src]) {
 /* Announcement Popup Styles */
 .announcement-popup-container {
   position: fixed;
-  right: 2.5rem;
-  bottom: 6rem;
+  right: 1rem;
+  bottom: 1.5rem;
   left: auto;
   transform: none;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
 }
 
 @media (max-width: 768px) {
   .announcement-popup-container {
-    bottom: 8rem;
-    right: 1rem;
+    bottom: 1rem;
+    right: 0.5rem;
   }
 }
 
@@ -756,8 +830,8 @@ img:not([src]) {
   border: none;
   outline: none;
   border-radius: 999px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 0 0 2px #000000;
-  padding: 0.6rem 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15), 0 0 0 1px #000000;
+  padding: 0.3rem 0.75rem;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
@@ -1706,4 +1780,318 @@ a:focus-visible {
 .gallery-enhanced .gallery-item {
   will-change: transform;
   transform: translateZ(0);
+}
+
+/* ============================================
+   RESPONSIVE MOBILE-FIRST UTILITIES
+   ============================================ */
+
+/* Mobile Navigation Drawer */
+.mobile-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Mobile Menu Overlay */
+#mobileMenu.active::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hamburger Menu Animation */
+.hamburger-line {
+  transition: all 0.3s ease-out;
+}
+
+.hamburger-active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translateY(10px);
+}
+
+.hamburger-active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translateY(-10px);
+}
+
+/* Responsive Button Sizing */
+button, .btn {
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 640px) {
+  button, .btn {
+    min-height: 48px;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .btn-group .btn {
+    width: 100%;
+  }
+}
+
+/* Responsive Form Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="phone"],
+textarea,
+select {
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="phone"],
+  textarea,
+  select {
+    min-height: 48px;
+    font-size: 16px;
+    padding: 14px 14px;
+  }
+}
+
+/* Responsive Card Grid */
+.card-grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Responsive Card Styling */
+.responsive-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+  .responsive-card {
+    padding: 14px;
+    border-radius: 8px;
+  }
+}
+
+.responsive-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.responsive-card h3 {
+  margin: 0 0 8px 0;
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.responsive-card p {
+  margin: 8px 0;
+  color: #6b7280;
+  font-size: clamp(14px, 3vw, 16px);
+  line-height: 1.5;
+}
+
+/* Responsive Table (Mobile Card Layout) */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+  }
+  
+  table thead {
+    display: none;
+  }
+  
+  table tbody,
+  table tr,
+  table td {
+    display: block;
+    width: 100%;
+  }
+  
+  table tr {
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  
+  table td {
+    padding: 10px 0;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #374151;
+    min-width: 100px;
+  }
+}
+
+/* Touch-friendly spacing */
+a, button {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prevent zoom on input focus (mobile) */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  font-size: 16px;
+}
+
+/* Responsive Typography */
+h1 {
+  font-size: clamp(24px, 6vw, 48px);
+}
+
+h2 {
+  font-size: clamp(20px, 5vw, 36px);
+}
+
+h3 {
+  font-size: clamp(18px, 4vw, 28px);
+}
+
+h4 {
+  font-size: clamp(16px, 3vw, 22px);
+}
+
+/* Responsive Container */
+.responsive-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+@media (min-width: 640px) {
+  .responsive-container {
+    padding: 0 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-container {
+    max-width: 1280px;
+    padding: 0 24px;
+  }
+}
+
+/* Responsive Spacing Utilities */
+@media (max-width: 640px) {
+  .space-mobile-sm { gap: 8px !important; }
+  .space-mobile-md { gap: 12px !important; }
+  .space-mobile-lg { gap: 16px !important; }
+  
+  .px-mobile-sm { padding-left: 8px; padding-right: 8px; }
+  .px-mobile-md { padding-left: 12px; padding-right: 12px; }
+  .px-mobile-lg { padding-left: 16px; padding-right: 16px; }
+  
+  .py-mobile-sm { padding-top: 8px; padding-bottom: 8px; }
+  .py-mobile-md { padding-top: 12px; padding-bottom: 12px; }
+  .py-mobile-lg { padding-top: 16px; padding-bottom: 16px; }
+}
+
+/* Floating Action Button Container */
+.fab-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 50;
+}
+
+@media (max-width: 640px) {
+  .fab-container {
+    bottom: 16px;
+    right: 16px;
+    gap: 10px;
+  }
 }
