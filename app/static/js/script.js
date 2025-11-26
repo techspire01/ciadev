@@ -185,13 +185,13 @@ function updateCarousel() {
                 dot.classList.add('active');
                 dot.classList.remove('bg-gray-300');
                 dot.classList.add('bg-yellow-500');
-                dot.style.transform = 'scale(1.25)';
-                dot.style.boxShadow = '0 0 10px rgba(251, 191, 36, 0.5)';
+                dot.style.transform = 'scale(0.6)';
+                dot.style.boxShadow = '0 0 3px rgba(251, 191, 36, 0.15)';
             } else {
                 dot.classList.remove('active');
                 dot.classList.remove('bg-yellow-500');
                 dot.classList.add('bg-gray-300');
-                dot.style.transform = 'scale(1)';
+                dot.style.transform = 'scale(0.6)';
                 dot.style.boxShadow = 'none';
             }
         });
@@ -460,23 +460,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Mobile menu functionality with drawer animation
+    // Mobile menu functionality
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileProductsBtn = document.getElementById('mobileProductsBtn');
     const mobileProductsMenu = document.getElementById('mobileProductsMenu');
 
     if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
+        mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
-            mobileMenuBtn.classList.toggle('hamburger-active');
-            // Add overlay if not already present
-            if (!mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('active');
-            } else {
-                mobileMenu.classList.remove('active');
-            }
+            mobileMenuBtn.classList.toggle('active');
         });
     }
 
@@ -498,22 +491,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
         if (mobileMenu && !mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
             mobileMenu.classList.add('hidden');
-            mobileMenuBtn.classList.remove('hamburger-active');
-            mobileMenu.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
         }
     });
-
-    // Close mobile menu when clicking on a link
-    if (mobileMenu) {
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.add('hidden');
-                mobileMenuBtn.classList.remove('hamburger-active');
-                mobileMenu.classList.remove('active');
-            });
-        });
-    }
 
     // Announcement button redirect logic
     const announcementBtn = document.getElementById('announcementBtn');
