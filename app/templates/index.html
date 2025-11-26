@@ -20,15 +20,17 @@
 
   {% include 'navbar.html' %}
 
-  <section class="w-full relative px-0 py-0 shadow-lg shadow-black/30" style="height: calc(70vh - 2cm);">
+  <section class="w-full relative px-0 py-0 shadow-lg shadow-black/30" style="height: calc(70vh - 2cm);" id="heroSection">
     <!-- Dimming Overlay with Caption -->
     <div class="absolute inset-0 z-20 rounded-xl flex items-center justify-center pointer-events-none" style="background-color: rgba(136, 178, 233, 0.2);">
-      <div class="text-center text-white p-4 bg-black/50 rounded-lg backdrop-blur-sm max-w-sm">
+      <div class="text-center text-white p-4 bg-black/50 rounded-lg backdrop-blur-sm max-w-sm flex flex-col items-center justify-center">
         <h2 class="text-xl md:text-2xl font-bold mb-2 text-yellow-100">Discover Industrial Excellence</h2>
         <p class="text-sm md:text-base opacity-90 mb-3">Explore our diverse industrial sectors</p>
+        <div class="w-full flex justify-center">
           <button id="browseBtn" class="bg-yellow-400 hover:bg-yellow-400 text-black px-4 py-2 rounded-full font-semibold transition-all duration-300 pointer-events-auto text-sm">
-          Browse Catalog
+            Browse Catalog
           </button>
+        </div>
           <!-- Internship button moved below categories -->
       </div>
     </div>
@@ -38,9 +40,9 @@
       <div class="carousel-item carousel-item-large rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
         <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
-        <div class="absolute bottom-4 md:bottom-8 left-4 md:left-8 text-white max-w-xs md:max-w-none">
-          <h3 class="text-lg md:text-2xl font-bold mb-1 md:mb-2">Industrial Excellence</h3>
-          <p class="text-xs md:text-base opacity-90 hidden md:block">Connecting industries and fostering growth in Coimbatore's manufacturing sector</p>
+        <div class="absolute bottom-3 md:bottom-6 left-3 md:left-6 text-white max-w-xs md:max-w-none">
+          <h3 class="text-base md:text-xl font-bold mb-1 md:mb-1">Industrial Excellence</h3>
+          <p class="text-xs opacity-90 hidden md:block">Connecting industries and fostering growth</p>
         </div>
       </div>
 
@@ -86,48 +88,49 @@
     </div>
 
     <!-- Carousel Indicators -->
-    <div class="carousel-indicators flex justify-center mt-4 md:mt-8 space-x-2 z-30">
-      <button class="carousel-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="0"></button>
-      <button class="carousel-dot active w-2 h-2 md:w-3 md:h-3 rounded-full bg-yellow-500 transition-all duration-300 scale-125 shadow-lg shadow-yellow-500/50" data-slide="1"></button>
-      <button class="carousel-dot w-2 h-2 md:w-3 md:h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300" data-slide="2"></button>
+    <div class="carousel-indicators flex justify-center mt-1 md:mt-2 space-x-0.5 z-30">
+      <button class="carousel-dot w-0.5 h-0.5 md:w-0.5 md:h-0.5 rounded-full bg-gray-400 hover:bg-gray-500 transition-all duration-200" data-slide="0"></button>
+      <button class="carousel-dot active w-0.5 h-0.5 md:w-0.5 md:h-0.5 rounded-full bg-yellow-500 transition-all duration-200 shadow-sm shadow-yellow-500/20" data-slide="1"></button>
+      <button class="carousel-dot w-0.5 h-0.5 md:w-0.5 md:h-0.5 rounded-full bg-gray-400 hover:bg-gray-500 transition-all duration-200" data-slide="2"></button>
     </div>
   </section>
 
-    <!-- Categories Section -->
-    <section class="py-12 max-w-[1081px] mx-auto px-4">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold mb-4 text-gray-800">
+  <!-- Categories Section -->
+  <section class="py-8 md:py-12 w-full px-4">
+    <div class="max-w-[1081px] mx-auto">
+      <div class="text-center mb-6 md:mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold mb-2 md:mb-4 text-gray-800">
           Browse Industrial Categories
         </h2>
-        <p class="text-gray-600 max-w-2xl mx-auto">
+        <p class="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
           Explore our diverse manufacturing and industrial sectors in Coimbatore
         </p>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="categories">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6" id="categories">
         {% for category in categories %}
           <a
             href="{% url 'suppliers' %}?category={{ category|urlencode }}"
-            class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl shadow-md p-6 text-center card-hover group hover:shadow-xl transition-all duration-300"
+            class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg md:rounded-xl shadow-md p-4 md:p-6 text-center card-hover group hover:shadow-lg transition-all duration-300"
           >
             <div
-              class="category-icon-circle w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300"
+              class="category-icon-circle w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4 shadow-lg group-hover:shadow-xl transition-all duration-300"
             >
-              <span class="text-2xl font-bold text-white">{{ category|slice:":1"|upper }}</span>
+              <span class="text-lg md:text-2xl font-bold text-white">{{ category|slice:":1"|upper }}</span>
             </div>
-            <h3 class="font-semibold text-lg mb-1 text-gray-800">{{ category }}</h3>
-            <p class="text-gray-600 text-sm">{{ category_counts|get_item:category }}+ Companies</p>
+            <h3 class="font-semibold text-sm md:text-lg text-gray-800">{{ category }}</h3>
           </a>
         {% endfor %}
       </div>
       <!-- View More Button -->
-      <div class="text-center mt-8">
+      <div class="text-center mt-6 md:mt-8">
         <a
           href="{% url 'category' %}"
-          class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-semibold px-8 py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          class="inline-block bg-gradient-to-r from-yellow-400 to-yellow-500 text-white font-semibold px-6 md:px-8 py-2 md:py-3 rounded-full hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm md:text-base">
           View All Categories <i class="fas fa-arrow-right ml-2"></i>
         </a>
       </div>
-      <!-- Internship Available Container (enhanced styling) -->
+    </div>
+    <!-- Internship Available Container (enhanced styling) -->
       <div class="mt-8 flex justify-center">
         <div class="max-w-[1081px] w-full bg-white rounded-2xl shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4 border border-yellow-50">
           <div class="flex items-start md:items-center gap-4">
