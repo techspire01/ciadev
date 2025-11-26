@@ -460,16 +460,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Mobile menu functionality
+    // Mobile menu functionality with drawer animation
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     const mobileProductsBtn = document.getElementById('mobileProductsBtn');
     const mobileProductsMenu = document.getElementById('mobileProductsMenu');
 
     if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             mobileMenu.classList.toggle('hidden');
-            mobileMenuBtn.classList.toggle('active');
+            mobileMenuBtn.classList.toggle('hamburger-active');
+            // Add overlay if not already present
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('active');
+            } else {
+                mobileMenu.classList.remove('active');
+            }
         });
     }
 
@@ -491,9 +498,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
         if (mobileMenu && !mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
             mobileMenu.classList.add('hidden');
-            mobileMenuBtn.classList.remove('active');
+            mobileMenuBtn.classList.remove('hamburger-active');
+            mobileMenu.classList.remove('active');
         }
     });
+
+    // Close mobile menu when clicking on a link
+    if (mobileMenu) {
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.classList.remove('hamburger-active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+    }
 
     // Announcement button redirect logic
     const announcementBtn = document.getElementById('announcementBtn');

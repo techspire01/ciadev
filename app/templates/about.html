@@ -513,7 +513,7 @@
             </div>
 
             <!-- Dynamic Photo Gallery Grid -->
-            <div class="photo-gallery-grid grid grid-cols-3 grid-rows-2 gap-6 w-full">
+            <div class="photo-gallery-grid grid grid-cols-3 md:grid-rows-2 gap-6 md:gap-6 gap-2 w-full">
                 {% for photo in latest_photos %}
                 <div class="gallery-item photo-gallery-item">
                     {% if photo.image_url %}
@@ -550,9 +550,9 @@
             </div>
 
             <!-- Dynamic Newspaper Gallery Grid -->
-            <div class="photo-gallery-grid grid grid-cols-3 grid-rows-2 gap-6 w-full">
+            <div class="news-gallery-grid grid grid-cols-3 md:grid-rows-2 gap-6 md:gap-6 gap-2 w-full">
                 {% for newspaper in latest_newspapers %}
-                <div class="gallery-item photo-gallery-item">
+                <div class="gallery-item news-gallery-item">
                     {% if newspaper.image_url %}
                         <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover" onclick="openLightbox('{{ newspaper.image_url|escapejs }}', '{{ newspaper.title|default:'CIA Newspaper Cutting'|escapejs }}')" loading="lazy" />
                     {% elif newspaper.image %}
@@ -787,14 +787,9 @@
             observer.observe(storySection);
         }
     </script>
-    <!-- Announcement Banner -->          
-            <div class="announcement-footer">
-                <span>Learn more at <a href="{% url 'announcement' %}">View All Announcements</a></span>
-            </div>
+            <!-- Announcement Banner -->          
             <button class="announcement-close" id="announcementClose" title="Close">&times;</button>
-        </div>
-        
-    </div>
+        </div>    </div>
 
     <!-- Lightbox Modal -->
     <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300 ease-out">

@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('app.urls')),
+    path('', include('app.urls')),  # Main app URLs (homepage, suppliers, etc.)
+    path('', include('portal.urls')),  # Portal URLs (dashboard, internship, etc.)
     path("accounts/", include("allauth.urls")),  # newly added for the google login
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

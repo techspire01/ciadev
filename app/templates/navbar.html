@@ -40,10 +40,10 @@
               type="text"
               id="searchInput"
               placeholder="Search..!!"
-              class="w-40 py-1 px-2 rounded-full text-[#000000] bg-[#FFF9E5] border border-[#000000] shadow-md rounded-full focus:outline-none pr-10 shadow-md search-box"
+              class="w-40 py-2 px-3 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent pr-10 shadow-md search-box"
             />
             <button
-              class="absolute right-0 top-0 mt-2 mr-4 text-black hover:text-gray-800"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-yellow-700 hover:text-yellow-800"
               title="Search"
             >
               <i class="fas fa-search"></i>
@@ -137,10 +137,10 @@
             <div class="relative mb-6">
               <input
                 type="text"
-                placeholder="Search products, suppliers..."
-                class="w-full py-3 px-4 pr-12 rounded-lg text-[#000000] bg-[#FFF9E5] border border-[#bba99a] focus:outline-none focus:ring-2 focus:ring-yellow-500 search-box"
+                placeholder="Search suppliers..."
+                class="w-full py-3 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
               />
-              <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800">
+              <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-yellow-700 hover:text-yellow-800 text-lg" title="Search">
                 <i class="fas fa-search"></i>
               </button>
             </div>
@@ -163,6 +163,12 @@
                 <i class="fas fa-building w-5"></i>
                 <span class="font-medium">Suppliers</span>
               </a>
+              {% if user.is_authenticated %}
+              <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-3 py-3 text-[#3d2d29] hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+                <i class="fas fa-user-circle w-5"></i>
+                <span class="font-medium">My Profile</span>
+              </a>
+              {% endif %}
 
               
           <!-- Mobile Menu Footer -->
