@@ -20,7 +20,10 @@
         <!-- ==================== SIDEBAR ==================== -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h1>CIA Admin</h1>
+                <a href="{% url 'index' %}" class="flex items-center space-x-2">
+                    <img src="{% static 'images/CIA logo.png' %}" alt="CIA logo" class="h-10 rounded-lg logo-black-filter" />
+                    <span class="text-2xl font-bold text-black">CIA<span class="text-yellow-700">next</span></span>
+                </a>
             </div>
             <nav class="sidebar-nav">
                 <li class="nav-item"><a class="nav-link active" onclick="switchTab('add-internships')">Add Internships</a></li>

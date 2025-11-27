@@ -1259,13 +1259,14 @@
   <div class="dashboard-wrapper">
     <header class="dashboard-header">
       <div class="header-content">
-        <div class="header-branding">
-          <div class="header-logo">CIA</div>
-          <div>
-            <h1 class="header-title">CIA Next</h1>
-            <p class="header-subtitle">Career Opportunities Portal</p>
+        <a href="{% url 'index' %}" class="header-branding">
+          <div class="header-logo">
+            <img src="{% static 'images/CIA logo.png' %}" alt="CIA logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
           </div>
-        </div>
+          <div>
+            <h1 class="header-title">CIA<span style="color: #b45309;">next</span></h1>
+          </div>
+        </a>
         <div class="header-search">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           <input type="text" id="searchInput" placeholder="Search internships, jobs..." />
@@ -1275,7 +1276,7 @@
 
     <main class="dashboard-main">
       <section class="hero-section">
-        <h1 class="hero-title">Explore Career Opportunities</h1>
+        <h1 class="hero-title">Dashboard</h1>
         <p class="hero-subtitle">Find your next internship or job opportunity with leading companies</p>
       </section>
 
