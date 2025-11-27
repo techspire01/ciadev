@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Internship Management</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="{% static 'brand_new_site/css/admin-styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- ==================== SIDEBAR ==================== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h1>CIA Admin</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <li class="nav-item"><a class="nav-link active" onclick="switchTab('add-internships')">Add Internships</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="switchTab('view-internships')">View Internships</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="switchTab('add-jobs')">Add Jobs</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="switchTab('view-jobs')">View Jobs</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="switchTab('applications')">Applications</a></li>
+            </nav>
+        </aside>
+
+        <!-- ==================== MAIN CONTENT ==================== -->
+        <main class="main-content">
+            <!-- ADD INTERNSHIPS TAB -->
+            <div id="add-internships" class="tab-content active">
+                <div class="page-header">
+                    <h2>Add New Internship</h2>
+                    <p>Create and manage internship opportunities</p>
+                </div>
+                <div class="form-container">
+                    <form id="internship-form">
+                        <h3>Internship Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Role</label>
+                                <input type="text" name="role" placeholder="e.g., Software Engineer Intern" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input type="text" name="company" placeholder="e.g., Tech Corp" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Duration</label>
+                                <input type="text" name="duration" placeholder="e.g., 3-6 months">
+                            </div>
+                            <div class="form-group">
+                                <label>Stipend</label>
+                                <input type="text" name="stipend" placeholder="e.g., ₹20-25/hour">
+                            </div>
+                        </div>
+                        <div class="form-row-full">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="description" placeholder="Describe the internship opportunity" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Add Internship</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VIEW INTERNSHIPS TAB -->
+            <div id="view-internships" class="tab-content">
+                <div class="page-header">
+                    <h2>Internship Listings</h2>
+                    <p>Manage all internship opportunities</p>
+                </div>
+                <div id="internships-container" class="internships-container">
+                    <!-- Internships will be rendered here -->
+                </div>
+                <div class="empty-state" id="empty-internships">
+                    <div class="icon">📋</div>
+                    <h3>No internships yet</h3>
+                    <p>Add your first internship opportunity from the "Add Internships" tab</p>
+                </div>
+            </div>
+
+            <!-- ADD JOBS TAB -->
+            <div id="add-jobs" class="tab-content">
+                <div class="page-header">
+                    <h2>Add New Job</h2>
+                    <p>Create and manage job opportunities</p>
+                </div>
+                <div class="form-container">
+                    <form id="job-form">
+                        <h3>Job Details</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Job Title</label>
+                                <input type="text" name="title" placeholder="e.g., Senior Software Engineer" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input type="text" name="company" placeholder="e.g., Tech Corp" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Salary</label>
+                                <input type="text" name="salary" placeholder="e.g., ₹12-15 LPA">
+                            </div>
+                            <div class="form-group">
+                                <label>Job Type</label>
+                                <select name="jobType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="full-time">Full-time</option>
+                                    <option value="part-time">Part-time</option>
+                                    <option value="contract">Contract</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row-full">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea name="description" placeholder="Describe the job opportunity" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Add Job</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VIEW JOBS TAB -->
+            <div id="view-jobs" class="tab-content">
+                <div class="page-header">
+                    <h2>Job Listings</h2>
+                    <p>Manage all job opportunities</p>
+                </div>
+                <div class="table-container">
+                    <table id="jobs-table">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Salary</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Jobs will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="empty-jobs">
+                    <div class="icon">💼</div>
+                    <h3>No jobs yet</h3>
+                    <p>Add your first job opportunity from the "Add Jobs" tab</p>
+                </div>
+            </div>
+
+            <!-- APPLICATIONS TAB -->
+            <div id="applications" class="tab-content">
+                <div class="page-header">
+                    <h2>Applications</h2>
+                    <p>View and manage all applications</p>
+                </div>
+                <div class="table-container">
+                    <table id="applications-table">
+                        <thead>
+                            <tr>
+                                <th>Applicant Name</th>
+                                <th>Email</th>
+                                <th>Applied For</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Applications will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="empty-applications">
+                    <div class="icon">📧</div>
+                    <h3>No applications yet</h3>
+                    <p>Applications will appear here once received</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== EDIT MODAL ==================== -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Internship</h3>
+                <button class="modal-close" onclick="document.getElementById('edit-modal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form">
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" name="role" placeholder="Role" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" name="company" placeholder="Company" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" name="duration" placeholder="Duration">
+                    </div>
+                    <div class="form-group">
+                        <label>Stipend</label>
+                        <input type="text" name="stipend" placeholder="Stipend">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="document.getElementById('edit-modal').classList.remove('active')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveInternshipChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'brand_new_site/js/admin.js' %}"></script>
+</body>
+</html>

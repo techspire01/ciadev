@@ -1,0 +1,1488 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIA Next — Career Opportunities</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://cdn.builder.io/api/v1/image/assets%2Fa180d3e502ea4bf0922bba9c817ddbe4%2F13a5568b42344d13af0dc08dfaf227ab?format=webp&width=800" />
+  <style>
+    :root {
+      --blue: #F59E0B;
+      --red: #D97706;
+      --gold: #FCD34D;
+      --dark: #78350F;
+      --white: #FFFFFF;
+      --light-bg: #FFFBF0;
+      --gray: #92400E;
+      --shadow: 0 8px 20px rgba(245,158,11,0.1);
+      --shadow-lg: 0 12px 30px rgba(245,158,11,0.15);
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #FFFBF0;
+      color: var(--dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Industrial Background Video */
+    .bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: #FFFBF0;
+      overflow: hidden;
+    }
+
+    .bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.3;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 251, 240, 0.7) 0%, rgba(255, 245, 230, 0.6) 50%, rgba(255, 251, 240, 0.8) 100%);
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      25% { transform: translateY(-10px); }
+      50% { transform: translateY(-5px); }
+      75% { transform: translateY(-8px); }
+    }
+    
+    /* New Keyframe Animation: Hero Title Entrance */
+    @keyframes fadeInDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* New Keyframe Animation: Fade In and Slide Up */
+    @keyframes fadeInSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .parallax-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: particle-float 4s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { width: 8px; height: 8px; top: 10%; left: 20%; animation-delay: 0s; }
+    .particle:nth-child(2) { width: 12px; height: 12px; top: 30%; left: 60%; animation-delay: 1s; }
+    .particle:nth-child(3) { width: 6px; height: 6px; top: 50%; left: 80%; animation-delay: 2s; }
+    .particle:nth-child(4) { width: 10px; height: 10px; top: 70%; left: 30%; animation-delay: 1.5s; }
+    .particle:nth-child(5) { width: 8px; height: 8px; top: 20%; left: 90%; animation-delay: 0.5s; }
+
+    @keyframes particle-float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-20px) translateX(10px); }
+    }
+
+    /* Main content wrapper */
+    .dashboard-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header/Navigation */
+    .dashboard-header {
+      background: rgba(255, 251, 240, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(245, 158, 11, 0.1);
+      padding: 20px 40px;
+      box-shadow: var(--shadow);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-sizing: border-box;
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 24px;
+    }
+
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0;
+    }
+
+    .header-subtitle {
+      font-size: 12px;
+      color: var(--gray);
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .header-search {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 25px;
+      padding: 0 15px;
+      transition: all 0.3s ease;
+    }
+
+    .header-search:hover,
+    .header-search:focus-within {
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+    }
+
+    .header-search svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gray);
+      stroke-width: 2;
+      margin-right: 10px;
+    }
+
+    .header-search input {
+      border: none;
+      outline: none;
+      flex: 1;
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .header-search input::placeholder {
+      color: #d0d0d0;
+    }
+
+    /* Main content area */
+    .dashboard-main {
+      flex: 1;
+      max-width: 100%;
+      width: 100%;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      align-items: center;
+    }
+
+    /* Hero section */
+    .hero-section {
+      margin-bottom: 50px;
+      animation: fadeInDown 0.8s ease;
+      width: 100%;
+      max-width: 900px;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0 auto 10px auto;
+      background: linear-gradient(135deg, var(--dark), var(--gray));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--gray);
+      margin: 0 auto;
+      max-width: 600px;
+      line-height: 1.6;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Filter section */
+    .filter-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      animation: fadeInSlideUp 0.8s ease 0.2s both;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filter-button {
+      padding: 10px 20px;
+      border: 2px solid rgba(245, 158, 11, 0.3);
+      background: white;
+      color: var(--gray);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .filter-button:hover {
+      border-color: var(--blue);
+      background: rgba(245, 158, 11, 0.05);
+      color: var(--blue);
+    }
+
+    .filter-button.active {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .filter-button.internship-active {
+      background: #3B82F6;
+      color: white;
+      border-color: #3B82F6;
+    }
+
+    .filter-button.work-active {
+      background: #10B981;
+      color: white;
+      border-color: #10B981;
+    }
+
+    .counter-info {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-left: auto;
+      padding: 10px 20px;
+      background: rgba(245, 158, 11, 0.1);
+      border-radius: 20px;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      animation: fadeInSlideUp 0.8s ease 0.4s both;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Opportunity card */
+    .opportunity-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .opportunity-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--blue);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .card-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      overflow: hidden;
+    }
+
+    .category-badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #3B82F6;
+      color: white;
+    }
+
+    .category-badge.work {
+      background: #10B981;
+    }
+
+    .card-body {
+      margin-bottom: 20px;
+    }
+
+    .card-company {
+      font-size: 12px;
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .card-description {
+      font-size: 14px;
+      color: var(--dark);
+      font-weight: 600;
+      margin: 0;
+      line-height: 1.4;
+      min-height: 40px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .card-location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .card-location svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--gray);
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .card-email {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--blue);
+      cursor: pointer;
+    }
+
+    .card-email svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--blue);
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--blue);
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      word-wrap: break-word;
+      white-space: nowrap;
+    }
+
+    .card-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .rating-stars {
+      color: #FCD34D;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid var(--blue);
+      background: white;
+      color: var(--blue);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(245, 158, 11, 0.05);
+      transform: scale(1.05);
+    }
+
+    .action-btn.primary {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .action-btn.primary:hover {
+      background: var(--red);
+      border-color: var(--red);
+      transform: scale(1.05);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-state-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .empty-state-desc {
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    /* Footer */
+    .dashboard-footer {
+      background: rgba(255, 251, 240, 0.95);
+      border-top: 2px solid rgba(245, 158, 11, 0.1);
+      padding: 30px 40px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    /* Detail Modal */
+    .detail-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .detail-modal.is-open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .detail-container {
+      background: white;
+      border-radius: 20px;
+      max-width: 700px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .detail-header {
+      padding: 30px;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+      border-radius: 20px 20px 0 0;
+      position: relative;
+    }
+
+    .detail-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,...') repeat;
+      opacity: 0.1;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .detail-header-work {
+      background: linear-gradient(135deg, #10B981, #059669);
+    }
+
+    .detail-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .detail-logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      flex-shrink: 0;
+    }
+
+    .detail-header-text h1 {
+      font-size: 28px;
+      margin: 0 0 5px 0;
+      font-weight: 700;
+    }
+
+    .detail-header-text p {
+      font-size: 14px;
+      margin: 0;
+      opacity: 0.95;
+    }
+
+    .detail-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .detail-content {
+      padding: 30px;
+    }
+
+    .detail-section {
+      margin-bottom: 25px;
+    }
+
+    .detail-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .detail-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-section-title svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--blue);
+      stroke-width: 2;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .detail-item {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .detail-item-label {
+      font-size: 12px;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .detail-item-value {
+      font-size: 14px;
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .detail-overview {
+      line-height: 1.6;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .detail-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .detail-list li {
+      padding: 10px 0;
+      font-size: 14px;
+      color: var(--dark);
+      position: relative;
+      padding-left: 25px;
+    }
+
+    .detail-list li:last-child {
+      padding-bottom: 0;
+    }
+
+    .detail-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .gallery-item {
+      width: 100%;
+      height: 120px;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.05);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .detail-actions {
+      padding-top: 25px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .detail-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .detail-close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    .card-company,
+    .card-logo {
+      cursor: pointer;
+    }
+
+    .card-company:hover {
+      color: var(--red);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .dashboard-main {
+        padding: 40px 30px;
+      }
+
+      .header-content {
+        padding: 0 20px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-header {
+        padding: 15px 20px;
+      }
+
+      .header-content {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .header-search {
+        flex-basis: 100%;
+        max-width: 100%;
+      }
+
+      .counter-info {
+        margin-left: 0;
+        flex-basis: 100%;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .detail-container {
+        max-width: 90vw;
+        max-height: 90vh;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-header {
+        padding: 12px 16px;
+      }
+
+      .header-content {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 8px;
+      }
+
+      .dashboard-main {
+        padding: 24px 12px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .hero-section {
+        width: 100%;
+        max-width: calc(100% - 24px);
+        text-align: center;
+      }
+
+      .filter-section {
+        width: 100%;
+        max-width: calc(100% - 24px);
+        justify-content: center;
+      }
+
+      .header-content {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .header-branding {
+        gap: 10px;
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .header-title {
+        font-size: 16px;
+      }
+
+      .header-subtitle {
+        font-size: 11px;
+      }
+
+      .header-logo {
+        width: 38px;
+        height: 38px;
+        font-size: 16px;
+      }
+
+      .header-search {
+        max-width: 100%;
+        flex: 1;
+        min-width: 150px;
+      }
+
+      .header-search input {
+        font-size: 13px;
+        padding: 8px 0;
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .hero-subtitle {
+        font-size: 13px;
+      }
+
+      .filter-section {
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .filter-group {
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .filter-label {
+        font-size: 12px;
+      }
+
+      .filter-button {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+
+      .counter-info {
+        width: 100%;
+        justify-content: center;
+        font-size: 12px;
+        padding: 8px 12px;
+        margin-left: 0;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      .opportunity-card {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .card-logo {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+
+      .card-description {
+        font-size: 13px;
+      }
+
+      .card-location {
+        font-size: 11px;
+      }
+
+      .card-email {
+        font-size: 11px;
+      }
+
+      .tag {
+        padding: 3px 8px;
+        font-size: 10px;
+        white-space: normal;
+        word-wrap: break-word;
+      }
+
+      .card-actions {
+        gap: 8px;
+      }
+
+      .action-btn {
+        padding: 8px;
+        font-size: 11px;
+      }
+
+      .detail-container {
+        max-width: 95vw;
+        max-height: 85vh;
+      }
+
+      .detail-header {
+        padding: 20px;
+      }
+
+      .detail-top {
+        gap: 16px;
+      }
+
+      .detail-logo {
+        width: 70px;
+        height: 70px;
+        font-size: 30px;
+      }
+
+      .detail-header-text h1 {
+        font-size: 22px;
+      }
+
+      .detail-content {
+        padding: 20px;
+      }
+
+      .detail-section {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+      }
+
+      .detail-section-title {
+        font-size: 14px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .detail-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .dashboard-footer {
+        padding: 16px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .dashboard-header {
+        padding: 12px 12px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .dashboard-main {
+        padding: 20px 10px;
+        width: 100%;
+        box-sizing: border-box;
+        align-items: center;
+      }
+
+      .header-branding {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header-logo {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+
+      .header-title {
+        font-size: 14px;
+      }
+
+      .header-search {
+        width: 100%;
+        max-width: calc(100% - 20px);
+      }
+
+      .hero-section {
+        width: 100%;
+        max-width: calc(100% - 20px);
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 24px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .hero-subtitle {
+        font-size: 12px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        width: 100%;
+        max-width: calc(100% - 20px);
+        justify-content: center;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .filter-button {
+        width: 100%;
+      }
+
+      .counter-info {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        width: 100%;
+        max-width: calc(100% - 20px);
+      }
+
+      .detail-container {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 12px 12px 0 0;
+        margin: auto;
+      }
+
+      .detail-header {
+        padding: 16px;
+        border-radius: 12px 12px 0 0;
+      }
+
+      .detail-top {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .detail-logo {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+      }
+
+      .detail-header-text h1 {
+        font-size: 18px;
+      }
+
+      .detail-header-text p {
+        font-size: 12px;
+      }
+
+      .detail-content {
+        padding: 16px;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tag {
+        padding: 3px 8px;
+        font-size: 10px;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .opportunity-card {
+        padding: 12px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-container">
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="{% static 'brand_new_site/videos/background.mp4' %}" type="video/mp4">
+    </video>
+    <div class="bg-overlay"></div>
+    <div class="parallax-layer" id="parallaxLayer">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <div class="dashboard-wrapper">
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="header-branding">
+          <div class="header-logo">CIA</div>
+          <div>
+            <h1 class="header-title">CIA Next</h1>
+            <p class="header-subtitle">Career Opportunities Portal</p>
+          </div>
+        </div>
+        <div class="header-search">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" placeholder="Search internships, jobs..." />
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+      <section class="hero-section">
+        <h1 class="hero-title">Explore Career Opportunities</h1>
+        <p class="hero-subtitle">Find your next internship or job opportunity with leading companies</p>
+      </section>
+
+      <section class="filter-section">
+        <div class="filter-group">
+          <span class="filter-label">Filter by:</span>
+          <button class="filter-button active" data-filter="all">All</button>
+          <button class="filter-button" data-filter="internship">Internships</button>
+          <button class="filter-button" data-filter="work">Jobs</button>
+        </div>
+        <div class="counter-info">
+          <span id="itemCounter">8</span> opportunities found
+        </div>
+      </section>
+
+      <section class="cards-grid" id="cardsGrid">
+        <!-- Cards will be rendered here -->
+      </section>
+
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-state-icon">🔍</div>
+        <h3 class="empty-state-text">No opportunities found</h3>
+        <p class="empty-state-desc">Try adjusting your search filters</p>
+      </div>
+    </main>
+
+    <footer class="dashboard-footer">
+      <p>&copy; 2025 CIA Next - Career Portal. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-container" id="detailContainer">
+      <!-- Detail view will be rendered here -->
+    </div>
+  </div>
+
+  {{ vacancies|json_script:"vacancies-data" }}
+  <script>
+    // State management
+    const state = {
+      allData: [],
+      filteredData: [],
+      currentFilter: 'all',
+      searchQuery: ''
+    };
+
+    const elements = {
+      cardsGrid: document.getElementById('cardsGrid'),
+      emptyState: document.getElementById('emptyState'),
+      detailModal: document.getElementById('detailModal'),
+      detailContainer: document.getElementById('detailContainer'),
+      filterButtons: document.querySelectorAll('.filter-button'),
+      searchInput: document.getElementById('searchInput'),
+      itemCounter: document.getElementById('itemCounter'),
+      detailCloseBtn: null
+    };
+
+    // Parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const parallaxLayer = document.getElementById('parallaxLayer');
+      if (parallaxLayer) {
+        const moveX = (e.clientX / window.innerWidth) * 10;
+        const moveY = (e.clientY / window.innerHeight) * 10;
+        parallaxLayer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      }
+    });
+
+    // Format date helper
+    function formatDate(isoString) {
+      const date = new Date(isoString);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Render cards
+    function renderCards() {
+      elements.cardsGrid.innerHTML = '';
+      
+      if (state.filteredData.length === 0) {
+        elements.emptyState.style.display = 'block';
+        elements.cardsGrid.style.display = 'none';
+        return;
+      }
+
+      elements.emptyState.style.display = 'none';
+      elements.cardsGrid.style.display = 'grid';
+
+      state.filteredData.forEach(item => {
+        const categoryClass = item.category === 'work' ? 'work' : '';
+        const badgeClass = item.category === 'work' ? 'work' : '';
+
+        const card = document.createElement('div');
+        card.className = 'opportunity-card';
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-logo" onclick="openDetailView('${item.id}')">
+              ${item.company.charAt(0)}
+            </div>
+            <span class="category-badge ${badgeClass}">${item.categoryLabel}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-company" onclick="openDetailView('${item.id}')">${item.company}</div>
+            <p class="card-description" onclick="openDetailView('${item.id}')">${item.description}</p>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
+              ${item.location}
+            </div>
+            <div class="card-email">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M3 8v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8"/></svg>
+              <a href="mailto:${item.email}" onclick="event.stopPropagation()">${item.email}</a>
+            </div>
+            <div class="card-tags">
+              ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            <div class="card-rating">
+              <span class="rating-stars">${'★'.repeat(Math.floor(item.rating))}</span>
+              <span>${item.rating}/5.0</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn" onclick="openDetailView('${item.id}')">Details</button>
+            <button class="action-btn primary">Apply Now</button>
+          </div>
+        `;
+        elements.cardsGrid.appendChild(card);
+      });
+    }
+
+    // Open detail view - Navigate to details page
+    function openDetailView(itemId) {
+      window.location.href = `{% url 'details' %}?id=${itemId}`;
+    }
+
+    // Update counter
+    function updateCounter() {
+      const count = state.filteredData.length;
+      elements.itemCounter.textContent = count;
+    }
+
+    // Apply filters and search
+    function applyFilters() {
+      state.filteredData = state.allData.filter(item => {
+        const matchesFilter = state.currentFilter === 'all' || item.category === state.currentFilter;
+        const matchesSearch = item.company.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                            item.description.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                            item.jobRole.toLowerCase().includes(state.searchQuery.toLowerCase());
+        return matchesFilter && matchesSearch;
+      });
+
+      updateCounter();
+      renderCards();
+    }
+
+    // Set active filter button
+    function setActiveFilterButton() {
+      elements.filterButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-filter') === state.currentFilter) {
+          btn.classList.add('active');
+        }
+      });
+    }
+
+    // Event listeners
+    elements.filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.currentFilter = btn.getAttribute('data-filter');
+        setActiveFilterButton();
+        applyFilters();
+      });
+    });
+
+    elements.searchInput.addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      applyFilters();
+    });
+
+    // Load data
+    function loadData() {
+      try {
+        const vacanciesData = JSON.parse(document.getElementById('vacancies-data').textContent);
+        
+        state.allData = vacanciesData.map((item, index) => ({
+          id: index, // Using index as id for now
+          category: item.type,
+          categoryLabel: item.type.charAt(0).toUpperCase() + item.type.slice(1),
+          company: item.company_name,
+          description: item.job_description,
+          location: 'N/A',
+          email: 'N/A',
+          tags: [],
+          rating: 0,
+          jobRole: item.role,
+          package: item.package
+        }));
+
+        state.filteredData = [...state.allData];
+        updateCounter();
+        renderCards();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        elements.emptyState.style.display = 'block';
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>
