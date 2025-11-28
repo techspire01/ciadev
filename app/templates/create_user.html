@@ -402,28 +402,48 @@
 <body class="signup-background min-h-screen">
   {% include 'navbar.html' %}
 
-  <!-- Floating shapes -->
-  <div class="floating-shape shape-1"></div>
-  <div class="floating-shape shape-2"></div>
-  <div class="floating-shape shape-3"></div>
+  <!-- Floating Background Icons (Hidden on Mobile) -->
+  <div class="hidden md:flex fixed inset-0 pointer-events-none overflow-hidden">
+    <i class="fas fa-industry floating-icon text-6xl text-white"></i>
+    <i class="fas fa-cogs floating-icon text-5xl text-white"></i>
+    <i class="fas fa-users floating-icon text-4xl text-white"></i>
+    <i class="fas fa-building floating-icon text-5xl text-white"></i>
+  </div>
 
   <!-- Main Content -->
-  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-20">
-    <div class="max-w-2xl w-full">
-      <!-- Header -->
-      <div class="signup-header">
-        <div class="signup-icon">
-          <i class="fas fa-user-plus text-white text-3xl"></i>
+  <div class="flex-1 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
+    <div class="registration-card max-w-2xl w-full p-5 sm:p-8 md:p-12" data-aos="fade-up">
+      <!-- Header Section -->
+      <div class="text-center mb-6 sm:mb-8">
+        <div class="inline-flex items-center justify-center w-12 sm:w-16 h-12 sm:h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-4 sm:mb-6 shadow-lg">
+          <i class="fas fa-user-plus text-lg sm:text-2xl text-white"></i>
         </div>
-        <h2 class="signup-title">Create Account</h2>
-        <p class="signup-subtitle">Join our industrial community</p>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-3 sm:mb-4 modern-heading">
+          Join Our Industrial Community
+        </h1>
+        <p class="text-sm sm:text-base text-gray-600 modern-body max-w-lg mx-auto px-2 sm:px-0">
+          Register your company or individual membership with the Chinnavedampatti Industrial Association to access
+          exclusive benefits, networking opportunities, and industrial development programs.
+        </p>
       </div>
 
-      <!-- Form Container -->
-      <div class="signup-container p-8 md:p-10">
+      <!-- Progress Bar -->
+      <div class="progress-bar mb-6 sm:mb-8">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
 
-      <form method="post" id="registrationForm" class="space-y-6">
+      <form method="post" id="registrationForm" class="space-y-4 sm:space-y-6">
         {% csrf_token %}
+
+        <!-- Form Header -->
+        <div class="text-center mb-5 sm:mb-6">
+          <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 modern-subheading mb-2">
+            User Registration Form
+          </h2>
+          <p class="text-xs sm:text-sm text-gray-600 px-2 sm:px-0">
+            Please fill in all the required information to complete your registration.
+          </p>
+        </div>
 
         <!-- Error Messages -->
         {% if form.errors %}
@@ -453,11 +473,11 @@
         {% endif %}
 
         <!-- Form Fields Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <!-- First Name -->
           <div class="form-group">
-            <label for="{{ form.first_name.id_for_label }}" class="form-label">
-              <i class="fas fa-user"></i>
+            <label for="{{ form.first_name.id_for_label }}" class="form-label text-sm sm:text-base">
+              <i class="fas fa-user text-xs sm:text-sm"></i>
               First Name *
             </label>
             {{ form.first_name }}
@@ -465,8 +485,8 @@
 
           <!-- Last Name -->
           <div class="form-group">
-            <label for="{{ form.last_name.id_for_label }}" class="form-label">
-              <i class="fas fa-user"></i>
+            <label for="{{ form.last_name.id_for_label }}" class="form-label text-sm sm:text-base">
+              <i class="fas fa-user text-xs sm:text-sm"></i>
               Last Name *
             </label>
             {{ form.last_name }}
@@ -475,8 +495,8 @@
 
         <!-- Email -->
         <div class="form-group">
-          <label for="{{ form.email.id_for_label }}" class="form-label">
-            <i class="fas fa-envelope"></i>
+          <label for="{{ form.email.id_for_label }}" class="form-label text-sm sm:text-base">
+            <i class="fas fa-envelope text-xs sm:text-sm"></i>
             Email Address *
           </label>
           {{ form.email }}
@@ -484,8 +504,8 @@
 
         <!-- Membership Type -->
         <div class="form-group">
-          <label for="{{ form.membership_type.id_for_label }}" class="form-label">
-            <i class="fas fa-id-card"></i>
+          <label for="{{ form.membership_type.id_for_label }}" class="form-label text-sm sm:text-base">
+            <i class="fas fa-id-card text-xs sm:text-sm"></i>
             Type of Membership *
           </label>
           {{ form.membership_type }}
@@ -493,31 +513,31 @@
 
         <!-- Business Type -->
         <div class="form-group">
-          <label for="{{ form.business_type.id_for_label }}" class="form-label">
-            <i class="fas fa-industry"></i>
+          <label for="{{ form.business_type.id_for_label }}" class="form-label text-sm sm:text-base">
+            <i class="fas fa-industry text-xs sm:text-sm"></i>
             Type of Business/Industry *
           </label>
           {{ form.business_type }}
         </div>
 
         <!-- Password Fields Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <!-- Password -->
           <div class="form-group">
-            <label for="id_password" class="form-label">
-              <i class="fas fa-lock"></i>
+            <label for="id_password" class="form-label text-sm sm:text-base">
+              <i class="fas fa-lock text-xs sm:text-sm"></i>
               Password *
             </label>
             <input type="password" name="password" id="id_password" class="form-input w-full" required>
-            <small class="text-gray-500 text-xs mt-1 block">
-              Minimum 8 characters with uppercase, lowercase, and number
+            <small class="text-gray-500 text-xs mt-1 block px-1">
+              Min 8 chars: uppercase, lowercase, number
             </small>
           </div>
 
           <!-- Confirm Password -->
           <div class="form-group">
-            <label for="id_confirm_password" class="form-label">
-              <i class="fas fa-lock"></i>
+            <label for="id_confirm_password" class="form-label text-sm sm:text-base">
+              <i class="fas fa-lock text-xs sm:text-sm"></i>
               Confirm Password *
             </label>
             <input type="password" name="confirm_password" id="id_confirm_password" class="form-input w-full" required>
