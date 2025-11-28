@@ -51,20 +51,20 @@
 </head>
 <body class="login-background min-h-screen">
     <!-- Navbar -->
-    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
+            <div class="flex items-center justify-between py-3 md:py-4">
                 <!-- Logo -->
                 <a href="{% url 'index' %}" class="flex items-center space-x-2">
-                    <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg">
-                    <span class="text-2xl font-bold text-black">CIA<span class="text-yellow-700">next</span></span>
+                    <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-8 md:h-10 rounded-lg">
+                    <span class="text-xl md:text-2xl font-bold text-black">CIA<span class="text-yellow-700">next</span></span>
                 </a>
 
-                <!-- Right Side -->
-                <div class="flex items-center space-x-4">
+                <!-- Right Side - Hidden on Mobile -->
+                <div class="hidden md:flex items-center space-x-4">
                     <!-- Language Switch -->
                     <div class="relative group">
-                        <button class="flex items-center space-x-1 text-gray-600 hover:text-yellow-600 transition">
+                        <button class="flex items-center space-x-1 text-gray-600 hover:text-yellow-600 transition text-sm">
                             <i class="fas fa-globe"></i>
                             <span>EN</span>
                             <i class="fas fa-chevron-down text-xs"></i>
@@ -72,13 +72,19 @@
                         <div class="absolute hidden group-hover:block bg-white text-gray-700 mt-2 py-2 w-32 rounded shadow-lg z-50 border border-gray-200">
                             <a href="#" class="block px-4 py-2 hover:bg-yellow-100">English</a>
                             <a href="#" class="block px-4 py-2 hover:bg-yellow-100">Tamil</a>
-                           
                         </div>
                     </div>
                     <!-- Back to index -->
-                    <a href="{% url 'index' %}" class="flex items-center space-x-2 text-gray-600 hover:text-yellow-600 transition-colors duration-300">
+                    <a href="{% url 'index' %}" class="flex items-center space-x-2 text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-sm">
                         <i class="fas fa-arrow-left"></i>
-                        <span>Back to index</span>
+                        <span>Back</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center space-x-2">
+                    <a href="{% url 'index' %}" class="text-gray-600 hover:text-yellow-600 transition-colors">
+                        <i class="fas fa-arrow-left text-lg"></i>
                     </a>
                 </div>
             </div>
@@ -86,21 +92,21 @@
     </nav>
 
     <!-- Login Container -->
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
+    <div class="min-h-screen flex items-center justify-center py-8 md:py-12 px-3 sm:px-6 lg:px-8">
+        <div class="w-full max-w-sm md:max-w-md space-y-6 md:space-y-8">
             <!-- Header -->
             <div class="text-center">
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-                <p class="text-gray-600">Sign in to your CIA MachineryHub account</p>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+                <p class="text-sm md:text-base text-gray-600">Sign in to your CIA MachineryHub account</p>
             </div>
 
             <!-- Login Form -->
-            <div class="form-container rounded-2xl p-8 border border-white/20">
-<form class="space-y-6" action="{% url 'login' %}" method="POST">
+            <div class="form-container rounded-2xl p-6 md:p-8 border border-white/20">
+<form class="space-y-4 md:space-y-6" action="{% url 'login' %}" method="POST">
     {% csrf_token %}
     {% if messages %}
         {% for message in messages %}
-            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-4 py-3 rounded relative" role="alert">
+            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-4 py-3 rounded text-sm" role="alert">
                 <span class="block sm:inline">{{ message }}</span>
             </div>
         {% endfor %}
@@ -112,12 +118,12 @@
                             name="email"
                             type="email"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300"
+                            class="w-full px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300"
                             placeholder=" "
                         >
-                        <label for="email" class="text-gray-500">Email Address</label>
-                        <div class="absolute right-3 top-3 text-gray-400">
-                            <i class="fas fa-envelope"></i>
+                        <label for="email" class="text-gray-500 text-sm">Email Address</label>
+                        <div class="absolute right-3 top-2.5 md:top-3 text-gray-400">
+                            <i class="fas fa-envelope text-sm"></i>
                         </div>
                     </div>
 
@@ -128,17 +134,17 @@
                             name="password"
                             type="password"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300"
+                            class="w-full px-4 py-2.5 md:py-3 text-sm md:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300"
                             placeholder=" "
                         >
-                        <label for="password" class="text-gray-500">Password</label>
-                        <div class="absolute right-3 top-3 text-gray-400 cursor-pointer" onclick="togglePassword()">
-                            <i class="fas fa-eye" id="toggleIcon"></i>
+                        <label for="password" class="text-gray-500 text-sm">Password</label>
+                        <div class="absolute right-3 top-2.5 md:top-3 text-gray-400 cursor-pointer" onclick="togglePassword()">
+                            <i class="fas fa-eye text-sm" id="toggleIcon"></i>
                         </div>
                     </div>
 
                     <!-- Remember Me & Forgot Password -->
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                         <div class="flex items-center">
                             <input
                                 id="remember-me"
@@ -146,11 +152,11 @@
                                 type="checkbox"
                                 class="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
                             >
-                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                            <label for="remember-me" class="ml-2 block text-xs sm:text-sm text-gray-700">
                                 Remember me
                             </label>
                         </div>
-                        <a href="{% url 'request_reset' %}" class="text-sm text-yellow-600 hover:text-yellow-500 transition-colors duration-300">
+                        <a href="{% url 'request_reset' %}" class="text-xs sm:text-sm text-yellow-600 hover:text-yellow-500 transition-colors duration-300">
                             Forgot password?
                         </a>
                     </div>
@@ -158,85 +164,29 @@
                     <!-- Login Button -->
                     <button
                         type="submit"
-                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2.5 md:py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm md:text-base"
                     >
                         <i class="fas fa-sign-in-alt mr-2"></i>
                         Sign In
                     </button>
 
                     <!-- Divider -->
-                    
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div></div></div>
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                    </div>
                     
-                    
-                    
-                            <!-- Sign Up Link -->
-               <div class="mt-2 text-center">
-    <p class="text-sm text-gray-600">
-        Don't have an account?
-        <a href="{% url 'create_user' %}" class="text-yellow-600 hover:text-yellow-500 font-medium transition-colors duration-300">
-            Create Account
-        </a>
-    </p>
-</div>
+                    <!-- Sign Up Link -->
+                    <div class="text-center">
+                        <p class="text-xs sm:text-sm text-gray-600">
+                            Don't have an account?
+                            <a href="{% url 'create_user' %}" class="text-yellow-600 hover:text-yellow-500 font-medium transition-colors duration-300">
+                                Create Account
+                            </a>
+                        </p>
+                    </div>
 
             </div>
-                      
-
-                    
-    
-    <!-- JavaScript -->
-    <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggleIcon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-
-        // Add floating label animation
-        document.querySelectorAll('.input-group input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-            
-            input.addEventListener('blur', function() {
-                if (this.value === '') {
-                    this.parentElement.classList.remove('focused');
-                }
-            });
-        });
-    </script>
-    <script src="{% static 'js/signup.js' %}"></script>
-</body>
-</html>
-<!--
-        });
-
-        // Add floating label animation
-        document.querySelectorAll('.input-group input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
-            });
-            
-            input.addEventListener('blur', function() {
-                if (this.value === '') {
-                    this.parentElement.classList.remove('focused');
-                }
-            });
-        });
-        -->
-    </script>
-    <script src="{% static 'js/signup.js' %}"></script>
-</body>
-</html>
+        </div>
+    </div>
