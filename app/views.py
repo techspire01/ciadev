@@ -417,6 +417,10 @@ def verify_otp(request):
             return render(request, "set_new_password.html", {"email": email})
         else:
             return render(request, "verify_otp.html", {"error": "Invalid or expired OTP", "email": email})
+    
+    # GET request
+    email = request.GET.get('email', request.session.get('reset_email', ''))
+    return render(request, "verify_otp.html", {"email": email})
 
 def set_new_password(request):
     if request.method == "POST":
