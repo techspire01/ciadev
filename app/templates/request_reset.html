@@ -9,64 +9,147 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+
     <style>
+        /* Warm industrial background */
         .login-background {
-            background: linear-gradient(135deg, #FFF9E5 0%, #f3f4f6 100%);
+            min-height: 100vh;
+            background-image:
+                linear-gradient(135deg, rgba(248, 115, 22, 0.88), rgba(245, 158, 11, 0.88)),
+                url("{% static '' %}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        
+
+        /* Glass card with yellow-orange edges */
         .form-container {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(18px);
+            background: linear-gradient(145deg, rgba(17, 24, 39, 0.85), rgba(15, 23, 42, 0.92));
+            border-radius: 1.25rem;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(252, 211, 77, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: fadeUpCard 0.7s ease-out forwards;
+            opacity: 0;
+            translate: 0 12px;
         }
-        
+
+        .form-container::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: conic-gradient(
+                from 160deg,
+                rgba(249, 115, 22, 0.0),
+                rgba(249, 115, 22, 0.5),
+                rgba(252, 211, 77, 0.7),
+                rgba(249, 115, 22, 0.0)
+            );
+            opacity: 0.28;
+            filter: blur(32px);
+            z-index: -1;
+        }
+
         .input-group {
             position: relative;
         }
-        
+
         .input-group input:focus + label,
         .input-group input:not(:placeholder-shown) + label {
-            transform: translateY(-1.5rem) scale(0.85);
-            color: #f59e0b;
+            transform: translateY(-1.6rem) scale(0.85);
+            color: #fdba74; /* orange-300 */
         }
-        
+
         .input-group label {
             position: absolute;
             left: 1rem;
-            top: 1rem;
-            transition: all 0.3s ease;
+            top: 0.9rem;
+            transition: all 0.25s ease;
             pointer-events: none;
-            color: #6b7280;
+            color: #9ca3af;
+        }
+
+        .input-group input:focus {
+            box-shadow:
+                0 0 0 1px rgba(249, 115, 22, 0.85),
+                0 0 0 6px rgba(249, 115, 22, 0.25);
+        }
+
+        /* Card entrance */
+        @keyframes fadeUpCard {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* CTA shimmer */
+        .btn-cta {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-cta::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(254, 215, 170, 0.35),
+                rgba(251, 191, 36, 0.6),
+                rgba(248, 113, 22, 0.5)
+            );
+            transform: translateX(-100%);
+            transition: transform 0.35s ease-out;
+        }
+        .btn-cta:hover::before {
+            transform: translateX(0);
+        }
+
+        /* Navbar over background */
+        .nav-blur {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(251, 191, 36, 0.45);
         }
     </style>
 </head>
-<body class="login-background min-h-screen">
+<body class="login-background">
+
     <!-- Navbar -->
-    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <nav class="nav-blur text-white">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between py-4">
                 <!-- Logo -->
                 <a href="{% url 'index' %}" class="flex items-center space-x-2">
                     <img src="{% static 'images/CIA logo.png' %}" alt="CIA MachineryHub logo" class="h-10 rounded-lg">
-                    <span class="text-2xl font-bold text-black">CIA<span class="text-yellow-700">next</span></span>
+                    <span class="text-2xl font-bold">
+                        CIA<span class="text-amber-300">next</span>
+                    </span>
                 </a>
 
                 <!-- Right Side -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-4 text-sm">
                     <!-- Language Switch -->
                     <div class="relative group">
-                        <button class="flex items-center space-x-1 text-gray-600 hover:text-yellow-600 transition">
-                            <i class="fas fa-globe"></i>
+                        <button class="flex items-center space-x-1 text-gray-200 hover:text-amber-300 transition">
+                            <i class="fas fa-globe text-base"></i>
                             <span>EN</span>
                             <i class="fas fa-chevron-down text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-white text-gray-700 mt-2 py-2 w-32 rounded shadow-lg z-50 border border-gray-200">
-                            <a href="#" class="block px-4 py-2 hover:bg-yellow-100">English</a>
-                            <a href="#" class="block px-4 py-2 hover:bg-yellow-100">Tamil</a>
+                        <div class="absolute right-0 hidden group-hover:block bg-slate-900/95 text-gray-100 mt-2 py-2 w-32 rounded-xl shadow-lg z-50 border border-amber-500/40">
+                            <a href="#" class="block px-4 py-2 hover:bg-amber-500/10">English</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-amber-500/10">Tamil</a>
                         </div>
                     </div>
+
                     <!-- Back to index -->
-                    <a href="{% url 'index' %}" class="flex items-center space-x-2 text-gray-600 hover:text-yellow-600 transition-colors duration-300">
+                    <a href="{% url 'index' %}" class="flex items-center space-x-2 text-gray-200 hover:text-amber-300 transition-colors duration-300">
                         <i class="fas fa-arrow-left"></i>
                         <span>Back to index</span>
                     </a>
@@ -76,21 +159,29 @@
     </nav>
 
     <!-- Reset Container -->
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-[calc(100vh-64px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <!-- Header -->
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Reset Password</h2>
-                <p class="text-gray-600">Enter your email to receive a verification code</p>
+            <div class="text-center text-white space-y-2">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-400/20 text-amber-200 mb-2 animate-pulse">
+                    <i class="fas fa-key text-xl"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold tracking-tight">
+                    Reset your password
+                </h2>
+                <p class="text-sm text-orange-50/90">
+                    Use your registered email. CIAnext will send a verification code to reset your password.
+                </p>
             </div>
 
             <!-- Reset Form -->
-            <div class="form-container rounded-2xl p-8 border border-white/20">
+            <div class="form-container p-8 text-slate-100">
                 <form class="space-y-6" action="{% url 'request_reset' %}" method="POST">
                     {% csrf_token %}
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-4 py-3 rounded relative" role="alert">
+                            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-800{% else %}bg-emerald-100 text-emerald-800{% endif %} px-4 py-3 rounded-lg mb-2 text-sm flex items-start space-x-2" role="alert">
+                                <i class="mt-0.5 fas {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
                                 <span class="block sm:inline">{{ message }}</span>
                             </div>
                         {% endfor %}
@@ -103,17 +194,20 @@
                             name="email"
                             type="email"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300"
+                            class="w-full px-4 py-3.5 bg-slate-900/50 border border-slate-500/70 rounded-lg text-slate-100 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-300"
                             placeholder=" "
                         >
-                        <label for="email" class="text-gray-500">Email Address</label>
-                        <div class="absolute right-3 top-3 text-gray-400">
+                        <label for="email" class="text-sm">
+                            Email address
+                        </label>
+                        <div class="absolute right-3 top-3.5 text-gray-400">
                             <i class="fas fa-envelope"></i>
                         </div>
                     </div>
 
                     {% if error %}
-                        <div class="bg-red-100 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <div class="bg-red-100 text-red-800 px-4 py-3 rounded-lg text-sm flex items-start space-x-2" role="alert">
+                            <i class="mt-0.5 fas fa-circle-exclamation"></i>
                             <span class="block sm:inline">{{ error }}</span>
                         </div>
                     {% endif %}
@@ -121,19 +215,19 @@
                     <!-- Send OTP Button -->
                     <button
                         type="submit"
-                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                        class="btn-cta w-full bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 hover:from-amber-300 hover:to-orange-500 text-slate-900 font-semibold py-3.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] hover:shadow-2xl shadow-orange-900/50 flex items-center justify-center gap-2"
                     >
-                        <i class="fas fa-paper-plane mr-2"></i>
-                        Send Verification Code
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Send verification code</span>
                     </button>
                 </form>
 
                 <!-- Back to Login Link -->
                 <div class="mt-6 text-center">
-                    <p class="text-sm text-gray-600">
+                    <p class="text-sm text-amber-100/90">
                         Remember your password?
-                        <a href="{% url 'login' %}" class="text-yellow-600 hover:text-yellow-500 font-medium transition-colors duration-300">
-                            Back to Login
+                        <a href="{% url 'login' %}" class="text-amber-300 hover:text-amber-100 font-medium transition-colors duration-300 underline underline-offset-4">
+                            Back to login
                         </a>
                     </p>
                 </div>
@@ -141,17 +235,19 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript: floating label support -->
     <script>
-        // Add floating label animation
         document.querySelectorAll('.input-group input').forEach(input => {
+            const parent = input.parentElement;
+            if (input.value.trim() !== "") {
+                parent.classList.add('focused');
+            }
             input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
+                parent.classList.add('focused');
             });
-            
             input.addEventListener('blur', function() {
-                if (this.value === '') {
-                    this.parentElement.classList.remove('focused');
+                if (this.value.trim() === "") {
+                    parent.classList.remove('focused');
                 }
             });
         });

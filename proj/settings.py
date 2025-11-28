@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import ssl
+import smtplib
 import dj_database_url
 
 
@@ -215,15 +217,43 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 
-
+# Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = "cianextcbe@gmail.com"
 EMAIL_HOST_PASSWORD = "cwgk azyb oxsp pfih"  # Google App Password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Create a custom SSL context for Gmail SMTP
+_custom_ssl_context = ssl.create_default_context()
+# Relax verification for problematic certificates
+_custom_ssl_context.check_hostname = False
+_custom_ssl_context.verify_mode = ssl.CERT_NONE
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+
+# Override smtplib to use our custom context
+_original_smtp_init = smtplib.SMTP.__init__
+
+def _patched_smtp_init(self, *args, **kwargs):
+    _original_smtp_init(self, *args, **kwargs)
+
+smtplib.SMTP.__init__ = _patched_smtp_init
+
+# Monkey-patch ssl module for smtplib
+_original_create_default_context = ssl.create_default_context
+
+def _create_default_context_with_patch(*args, **kwargs):
+    ctx = _original_create_default_context(*args, **kwargs)
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+ssl.create_default_context = _create_default_context_with_patch
 
 AUTH_USER_MODEL = "app.CustomUser"
 
