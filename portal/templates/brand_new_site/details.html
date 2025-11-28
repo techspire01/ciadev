@@ -1,0 +1,994 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CIA Next — Opportunity Details</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://cdn.builder.io/api/v1/image/assets%2Fa180d3e502ea4bf0922bba9c817ddbe4%2F13a5568b42344d13af0dc08dfaf227ab?format=webp&width=800" />
+  <style>
+    :root {
+      --primary: #FF5252;
+      --primary-dark: #D32F2F;
+      --primary-light: #FF8A80;
+      --accent: #FF4081;
+      --dark: #2D1B1B;
+      --text-secondary: #5C3A3A;
+      --white: #FFFFFF;
+      --light-bg: #FFF5F5;
+      --card-bg: #FFFFFF;
+      --shadow: 0 8px 20px rgba(255, 82, 82, 0.15);
+      --shadow-lg: 0 12px 30px rgba(255, 82, 82, 0.2);
+      --success: #10B981;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--light-bg);
+      color: var(--dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Image */
+    .bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: var(--light-bg);
+      overflow: hidden;
+    }
+
+    .bg-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=1920');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 245, 245, 0.8) 0%, rgba(255, 235, 235, 0.7) 50%, rgba(255, 245, 245, 0.9) 100%);
+      pointer-events: none;
+    }
+
+    .parallax-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 82, 82, 0.4);
+      border-radius: 50%;
+      animation: particle-float 8s infinite ease-in-out;
+      box-shadow: 0 0 20px rgba(255, 82, 82, 0.3);
+    }
+
+    .particle:nth-child(1) { width: 8px; height: 8px; top: 10%; left: 20%; animation-delay: 0s; }
+    .particle:nth-child(2) { width: 12px; height: 12px; top: 30%; left: 60%; animation-delay: 1s; }
+    .particle:nth-child(3) { width: 6px; height: 6px; top: 50%; left: 80%; animation-delay: 2s; }
+    .particle:nth-child(4) { width: 10px; height: 10px; top: 70%; left: 30%; animation-delay: 1.5s; }
+    .particle:nth-child(5) { width: 8px; height: 8px; top: 20%; left: 90%; animation-delay: 0.5s; }
+
+    @keyframes particle-float {
+      0%, 100% { transform: translateY(0px); opacity: 0.3; }
+      50% { transform: translateY(-30px); opacity: 0.7; }
+    }
+
+    /* Main content wrapper */
+    .dashboard-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header/Navigation */
+    .dashboard-header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 82, 82, 0.1);
+      padding: 16px 24px;
+      box-shadow: 0 4px 12px rgba(255, 82, 82, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: fit-content;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .header-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--white);
+      font-size: 24px;
+    }
+
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .header-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .header-subtitle {
+      margin: 0;
+      font-size: 12px;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    /* Main content area */
+    .dashboard-main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px;
+      background: transparent;
+    }
+
+    /* Detail Container Styles */
+    .detail-container {
+      background: var(--white);
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      position: relative;
+      margin: 0 auto;
+      box-shadow: 0 25px 60px rgba(255, 82, 82, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 82, 82, 0.15);
+      overflow: hidden;
+    }
+
+    .detail-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      padding: 32px;
+      color: var(--white);
+      border-radius: 16px 16px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .detail-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1), transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1), transparent 50%);
+      pointer-events: none;
+    }
+
+    .detail-header-work {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    }
+
+    .detail-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .detail-logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      background: rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .detail-header-text h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .detail-header-text p {
+      margin: 0;
+      font-size: 15px;
+      opacity: 0.95;
+      line-height: 1.5;
+    }
+
+    .detail-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.25);
+      color: var(--white);
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .detail-content {
+      padding: 32px;
+    }
+
+    .detail-section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255, 82, 82, 0.1);
+    }
+
+    .detail-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .detail-section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-section-title svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--primary);
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .detail-item {
+      padding: 14px;
+      background: rgba(255, 82, 82, 0.03);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 82, 82, 0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .detail-item:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 82, 82, 0.06);
+    }
+
+    .detail-item-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 5px;
+    }
+
+    .detail-item-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .detail-overview {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      background: rgba(255, 82, 82, 0.03);
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+      border: 1px solid rgba(255, 82, 82, 0.1);
+      margin-bottom: 16px;
+    }
+
+    .detail-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .detail-list li {
+      padding: 10px 0;
+      padding-left: 24px;
+      position: relative;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      border-bottom: 1px solid rgba(255, 82, 82, 0.1);
+    }
+
+    .detail-list li:last-child {
+      border-bottom: none;
+    }
+
+    .detail-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 82, 82, 0.1);
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 11px;
+      border-radius: 8px;
+      border: 1.5px solid #e0e8f0;
+      background: var(--white);
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Poppins', sans-serif;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .action-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: var(--white);
+      border: none;
+    }
+    
+    .action-btn.primary:hover {
+      box-shadow: 0 8px 16px rgba(255, 82, 82, 0.3);
+      transform: translateY(-3px);
+      color: var(--white);
+    }
+
+    .tag {
+      background: rgba(255, 82, 82, 0.08);
+      color: var(--primary-dark);
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 82, 82, 0.15);
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    /* Footer */
+    .dashboard-footer {
+      padding: 24px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      border-top: 1px solid rgba(255, 82, 82, 0.1);
+      background: rgba(255, 255, 255, 0.8);
+      margin-top: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toast {
+      background: var(--white);
+      color: var(--dark);
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border-left: 4px solid var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+      min-width: 300px;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-header {
+        padding: 14px 20px;
+      }
+
+      .header-content {
+        gap: 16px;
+      }
+
+      .header-logo {
+        width: 44px;
+        height: 44px;
+      }
+
+      .header-title {
+        font-size: 18px;
+      }
+
+      .dashboard-main {
+        padding: 28px 20px;
+      }
+
+      .detail-container {
+        max-width: 100%;
+      }
+
+      .detail-header {
+        padding: 24px;
+      }
+
+      .detail-content {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-header {
+        padding: 12px 16px;
+      }
+
+      .header-content {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .header-branding {
+        gap: 8px;
+        flex: 1;
+      }
+
+      .header-logo {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      .header-title {
+        font-size: 16px;
+      }
+
+      .header-subtitle {
+        font-size: 11px;
+      }
+
+      .dashboard-main {
+        padding: 20px 12px;
+      }
+
+      .detail-container {
+        max-width: 100%;
+        border-radius: 12px;
+      }
+
+      .detail-content {
+        padding: 18px;
+      }
+
+      .detail-header {
+        padding: 20px;
+        border-radius: 12px 12px 0 0;
+      }
+
+      .detail-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+      }
+
+      .detail-logo {
+        width: 80px;
+        height: 80px;
+        font-size: 36px;
+      }
+
+      .detail-header-text h1 {
+        font-size: 20px;
+      }
+
+      .detail-header-text p {
+        font-size: 13px;
+      }
+
+      .detail-section {
+        margin-bottom: 18px;
+        padding-bottom: 18px;
+      }
+
+      .detail-section-title {
+        font-size: 15px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .detail-item {
+        padding: 12px;
+      }
+
+      .detail-item-label {
+        font-size: 10px;
+      }
+
+      .detail-item-value {
+        font-size: 13px;
+      }
+
+      .detail-overview {
+        font-size: 13px;
+        padding: 12px;
+      }
+
+      .detail-list li {
+        padding: 8px 0;
+        padding-left: 20px;
+        font-size: 13px;
+        border-bottom: none;
+      }
+
+      .detail-actions {
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 15px;
+      }
+
+      .action-btn {
+        padding: 10px;
+        font-size: 12px;
+      }
+
+      .dashboard-footer {
+        padding: 14px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .dashboard-header {
+        padding: 10px 12px;
+      }
+
+      .header-content {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .header-branding {
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .header-logo {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .header-title {
+        font-size: 14px;
+      }
+
+      .header-subtitle {
+        font-size: 10px;
+      }
+
+      .dashboard-main {
+        padding: 16px 8px;
+      }
+
+      .detail-container {
+        max-width: 100%;
+        border-radius: 12px 12px 0 0;
+        margin: auto;
+      }
+
+      .detail-header {
+        padding: 16px;
+        border-radius: 12px 12px 0 0;
+      }
+
+      .detail-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .detail-logo {
+        width: 70px;
+        height: 70px;
+        font-size: 32px;
+      }
+
+      .detail-header-text h1 {
+        font-size: 18px;
+        margin-bottom: 4px;
+      }
+
+      .detail-header-text p {
+        font-size: 12px;
+      }
+
+      .detail-content {
+        padding: 14px;
+      }
+
+      .detail-section {
+        margin-bottom: 14px;
+        padding-bottom: 14px;
+      }
+
+      .detail-section-title {
+        font-size: 13px;
+      }
+
+      .detail-section-title svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .detail-item {
+        padding: 10px;
+      }
+
+      .detail-item-label {
+        font-size: 9px;
+      }
+
+      .detail-item-value {
+        font-size: 12px;
+      }
+
+      .detail-overview {
+        font-size: 12px;
+        padding: 10px;
+        border-radius: 6px;
+      }
+
+      .detail-list {
+        font-size: 12px;
+      }
+
+      .detail-list li {
+        padding: 7px 0;
+        padding-left: 18px;
+        font-size: 12px;
+      }
+
+      .tag {
+        padding: 3px 6px;
+        font-size: 9px;
+      }
+
+      .detail-actions {
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 12px;
+      }
+
+      .action-btn {
+        padding: 8px;
+        font-size: 11px;
+      }
+
+      .dashboard-footer {
+        padding: 12px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Image -->
+  <div class="bg-container">
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+    <div class="parallax-layer" id="parallaxLayer">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <div class="dashboard-wrapper">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-content">
+        <a href="{% url 'index' %}" class="header-branding">
+          <div class="header-logo">
+            <img src="{% static 'images/CIA logo.png' %}" alt="CIA logo" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <div>
+            <h1 class="header-title">CIA<span style="color: #b45309;">next</span></h1>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <div id="detailContent" class="detail-container">
+        <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
+          <p>Loading opportunity details...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+      <p style="margin: 0;">&copy; 2025 CIA Next - Career Portal. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Show toast notification
+    function showToast(message, type = 'info') {
+      const toastContainer = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      const color = type === 'success' ? '#10B981' : '#FF5252';
+      toast.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>${message}</span>
+      `;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+
+    // Parallax effect
+    const parallaxLayer = document.getElementById('parallaxLayer');
+    let particles = [];
+    if (parallaxLayer) {
+      particles = Array.from(parallaxLayer.querySelectorAll('.particle'));
+    }
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let isParallaxRunning = false;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX / window.innerWidth;
+      mouseY = e.clientY / window.innerHeight;
+      
+      if (!isParallaxRunning) {
+        requestAnimationFrame(updateParallax);
+        isParallaxRunning = true;
+      }
+    });
+
+    function updateParallax() {
+      particles.forEach((particle, idx) => {
+        const speed = (idx + 1) * 2;
+        const offsetX = mouseX * speed * 20;
+        const offsetY = mouseY * speed * 20;
+        particle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      });
+      isParallaxRunning = false;
+    }
+
+    // Load and render details
+    async function loadDetails() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      if (!id) {
+        document.getElementById('detailContent').innerHTML = `
+          <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
+            <p>No opportunity selected. <a href="{% url 'dashboard' %}" style="color: var(--primary);">Go back</a></p>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        const response = await fetch("{% static 'brand_new_site/dashboard.json' %}");
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const data = await response.json();
+        const item = data.find(i => i.id === id);
+        
+        if (!item) {
+          throw new Error('Opportunity not found');
+        }
+        renderDetail(item);
+      } catch (error) {
+        document.getElementById('detailContent').innerHTML = `
+          <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
+            <p>Error loading opportunity details. <a href="{% url 'dashboard' %}" style="color: var(--primary);">Go back</a></p>
+          </div>
+        `;
+      }
+    }
+
+    function renderDetail(item) {
+      const isWork = item.category === 'work';
+      const headerGradient = isWork ? 'detail-header-work' : '';
+
+      const requirementsHTML = item.requirements.map(req =>
+        `<li>${req}</li>`
+      ).join('');
+
+      const responsibilitiesHTML = item.responsibilities.map(resp =>
+        `<li>${resp}</li>`
+      ).join('');
+
+      const detailContent = document.getElementById('detailContent');
+      detailContent.innerHTML = `
+        <div class="detail-header ${headerGradient}">
+          <div class="detail-top">
+            <div class="detail-logo">${item.company.charAt(0)}</div>
+            <div class="detail-header-text">
+              <h1>${item.jobRole}</h1>
+              <p>${item.company}</p>
+            </div>
+          </div>
+          <span class="detail-badge">${item.categoryLabel}</span>
+        </div>
+        <div class="detail-content">
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/></svg>
+              Overview
+            </h3>
+            <p class="detail-overview">${item.overview}</p>
+          </div>
+
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+              Details
+            </h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-item-label">Salary/Hourly</div>
+                <div class="detail-item-value">${item.salary}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item-label">Duration</div>
+                <div class="detail-item-value">${item.duration}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item-label">Location</div>
+                <div class="detail-item-value">${item.location}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item-label">Email</div>
+                <div class="detail-item-value"><a href="mailto:${item.email}" style="color: inherit; text-decoration: none;">${item.email}</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+              Requirements
+            </h3>
+            <ul class="detail-list">
+              ${requirementsHTML}
+            </ul>
+          </div>
+
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+              Responsibilities
+            </h3>
+            <ul class="detail-list">
+              ${responsibilitiesHTML}
+            </ul>
+          </div>
+
+          <div class="detail-actions">
+            <a href="{% url 'dashboard' %}" class="action-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; flex: 1;">Back</a>
+            <button class="action-btn primary" style="flex: 1;">Apply Now</button>
+          </div>
+        </div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDetails);
+  </script>
+</body>
+</html>
