@@ -21,7 +21,13 @@
 
         .input-group {
             position: relative;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        @media (min-width: 640px) {
+            .input-group {
+                margin-bottom: 1.5rem;
+            }
         }
 
         .input-group input:focus + label,
@@ -32,20 +38,36 @@
 
         .input-group label {
             position: absolute;
-            left: 1rem;
-            top: 1rem;
+            left: 0.75rem;
+            top: 0.25rem;
             transition: all 0.3s ease;
             pointer-events: none;
             color: #6b7280;
+            font-size: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            .input-group label {
+                left: 1rem;
+                top: 0.5rem;
+                font-size: 0.875rem;
+            }
         }
 
         .input-group input {
             width: 100%;
-            padding: 1rem;
+            padding: 0.75rem;
             border: 1px solid #d1d5db;
             border-radius: 0.5rem;
-            font-size: 1rem;
+            font-size: 0.875rem;
             transition: border-color 0.3s ease;
+        }
+
+        @media (min-width: 640px) {
+            .input-group input {
+                padding: 1rem;
+                font-size: 1rem;
+            }
         }
 
         .input-group input:focus {
@@ -59,24 +81,24 @@
 <body class="edit-profile-background min-h-screen">
     {% include 'navbar.html' %}
 
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
+    <div class="min-h-screen flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4 md:px-6 lg:px-8">
+        <div class="w-full max-w-sm sm:max-w-md space-y-6 sm:space-y-8">
             <div class="text-center">
-                <div class="mx-auto h-16 w-16 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="fas fa-user-edit text-yellow-600 text-2xl"></i>
+                <div class="mx-auto w-12 sm:w-16 h-12 sm:h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                    <i class="fas fa-user-edit text-yellow-600 text-lg sm:text-2xl"></i>
                 </div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Edit Profile</h2>
-                <p class="text-gray-600">Update your personal information</p>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">Edit Profile</h2>
+                <p class="text-sm sm:text-base text-gray-600">Update your personal information</p>
             </div>
 
-            <div class="edit-profile-container rounded-2xl p-8 border border-white/20">
-                <form class="space-y-6" method="post">
+            <div class="edit-profile-container rounded-2xl p-5 sm:p-6 md:p-8 border border-white/20">
+                <form class="space-y-4 sm:space-y-6" method="post">
                     {% csrf_token %}
 
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-4 py-3 rounded relative" role="alert">
-                                <span class="block sm:inline">{{ message }}</span>
+                            <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} px-3 sm:px-4 py-2 sm:py-3 rounded text-xs sm:text-sm" role="alert">
+                                <span class="block">{{ message }}</span>
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -98,15 +120,15 @@
 
                     <button
                         type="submit"
-                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                        class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2.5 sm:py-3 px-4 sm:px-5 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm sm:text-base"
                     >
                         <i class="fas fa-save mr-2"></i>
                         Update Profile
                     </button>
                 </form>
 
-                <div class="mt-6 text-center">
-                    <a href="{% url 'profile' %}" class="text-yellow-600 hover:text-yellow-500 font-medium transition-colors duration-300">
+                <div class="mt-4 sm:mt-6 text-center">
+                    <a href="{% url 'profile' %}" class="text-xs sm:text-sm text-yellow-600 hover:text-yellow-500 font-medium transition-colors duration-300">
                         <i class="fas fa-arrow-left mr-1"></i>
                         Back to Profile
                     </a>
