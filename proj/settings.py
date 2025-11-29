@@ -33,6 +33,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Site font family configurable here. Change this value to update font across the site.
+# Provide a CSS font-family value, including fallbacks and quotes if needed.
+SITE_FONT_FAMILY = "'Times New Roman', Times, serif"
+
 
 
 
@@ -82,6 +86,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # expose SITE_FONT_FAMILY to templates
+                'app.context_processors.site_font',
             ],
         },
     },
@@ -164,9 +170,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'app/static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Media files (Uploaded images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -183,9 +190,6 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
 
 # Google OAuth2 Configuration
 SOCIALACCOUNT_PROVIDERS = {
@@ -206,9 +210,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_URL = '/login/'
-LOGOUT_REDIRECT_URL = "/logout/"
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to dashboard after login
-LOG_OUT_REDIRECT_URL = 'home'  # Redirect to home after logout
+LOGOUT_REDIRECT_URL = 'home'  # Redirect to home after logout
 
 # Allauth settings
 ACCOUNT_LOGIN_METHODS = {'email'}
@@ -218,15 +221,8 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 
 
 # Email Configuration
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "app.utils.DynamicEmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = "cianextcbe@gmail.com"
-EMAIL_HOST_PASSWORD = "cwgk azyb oxsp pfih"  # Google App Password
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Create a custom SSL context for Gmail SMTP
 _custom_ssl_context = ssl.create_default_context()
@@ -258,13 +254,3 @@ ssl.create_default_context = _create_default_context_with_patch
 AUTH_USER_MODEL = "app.CustomUser"
 
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users after social login
-
-
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Whitenoise setup
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
