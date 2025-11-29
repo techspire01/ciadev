@@ -158,9 +158,15 @@
         .verify-header {
             animation: fadeInDown 0.6s ease-out backwards;
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             position: relative;
             z-index: 15;
+        }
+
+        @media (min-width: 640px) {
+            .verify-header {
+                margin-bottom: 2rem;
+            }
         }
 
         @keyframes fadeInDown {
@@ -175,8 +181,8 @@
         }
 
         .verify-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
             border-radius: 50%;
             display: flex;
@@ -185,6 +191,13 @@
             margin: 0 auto 1rem;
             box-shadow: 0 15px 40px rgba(251, 191, 36, 0.4);
             animation: scaleInAvatar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+        }
+
+        @media (min-width: 640px) {
+            .verify-icon {
+                width: 80px;
+                height: 80px;
+            }
         }
 
         @keyframes scaleInAvatar {
@@ -199,7 +212,7 @@
         }
 
         .verify-title {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: #1F2937;
             background: linear-gradient(90deg, #FBBF24 0%, #F59E0B 50%, #FBBF24 100%);
@@ -210,6 +223,12 @@
             animation: gradientShift 3s ease infinite;
         }
 
+        @media (min-width: 640px) {
+            .verify-title {
+                font-size: 2rem;
+            }
+        }
+
         @keyframes gradientShift {
             0% { background-position: 0% center; }
             50% { background-position: 100% center; }
@@ -217,25 +236,39 @@
         }
 
         .verify-subtitle {
-            font-size: 1rem;
+            font-size: 0.875rem;
             color: #374151;
             font-weight: 600;
             margin-top: 0.5rem;
         }
 
+        @media (min-width: 640px) {
+            .verify-subtitle {
+                font-size: 1rem;
+            }
+        }
+
         /* OTP Input */
         .otp-input {
             width: 100%;
-            padding: 1rem;
+            padding: 0.875rem;
             border: 2px solid rgba(251, 191, 36, 0.3);
             border-radius: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             background: rgba(255, 255, 255, 0.95);
             color: #000000;
             font-weight: 700;
-            letter-spacing: 0.3rem;
+            letter-spacing: 0.2rem;
             text-align: center;
             transition: all 0.3s ease;
+        }
+
+        @media (min-width: 640px) {
+            .otp-input {
+                padding: 1rem;
+                font-size: 1.5rem;
+                letter-spacing: 0.3rem;
+            }
         }
 
         .otp-input:focus {
@@ -270,7 +303,8 @@
             background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
             color: white;
             font-weight: 700;
-            padding: 1rem;
+            padding: 0.875rem;
+            font-size: 0.95rem;
             border-radius: 1rem;
             border: none;
             cursor: pointer;
@@ -282,6 +316,13 @@
             gap: 0.5rem;
             overflow: hidden;
             animation: slideInUp 0.6s ease-out 0.2s backwards;
+        }
+
+        @media (min-width: 640px) {
+            .submit-btn {
+                padding: 1rem;
+                font-size: 1rem;
+            }
         }
 
         @keyframes slideInUp {
@@ -306,11 +347,20 @@
 
         /* Message alerts */
         .alert {
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             border: 2px solid;
             animation: slideInUp 0.6s ease-out backwards;
+            font-size: 0.875rem;
+        }
+
+        @media (min-width: 640px) {
+            .alert {
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+                font-size: 1rem;
+            }
         }
 
         .alert-success {
@@ -328,11 +378,24 @@
         /* Resend link */
         .resend-link {
             text-align: center;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             animation: slideInUp 0.6s ease-out 0.3s backwards;
         }
 
-        .resend-link a {
+        .resend-link p {
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        @media (min-width: 640px) {
+            .resend-link {
+                margin-top: 1.5rem;
+            }
+
+            .resend-link p {
+                font-size: 1rem;
+            }
+        }\n\n        .resend-link a {
             color: #F59E0B;
             text-decoration: none;
             font-weight: 700;
@@ -368,8 +431,21 @@
     <div class="floating-shape shape-1"></div>
     <div class="floating-shape shape-2"></div>
     
-    <div class="relative z-30 flex-1 flex items-center justify-center px-4 py-8" style="display: flex; align-items: center; justify-content: center;">
-        <div class="verify-container" style="width: 100%; max-width: 28rem; padding: 2.5rem; border-radius: 2rem;">
+    <div class="relative z-30 flex-1 flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8" style="display: flex; align-items: center; justify-content: center;">
+        <div class="verify-container" style="width: 100%; max-width: 24rem; padding: 1.5rem; border-radius: 2rem;">
+            <style>
+                @media (min-width: 640px) {
+                    .verify-container {
+                        max-width: 28rem !important;
+                        padding: 2rem !important;
+                    }
+                }
+                @media (min-width: 768px) {
+                    .verify-container {
+                        padding: 2.5rem !important;
+                    }
+                }
+            </style>
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert {% if message.tags %}alert-success{% else %}alert-error{% endif %}">
@@ -380,13 +456,13 @@
 
             <div class="verify-header">
                 <div class="verify-icon">
-                    <i class="fas fa-lock text-white text-2xl"></i>
+                    <i class="fas fa-lock text-white text-lg sm:text-2xl"></i>
                 </div>
                 <h2 class="verify-title">Verify OTP</h2>
                 <p class="verify-subtitle">Enter the code sent to your email</p>
             </div>
 
-            <form method="POST" class="space-y-6">
+            <form method="POST" class="space-y-4 sm:space-y-6">
                 {% csrf_token %}
                 
                 <div class="input-group">
