@@ -397,13 +397,38 @@
         margin: 0;
         padding: 0;
     }
+
+    .registration-card {
+        background: rgba(255, 255, 255, 0.97);
+        border-radius: 2rem;
+        box-shadow: 0 25px 80px rgba(251, 191, 36, 0.15), 0 10px 40px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+        backdrop-filter: blur(10px);
+        animation: slideInUp 0.8s ease-out 0.3s backwards;
+    }
+
+    .floating-icon {
+        position: absolute;
+        opacity: 0.15;
+        pointer-events: none;
+    }
+
+    .floating-icon:nth-child(1) { top: 5%; left: 5%; animation: float 20s ease-in-out infinite; }
+    .floating-icon:nth-child(2) { top: 20%; right: 8%; animation: float 24s ease-in-out infinite reverse; }
+    .floating-icon:nth-child(3) { bottom: 15%; left: 10%; animation: float 22s ease-in-out infinite; }
+    .floating-icon:nth-child(4) { bottom: 10%; right: 12%; animation: float 26s ease-in-out infinite reverse; }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-30px); }
+    }
   </style>
 </head>
 <body class="signup-background min-h-screen">
   {% include 'navbar.html' %}
 
   <!-- Floating Background Icons (Hidden on Mobile) -->
-  <div class="hidden md:flex fixed inset-0 pointer-events-none overflow-hidden">
+  <div class="hidden md:flex fixed inset-0 pointer-events-none overflow-hidden z-0">
     <i class="fas fa-industry floating-icon text-6xl text-white"></i>
     <i class="fas fa-cogs floating-icon text-5xl text-white"></i>
     <i class="fas fa-users floating-icon text-4xl text-white"></i>
@@ -411,7 +436,7 @@
   </div>
 
   <!-- Main Content -->
-  <div class="flex-1 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
+  <div class="relative z-20 flex-1 flex items-center justify-center py-6 sm:py-8 md:py-12 px-3 sm:px-4">
     <div class="registration-card max-w-2xl w-full p-5 sm:p-8 md:p-12" data-aos="fade-up">
       <!-- Header Section -->
       <div class="text-center mb-6 sm:mb-8">
@@ -570,6 +595,11 @@
       </form>
     </div>
   </div>
-</body>
+
+  {% include 'footer.html' %}
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
 </body>
 </html>
