@@ -9,20 +9,523 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+    <style>
+        /* Enhanced animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                filter: blur(0);
+            }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), 0 0 40px rgba(239, 68, 68, 0.5), 0 0 80px rgba(239, 68, 68, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(239, 68, 68, 1), 0 0 80px rgba(239, 68, 68, 0.8), 0 0 120px rgba(239, 68, 68, 0.6);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes floatWave {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px);
+            }
+            25% {
+                transform: translateY(-30px) translateX(25px);
+            }
+            50% {
+                transform: translateY(-50px) translateX(0px);
+            }
+            75% {
+                transform: translateY(-25px) translateX(-25px);
+            }
+        }
+
+        @keyframes scale-bounce {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.15);
+            }
+            50% {
+                transform: scale(1);
+            }
+            75% {
+                transform: scale(1.12);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes rotate-slow {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes sway {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            25% {
+                transform: rotate(4deg) scale(1.05);
+            }
+            50% {
+                transform: rotate(0deg) scale(1);
+            }
+            75% {
+                transform: rotate(-4deg) scale(1.05);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.6)) drop-shadow(0 0 20px rgba(251, 146, 60, 0.4));
+            }
+            50% {
+                filter: drop-shadow(0 0 30px rgba(249, 115, 22, 1)) drop-shadow(0 0 50px rgba(251, 146, 60, 0.8));
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7);
+            }
+            100% {
+                box-shadow: 0 0 0 20px rgba(249, 115, 22, 0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes wobble {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            15% {
+                transform: translateX(-15px);
+            }
+            30% {
+                transform: translateX(15px);
+            }
+            45% {
+                transform: translateX(-15px);
+            }
+            60% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 50% 100%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            75% {
+                background-position: 50% 0%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.2);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.18);
+            }
+            56% {
+                transform: scale(1);
+            }
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ea580c 100%);
+            background-size: 200% 200%;
+            animation: gradientFlow 8s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 50%;
+            animation: floatWave 8s ease-in-out infinite;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent);
+            border-radius: 50%;
+            animation: floatWave 10s ease-in-out infinite 1s reverse;
+        }
+
+        .hero-icon {
+            animation: scale-bounce 2s ease-in-out infinite, glowPulse 2.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .filter-section {
+            animation: slideInDown 1s ease-out;
+        }
+
+        .critical-announcement {
+            animation: slideInUp 1s ease-out, pulse-glow 2.5s ease-in-out infinite, gradientFlow 5s ease infinite;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 50%, #991b1b 100%);
+            background-size: 200% 200%;
+        }
+
+        .critical-announcement::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 50%;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .critical-announcement::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -20%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent);
+            border-radius: 50%;
+            animation: float 7s ease-in-out infinite 1s;
+        }
+
+        .announcement-card {
+            animation: slideInUp 1.2s ease-out backwards;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .announcement-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(180deg, #3b82f6, #1e40af);
+            transition: width 0.3s ease;
+        }
+
+        .announcement-card:nth-child(1) { animation-delay: 0.2s; }
+        .announcement-card:nth-child(2) { animation-delay: 0.4s; }
+        .announcement-card:nth-child(3) { animation-delay: 0.6s; }
+        .announcement-card:nth-child(4) { animation-delay: 0.8s; }
+        .announcement-card:nth-child(5) { animation-delay: 1s; }
+        .announcement-card:nth-child(n+6) { animation-delay: 1.2s; }
+
+        .announcement-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+        }
+
+        .announcement-card:hover::before {
+            width: 6px;
+        }
+
+        .announcement-card:hover::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent);
+            pointer-events: none;
+        }
+
+        .icon-badge {
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        .icon-badge:hover {
+            animation: rotate-slow 1s linear, scale-bounce 1s ease-in-out;
+        }
+
+        .newsletter-section {
+            animation: slideInUp 1.4s ease-out, gradientFlow 5s ease infinite;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            background-size: 200% 200%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.1), transparent);
+            animation: floatWave 7s ease-in-out infinite;
+        }
+
+        .newsletter-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: -5%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.15), transparent);
+            animation: floatWave 9s ease-in-out infinite 1.5s reverse;
+        }
+
+        .newsletter-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            color: white;
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.8s ease-out 0.4s backwards;
+        }
+
+        .newsletter-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fbbf24;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.5), inset 0 0 20px rgba(251, 191, 36, 0.1);
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+            background-size: 200% 200%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 0.8s ease-out 0.5s backwards;
+        }
+
+        .newsletter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .newsletter-btn:hover::before {
+            left: 100%;
+        }
+
+        .newsletter-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 60px rgba(249, 115, 22, 0.7), 0 0 50px rgba(249, 115, 22, 0.5);
+            animation: gradientFlow 2.5s ease infinite;
+        }
+
+        .filter-btn {
+            transition: all 0.3s ease;
+            animation: slideInDown 0.8s ease-out backwards;
+        }
+
+        .filter-btn:first-of-type { animation-delay: 0.3s; }
+        .filter-btn:nth-of-type(2) { animation-delay: 0.5s; }
+        .filter-btn:nth-of-type(3) { animation-delay: 0.7s; }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state {
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .empty-state i {
+            animation: float 4s ease-in-out infinite, scale-bounce 3s ease-in-out infinite;
+        }
+
+        .tag {
+            animation: slideInLeft 0.8s ease-out backwards;
+        }
+
+        .tag:nth-child(1) { animation-delay: 0.3s; }
+        .tag:nth-child(2) { animation-delay: 0.5s; }
+
+        .badge-pulse {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .floating-particle {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .particle-1 {
+            animation: floatWave 5s ease-in-out infinite;
+        }
+
+        .particle-2 {
+            animation: floatWave 6s ease-in-out infinite 1s;
+        }
+
+        .particle-3 {
+            animation: floatWave 5.5s ease-in-out infinite 2s;
+        }
+
+        .heroSubtitle {
+            animation: slideInUp 1s ease-out 0.3s backwards;
+        }
+
+        .heroTitle {
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .card-shimmer {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+    </style>
 </head>
 <body class="bg-white">
     
         {% include 'navbar.html' %}
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white py-24">
-        <div class="container mx-auto px-4 text-center">
+    <section class="hero-section text-white py-20 sm:py-28 md:py-32">
+        <!-- Floating Particles -->
+        <div class="floating-particle particle-1 top-10 left-10 w-24 h-24 bg-white rounded-full opacity-5"></div>
+        <div class="floating-particle particle-2 top-20 right-20 w-32 h-32 bg-yellow-300 rounded-full opacity-10"></div>
+        <div class="floating-particle particle-3 bottom-10 left-1/4 w-20 h-20 bg-orange-300 rounded-full opacity-5"></div>
+        
+        <div class="container mx-auto px-3 sm:px-4 md:px-6 text-center relative z-10">
             <div class="max-w-4xl mx-auto">
-                <i class="fas fa-bullhorn text-6xl mb-6 opacity-90"></i>
-                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                <div class="hero-icon mb-4 sm:mb-6 md:mb-8 inline-block">
+                    <i class="fas fa-bullhorn text-5xl sm:text-6xl md:text-7xl opacity-95 drop-shadow-lg" style="animation: scale-bounce 2s ease-in-out infinite, glowPulse 3s ease-in-out infinite;"></i>
+                </div>
+                <h1 class="heroTitle text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 md:mb-6 drop-shadow-lg">
                     Important Announcements
                 </h1>
-                <p class="text-xl md:text-2xl opacity-90 leading-relaxed">
+                <p class="heroSubtitle text-base sm:text-lg md:text-xl lg:text-2xl opacity-95 leading-relaxed drop-shadow-md px-2">
                     Stay updated with the latest news, offers, and important updates from CIA MachineryHub
                 </p>
             </div>
@@ -30,33 +533,32 @@
     </section>
 
     <!-- Filter Section -->
-    <section class="py-8 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
-                <div class="flex flex-wrap gap-4 items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Announcements</h2>
+    <section class="py-6 sm:py-8 md:py-10 bg-white shadow-md relative z-5">
+        <div class="container mx-auto px-3 sm:px-4 md:px-6">
+            <div class="max-w-4xl mx-auto filter-section">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between mb-4 sm:mb-6">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Announcements</h2>
                     
-                    <div class="flex flex-wrap gap-3">
+                    <div class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
                         <!-- Filter Dropdown -->
-                        <div class="relative">
-                            <select id="filterSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                        <div class="relative flex-1 sm:flex-none">
+                            <select id="filterSelect" class="w-full px-3 sm:px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition filter-btn text-sm sm:text-base">
                                 <option value="all" {% if current_filter == 'all' %}selected{% endif %}>All Announcements</option>
                                 <option value="critical" {% if current_filter == 'critical' %}selected{% endif %}>Critical Only</option>
-                              <!--  <option value="latest" {% if current_filter == 'latest' %}selected{% endif %}>Latest</option> -->
                             </select>
                         </div>
                         
                         <!-- Show Inactive Toggle -->
                         <label class="flex items-center space-x-2 cursor-pointer">
                             <input type="checkbox" id="showInactive" class="hidden" {% if show_inactive %}checked{% endif %}>
-                            <div class="w-10 h-6 bg-gray-300 rounded-full relative">
-                                <div class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 transition-transform"></div>
+                            <div class="w-10 h-6 bg-gray-300 rounded-full relative transition filter-btn">
+                                <div class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 transition-transform shadow-md"></div>
                             </div>
-                            <span class="text-sm text-gray-700">Show Inactive</span>
+                            <span class="text-xs sm:text-sm text-gray-700 whitespace-nowrap">Show Inactive</span>
                         </label>
                         
                         <!-- Clear Filters Button -->
-                        <button id="clearFilters" class="px-4 py-2 text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg transition">
+                        <button id="clearFilters" class="px-3 sm:px-4 py-2 text-gray-600 hover:text-gray-800 border-2 border-gray-300 hover:border-gray-400 rounded-lg transition filter-btn text-xs sm:text-sm font-medium">
                             Clear Filters
                         </button>
                     </div>
@@ -66,28 +568,31 @@
     </section>
 
     <!-- Announcements Section -->
-    <section class="py-8">
-        <div class="container mx-auto px-4">
+    <section class="py-8 sm:py-12 md:py-16">
+        <div class="container mx-auto px-3 sm:px-4 md:px-6">
             <div class="max-w-4xl mx-auto">
                 {% if critical_announcement %}
                 <!-- Latest Announcement -->
-                <div class="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl p-8 mb-8 shadow-2xl">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 mr-4">
-                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                                <i class="fas fa-exclamation-triangle text-2xl"></i>
+                <div class="critical-announcement bg-gradient-to-r from-red-500 via-red-600 to-red-700 text-white rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">
+                    <div class="floating-particle particle-1 top-0 right-0 w-32 h-32 bg-white rounded-full opacity-10" style="animation: floatWave 6s ease-in-out infinite;"></div>
+                    <div class="floating-particle particle-2 bottom-0 left-0 w-40 h-40 bg-white rounded-full opacity-5" style="animation: floatWave 8s ease-in-out infinite 1s;"></div>
+                    
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 sm:w-14 h-12 sm:h-14 bg-white/20 rounded-full flex items-center justify-center badge-pulse">
+                                <i class="fas fa-exclamation-triangle text-xl sm:text-2xl" style="animation: rotate-slow 3s linear infinite;"></i>
                             </div>
                         </div>
-                        <div class="flex-1">
-                            <div class="flex items-center mb-3">
-                                <span class="bg-white/20 text-white px-3 py-1 rounded-full text-sm font-semibold mr-3">URGENT</span>
-                                <span class="text-white/80 text-sm">{{ critical_announcement.date|date:"F d, Y" }}</span>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-2 sm:mb-3 flex-wrap">
+                                <span class="tag bg-white/25 text-white px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold" style="animation: slideInLeft 0.6s ease-out;">URGENT</span>
+                                <span class="text-white/80 text-xs sm:text-sm">{{ critical_announcement.date|date:"F d, Y" }}</span>
                             </div>
-                            <h2 class="text-2xl font-bold mb-3">{{ critical_announcement.title }}</h2>
-                            <p class="text-lg leading-relaxed mb-4">
+                            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-3">{{ critical_announcement.title }}</h2>
+                            <p class="text-sm sm:text-base md:text-lg leading-relaxed mb-3 sm:mb-4">
                                 {{ critical_announcement.content|truncatewords:50 }}
                             </p>
-                            <a href="{% url 'announcement_detail' critical_announcement.id %}" class="inline-flex items-center text-white hover:text-yellow-200 transition">
+                            <a href="{% url 'announcement_detail' critical_announcement.id %}" class="inline-flex items-center text-white hover:text-yellow-200 transition font-semibold text-xs sm:text-sm md:text-base">
                                 Read More <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>
@@ -96,57 +601,64 @@
                 {% endif %}
 
                 <!-- Recent Announcements -->
-                <div class="grid gap-6">
+                <div class="grid gap-4 sm:gap-6">
                     {% for announcement in announcements %}
                     {% if not announcement.is_critical or announcement != critical_announcement %}
-                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 {% if not announcement.is_active %}border-gray-400 opacity-70{% else %}border-blue-500{% endif %}">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0 mr-4">
-                                <div class="w-10 h-10 {% if not announcement.is_active %}bg-gray-200{% else %}bg-blue-100{% endif %} rounded-full flex items-center justify-center">
+                    <div class="announcement-card card-shimmer bg-white rounded-xl shadow-lg p-5 sm:p-6 border-l-4 {% if not announcement.is_active %}border-gray-400 opacity-70{% else %}border-blue-500{% endif %} relative transition duration-300 hover:shadow-2xl" style="animation: slideInUp 0.8s ease-out backwards;">
+                        <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        <div class="flex items-start gap-3 sm:gap-4 relative z-10">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 {% if not announcement.is_active %}bg-gray-200{% else %}bg-blue-100{% endif %} rounded-full flex items-center justify-center icon-badge" style="animation: sway 3s ease-in-out infinite;">
                                     <i class="fas fa-bullhorn {% if not announcement.is_active %}text-gray-500{% else %}text-blue-600{% endif %}"></i>
                                 </div>
                             </div>
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 mb-1 sm:mb-2 flex-wrap">
                                     {% if announcement.is_critical %}
-                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold mr-3">URGENT</span>
+                                    <span class="tag bg-red-100 text-red-800 px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold" style="animation: slideInLeft 0.6s ease-out;">URGENT</span>
                                     {% else %}
-                                    <span class="{% if not announcement.is_active %}bg-gray-200 text-gray-600{% else %}bg-blue-100 text-blue-800{% endif %} px-3 py-1 rounded-full text-sm font-semibold mr-3">
+                                    <span class="tag {% if not announcement.is_active %}bg-gray-200 text-gray-600{% else %}bg-blue-100 text-blue-800{% endif %} px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold" style="animation: slideInLeft 0.6s ease-out 0.1s backwards;">
                                         {% if not announcement.is_active %}INACTIVE{% else %}ANNOUNCEMENT{% endif %}
                                     </span>
                                     {% endif %}
-                                    <span class="text-gray-500 text-sm">{{ announcement.date|date:"F d, Y" }}</span>
+                                    <span class="text-gray-500 text-xs sm:text-sm">{{ announcement.date|date:"F d, Y" }}</span>
                                 </div>
-                                <h3 class="text-xl font-bold text-gray-800 mb-2">{{ announcement.title }}</h3>
-                                <p class="text-gray-600 leading-relaxed mb-3">
+                                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition">{{ announcement.title }}</h3>
+                                <p class="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed mb-2 sm:mb-3">
                                     {{ announcement.content|truncatewords:30 }}
                                 </p>
-                                <a href="{% url 'announcement_detail' announcement.id %}" class="text-blue-600 hover:text-blue-800 transition font-medium">
-                                    Read More →
+                                <a href="{% url 'announcement_detail' announcement.id %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 hover:translate-x-1 transition font-medium text-xs sm:text-sm md:text-base">
+                                    Read More <i class="fas fa-arrow-right ml-2"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                     {% endif %}
                     {% empty %}
-                    <div class="text-center py-8">
-                        <i class="fas fa-info-circle text-4xl text-gray-400 mb-4"></i>
-                        <p class="text-gray-600 text-lg">No announcements available at the moment.</p>
+                    <div class="empty-state text-center py-12 sm:py-16">
+                        <i class="fas fa-info-circle text-5xl sm:text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-600 text-base sm:text-lg md:text-xl">No announcements available at the moment.</p>
                     </div>
                     {% endfor %}
                 </div>
 
                 <!-- Newsletter Signup -->
-                <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white rounded-2xl p-8 mt-12">
-                    <div class="text-center">
-                        <i class="fas fa-envelope text-4xl mb-4 text-yellow-400"></i>
-                        <h2 class="text-2xl font-bold mb-4">Stay Updated</h2>
-                        <p class="text-gray-300 mb-6 leading-relaxed">
+                <div class="newsletter-section text-white rounded-2xl p-6 sm:p-8 md:p-12 mt-10 sm:mt-12 md:mt-16 relative overflow-hidden">
+                    <!-- Floating Particles -->
+                    <div class="floating-particle particle-1 top-0 left-0 w-40 h-40 bg-yellow-300 rounded-full opacity-10" style="animation: floatWave 8s ease-in-out infinite;"></div>
+                    <div class="floating-particle particle-2 bottom-0 right-0 w-48 h-48 bg-amber-400 rounded-full opacity-5" style="animation: floatWave 10s ease-in-out infinite 1s;"></div>
+                    <div class="floating-particle particle-3 top-1/2 right-1/4 w-32 h-32 bg-yellow-200 rounded-full opacity-8" style="animation: floatWave 7s ease-in-out infinite 0.5s;"></div>
+                    
+                    <div class="text-center relative z-10">
+                        <i class="fas fa-envelope text-4xl sm:text-5xl md:text-6xl mb-4 text-yellow-400 inline-block" style="animation: scale-bounce 2s ease-in-out infinite;"></i>
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4" style="animation: slideInDown 0.6s ease-out 0.2s backwards;">Stay Updated</h2>
+                        <p class="text-gray-300 mb-6 sm:mb-8 leading-relaxed text-xs sm:text-sm md:text-base px-2" style="animation: slideInUp 0.8s ease-out 0.3s backwards;">
                             Subscribe to our newsletter to receive the latest announcements, deals, and industry news directly in your inbox.
                         </p>
-                        <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
-                            <input type="email" placeholder="Enter your email address" class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                            <button class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-3 rounded-lg font-semibold transition">
+                        <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 max-w-lg mx-auto">
+                            <input type="email" placeholder="Enter your email address" class="newsletter-input flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:outline-none transition text-sm sm:text-base" style="animation: slideInLeft 0.6s ease-out 0.4s backwards;">
+                            <button class="newsletter-btn bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold transition text-sm sm:text-base whitespace-nowrap" style="animation: slideInRight 0.6s ease-out 0.5s backwards;">
                                 Subscribe
                             </button>
                         </div>

@@ -815,9 +815,8 @@
                             </div>
                             {% endif %}
                             {% if supplier.city or supplier.state %}
-                            <div class="stat-card">
-                                <p>Operating Region</p>
-                                <p class="text-base">{{ supplier.city }}, {{ supplier.state }}</p>
+                            <div class="text-base text-gray-700">
+                                <p><span class="font-semibold text-gray-800">Operating Region:</span> {{ supplier.city }}, {{ supplier.state }}</p>
                             </div>
                             {% endif %}
                         </section>
@@ -835,7 +834,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                     {% for image in product_images %}
-                    <img src="{{ image }}" alt="{{ supplier.name }} product image" class="product-gallery-item h-40 w-full object-cover shadow-lg" onclick="openImageModal(this.src)">
+                    <img src="{{ image }}" alt="{{ supplier.name }} product image" class="product-gallery-item w-full object-cover shadow-lg" onclick="openImageModal(this.src)">
                     {% endfor %}
                 </div>
             </section>
