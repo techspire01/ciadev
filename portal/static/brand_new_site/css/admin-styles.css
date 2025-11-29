@@ -412,6 +412,29 @@ html, body {
     font-size: 0.85rem;
 }
 
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
+.filter-select {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
 /* Internships/Jobs Container */
 .internships-container,
 .jobs-container {
@@ -430,6 +453,7 @@ html, body {
     transition: all 0.3s ease;
     border-left: 4px solid var(--primary-color);
     animation: slideDown 0.4s ease backwards;
+    overflow: hidden;
 }
 
 .opportunity-card:nth-child(1) { animation-delay: 0.1s; }
@@ -459,6 +483,19 @@ html, body {
 .card-company {
     font-size: 0.9rem;
     color: var(--text-light);
+}
+
+.card-details {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.card-details p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0.5rem 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .card-actions {

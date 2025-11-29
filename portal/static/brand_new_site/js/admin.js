@@ -209,15 +209,77 @@ function closeEditModal() {
     document.getElementById('edit-modal').classList.remove('active');
 }
 
+// Edit Job Modal Functions
+function openEditJobModal(id, title, company, location, salary, email, description, requirements, responsibilities) {
+    document.getElementById('edit-job-id').value = id;
+    document.getElementById('edit-job-title').value = title;
+    document.getElementById('edit-job-company').value = company;
+    document.getElementById('edit-job-location').value = location;
+    document.getElementById('edit-job-salary').value = salary;
+    document.getElementById('edit-job-email').value = email;
+    document.getElementById('edit-job-description').value = description;
+    document.getElementById('edit-job-requirements').value = requirements;
+    document.getElementById('edit-job-responsibilities').value = responsibilities;
+
+    document.getElementById('edit-job-modal').classList.add('active');
+}
+
+function submitEditJobForm() {
+    const id = document.getElementById('edit-job-id').value;
+    const form = document.getElementById('edit-job-form');
+
+    form.method = "POST";
+    form.action = `/portal-admin/edit-job/${id}/`;
+
+    form.submit();
+}
+
+function closeEditJobModal() {
+    document.getElementById('edit-job-modal').classList.remove('active');
+}
+
+// Job Filtering and Search
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("job-search");
+    const statusFilter = document.getElementById("job-status-filter");
+
+    if (searchInput && statusFilter) {
+        searchInput.addEventListener("input", filterJobs);
+        statusFilter.addEventListener("change", filterJobs);
+    }
+});
+
+function filterJobs() {
+    const query = document.getElementById("job-search").value.toLowerCase();
+    const status = document.getElementById("job-status-filter").value;
+
+    const cards = document.querySelectorAll("#jobs-container .opportunity-card");
+
+    cards.forEach(card => {
+        const title = card.dataset.title;
+        const activeStatus = card.dataset.status;
+
+        const matchesSearch = title.includes(query);
+        const matchesStatus =
+            status === "all" || status === activeStatus;
+
+        if (matchesSearch && matchesStatus) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+
 // Close modal when clicking outside of it
 window.addEventListener('click', function(event) {
     const editModal = document.getElementById('edit-modal');
     const editJobModal = document.getElementById('edit-job-modal');
 
     if (event.target === editModal) {
-        closeModal('edit-modal');
+        closeEditModal();
     }
     if (event.target === editJobModal) {
-        closeModal('edit-job-modal');
+        closeEditJobModal();
     }
 });

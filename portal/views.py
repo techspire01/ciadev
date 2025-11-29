@@ -327,3 +327,32 @@ def toggle_internship(request, id):
     internship.is_active = not internship.is_active
     internship.save()
     return redirect('job_portal_admin')
+
+# Server-side views for job management
+def edit_job(request, id):
+    job = get_object_or_404(PortalJob, id=id)
+
+    if request.method == 'POST':
+        job.title = request.POST.get('title')
+        job.company_name = request.POST.get('company')
+        job.location = request.POST.get('location')
+        job.salary = request.POST.get('salary')
+        job.email = request.POST.get('email')
+        job.description = request.POST.get('description')
+        job.requirements = request.POST.get('requirements')
+        job.responsibilities = request.POST.get('responsibilities')
+        job.save()
+        return redirect('job_portal_admin')
+
+    return redirect('job_portal_admin')
+
+def delete_job(request, id):
+    job = get_object_or_404(PortalJob, id=id)
+    job.delete()
+    return redirect('job_portal_admin')
+
+def toggle_job(request, id):
+    job = get_object_or_404(PortalJob, id=id)
+    job.is_active = not job.is_active
+    job.save()
+    return redirect('job_portal_admin')
