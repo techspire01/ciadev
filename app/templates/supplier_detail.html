@@ -815,9 +815,8 @@
                             </div>
                             {% endif %}
                             {% if supplier.city or supplier.state %}
-                            <div class="stat-card">
-                                <p>Operating Region</p>
-                                <p class="text-base">{{ supplier.city }}, {{ supplier.state }}</p>
+                            <div class="text-base text-gray-700">
+                                <p><span class="font-semibold text-gray-800">Operating Region:</span> {{ supplier.city }}, {{ supplier.state }}</p>
                             </div>
                             {% endif %}
                         </section>
