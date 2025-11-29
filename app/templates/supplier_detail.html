@@ -834,7 +834,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                     {% for image in product_images %}
-                    <img src="{{ image }}" alt="{{ supplier.name }} product image" class="product-gallery-item h-40 w-full object-cover shadow-lg" onclick="openImageModal(this.src)">
+                    <img src="{{ image }}" alt="{{ supplier.name }} product image" class="product-gallery-item w-full object-cover shadow-lg" onclick="openImageModal(this.src)">
                     {% endfor %}
                 </div>
             </section>
