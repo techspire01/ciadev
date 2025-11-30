@@ -13,6 +13,7 @@ class PortalInternship(models.Model):
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
     salary = models.CharField(max_length=100)
+    location = models.CharField(max_length=255, blank=True)
 
     class Meta:
         db_table = 'portal_internship'
@@ -32,6 +33,7 @@ class PortalJob(models.Model):
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
     salary = models.CharField(max_length=100)
+    experience = models.CharField(max_length=100, blank=True)
 
     class Meta:
         db_table = 'portal_job'

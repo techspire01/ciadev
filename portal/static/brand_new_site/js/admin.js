@@ -79,6 +79,66 @@ function loadInternships() {
 
 
 
+// Add Internship
+function addInternship() {
+    const form = document.getElementById('internship-form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/api/internships/add/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            form.reset();
+            location.reload(); // Reload to show new internship
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the internship.');
+    });
+}
+
+// Add Job
+function addJob() {
+    const form = document.getElementById('job-form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/api/jobs/add/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            form.reset();
+            location.reload(); // Reload to show new job
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the job.');
+    });
+}
+
 // Setup Form Handlers
 function setupFormHandlers() {
     const internshipForm = document.getElementById('internship-form');
@@ -181,13 +241,14 @@ function getCSRFToken() {
 }
 
 // Edit Internship Modal Functions
-function openEditModal(id, title, company, duration, stipend, email, description, requirements, responsibilities) {
+function openEditModal(id, title, company, duration, stipend, email, location, description, requirements, responsibilities) {
     document.getElementById('edit-id').value = id;
-    document.getElementById('edit-role').value = title;
+    document.getElementById('edit-title').value = title;
     document.getElementById('edit-company').value = company;
     document.getElementById('edit-duration').value = duration;
     document.getElementById('edit-stipend').value = stipend;
     document.getElementById('edit-email').value = email;
+    document.getElementById('edit-location').value = location;
     document.getElementById('edit-description').value = description;
     document.getElementById('edit-requirements').value = requirements;
     document.getElementById('edit-responsibilities').value = responsibilities;
@@ -210,7 +271,7 @@ function closeEditModal() {
 }
 
 // Edit Job Modal Functions
-function openEditJobModal(id, title, company, location, salary, email, description, requirements, responsibilities) {
+function openEditJobModal(id, title, company, location, salary, email, description, requirements, responsibilities, experience) {
     document.getElementById('edit-job-id').value = id;
     document.getElementById('edit-job-title').value = title;
     document.getElementById('edit-job-company').value = company;
@@ -220,6 +281,7 @@ function openEditJobModal(id, title, company, location, salary, email, descripti
     document.getElementById('edit-job-description').value = description;
     document.getElementById('edit-job-requirements').value = requirements;
     document.getElementById('edit-job-responsibilities').value = responsibilities;
+    document.getElementById('edit-job-experience').value = experience || '';
 
     document.getElementById('edit-job-modal').classList.add('active');
 }

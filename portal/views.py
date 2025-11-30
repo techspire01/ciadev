@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 import json
@@ -7,94 +7,82 @@ from .models import PortalInternship, PortalJob
 
 # Create your views here.
 
-def dashboard(request):
-    """Main dashboard with new red/pink theme"""
-    internships = PortalInternship.objects.filter(is_active=True)
-    jobs = PortalJob.objects.filter(is_active=True)
-    vacancies = []
-
-    for internship in internships:
-        vacancies.append({
-            'role': internship.title,
-            'company_name': internship.company_name,
-            'package': internship.salary,
-            'job_description': internship.description,
-            'type': 'internship'
-        })
-
-    for job in jobs:
-        vacancies.append({
-            'role': job.title,
-            'company_name': job.company_name,
-            'package': job.salary,
-            'job_description': job.description,
-            'type': 'job'
-        })
-
-    context = {'vacancies': vacancies}
-    return render(request, 'brand_new_site/dashboard.html', context)
 
 def details(request):
     """Opportunity details page"""
-    return render(request, 'brand_new_site/details.html')
+    vacancy_id = request.GET.get('id')
+    vacancy_type = request.GET.get('type')
+    
+    vacancy = None
+    try:
+        if vacancy_type == 'internship':
+            vacancy = get_object_or_404(PortalInternship, id=vacancy_id)
+        elif vacancy_type == 'job':
+            vacancy = get_object_or_404(PortalJob, id=vacancy_id)
+        else:
+            raise Http404("Vacancy type not specified")
+    except Http404:
+        # Render a "not found" page or redirect
+        return render(request, 'brand_new_site/details.html', {'vacancy': None})
+    except Exception as e:
+        # Log the exception and render a generic error page
+        # In a real app, you'd use proper logging
+        return render(request, 'brand_new_site/details.html', {'vacancy': None})
 
-def internship_job(request):
-    internships = PortalInternship.objects.filter(is_active=True)
-    jobs = PortalJob.objects.filter(is_active=True)
-    vacancies = []
 
-    for internship in internships:
-        vacancies.append({
-            'role': internship.title,
-            'company_name': internship.company_name,
-            'package': internship.salary,
-            'job_description': internship.description,
-            'type': 'internship'
-        })
+    return render(request, 'brand_new_site/details.html', {'vacancy': vacancy})
 
-    for job in jobs:
-        vacancies.append({
-            'role': job.title,
-            'company_name': job.company_name,
-            'package': job.salary,
-            'job_description': job.description,
-            'type': 'job'
-        })
-
-    context = {'vacancies': vacancies}
-    return render(request, 'brand_new_site/dashboard.html', context)
-
-def intern_apply_form(request):
-    return render(request, 'portal/intern_apply_form.html')
-
-def job_apply_form(request):
-    return render(request, 'portal/job_apply_form.html')
 
 def brand_new_site_dashboard(request):
     """Render the brand new site dashboard"""
-    internships = PortalInternship.objects.filter(is_active=True)
-    jobs = PortalJob.objects.filter(is_active=True)
-    vacancies = []
+    try:
+        internships = PortalInternship.objects.filter(is_active=True)
+        jobs = PortalJob.objects.filter(is_active=True)
+        vacancies = []
 
-    for internship in internships:
-        vacancies.append({
-            'role': internship.title,
-            'company_name': internship.company_name,
-            'package': internship.salary,
-            'job_description': internship.description,
-            'type': 'internship'
-        })
+        for internship in internships:
+            vacancies.append({
+                'id': internship.id,
+                'role': internship.title,
+                'company_name': internship.company_name,
+                'package': internship.salary,
+                'job_description': internship.description,
+                'type': 'internship',
+                'requirements': internship.requirements,
+                'duration': internship.duration,
+                'location': internship.location
+            })
 
-    for job in jobs:
-        vacancies.append({
-            'role': job.title,
-            'company_name': job.company_name,
-            'package': job.salary,
-            'job_description': job.description,
-            'type': 'job'
-        })
+        for job in jobs:
+            vacancies.append({
+                'id': job.id,
+                'role': job.title,
+                'company_name': job.company_name,
+                'package': job.salary,
+                'job_description': job.description,
+                'type': 'job',
+                'requirements': job.requirements,
+                'location': job.location,
+                'experience': job.experience
+            })
 
-    context = {'vacancies': vacancies}
+        # Collect unique locations from active internships and jobs
+        locations = set()
+        for internship in internships:
+            if internship.location:
+                locations.add(internship.location.strip())
+        for job in jobs:
+            if job.location:
+                locations.add(job.location.strip())
+
+        # Sort locations alphabetically
+        unique_locations = sorted(list(locations))
+
+        context = {'vacancies': vacancies, 'locations': unique_locations}
+    except Exception as e:
+        # In a real app, you'd use proper logging
+        context = {'vacancies': [], 'locations': [], 'error': str(e)}
+
     return render(request, 'brand_new_site/dashboard.html', context)
 
 def job_portal_admin(request):
@@ -121,12 +109,13 @@ def add_internship(request):
     try:
         data = json.loads(request.body)
         internship = PortalInternship.objects.create(
-            title=data['role'],
+            title=data['title'],
             company_name=data['company'],
             duration=data.get('duration', ''),
             salary=data.get('stipend', ''),
             description=data.get('description', ''),
             email=data.get('email', ''),
+            location=data.get('location', ''),
             requirements=data.get('requirements', ''),
             responsibilities=data.get('responsibilities', '')
         )
@@ -154,6 +143,7 @@ def get_internships(request):
             'email': internship.email,
             'requirements': internship.requirements,
             'responsibilities': internship.responsibilities,
+            'location': internship.location,
             'is_active': internship.is_active,
             'posted_date': internship.posted_date.strftime('%Y-%m-%d')
         })
@@ -167,7 +157,7 @@ def update_internship(request, internship_id):
         internship = get_object_or_404(PortalInternship, id=internship_id)
         data = json.loads(request.body)
 
-        internship.title = data.get('role', internship.title)
+        internship.title = data.get('title', internship.title)
         internship.company_name = data.get('company', internship.company_name)
         internship.duration = data.get('duration', internship.duration)
         internship.salary = data.get('stipend', internship.salary)
@@ -175,6 +165,7 @@ def update_internship(request, internship_id):
         internship.email = data.get('email', internship.email)
         internship.requirements = data.get('requirements', internship.requirements)
         internship.responsibilities = data.get('responsibilities', internship.responsibilities)
+        internship.location = data.get('location', internship.location)
         internship.save()
 
         return JsonResponse({
@@ -232,7 +223,8 @@ def add_job(request):
             description=data.get('description', ''),
             email=data.get('email', ''),
             requirements=data.get('requirements', ''),
-            responsibilities=data.get('responsibilities', '')
+            responsibilities=data.get('responsibilities', ''),
+            experience=data.get('experience', '')
         )
         return JsonResponse({
             'success': True,
@@ -258,6 +250,7 @@ def update_job(request, job_id):
         job.email = data.get('email', job.email)
         job.requirements = data.get('requirements', job.requirements)
         job.responsibilities = data.get('responsibilities', job.responsibilities)
+        job.experience = data.get('experience', job.experience)
         job.save()
 
         return JsonResponse({
@@ -304,7 +297,7 @@ def edit_internship(request, id):
     internship = get_object_or_404(PortalInternship, id=id)
 
     if request.method == 'POST':
-        internship.title = request.POST.get('role')
+        internship.title = request.POST.get('title')
         internship.company_name = request.POST.get('company')
         internship.duration = request.POST.get('duration')
         internship.salary = request.POST.get('stipend')
@@ -312,6 +305,7 @@ def edit_internship(request, id):
         internship.description = request.POST.get('description')
         internship.requirements = request.POST.get('requirements')
         internship.responsibilities = request.POST.get('responsibilities')
+        internship.location = request.POST.get('location')
         internship.save()
         return redirect('job_portal_admin')
 
@@ -341,12 +335,13 @@ def edit_job(request, id):
         job.description = request.POST.get('description')
         job.requirements = request.POST.get('requirements')
         job.responsibilities = request.POST.get('responsibilities')
+        job.experience = request.POST.get('experience')
         job.save()
         return redirect('job_portal_admin')
 
     return redirect('job_portal_admin')
 
-def delete_job(request, id):
+def delete_job_view(request, id):
     job = get_object_or_404(PortalJob, id=id)
     job.delete()
     return redirect('job_portal_admin')
