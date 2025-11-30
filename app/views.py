@@ -98,6 +98,7 @@ def submit_complaint(request):
             contact_number=contact_number
         )
 
+
         # Prepare email
         subject = f"New Complaint Submitted - #{complaint.id}"
         message = (
@@ -108,22 +109,31 @@ def submit_complaint(request):
             f"Complaint:\n{complaint_text}\n"
         )
 
-        # Determine recipients: prefer EMAIL_HOST_USER and ADMINS if present
-        admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
-        recipients = []
-        if admin_email:
-            recipients.append(admin_email)
+        # Use dynamic email settings (from EmailConfiguration or fallback)
+        from .utils import get_email_settings
+        email_settings = get_email_settings()
+        config_email = email_settings.get('host_user') or email_settings.get('default_from_email')
+
+        # Recipients: admin(s) and config email
+        recipients = set()
+        if config_email:
+            recipients.add(config_email)
         admins = getattr(settings, 'ADMINS', None)
         if admins:
             for a in admins:
                 try:
-                    recipients.append(a[1])
+                    recipients.add(a[1])
                 except Exception:
                     continue
 
+        # Also add any previous admin_email logic for backward compatibility
+        admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
+        if admin_email:
+            recipients.add(admin_email)
+
         if recipients:
             try:
-                send_mail(subject, message, admin_email or recipients[0], list(set(recipients)), fail_silently=False)
+                send_mail(subject, message, config_email or admin_email or list(recipients)[0], list(recipients), fail_silently=False)
             except Exception as e:
                 logger.exception("Failed sending complaint email: %s", e)
 

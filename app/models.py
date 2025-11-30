@@ -362,3 +362,19 @@ class InternshipApplication(models.Model):
 
     def __str__(self):
         return f"{self.fullname} ({self.email}) - {self.sector}"
+
+class EmailConfiguration(models.Model):
+    host = models.CharField(max_length=255, default='smtp.gmail.com')
+    port = models.IntegerField(default=587)
+    use_tls = models.BooleanField(default=True)
+    use_ssl = models.BooleanField(default=False)
+    host_user = models.EmailField(default='cianextcbe@gmail.com')
+    host_password = models.CharField(max_length=255, default='cwgk azyb oxsp pfih')
+    default_from_email = models.EmailField(default='cianextcbe@gmail.com')
+
+    class Meta:
+        verbose_name = "Email Configuration"
+        verbose_name_plural = "Email Configuration"
+
+    def __str__(self):
+        return "Email Configuration"

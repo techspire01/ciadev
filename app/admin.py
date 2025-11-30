@@ -9,8 +9,21 @@ from django.conf import settings
 import json
 import logging
 
-from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, InternshipApplication, Complaint
+from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, InternshipApplication, Complaint, EmailConfiguration
+# Register EmailConfiguration in admin
+@admin.register(EmailConfiguration)
+class EmailConfigurationAdmin(admin.ModelAdmin):
+    list_display = ("host", "port", "host_user", "default_from_email", "use_tls", "use_ssl")
+    fieldsets = (
+        (None, {
+            'fields': ('host', 'port', 'use_tls', 'use_ssl', 'host_user', 'host_password', 'default_from_email'),
+        }),
+    )
+    def has_add_permission(self, request):
+        # Only allow one config row
+        return not EmailConfiguration.objects.exists()
 from .forms import SupplierForm
+from .utils import get_email_settings
 
 logger = logging.getLogger(__name__)
 
@@ -343,7 +356,7 @@ class SupplierEditRequestAdmin(admin.ModelAdmin):
                 if user and getattr(user, 'email', None):
                     subject = f"Your edit request for {getattr(supplier, 'name', 'supplier')} has been denied"
                     body = f"Your edit request has been denied by admin.\n\nMessage: {getattr(edit_request, 'message', '')}\nContact Phone: {getattr(edit_request, 'contact_phone', '')}\n\nIf you have questions, contact support."
-                    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'webmaster@localhost')
+                    from_email = get_email_settings()['default_from_email']
                     send_mail(subject, body, from_email, [user.email], fail_silently=True)
             except Exception:
                 logger.exception("Failed to notify user after denying edit request")

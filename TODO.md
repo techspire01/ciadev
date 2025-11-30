@@ -1,11 +1,7 @@
-# SSL Certificate Fix for Email
+# TODO: Remove AJAX Mode and localStorage Mode for Job Portal Admin
 
-## Completed Tasks
-- [x] Identified SSLCertVerificationError in password reset email sending
-- [x] Attempted to update Windows SSL certificates (failed due to admin permissions)
-- [x] Added EMAIL_SSL_CONTEXT to settings.py to disable SSL verification for development
-
-## Next Steps
-- [ ] Test the password reset functionality to confirm the fix works
-- [ ] Remove EMAIL_SSL_CONTEXT before deploying to production (security risk)
-- [ ] Consider proper SSL certificate management for production environment
+## Tasks
+- [x] Fix 1: Update `job_portal_admin` view in `portal/views.py` to query and send both internships and jobs to the template.
+- [x] Fix 2: In `portal/static/brand_new_site/js/admin.js`, delete `loadInternships()` function, remove `loadJobs()` from DOMContentLoaded, and ensure `renderJobs()` is not called.
+- [x] Fix 3: In `portal/templates/brand_new_site/job_portal_admin.html`, replace the jobs table structure with server-side rendering using `{% for job in jobs %}` loop as specified.
+- [ ] Followup: Run the Django server and verify the admin page loads internships and jobs server-side without AJAX or localStorage.

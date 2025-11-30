@@ -44,6 +44,7 @@
                 </div>
                 <div class="form-container">
                     <form id="internship-form">
+                        {% csrf_token %}
                         <h3>Internship Details</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -58,17 +59,33 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Duration</label>
-                                <input type="text" name="duration" placeholder="e.g., 3-6 months">
+                                <input type="text" name="duration" placeholder="e.g., 3-6 months" required>
                             </div>
                             <div class="form-group">
                                 <label>Stipend</label>
-                                <input type="text" name="stipend" placeholder="e.g., ₹20-25/hour">
+                                <input type="text" name="stipend" placeholder="e.g., ₹20-25/hour" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" placeholder="contact@company.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Requirements</label>
+                                <textarea name="requirements" placeholder="Skills required for the internship" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="form-row-full">
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea name="description" placeholder="Describe the internship opportunity" rows="4"></textarea>
+                                <textarea name="description" placeholder="Describe the internship opportunity" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row-full">
+                            <div class="form-group">
+                                <label>Responsibilities</label>
+                                <textarea name="responsibilities" placeholder="Key responsibilities of the intern" rows="3"></textarea>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-full">Add Internship</button>
@@ -83,12 +100,77 @@
                     <p>Manage all internship opportunities</p>
                 </div>
                 <div id="internships-container" class="internships-container">
-                    <!-- Internships will be rendered here -->
-                </div>
-                <div class="empty-state" id="empty-internships">
-                    <div class="icon">📋</div>
-                    <h3>No internships yet</h3>
-                    <p>Add your first internship opportunity from the "Add Internships" tab</p>
+                    {% if internships %}
+                        {% for internship in internships %}
+                        <div class="opportunity-card">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">{{ internship.title|default:'N/A' }}</div>
+                                    <div class="card-company">{{ internship.company_name|default:'N/A' }}</div>
+                                </div>
+                                <div class="card-status">
+                                    {% if internship.is_active %}
+                                        <span class="status-active">Active</span>
+                                    {% else %}
+                                        <span class="status-inactive">Inactive</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="card-details">
+                                <p><strong>Duration:</strong> {{ internship.duration|default:'N/A' }}</p>
+                                <p><strong>Stipend:</strong> {{ internship.salary|default:'N/A' }}</p>
+                                <p><strong>Email:</strong> {{ internship.email|default:'N/A' }}</p>
+                                <p><strong>Posted Date:</strong> {{ internship.posted_date|default:'N/A' }}</p>
+                                <p><strong>Description:</strong> {{ internship.description|default:'N/A' }}</p>
+                                <p><strong>Requirements:</strong> {{ internship.requirements|default:'N/A' }}</p>
+                                <p><strong>Responsibilities:</strong> {{ internship.responsibilities|default:'N/A' }}</p>
+                            </div>
+                            <div class="card-actions">
+                                <!-- Edit Button -->
+                                <button class="btn btn-primary btn-small"
+                                        onclick="openEditModal('{{ internship.id }}',
+                                                       '{{ internship.title }}',
+                                                       '{{ internship.company_name }}',
+                                                       '{{ internship.duration }}',
+                                                       '{{ internship.salary }}',
+                                                       '{{ internship.email }}',
+                                                       `{{ internship.description|escapejs }}`,
+                                                       `{{ internship.requirements|escapejs }}`,
+                                                       `{{ internship.responsibilities|escapejs }}`)">
+                                    Edit
+                                </button>
+
+                                <!-- Pause / Resume -->
+                                {% if internship.is_active %}
+                                    <a href="{% url 'toggle_internship' internship.id %}"
+                                       class="btn btn-warning btn-small"
+                                       style="background:#f59e0b;color:white;">
+                                       Pause
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'toggle_internship' internship.id %}"
+                                       class="btn btn-success btn-small"
+                                       style="background:#10b981;color:white;">
+                                       Resume
+                                    </a>
+                                {% endif %}
+
+                                <!-- Delete -->
+                                <a href="{% url 'delete_internship' internship.id %}"
+                                   class="btn btn-danger btn-small"
+                                   onclick="return confirm('Are you sure you want to delete this internship?');">
+                                   Delete
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state" id="empty-internships">
+                            <div class="icon">📋</div>
+                            <h3>No internships yet</h3>
+                            <p>Add your first internship opportunity from the "Add Internships" tab</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -137,32 +219,99 @@
                 </div>
             </div>
 
-            <!-- VIEW JOBS TAB -->
+            <!-- ==================== VIEW JOBS TAB ==================== -->
             <div id="view-jobs" class="tab-content">
                 <div class="page-header">
                     <h2>Job Listings</h2>
                     <p>Manage all job opportunities</p>
                 </div>
-                <div class="table-container">
-                    <table id="jobs-table">
-                        <thead>
-                            <tr>
-                                <th>Job Title</th>
-                                <th>Company</th>
-                                <th>Salary</th>
-                                <th>Type</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Jobs will be rendered here -->
-                        </tbody>
-                    </table>
+
+                <div class="filter-bar">
+                    <input type="text" id="job-search" class="search-input" placeholder="Search job title...">
+
+                    <select id="job-status-filter" class="filter-select">
+                        <option value="all">All</option>
+                        <option value="active">Active Only</option>
+                        <option value="inactive">Inactive Only</option>
+                    </select>
                 </div>
-                <div class="empty-state" id="empty-jobs">
-                    <div class="icon">💼</div>
-                    <h3>No jobs yet</h3>
-                    <p>Add your first job opportunity from the "Add Jobs" tab</p>
+
+                <div id="jobs-container" class="internships-container">
+                    {% if jobs %}
+                        {% for job in jobs %}
+                        <div class="opportunity-card"
+                             data-title="{{ job.title|lower }}"
+                             data-status="{% if job.is_active %}active{% else %}inactive{% endif %}">
+                            <div class="card-header">
+                                <div>
+                                    <div class="card-title">{{ job.title|default:'N/A' }}</div>
+                                    <div class="card-company">{{ job.company_name|default:'N/A' }}</div>
+                                </div>
+                                <div class="card-status">
+                                    {% if job.is_active %}
+                                        <span class="status-active">Active</span>
+                                    {% else %}
+                                        <span class="status-inactive">Inactive</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="card-details">
+                                <p><strong>Location:</strong> {{ job.location|default:'N/A' }}</p>
+                                <p><strong>Salary:</strong> {{ job.salary|default:'N/A' }}</p>
+                                <p><strong>Email:</strong> {{ job.email|default:'N/A' }}</p>
+                                <p><strong>Posted Date:</strong> {{ job.posted_date|default:'N/A' }}</p>
+                                <p><strong>Description:</strong> {{ job.description|default:'N/A' }}</p>
+                                <p><strong>Requirements:</strong> {{ job.requirements|default:'N/A' }}</p>
+                                <p><strong>Responsibilities:</strong> {{ job.responsibilities|default:'N/A' }}</p>
+                            </div>
+
+                            <div class="card-actions">
+                                <!-- Edit Job Button -->
+                                <button class="btn btn-primary btn-small"
+                                    onclick="openEditJobModal('{{ job.id }}',
+                                                      '{{ job.title }}',
+                                                      '{{ job.company_name }}',
+                                                      '{{ job.location }}',
+                                                      '{{ job.salary }}',
+                                                      '{{ job.email }}',
+                                                      `{{ job.description|escapejs }}`,
+                                                      `{{ job.requirements|escapejs }}`,
+                                                      `{{ job.responsibilities|escapejs }}`)">
+                                    Edit
+                                </button>
+
+                                <!-- Pause / Resume -->
+                                {% if job.is_active %}
+                                    <a href="{% url 'toggle_job' job.id %}"
+                                       class="btn btn-warning btn-small"
+                                       style="background:#f59e0b;color:white;">
+                                       Pause
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'toggle_job' job.id %}"
+                                       class="btn btn-success btn-small"
+                                       style="background:#10b981;color:white;">
+                                       Resume
+                                    </a>
+                                {% endif %}
+
+                                <!-- Delete -->
+                                <a href="{% url 'delete_job' job.id %}"
+                                   class="btn btn-danger btn-small"
+                                   onclick="return confirm('Are you sure you want to delete this job?');">
+                                   Delete
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state" id="empty-jobs">
+                            <div class="icon">💼</div>
+                            <h3>No jobs yet</h3>
+                            <p>Add your first job opportunity from the "Add Jobs" tab</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -205,29 +354,123 @@
                 <button class="modal-close" onclick="document.getElementById('edit-modal').classList.remove('active')">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="edit-form">
-                    <div class="form-group">
-                        <label>Role</label>
-                        <input type="text" name="role" placeholder="Role" required>
+                <form id="edit-form" method="POST" action="" style="max-height:60vh;overflow-y:auto;">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit-id" name="id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" id="edit-role" name="role" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="edit-company" name="company" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Company</label>
-                        <input type="text" name="company" placeholder="Company" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Duration</label>
+                            <input type="text" id="edit-duration" name="duration" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Stipend</label>
+                            <input type="text" id="edit-stipend" name="stipend" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Duration</label>
-                        <input type="text" name="duration" placeholder="Duration">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="edit-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Requirements</label>
+                            <textarea id="edit-requirements" name="requirements" rows="2"></textarea>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Stipend</label>
-                        <input type="text" name="stipend" placeholder="Stipend">
+                    <div class="form-row-full">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="edit-description" name="description" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row-full">
+                        <div class="form-group">
+                            <label>Responsibilities</label>
+                            <textarea id="edit-responsibilities" name="responsibilities" rows="3"></textarea>
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="document.getElementById('edit-modal').classList.remove('active')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveInternshipChanges()">Save Changes</button>
+            <div class="modal-footer" style="display:flex;gap:0.5rem;justify-content:flex-end;">
+                <button type="button" class="btn btn-secondary btn-small" onclick="closeEditModal()">Cancel</button>
+                <button type="button" class="btn btn-primary btn-small" onclick="submitEditForm()">Save Changes</button>
             </div>
+            </div>
+            <!-- Modal footer moved inside form for better UX -->
+        </div>
+    </div>
+
+    <!-- ==================== EDIT JOB MODAL ==================== -->
+    <div id="edit-job-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Job</h3>
+                <button class="modal-close" onclick="document.getElementById('edit-job-modal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-job-form" method="POST" action="" style="max-height:60vh;overflow-y:auto;">
+                    {% csrf_token %}
+                    <input type="hidden" id="edit-job-id" name="id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Job Title</label>
+                            <input type="text" id="edit-job-title" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <input type="text" id="edit-job-company" name="company" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="edit-job-location" name="location" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Salary</label>
+                            <input type="text" id="edit-job-salary" name="salary" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="edit-job-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Requirements</label>
+                            <textarea id="edit-job-requirements" name="requirements" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row-full">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="edit-job-description" name="description" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row-full">
+                        <div class="form-group">
+                            <label>Responsibilities</label>
+                            <textarea id="edit-job-responsibilities" name="responsibilities" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="display:flex;gap:0.5rem;justify-content:flex-end;">
+                <button type="button" class="btn btn-secondary btn-small" onclick="closeEditJobModal()">Cancel</button>
+                <button type="button" class="btn btn-primary btn-small" onclick="submitEditJobForm()">Save Changes</button>
+            </div>
+            </div>
+            <!-- Modal footer moved inside form for better UX -->
         </div>
     </div>
 

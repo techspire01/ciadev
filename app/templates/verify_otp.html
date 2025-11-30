@@ -387,16 +387,14 @@
                 <p class="verify-subtitle">Enter the code sent to your email</p>
             </div>
 
-            <form method="POST" class="space-y-6">
+            <form method="POST" action="{% url 'verify_otp' %}" class="space-y-6">
                 {% csrf_token %}
-                
-                <!-- Hidden email field -->
                 <input type="hidden" name="email" value="{{ email }}">
-                
+
                 <div class="input-group">
-                    <input 
-                        type="text" 
-                        name="otp" 
+                    <input
+                        type="text"
+                        name="otp"
                         placeholder="000000"
                         class="otp-input"
                         maxlength="6"
@@ -412,14 +410,13 @@
             </form>
 
             <div class="resend-link">
-                <p class="text-gray-600">
-                    Didn't receive the code? 
-                    <form action="{% url 'resend_otp' %}" method="POST" class="inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="email" value="{{ email }}">
-                        <button type="submit" class="text-yellow-600 hover:text-yellow-700 font-semibold underline">Resend OTP</button>
-                    </form>
-                </p>
+                <form method="POST" action="{% url 'resend_otp' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="email" value="{{ email }}">
+                    <button type="submit" class="text-yellow-600 hover:text-yellow-800 font-semibold underline" style="background: none; border: none; cursor: pointer; padding: 0;">
+                        Resend OTP
+                    </button>
+                </form>
             </div>
         </div>
     </div>
