@@ -33,7 +33,8 @@ def dashboard(request):
             'job_description': job.description,
             'type': 'job',
             'requirements': job.requirements,
-            'location': job.location
+            'location': job.location,
+            'experience': job.experience
         })
 
     context = {'vacancies': vacancies}
@@ -68,17 +69,13 @@ def internship_job(request):
             'job_description': job.description,
             'type': 'job',
             'requirements': job.requirements,
-            'location': job.location
+            'location': job.location,
+            'experience': job.experience
         })
 
     context = {'vacancies': vacancies}
     return render(request, 'brand_new_site/dashboard.html', context)
 
-def intern_apply_form(request):
-    return render(request, 'portal/intern_apply_form.html')
-
-def job_apply_form(request):
-    return render(request, 'portal/job_apply_form.html')
 
 def brand_new_site_dashboard(request):
     """Render the brand new site dashboard"""
@@ -104,7 +101,10 @@ def brand_new_site_dashboard(request):
             'company_name': job.company_name,
             'package': job.salary,
             'job_description': job.description,
-            'type': 'job'
+            'type': 'job',
+            'requirements': job.requirements,
+            'location': job.location,
+            'experience': job.experience
         })
 
     context = {'vacancies': vacancies}
@@ -248,7 +248,8 @@ def add_job(request):
             description=data.get('description', ''),
             email=data.get('email', ''),
             requirements=data.get('requirements', ''),
-            responsibilities=data.get('responsibilities', '')
+            responsibilities=data.get('responsibilities', ''),
+            experience=data.get('experience', '')
         )
         return JsonResponse({
             'success': True,
@@ -274,6 +275,7 @@ def update_job(request, job_id):
         job.email = data.get('email', job.email)
         job.requirements = data.get('requirements', job.requirements)
         job.responsibilities = data.get('responsibilities', job.responsibilities)
+        job.experience = data.get('experience', job.experience)
         job.save()
 
         return JsonResponse({
@@ -358,12 +360,13 @@ def edit_job(request, id):
         job.description = request.POST.get('description')
         job.requirements = request.POST.get('requirements')
         job.responsibilities = request.POST.get('responsibilities')
+        job.experience = request.POST.get('experience')
         job.save()
         return redirect('job_portal_admin')
 
     return redirect('job_portal_admin')
 
-def delete_job(request, id):
+def delete_job_view(request, id):
     job = get_object_or_404(PortalJob, id=id)
     job.delete()
     return redirect('job_portal_admin')

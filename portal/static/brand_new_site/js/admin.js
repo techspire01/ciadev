@@ -271,7 +271,7 @@ function closeEditModal() {
 }
 
 // Edit Job Modal Functions
-function openEditJobModal(id, title, company, location, salary, email, description, requirements, responsibilities) {
+function openEditJobModal(id, title, company, location, salary, email, description, requirements, responsibilities, experience) {
     document.getElementById('edit-job-id').value = id;
     document.getElementById('edit-job-title').value = title;
     document.getElementById('edit-job-company').value = company;
@@ -281,6 +281,7 @@ function openEditJobModal(id, title, company, location, salary, email, descripti
     document.getElementById('edit-job-description').value = description;
     document.getElementById('edit-job-requirements').value = requirements;
     document.getElementById('edit-job-responsibilities').value = responsibilities;
+    document.getElementById('edit-job-experience').value = experience || '';
 
     document.getElementById('edit-job-modal').classList.add('active');
 }

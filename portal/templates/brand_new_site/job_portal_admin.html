@@ -190,6 +190,7 @@
                 </div>
                 <div class="form-container">
                     <form id="job-form">
+                        {% csrf_token %}
                         <h3>Job Details</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -203,23 +204,40 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Salary</label>
-                                <input type="text" name="salary" placeholder="e.g., ₹12-15 LPA">
+                                <label>Location</label>
+                                <input type="text" name="location" placeholder="e.g., Mumbai, India" required>
                             </div>
                             <div class="form-group">
-                                <label>Job Type</label>
-                                <select name="jobType" required>
-                                    <option value="">Select Type</option>
-                                    <option value="full-time">Full-time</option>
-                                    <option value="part-time">Part-time</option>
-                                    <option value="contract">Contract</option>
-                                </select>
+                                <label>Salary</label>
+                                <input type="text" name="salary" placeholder="e.g., ₹12-15 LPA" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" placeholder="contact@company.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Experience</label>
+                                <input type="text" name="experience" placeholder="e.g., 2-3 years">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Requirements</label>
+                                <textarea name="requirements" placeholder="Skills required for the job" rows="2"></textarea>
                             </div>
                         </div>
                         <div class="form-row-full">
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea name="description" placeholder="Describe the job opportunity" rows="4"></textarea>
+                                <textarea name="description" placeholder="Describe the job opportunity" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row-full">
+                            <div class="form-group">
+                                <label>Responsibilities</label>
+                                <textarea name="responsibilities" placeholder="Key responsibilities of the role" rows="3"></textarea>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-full">Add Job</button>
@@ -267,6 +285,7 @@
                             <div class="card-details">
                                 <p><strong>Location:</strong> {{ job.location|default:'N/A' }}</p>
                                 <p><strong>Salary:</strong> {{ job.salary|default:'N/A' }}</p>
+                                <p><strong>Experience:</strong> {{ job.experience|default:'N/A' }}</p>
                                 <p><strong>Email:</strong> {{ job.email|default:'N/A' }}</p>
                                 <p><strong>Posted Date:</strong> {{ job.posted_date|default:'N/A' }}</p>
                                 <p><strong>Description:</strong> {{ job.description|default:'N/A' }}</p>
@@ -285,7 +304,8 @@
                                                       '{{ job.email }}',
                                                       `{{ job.description|escapejs }}`,
                                                       `{{ job.requirements|escapejs }}`,
-                                                      `{{ job.responsibilities|escapejs }}`)">
+                                                      `{{ job.responsibilities|escapejs }}`,
+                                                      '{{ job.experience }}')">
                                     Edit
                                 </button>
 
@@ -305,7 +325,7 @@
                                 {% endif %}
 
                                 <!-- Delete -->
-                                <a href="{% url 'delete_job' job.id %}"
+                                <a href="{% url 'delete_job_view' job.id %}"
                                    class="btn btn-danger btn-small"
                                    onclick="return confirm('Are you sure you want to delete this job?');">
                                    Delete
@@ -460,6 +480,12 @@
                             <label>Email</label>
                             <input type="email" id="edit-job-email" name="email" required>
                         </div>
+                        <div class="form-group">
+                            <label>Experience</label>
+                            <input type="text" id="edit-job-experience" name="experience" placeholder="e.g., 2-3 years">
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label>Requirements</label>
                             <textarea id="edit-job-requirements" name="requirements" rows="2"></textarea>

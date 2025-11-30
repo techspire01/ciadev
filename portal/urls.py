@@ -15,6 +15,7 @@ urlpatterns = [
     # Job admin (server-side)
     path('portal-admin/edit-job/<int:id>/', views.edit_job, name='edit_job'),
     path('portal-admin/delete-job/<int:id>/', views.delete_job, name='delete_job'),
+    path('portal-admin/delete-job-view/<int:id>/', views.delete_job_view, name='delete_job_view'),
     path('portal-admin/toggle-job/<int:id>/', views.toggle_job, name='toggle_job'),
     # API endpoints for internship management (kept for backward compatibility if needed)
     path('api/internships/', views.get_internships, name='get_internships'),
@@ -25,5 +26,5 @@ urlpatterns = [
     path('api/jobs/add/', views.add_job, name='add_job'),
     path('api/jobs/<int:job_id>/update/', views.update_job, name='update_job'),
     path('api/jobs/<int:job_id>/toggle/', views.toggle_job_status, name='toggle_job_status'),
-    path('api/jobs/<int:job_id>/delete/', views.delete_job, name='delete_job'),
+    path('api/jobs/<int:job_id>/delete/', views.delete_job, name='delete_job_api'),
    ]

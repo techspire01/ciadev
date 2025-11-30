@@ -524,6 +524,20 @@
       flex-shrink: 0;
     }
 
+    .card-experience {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .card-experience::before {
+      content: '💼';
+      font-size: 14px;
+    }
+
     .card-actions {
       display: flex;
       gap: 10px;
@@ -1404,6 +1418,7 @@
               <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
               ${item.category === 'internship' ? item.duration : item.package}
             </div>
+            ${item.category === 'job' ? `<div class="card-experience">${item.experience}</div>` : ''}
             <div class="card-tags">
               ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
             </div>
@@ -1483,6 +1498,7 @@
           location: item.location || 'N/A',
           duration: item.duration || 'N/A',
           requirements: item.requirements || 'N/A',
+          experience: item.experience || 'N/A',
           tags: [],
           jobRole: item.role,
           package: item.package
