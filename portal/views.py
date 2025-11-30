@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 import json
@@ -7,107 +7,82 @@ from .models import PortalInternship, PortalJob
 
 # Create your views here.
 
-def dashboard(request):
-    """Main dashboard with new red/pink theme"""
-    internships = PortalInternship.objects.filter(is_active=True)
-    jobs = PortalJob.objects.filter(is_active=True)
-    vacancies = []
-
-    for internship in internships:
-        vacancies.append({
-            'role': internship.title,
-            'company_name': internship.company_name,
-            'package': internship.salary,
-            'job_description': internship.description,
-            'type': 'internship',
-            'requirements': internship.requirements,
-            'duration': internship.duration,
-            'location': internship.location
-        })
-
-    for job in jobs:
-        vacancies.append({
-            'role': job.title,
-            'company_name': job.company_name,
-            'package': job.salary,
-            'job_description': job.description,
-            'type': 'job',
-            'requirements': job.requirements,
-            'location': job.location,
-            'experience': job.experience
-        })
-
-    context = {'vacancies': vacancies}
-    return render(request, 'brand_new_site/dashboard.html', context)
 
 def details(request):
     """Opportunity details page"""
-    return render(request, 'brand_new_site/details.html')
+    vacancy_id = request.GET.get('id')
+    vacancy_type = request.GET.get('type')
+    
+    vacancy = None
+    try:
+        if vacancy_type == 'internship':
+            vacancy = get_object_or_404(PortalInternship, id=vacancy_id)
+        elif vacancy_type == 'job':
+            vacancy = get_object_or_404(PortalJob, id=vacancy_id)
+        else:
+            raise Http404("Vacancy type not specified")
+    except Http404:
+        # Render a "not found" page or redirect
+        return render(request, 'brand_new_site/details.html', {'vacancy': None})
+    except Exception as e:
+        # Log the exception and render a generic error page
+        # In a real app, you'd use proper logging
+        return render(request, 'brand_new_site/details.html', {'vacancy': None})
 
-def internship_job(request):
-    internships = PortalInternship.objects.filter(is_active=True)
-    jobs = PortalJob.objects.filter(is_active=True)
-    vacancies = []
 
-    for internship in internships:
-        vacancies.append({
-            'role': internship.title,
-            'company_name': internship.company_name,
-            'package': internship.salary,
-            'job_description': internship.description,
-            'type': 'internship',
-            'requirements': internship.requirements,
-            'duration': internship.duration,
-            'location': internship.location
-        })
-
-    for job in jobs:
-        vacancies.append({
-            'role': job.title,
-            'company_name': job.company_name,
-            'package': job.salary,
-            'job_description': job.description,
-            'type': 'job',
-            'requirements': job.requirements,
-            'location': job.location,
-            'experience': job.experience
-        })
-
-    context = {'vacancies': vacancies}
-    return render(request, 'brand_new_site/dashboard.html', context)
+    return render(request, 'brand_new_site/details.html', {'vacancy': vacancy})
 
 
 def brand_new_site_dashboard(request):
     """Render the brand new site dashboard"""
-    internships = PortalInternship.objects.filter(is_active=True)
-    jobs = PortalJob.objects.filter(is_active=True)
-    vacancies = []
+    try:
+        internships = PortalInternship.objects.filter(is_active=True)
+        jobs = PortalJob.objects.filter(is_active=True)
+        vacancies = []
 
-    for internship in internships:
-        vacancies.append({
-            'role': internship.title,
-            'company_name': internship.company_name,
-            'package': internship.salary,
-            'job_description': internship.description,
-            'type': 'internship',
-            'requirements': internship.requirements,
-            'duration': internship.duration,
-            'location': internship.location
-        })
+        for internship in internships:
+            vacancies.append({
+                'id': internship.id,
+                'role': internship.title,
+                'company_name': internship.company_name,
+                'package': internship.salary,
+                'job_description': internship.description,
+                'type': 'internship',
+                'requirements': internship.requirements,
+                'duration': internship.duration,
+                'location': internship.location
+            })
 
-    for job in jobs:
-        vacancies.append({
-            'role': job.title,
-            'company_name': job.company_name,
-            'package': job.salary,
-            'job_description': job.description,
-            'type': 'job',
-            'requirements': job.requirements,
-            'location': job.location,
-            'experience': job.experience
-        })
+        for job in jobs:
+            vacancies.append({
+                'id': job.id,
+                'role': job.title,
+                'company_name': job.company_name,
+                'package': job.salary,
+                'job_description': job.description,
+                'type': 'job',
+                'requirements': job.requirements,
+                'location': job.location,
+                'experience': job.experience
+            })
 
-    context = {'vacancies': vacancies}
+        # Collect unique locations from active internships and jobs
+        locations = set()
+        for internship in internships:
+            if internship.location:
+                locations.add(internship.location.strip())
+        for job in jobs:
+            if job.location:
+                locations.add(job.location.strip())
+
+        # Sort locations alphabetically
+        unique_locations = sorted(list(locations))
+
+        context = {'vacancies': vacancies, 'locations': unique_locations}
+    except Exception as e:
+        # In a real app, you'd use proper logging
+        context = {'vacancies': [], 'locations': [], 'error': str(e)}
+
     return render(request, 'brand_new_site/dashboard.html', context)
 
 def job_portal_admin(request):

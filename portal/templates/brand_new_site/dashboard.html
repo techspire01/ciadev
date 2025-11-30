@@ -1353,6 +1353,11 @@
   </div>
 
   <div class="dashboard-wrapper">
+    {% if error %}
+    <div style="text-align: center; padding: 60px; color: var(--dark);">
+      <p>Error loading data: {{ error }}</p>
+    </div>
+    {% else %}
     <main class="dashboard-main">
       <section class="hero-section">
         <h1 class="hero-title">Talent Discovery</h1>
@@ -1380,19 +1385,14 @@
           <label for="locationFilter" class="filter-label">Location:</label>
           <select id="locationFilter" class="location-filter-dropdown">
             <option value="">All Locations</option>
-            <option value="Remote">Remote</option>
-            <option value="Bangalore">Bangalore</option>
-            <option value="Hyderabad">Hyderabad</option>
-            <option value="Mumbai">Mumbai</option>
-            <option value="Delhi">Delhi</option>
-            <option value="Chennai">Chennai</option>
-            <option value="Pune">Pune</option>
-            <option value="Coimbatore">Coimbatore</option>
+            {% for location in locations %}
+            <option value="{{ location }}">{{ location }}</option>
+            {% endfor %}
           </select>
         </div>
         
         <div class="counter-info">
-          <span id="itemCounter">8</span> opportunities found
+          <span id="itemCounter">{{ vacancies|length }}</span> opportunities found
         </div>
       </section>
 
@@ -1406,7 +1406,7 @@
         <p class="empty-state-desc">Try adjusting your search filters</p>
       </div>
     </main>
-
+    {% endif %}
   </div>
   
   {% include 'footer.html' %}
@@ -1436,7 +1436,6 @@
       filterButtons: document.querySelectorAll('.filter-button'),
       searchInput: document.getElementById('searchInput'),
       locationFilter: document.getElementById('locationFilter'),
-      itemCounter: document.getElementById('itemCounter'),
       detailCloseBtn: null
     };
 
@@ -1513,13 +1512,15 @@
 
     // Open detail view - Navigate to details page
     function openDetailView(itemId) {
-      window.location.href = `{% url 'details' %}?id=${itemId}`;
+      const item = state.allData.find(item => item.id == itemId);
+      window.location.href = `{% url 'details' %}?id=${itemId}&type=${item.category}`;
     }
 
     // Update counter
     function updateCounter() {
       const count = state.filteredData.length;
-      elements.itemCounter.textContent = count;
+      const counterInfo = document.querySelector('.counter-info');
+      counterInfo.innerHTML = `<span id="itemCounter">${count}</span> opportunities found`;
     }
 
     // Apply filters and search
@@ -1572,8 +1573,8 @@
       try {
         const vacanciesData = JSON.parse(document.getElementById('vacancies-data').textContent);
         
-        state.allData = vacanciesData.map((item, index) => ({
-          id: index, // Using index as id for now
+        state.allData = vacanciesData.map(item => ({
+          id: item.id, // Using id from database
           category: item.type,
           categoryLabel: item.type.charAt(0).toUpperCase() + item.type.slice(1),
           company: item.company_name,
@@ -1591,7 +1592,6 @@
         updateCounter();
         renderCards();
       } catch (error) {
-        console.error('Error loading data:', error);
         elements.emptyState.style.display = 'block';
       }
     }

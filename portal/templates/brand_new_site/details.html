@@ -804,9 +804,85 @@
     <!-- Main Content -->
     <main class="dashboard-main">
       <div id="detailContent" class="detail-container">
-        <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
-          <p>Loading opportunity details...</p>
+        {% if vacancy %}
+        <div class="detail-header {% if vacancy.type == 'job' %}detail-header-work{% endif %}">
+          <div class="detail-top">
+            <div class="detail-logo">{{ vacancy.company_name.0 }}</div>
+            <div class="detail-header-text">
+              <h1>{{ vacancy.title }}</h1>
+              <p>{{ vacancy.company_name }}</p>
+            </div>
+          </div>
+          <span class="detail-badge">{% if vacancy.type == 'job' %}Job{% else %}Internship{% endif %}</span>
         </div>
+        <div class="detail-content">
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/></svg>
+              Overview
+            </h3>
+            <p class="detail-overview">{{ vacancy.description }}</p>
+          </div>
+
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+              Details
+            </h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <div class="detail-item-label">Salary/Hourly</div>
+                <div class="detail-item-value">{{ vacancy.salary }}</div>
+              </div>
+              {% if vacancy.duration %}
+              <div class="detail-item">
+                <div class="detail-item-label">Duration</div>
+                <div class="detail-item-value">{{ vacancy.duration }}</div>
+              </div>
+              {% endif %}
+              <div class="detail-item">
+                <div class="detail-item-label">Location</div>
+                <div class="detail-item-value">{{ vacancy.location }}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-item-label">Email</div>
+                <div class="detail-item-value"><a href="mailto:{{ vacancy.email }}" style="color: inherit; text-decoration: none;">{{ vacancy.email }}</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+              Requirements
+            </h3>
+            <ul class="detail-list">
+              <li>{{ vacancy.requirements }}</li>
+            </ul>
+          </div>
+
+          {% if vacancy.responsibilities %}
+          <div class="detail-section">
+            <h3 class="detail-section-title">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
+              Responsibilities
+            </h3>
+            <ul class="detail-list">
+              <li>{{ vacancy.responsibilities }}</li>
+            </ul>
+          </div>
+          {% endif %}
+
+          <div class="detail-actions">
+            <a href="{% url 'dashboard' %}" class="action-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; flex: 1;">Back</a>
+            <button class="action-btn primary" style="flex: 1;">Apply Now</button>
+          </div>
+        </div>
+        {% else %}
+        <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
+          <p>No opportunity selected. <a href="{% url 'dashboard' %}" style="color: var(--primary);">Go back</a></p>
+        </div>
+        {% endif %}
       </div>
     </main>
 
@@ -818,176 +894,6 @@
 
   <div class="toast-container" id="toastContainer"></div>
 
-  <script>
-    // Show toast notification
-    function showToast(message, type = 'info') {
-      const toastContainer = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      const color = type === 'success' ? '#10B981' : '#FF5252';
-      toast.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"></polyline>
-        </svg>
-        <span>${message}</span>
-      `;
-      toastContainer.appendChild(toast);
-      setTimeout(() => {
-        toast.remove();
-      }, 3000);
-    }
 
-    // Parallax effect
-    const parallaxLayer = document.getElementById('parallaxLayer');
-    let particles = [];
-    if (parallaxLayer) {
-      particles = Array.from(parallaxLayer.querySelectorAll('.particle'));
-    }
-
-    let mouseX = 0;
-    let mouseY = 0;
-    let isParallaxRunning = false;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX / window.innerWidth;
-      mouseY = e.clientY / window.innerHeight;
-      
-      if (!isParallaxRunning) {
-        requestAnimationFrame(updateParallax);
-        isParallaxRunning = true;
-      }
-    });
-
-    function updateParallax() {
-      particles.forEach((particle, idx) => {
-        const speed = (idx + 1) * 2;
-        const offsetX = mouseX * speed * 20;
-        const offsetY = mouseY * speed * 20;
-        particle.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      });
-      isParallaxRunning = false;
-    }
-
-    // Load and render details
-    async function loadDetails() {
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
-
-      if (!id) {
-        document.getElementById('detailContent').innerHTML = `
-          <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
-            <p>No opportunity selected. <a href="{% url 'dashboard' %}" style="color: var(--primary);">Go back</a></p>
-          </div>
-        `;
-        return;
-      }
-
-      try {
-        const response = await fetch("{% static 'brand_new_site/dashboard.json' %}");
-        if (!response.ok) throw new Error('Failed to fetch data');
-        const data = await response.json();
-        const item = data.find(i => i.id === id);
-        
-        if (!item) {
-          throw new Error('Opportunity not found');
-        }
-        renderDetail(item);
-      } catch (error) {
-        document.getElementById('detailContent').innerHTML = `
-          <div style="text-align: center; padding: 60px; color: var(--text-secondary);">
-            <p>Error loading opportunity details. <a href="{% url 'dashboard' %}" style="color: var(--primary);">Go back</a></p>
-          </div>
-        `;
-      }
-    }
-
-    function renderDetail(item) {
-      const isWork = item.category === 'work';
-      const headerGradient = isWork ? 'detail-header-work' : '';
-
-      const requirementsHTML = item.requirements.map(req =>
-        `<li>${req}</li>`
-      ).join('');
-
-      const responsibilitiesHTML = item.responsibilities.map(resp =>
-        `<li>${resp}</li>`
-      ).join('');
-
-      const detailContent = document.getElementById('detailContent');
-      detailContent.innerHTML = `
-        <div class="detail-header ${headerGradient}">
-          <div class="detail-top">
-            <div class="detail-logo">${item.company.charAt(0)}</div>
-            <div class="detail-header-text">
-              <h1>${item.jobRole}</h1>
-              <p>${item.company}</p>
-            </div>
-          </div>
-          <span class="detail-badge">${item.categoryLabel}</span>
-        </div>
-        <div class="detail-content">
-          <div class="detail-section">
-            <h3 class="detail-section-title">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/></svg>
-              Overview
-            </h3>
-            <p class="detail-overview">${item.overview}</p>
-          </div>
-
-          <div class="detail-section">
-            <h3 class="detail-section-title">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
-              Details
-            </h3>
-            <div class="detail-grid">
-              <div class="detail-item">
-                <div class="detail-item-label">Salary/Hourly</div>
-                <div class="detail-item-value">${item.salary}</div>
-              </div>
-              <div class="detail-item">
-                <div class="detail-item-label">Duration</div>
-                <div class="detail-item-value">${item.duration}</div>
-              </div>
-              <div class="detail-item">
-                <div class="detail-item-label">Location</div>
-                <div class="detail-item-value">${item.location}</div>
-              </div>
-              <div class="detail-item">
-                <div class="detail-item-label">Email</div>
-                <div class="detail-item-value"><a href="mailto:${item.email}" style="color: inherit; text-decoration: none;">${item.email}</a></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="detail-section">
-            <h3 class="detail-section-title">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
-              Requirements
-            </h3>
-            <ul class="detail-list">
-              ${requirementsHTML}
-            </ul>
-          </div>
-
-          <div class="detail-section">
-            <h3 class="detail-section-title">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg>
-              Responsibilities
-            </h3>
-            <ul class="detail-list">
-              ${responsibilitiesHTML}
-            </ul>
-          </div>
-
-          <div class="detail-actions">
-            <a href="{% url 'dashboard' %}" class="action-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; flex: 1;">Back</a>
-            <button class="action-btn primary" style="flex: 1;">Apply Now</button>
-          </div>
-        </div>
-      `;
-    }
-
-    document.addEventListener('DOMContentLoaded', loadDetails);
-  </script>
 </body>
 </html>
