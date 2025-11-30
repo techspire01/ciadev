@@ -102,7 +102,7 @@
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <div id="mobileMenu" class="lg:hidden hidden">
+    <div id="mobileMenu" class="lg:hidden hidden mobile-menu-overlay">
       <div class="mobile-panel">
         <!-- Mobile Menu Content -->
         <div class="flex flex-col h-full">
@@ -147,24 +147,24 @@
 
             <!-- Navigation Links -->
             <nav class="space-y-1">
-              <a href="{% url 'index' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'index' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-home w-5"></i>
                 <span class="font-medium">Home</span>
               </a>
-              <a href="{% url 'about' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'about' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-info-circle w-5"></i>
                 <span class="font-medium">About</span>
               </a>
-              <a href="{% url 'category' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'category' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-th-large w-5"></i>
                 <span class="font-medium">Categories</span>
               </a>
-              <a href="{% url 'suppliers' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'suppliers' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-building w-5"></i>
                 <span class="font-medium">Suppliers</span>
               </a>
               {% if user.is_authenticated %}
-              <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'profile' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-user-circle w-5"></i>
                 <span class="font-medium">My Profile</span>
               </a>

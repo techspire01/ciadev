@@ -61,6 +61,8 @@ html {
   transition: all 0.3s ease-in-out;
   -webkit-backdrop-filter: blur(10px); /* Safari 9+, iOS 9+ */
   backdrop-filter: blur(10px);
+  z-index: 999;
+  position: relative;
 }
 
 .fixed-header:hover {
@@ -1741,48 +1743,96 @@ a:focus-visible {
    RESPONSIVE MOBILE-FIRST UTILITIES
    ============================================ */
 
-/* Mobile Navigation Drawer */
-.mobile-panel {
-  position: fixed;
+/* Mobile Navigation Overlay Container */
+.mobile-menu-overlay {
+  position: fixed !important;
   top: 0;
   left: 0;
-  width: 280px;
+  right: 0;
+  bottom: 0;
+  z-index: 9999 !important;
+  display: flex !important;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.5);
+  animation: fadeInOverlay 0.3s ease-out;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.mobile-menu-overlay.hidden {
+  display: none !important;
+  z-index: -1;
+}
+
+/* Mobile Navigation Drawer */
+.mobile-panel {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 85vw;
+  max-width: 320px;
   height: 100vh;
-  background: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
+  height: 100dvh;
+  background: #ffffff;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+  z-index: 10000 !important;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  animation: slideIn 0.3s ease-out;
+  overflow-x: hidden;
+  animation: slideInPanel 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  -webkit-overflow-scrolling: touch;
 }
 
-@keyframes slideIn {
+@keyframes slideInPanel {
   from {
     transform: translateX(-100%);
+    opacity: 0;
   }
   to {
     transform: translateX(0);
+    opacity: 1;
   }
 }
 
-/* Mobile Menu Overlay */
-#mobileMenu.active::before {
+.mobile-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.mobile-panel::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+  border-radius: 3px;
+}
+
+.mobile-panel::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Mobile Menu Overlay Fade */
+#mobileMenu.active::before,
+.mobile-menu-overlay::before {
   content: '';
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9998;
-  animation: fadeIn 0.3s ease-out;
+  z-index: 9998 !important;
+  animation: fadeInOverlay 0.3s ease-out;
+  pointer-events: auto;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+#mobileMenu.active::before {
+  display: none;
 }
 
 /* Hamburger Menu Animation */

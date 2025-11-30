@@ -466,10 +466,49 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileProductsBtn = document.getElementById('mobileProductsBtn');
     const mobileProductsMenu = document.getElementById('mobileProductsMenu');
 
+    // Function to close mobile menu
+    function closeMobileMenu() {
+        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+            if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }
+    }
+
     if (mobileMenuBtn && mobileMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-            mobileMenuBtn.classList.toggle('active');
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isHidden = mobileMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                // Show menu
+                mobileMenu.classList.remove('hidden');
+                mobileMenuBtn.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+            } else {
+                // Hide menu
+                closeMobileMenu();
+            }
+        });
+        
+        // Add click handler to overlay to close menu
+        mobileMenu.addEventListener('click', function(e) {
+            // Only close if clicking on the overlay, not the panel
+            if (e.target === mobileMenu) {
+                closeMobileMenu();
+            }
+        });
+        
+        // Close menu when clicking on any menu link
+        const mobileMenuLinks = mobileMenu.querySelectorAll('.mobile-menu-link');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                closeMobileMenu();
+            });
         });
     }
 
@@ -490,8 +529,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close mobile menu when clicking outside
     document.addEventListener('click', function(event) {
         if (mobileMenu && !mobileMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
-            mobileMenu.classList.add('hidden');
-            mobileMenuBtn.classList.remove('active');
+            closeMobileMenu();
         }
     });
 
