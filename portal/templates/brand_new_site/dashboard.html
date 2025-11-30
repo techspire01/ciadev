@@ -1336,6 +1336,41 @@
         overflow-wrap: break-word;
       }
     }
+
+    /* Override footer to match dashboard theme */
+    footer {
+      background: rgba(255, 251, 240, 0.95) !important;
+      border-top: 2px solid rgba(245, 158, 11, 0.1) !important;
+      color: var(--gray) !important;
+    }
+
+    footer a {
+      color: var(--gray) !important;
+    }
+
+    footer a:hover {
+      color: var(--blue) !important;
+    }
+
+    footer .text-yellow-600 {
+      color: var(--blue) !important;
+    }
+
+    footer .hover\:text-yellow-600:hover {
+      color: var(--blue) !important;
+    }
+
+    footer .bg-gray-100 {
+      background: rgba(255, 251, 240, 0.95) !important;
+    }
+
+    footer .border-gray-100 {
+      border-color: rgba(245, 158, 11, 0.1) !important;
+    }
+
+    footer .text-gray-500 {
+      color: var(--gray) !important;
+    }
   </style>
 
 <div class="bg-container">
@@ -1503,7 +1538,7 @@
           </div>
           <div class="card-actions">
             <button class="action-btn" onclick="openDetailView('${item.id}')">Details</button>
-            <button class="action-btn primary">Apply Now</button>
+            <button class="action-btn primary" onclick="applyForPosition('${item.id}', '${item.category}')">Apply Now</button>
           </div>
         `;
         elements.cardsGrid.appendChild(card);
@@ -1514,6 +1549,15 @@
     function openDetailView(itemId) {
       const item = state.allData.find(item => item.id == itemId);
       window.location.href = `{% url 'details' %}?id=${itemId}&type=${item.category}`;
+    }
+
+    // Apply for position - Navigate to application form
+    function applyForPosition(itemId, category) {
+      if (category === 'internship') {
+        window.location.href = `/internship/${itemId}/apply/`;
+      } else if (category === 'job') {
+        window.location.href = `/job/${itemId}/apply/`;
+      }
     }
 
     // Update counter

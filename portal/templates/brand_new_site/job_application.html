@@ -1,0 +1,727 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    :root {
+      --blue: #F59E0B;
+      --red: #D97706;
+      --gold: #FCD34D;
+      --dark: #78350F;
+      --white: #FFFFFF;
+      --light-bg: #FFFBF0;
+      --gray: #92400E;
+      --shadow: 0 8px 20px rgba(245,158,11,0.1);
+      --shadow-lg: 0 12px 30px rgba(245,158,11,0.15);
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background: #FFFBF0;
+      color: var(--dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Industrial Background Video */
+    .bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: #FFFBF0;
+      overflow: hidden;
+    }
+
+    .bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.3;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 251, 240, 0.7) 0%, rgba(255, 245, 230, 0.6) 50%, rgba(255, 251, 240, 0.8) 100%);
+      pointer-events: none;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      25% { transform: translateY(-10px); }
+      50% { transform: translateY(-5px); }
+      75% { transform: translateY(-8px); }
+    }
+
+    /* New Keyframe Animation: Hero Title Entrance */
+    @keyframes fadeInDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* New Keyframe Animation: Fade In and Slide Up */
+    @keyframes fadeInSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .parallax-layer {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--blue);
+      border-radius: 50%;
+      animation: particle-float 4s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { width: 8px; height: 8px; top: 10%; left: 20%; animation-delay: 0s; }
+    .particle:nth-child(2) { width: 12px; height: 12px; top: 30%; left: 60%; animation-delay: 1s; }
+    .particle:nth-child(3) { width: 6px; height: 6px; top: 50%; left: 80%; animation-delay: 2s; }
+    .particle:nth-child(4) { width: 10px; height: 10px; top: 70%; left: 30%; animation-delay: 1.5s; }
+    .particle:nth-child(5) { width: 8px; height: 8px; top: 20%; left: 90%; animation-delay: 0.5s; }
+
+    @keyframes particle-float {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-20px) translateX(10px); }
+    }
+
+    /* Main content wrapper */
+    .application-wrapper {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header/Navigation */
+    .application-header {
+      background: rgba(255, 251, 240, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid rgba(245, 158, 11, 0.1);
+      padding: 20px 40px;
+      box-shadow: var(--shadow);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-sizing: border-box;
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      font-size: 24px;
+    }
+
+    .header-logo img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0;
+    }
+
+    .header-subtitle {
+      font-size: 12px;
+      color: var(--gray);
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-link {
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--blue);
+    }
+
+    /* Main content area */
+    .application-main {
+      flex: 1;
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      align-items: center;
+    }
+
+    /* Hero section */
+    .hero-section {
+      margin-bottom: 50px;
+      animation: fadeInDown 0.8s ease;
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0 auto 10px auto;
+      background: linear-gradient(135deg, var(--dark), var(--gray));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--gray);
+      margin: 0 auto;
+      max-width: 600px;
+      line-height: 1.6;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Application form */
+    .application-form {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      width: 100%;
+      animation: fadeInSlideUp 0.8s ease 0.2s both;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-title svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--blue);
+      stroke-width: 2;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--dark);
+      background: white;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-file {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      background: white;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-file:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: var(--shadow);
+    }
+
+    .file-input-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 8px;
+      background: white;
+      color: var(--gray);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .file-input-button:hover {
+      border-color: var(--blue);
+      background: rgba(245, 158, 11, 0.05);
+      color: var(--blue);
+    }
+
+    .file-input-button svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: 2px solid var(--blue);
+      background: white;
+      color: var(--blue);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: rgba(245, 158, 11, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .btn.primary {
+      background: var(--blue);
+      color: white;
+      border-color: var(--blue);
+    }
+
+    .btn.primary:hover {
+      background: var(--red);
+      border-color: var(--red);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    .application-footer {
+      background: rgba(255, 251, 240, 0.95);
+      border-top: 2px solid rgba(245, 158, 11, 0.1);
+      padding: 30px 40px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--gray);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .application-main {
+        padding: 40px 20px;
+      }
+
+      .application-form {
+        padding: 30px 20px;
+      }
+
+      .hero-title {
+        font-size: 36px;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .application-header {
+        padding: 15px 20px;
+      }
+
+      .header-content {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .header-nav {
+        gap: 15px;
+      }
+
+      .application-main {
+        padding: 30px 15px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+      }
+
+      .application-form {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+
+<div class="bg-container">
+    <video autoplay muted loop playsinline class="bg-video">
+      <source src="{% static 'brand_new_site/videos/background.mp4' %}" type="video/mp4">
+    </video>
+    <div class="bg-overlay"></div>
+    <div class="parallax-layer" id="parallaxLayer">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+  </div>
+
+  <div class="application-wrapper">
+    <header class="application-header">
+      <div class="header-content">
+        <div class="header-branding">
+          <div class="header-logo">CIA</div>
+          <div>
+            <h1 class="header-title">CIA Incubation Cell</h1>
+            <p class="header-subtitle">Empowering Innovation</p>
+          </div>
+        </div>
+        <nav class="header-nav">
+          <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="application-main">
+      <section class="hero-section">
+        <h1 class="hero-title">Job Application</h1>
+        <p class="hero-subtitle">Apply for exciting job opportunities and take the next step in your career.</p>
+      </section>
+
+      <form class="application-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Personal Information
+          </h2>
+
+          <div class="form-group">
+            <label for="full_name" class="form-label">Full Name *</label>
+            <input type="text" id="full_name" name="full_name" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address *</label>
+            <input type="email" id="email" name="email" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number *</label>
+            <input type="tel" id="phone" name="phone" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="address" class="form-label">Address</label>
+            <textarea id="address" name="address" class="form-textarea" placeholder="Your current address"></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+            Education & Experience
+          </h2>
+
+          <div class="form-group">
+            <label for="education" class="form-label">Highest Education *</label>
+            <select id="education" name="education" class="form-select" required>
+              <option value="">Select your highest education level</option>
+              <option value="high_school">High School</option>
+              <option value="associate">Associate Degree</option>
+              <option value="bachelor">Bachelor's Degree</option>
+              <option value="master">Master's Degree</option>
+              <option value="phd">PhD</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="major" class="form-label">Field of Study/Major</label>
+            <input type="text" id="major" name="major" class="form-input" placeholder="e.g., Computer Science, Business, Engineering">
+          </div>
+
+          <div class="form-group">
+            <label for="experience_years" class="form-label">Years of Experience *</label>
+            <select id="experience_years" name="experience_years" class="form-select" required>
+              <option value="">Select years of experience</option>
+              <option value="0">0 years (Entry Level)</option>
+              <option value="1-2">1-2 years</option>
+              <option value="3-5">3-5 years</option>
+              <option value="6-10">6-10 years</option>
+              <option value="10+">10+ years</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="current_position" class="form-label">Current Position/Title</label>
+            <input type="text" id="current_position" name="current_position" class="form-input" placeholder="Your current job title">
+          </div>
+
+          <div class="form-group">
+            <label for="current_company" class="form-label">Current Company</label>
+            <input type="text" id="current_company" name="current_company" class="form-input" placeholder="Your current employer">
+          </div>
+
+          <div class="form-group">
+            <label for="skills" class="form-label">Skills & Technologies</label>
+            <textarea id="skills" name="skills" class="form-textarea" placeholder="List your technical skills, programming languages, software proficiency, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+            Job Preferences
+          </h2>
+
+          <div class="form-group">
+            <label for="preferred_role" class="form-label">Preferred Role/Position</label>
+            <input type="text" id="preferred_role" name="preferred_role" class="form-input" placeholder="e.g., Software Engineer, Product Manager, Designer">
+          </div>
+
+          <div class="form-group">
+            <label for="employment_type" class="form-label">Employment Type *</label>
+            <select id="employment_type" name="employment_type" class="form-select" required>
+              <option value="">Select employment type</option>
+              <option value="full_time">Full-time</option>
+              <option value="part_time">Part-time</option>
+              <option value="contract">Contract</option>
+              <option value="freelance">Freelance</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="salary_expectation" class="form-label">Salary Expectation</label>
+            <input type="text" id="salary_expectation" name="salary_expectation" class="form-input" placeholder="e.g., $50,000 - $70,000 per year">
+          </div>
+
+          <div class="form-group">
+            <label for="availability_date" class="form-label">Available Start Date</label>
+            <input type="date" id="availability_date" name="availability_date" class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label for="work_authorization" class="form-label">Work Authorization Status *</label>
+            <select id="work_authorization" name="work_authorization" class="form-select" required>
+              <option value="">Select work authorization status</option>
+              <option value="us_citizen">US Citizen</option>
+              <option value="permanent_resident">Permanent Resident</option>
+              <option value="h1b">H1B Visa</option>
+              <option value="tn_visa">TN Visa</option>
+              <option value="other_visa">Other Visa</option>
+              <option value="need_sponsorship">Require Sponsorship</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            Documents & Cover Letter
+          </h2>
+
+          <div class="form-group">
+            <label class="file-input-label">Resume/CV *</label>
+            <div class="file-input-wrapper">
+              <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+              <div class="file-input-button">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+                Choose Resume File
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cover_letter" class="form-label">Cover Letter</label>
+            <textarea id="cover_letter" name="cover_letter" class="form-textarea" placeholder="Tell us why you're interested in this position and what makes you a great fit..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="portfolio_url" class="form-label">Portfolio/LinkedIn URL</label>
+            <input type="url" id="portfolio_url" name="portfolio_url" class="form-input" placeholder="https://linkedin.com/in/yourprofile or portfolio URL">
+          </div>
+
+          <div class="form-group">
+            <label for="additional_info" class="form-label">Additional Information</label>
+            <textarea id="additional_info" name="additional_info" class="form-textarea" placeholder="Any additional information you'd like to share (projects, achievements, certifications, etc.)"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn" onclick="window.history.back()">Cancel</button>
+          <button type="submit" class="btn primary">Submit Application</button>
+        </div>
+      </form>
+    </main>
+
+    <footer class="application-footer">
+      <p>&copy; 2024 CIA Incubation Cell. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Parallax effect on mouse move
+    document.addEventListener('mousemove', (e) => {
+      const parallaxLayer = document.getElementById('parallaxLayer');
+      if (parallaxLayer) {
+        const moveX = (e.clientX / window.innerWidth) * 10;
+        const moveY = (e.clientY / window.innerHeight) * 10;
+        parallaxLayer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      }
+    });
+
+    // File input handling
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const button = e.target.parentElement.querySelector('.file-input-button');
+        if (file) {
+          button.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+            ${file.name}
+          `;
+        }
+      });
+    });
+  </script>
+{% endblock %}
