@@ -134,7 +134,7 @@ def add_internship(request):
     try:
         data = json.loads(request.body)
         internship = PortalInternship.objects.create(
-            title=data['role'],
+            title=data['title'],
             company_name=data['company'],
             duration=data.get('duration', ''),
             salary=data.get('stipend', ''),
@@ -182,7 +182,7 @@ def update_internship(request, internship_id):
         internship = get_object_or_404(PortalInternship, id=internship_id)
         data = json.loads(request.body)
 
-        internship.title = data.get('role', internship.title)
+        internship.title = data.get('title', internship.title)
         internship.company_name = data.get('company', internship.company_name)
         internship.duration = data.get('duration', internship.duration)
         internship.salary = data.get('stipend', internship.salary)
@@ -320,7 +320,7 @@ def edit_internship(request, id):
     internship = get_object_or_404(PortalInternship, id=id)
 
     if request.method == 'POST':
-        internship.title = request.POST.get('role')
+        internship.title = request.POST.get('title')
         internship.company_name = request.POST.get('company')
         internship.duration = request.POST.get('duration')
         internship.salary = request.POST.get('stipend')
