@@ -496,17 +496,32 @@
       white-space: nowrap;
     }
 
-    .card-rating {
+    .card-requirements {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 12px;
+      color: var(--dark);
     }
 
-    .rating-stars {
-      color: #FCD34D;
+    .card-duration-location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .card-duration-location svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--gray);
+      stroke-width: 2;
+      flex-shrink: 0;
     }
 
     .card-actions {
@@ -1382,18 +1397,17 @@
             <p class="card-description" onclick="openDetailView('${item.id}')">${item.description}</p>
             <div class="card-location">
               <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
-              ${item.location}
+              ${item.category === 'internship' ? item.package : item.location}
             </div>
-            <div class="card-email">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M3 8v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8"/></svg>
-              <a href="mailto:${item.email}" onclick="event.stopPropagation()">${item.email}</a>
+            <div class="card-duration-location">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
+              ${item.category === 'internship' ? item.duration : item.package}
             </div>
             <div class="card-tags">
               ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
             </div>
-            <div class="card-rating">
-              <span class="rating-stars">${'★'.repeat(Math.floor(item.rating))}</span>
-              <span>${item.rating}/5.0</span>
+            <div class="card-requirements">
+              <span>Requirements: ${item.requirements}</span>
             </div>
           </div>
           <div class="card-actions">
@@ -1465,10 +1479,10 @@
           categoryLabel: item.type.charAt(0).toUpperCase() + item.type.slice(1),
           company: item.company_name,
           description: item.job_description,
-          location: 'N/A',
-          email: 'N/A',
+          location: item.location || 'N/A',
+          duration: item.duration || 'N/A',
+          requirements: item.requirements || 'N/A',
           tags: [],
-          rating: 0,
           jobRole: item.role,
           package: item.package
         }));

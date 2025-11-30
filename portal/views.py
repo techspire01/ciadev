@@ -19,7 +19,10 @@ def dashboard(request):
             'company_name': internship.company_name,
             'package': internship.salary,
             'job_description': internship.description,
-            'type': 'internship'
+            'type': 'internship',
+            'requirements': internship.requirements,
+            'duration': internship.duration,
+            'location': internship.location
         })
 
     for job in jobs:
@@ -28,7 +31,9 @@ def dashboard(request):
             'company_name': job.company_name,
             'package': job.salary,
             'job_description': job.description,
-            'type': 'job'
+            'type': 'job',
+            'requirements': job.requirements,
+            'location': job.location
         })
 
     context = {'vacancies': vacancies}
@@ -49,7 +54,10 @@ def internship_job(request):
             'company_name': internship.company_name,
             'package': internship.salary,
             'job_description': internship.description,
-            'type': 'internship'
+            'type': 'internship',
+            'requirements': internship.requirements,
+            'duration': internship.duration,
+            'location': internship.location
         })
 
     for job in jobs:
@@ -58,7 +66,9 @@ def internship_job(request):
             'company_name': job.company_name,
             'package': job.salary,
             'job_description': job.description,
-            'type': 'job'
+            'type': 'job',
+            'requirements': job.requirements,
+            'location': job.location
         })
 
     context = {'vacancies': vacancies}
@@ -82,7 +92,10 @@ def brand_new_site_dashboard(request):
             'company_name': internship.company_name,
             'package': internship.salary,
             'job_description': internship.description,
-            'type': 'internship'
+            'type': 'internship',
+            'requirements': internship.requirements,
+            'duration': internship.duration,
+            'location': internship.location
         })
 
     for job in jobs:
@@ -127,6 +140,7 @@ def add_internship(request):
             salary=data.get('stipend', ''),
             description=data.get('description', ''),
             email=data.get('email', ''),
+            location=data.get('location', ''),
             requirements=data.get('requirements', ''),
             responsibilities=data.get('responsibilities', '')
         )
@@ -154,6 +168,7 @@ def get_internships(request):
             'email': internship.email,
             'requirements': internship.requirements,
             'responsibilities': internship.responsibilities,
+            'location': internship.location,
             'is_active': internship.is_active,
             'posted_date': internship.posted_date.strftime('%Y-%m-%d')
         })
@@ -175,6 +190,7 @@ def update_internship(request, internship_id):
         internship.email = data.get('email', internship.email)
         internship.requirements = data.get('requirements', internship.requirements)
         internship.responsibilities = data.get('responsibilities', internship.responsibilities)
+        internship.location = data.get('location', internship.location)
         internship.save()
 
         return JsonResponse({
@@ -312,6 +328,7 @@ def edit_internship(request, id):
         internship.description = request.POST.get('description')
         internship.requirements = request.POST.get('requirements')
         internship.responsibilities = request.POST.get('responsibilities')
+        internship.location = request.POST.get('location')
         internship.save()
         return redirect('job_portal_admin')
 

@@ -181,13 +181,14 @@ function getCSRFToken() {
 }
 
 // Edit Internship Modal Functions
-function openEditModal(id, title, company, duration, stipend, email, description, requirements, responsibilities) {
+function openEditModal(id, title, company, duration, stipend, email, location, description, requirements, responsibilities) {
     document.getElementById('edit-id').value = id;
     document.getElementById('edit-role').value = title;
     document.getElementById('edit-company').value = company;
     document.getElementById('edit-duration').value = duration;
     document.getElementById('edit-stipend').value = stipend;
     document.getElementById('edit-email').value = email;
+    document.getElementById('edit-location').value = location;
     document.getElementById('edit-description').value = description;
     document.getElementById('edit-requirements').value = requirements;
     document.getElementById('edit-responsibilities').value = responsibilities;
