@@ -2,8 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
+from django.contrib import messages
 import json
-from .models import PortalInternship, PortalJob
+from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
 
 # Create your views here.
 
@@ -351,3 +352,74 @@ def toggle_job(request, id):
     job.is_active = not job.is_active
     job.save()
     return redirect('job_portal_admin')
+
+def internship_application(request, internship_id):
+    """Handle internship application form"""
+    internship = get_object_or_404(PortalInternship, id=internship_id, is_active=True)
+
+    if request.method == 'POST':
+        try:
+            application = InternshipApplication.objects.create(
+                internship=internship,
+                full_name=request.POST.get('full_name'),
+                email=request.POST.get('email'),
+                phone=request.POST.get('phone'),
+                address=request.POST.get('address', ''),
+                education=request.POST.get('education'),
+                major=request.POST.get('major', ''),
+                skills=request.POST.get('skills', ''),
+                preferred_role=request.POST.get('preferred_role', ''),
+                availability=request.POST.get('availability'),
+                duration=request.POST.get('duration', ''),
+                start_date=request.POST.get('start_date') or None,
+                resume=request.FILES.get('resume'),
+                cover_letter=request.POST.get('cover_letter', ''),
+                additional_info=request.POST.get('additional_info', '')
+            )
+            messages.success(request, 'Your internship application has been submitted successfully!')
+            return redirect('dashboard')
+        except Exception as e:
+            messages.error(request, f'Error submitting application: {str(e)}')
+
+    context = {
+        'internship': internship
+    }
+    return render(request, 'brand_new_site/internship_application.html', context)
+
+def job_application(request, job_id):
+    """Handle job application form"""
+    job = get_object_or_404(PortalJob, id=job_id, is_active=True)
+
+    if request.method == 'POST':
+        try:
+            application = JobApplication.objects.create(
+                job=job,
+                full_name=request.POST.get('full_name'),
+                email=request.POST.get('email'),
+                phone=request.POST.get('phone'),
+                address=request.POST.get('address', ''),
+                education=request.POST.get('education'),
+                major=request.POST.get('major', ''),
+                experience_years=request.POST.get('experience_years'),
+                current_position=request.POST.get('current_position', ''),
+                current_company=request.POST.get('current_company', ''),
+                skills=request.POST.get('skills', ''),
+                preferred_role=request.POST.get('preferred_role', ''),
+                employment_type=request.POST.get('employment_type'),
+                salary_expectation=request.POST.get('salary_expectation', ''),
+                availability_date=request.POST.get('availability_date') or None,
+                work_authorization=request.POST.get('work_authorization'),
+                resume=request.FILES.get('resume'),
+                cover_letter=request.POST.get('cover_letter', ''),
+                portfolio_url=request.POST.get('portfolio_url', ''),
+                additional_info=request.POST.get('additional_info', '')
+            )
+            messages.success(request, 'Your job application has been submitted successfully!')
+            return redirect('dashboard')
+        except Exception as e:
+            messages.error(request, f'Error submitting application: {str(e)}')
+
+    context = {
+        'job': job
+    }
+    return render(request, 'brand_new_site/job_application.html', context)
