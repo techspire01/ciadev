@@ -40,11 +40,12 @@
               type="text"
               id="searchInput"
               placeholder="Search..!!"
-              class="w-40 py-2 px-3 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent pr-10 shadow-md search-box"
+              class="w-40 py-2 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
             />
             <button
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-yellow-700 hover:text-yellow-800"
+              class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-3 pl-2"
               title="Search"
+              type="button"
             >
               <i class="fas fa-search"></i>
             </button>
@@ -83,8 +84,8 @@
             >CIA Networks</a>
           <!-- Language Translation Buttons -->
           <div class="flex items-center space-x-1">
-            <button id="translate-en" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition active">EN</button>
-            <button id="translate-ta" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition">TA</button>
+            <button id="translate-en" class="translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md">EN</button>
+            <button id="translate-ta" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md">TA</button>
           </div>
         </div>
 
@@ -136,13 +137,19 @@
             <!-- Mobile Search Bar -->
             <div class="relative mb-6">
               <input
-                type="text"
-                placeholder="Search CIA Networks..."
-                class="w-full py-3 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
+              type="text"
+              id="searchInput"
+              placeholder="Search..!!"
+              class="w-40 py-2 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
               />
-              <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-yellow-700 hover:text-yellow-800 text-lg" title="Search">
-                <i class="fas fa-search"></i>
-              </button>
+                <button
+                  class="absolute right-0 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-end pr-3"
+                  title="Search"
+                  type="button"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              <div id="searchResults" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-60 max-h-80 overflow-y-auto hidden"></div>
             </div>
 
             <!-- Navigation Links -->
@@ -185,11 +192,11 @@
                 <!-- Language toggle (desktop version embedded here) -->
                 <div class="flex items-center space-x-1">
                   <button id="translate-en-mobile" 
-                          class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition active">
+                          class="translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md">
                     EN
                   </button>
                   <button id="translate-ta-mobile" 
-                          class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition">
+                          class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md">
                     TA
                   </button>
                 </div>
@@ -275,22 +282,86 @@
           const lang = id.includes('ta') ? 'ta' : 'en';
           console.log('Button clicked:', id, 'Language:', lang);
           setLanguage(lang);
+          updateLanguageButtonStyles(lang);
         });
       }
     });
+  }
+
+  function updateLanguageButtonStyles(lang) {
+    const enBtns = ['#translate-en', '#translate-en-mobile'];
+    const taBtns = ['#translate-ta', '#translate-ta-mobile'];
+    
+    if (lang === 'en') {
+      // EN is active - yellow, TA is inactive - gray
+      enBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md';
+        }
+      });
+      taBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md';
+        }
+      });
+    } else {
+      // TA is active - orange, EN is inactive - gray
+      taBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600 transition active shadow-md';
+        }
+      });
+      enBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md';
+        }
+      });
+    }
   }
 
   // run once after DOM ready
   document.addEventListener('DOMContentLoaded', () => {
     // Initial attachment
     attachTranslateHandlers();
+    
+    // Initialize button styles based on saved language
+    const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+    updateLanguageButtonStyles(savedLang);
 
     // 🧠 Watch for new buttons in mobile menu after toggle
     const observer = new MutationObserver(() => attachTranslateHandlers());
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // 🕐 re-run binding after mobile menu toggle delay
+    // Mobile menu toggle functionality
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        mobileMenu.classList.toggle('show');
+        
+        // Toggle hamburger animation
+        const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+        lines.forEach(line => line.classList.toggle('active'));
+      });
+
+      // Close menu when a link is clicked
+      const menuLinks = mobileMenu.querySelectorAll('a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('show');
+          const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+          lines.forEach(line => line.classList.remove('active'));
+        });
+      });
+    }
+
+    // 🕐 re-run binding after mobile menu toggle delay
     if (mobileMenuBtn) {
       mobileMenuBtn.addEventListener('click', () => {
         setTimeout(attachTranslateHandlers, 400);
