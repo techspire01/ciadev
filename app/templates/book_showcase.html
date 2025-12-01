@@ -118,14 +118,16 @@
     <script>
         /* eslint-disable */
         let currentBookImageIndex = 0;
+        /* eslint-disable */
         const bookImages = [
             {% for photo in book_photos %}
             {
-                url: "{{ photo.image_url|default:photo.image.url|default:'' }}",
+                url: "{% if photo.image_url %}{{ photo.image_url }}{% elif photo.image %}{{ photo.image.url }}{% endif %}",
                 title: "{{ photo.title|default:'Untitled' }}"
             }{% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
+        /* eslint-enable */
         /* eslint-enable */
 
         // Add click handlers to gallery items
