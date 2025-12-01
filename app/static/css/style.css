@@ -3,6 +3,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Default site font - will be overridden by template-level setting when provided */
+html, body, input, textarea, select, button {
+  font-family: 'Times New Roman', Times, serif;
+}
+
 /* Import translate-specific styles */
 @import url('translate.css');
 

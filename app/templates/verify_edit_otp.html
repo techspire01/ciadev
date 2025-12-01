@@ -465,6 +465,9 @@
             <form method="POST" class="space-y-4 sm:space-y-6">
                 {% csrf_token %}
                 
+                <!-- Hidden user ID field for session persistence -->
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                
                 <div class="input-group">
                     <input 
                         type="text" 

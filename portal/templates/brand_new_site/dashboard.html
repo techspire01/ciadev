@@ -1,13 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CIA Next — Career Opportunities</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="https://cdn.builder.io/api/v1/image/assets%2Fa180d3e502ea4bf0922bba9c817ddbe4%2F13a5568b42344d13af0dc08dfaf227ab?format=webp&width=800" />
-  <style>
+
+{% block content %}
+<style>
     :root {
       --blue: #F59E0B;
       --red: #D97706;
@@ -27,7 +22,7 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Times New Roman', Times, serif;
       background: #FFFBF0;
       color: var(--dark);
       overflow-x: hidden;
@@ -496,17 +491,46 @@
       white-space: nowrap;
     }
 
-    .card-rating {
+    .card-requirements {
       display: flex;
       align-items: center;
       gap: 8px;
       margin-top: 15px;
       padding-top: 15px;
       border-top: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 12px;
+      color: var(--dark);
     }
 
-    .rating-stars {
-      color: #FCD34D;
+    .card-duration-location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .card-duration-location svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--gray);
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .card-experience {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .card-experience::before {
+      content: '💼';
+      font-size: 14px;
     }
 
     .card-actions {
@@ -853,6 +877,79 @@
 
     .card-company:hover {
       color: var(--red);
+    }
+
+    /* Search Bar in Hero */
+    .search-bar-container {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .header-search {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .header-search svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--blue);
+      stroke-width: 2;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .header-search input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      color: var(--dark);
+      font-family: 'Poppins', sans-serif;
+      outline: none;
+    }
+
+    .header-search input::placeholder {
+      color: #c4b5a0;
+    }
+
+    /* Location Filter */
+    .location-filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .location-filter-dropdown {
+      padding: 8px 12px;
+      border: 2px solid var(--blue);
+      border-radius: 8px;
+      background: white;
+      color: var(--dark);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .location-filter-dropdown:hover {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: var(--red);
+    }
+
+    .location-filter-dropdown:focus {
+      outline: none;
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
     }
 
     /* Responsive */
@@ -1239,10 +1336,44 @@
         overflow-wrap: break-word;
       }
     }
+
+    /* Override footer to match dashboard theme */
+    footer {
+      background: rgba(255, 251, 240, 0.95) !important;
+      border-top: 2px solid rgba(245, 158, 11, 0.1) !important;
+      color: var(--gray) !important;
+    }
+
+    footer a {
+      color: var(--gray) !important;
+    }
+
+    footer a:hover {
+      color: var(--blue) !important;
+    }
+
+    footer .text-yellow-600 {
+      color: var(--blue) !important;
+    }
+
+    footer .hover\:text-yellow-600:hover {
+      color: var(--blue) !important;
+    }
+
+    footer .bg-gray-100 {
+      background: rgba(255, 251, 240, 0.95) !important;
+    }
+
+    footer .border-gray-100 {
+      border-color: rgba(245, 158, 11, 0.1) !important;
+    }
+
+    footer .text-gray-500 {
+      color: var(--gray) !important;
+    }
   </style>
-</head>
-<body>
-  <div class="bg-container">
+
+<div class="bg-container">
     <video autoplay muted loop playsinline class="bg-video">
       <source src="{% static 'brand_new_site/videos/background.mp4' %}" type="video/mp4">
     </video>
@@ -1257,27 +1388,24 @@
   </div>
 
   <div class="dashboard-wrapper">
-    <header class="dashboard-header">
-      <div class="header-content">
-        <a href="{% url 'index' %}" class="header-branding">
-          <div class="header-logo">
-            <img src="{% static 'images/CIA logo.png' %}" alt="CIA logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
-          </div>
-          <div>
-            <h1 class="header-title">CIA<span style="color: #b45309;">next</span></h1>
-          </div>
-        </a>
-        <div class="header-search">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <input type="text" id="searchInput" placeholder="Search internships, jobs..." />
-        </div>
-      </div>
-    </header>
-
+    {% if error %}
+    <div style="text-align: center; padding: 60px; color: var(--dark);">
+      <p>Error loading data: {{ error }}</p>
+    </div>
+    {% else %}
     <main class="dashboard-main">
       <section class="hero-section">
         <h1 class="hero-title">Talent Discovery</h1>
         <p class="hero-subtitle">Explore the latest internships and job openings from trusted companies.</p>
+        
+        <!-- Search Bar 
+        <div class="search-bar-container">
+          <div class="header-search">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input type="text" id="searchInput" placeholder="Search internships, jobs..." />
+          </div>
+        </div>
+        -->
       </section>
 
       <section class="filter-section">
@@ -1285,10 +1413,22 @@
           <span class="filter-label">Filter by:</span>
           <button class="filter-button active" data-filter="all">All</button>
           <button class="filter-button" data-filter="internship">Internships</button>
-          <button class="filter-button" data-filter="work">Jobs</button>
+          <button class="filter-button" data-filter="job">Jobs</button>
         </div>
+        
+        <!-- Location Filter -->
+        <div class="location-filter-group">
+          <label for="locationFilter" class="filter-label">Location:</label>
+          <select id="locationFilter" class="location-filter-dropdown">
+            <option value="">All Locations</option>
+            {% for location in locations %}
+            <option value="{{ location }}">{{ location }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
         <div class="counter-info">
-          <span id="itemCounter">8</span> opportunities found
+          <span id="itemCounter">{{ vacancies|length }}</span> opportunities found
         </div>
       </section>
 
@@ -1302,11 +1442,9 @@
         <p class="empty-state-desc">Try adjusting your search filters</p>
       </div>
     </main>
-
-    <footer class="dashboard-footer">
-      <p>&copy; 2025 CIA Next - Career Portal. All rights reserved.</p>
-    </footer>
+    {% endif %}
   </div>
+  
 
   <div class="detail-modal" id="detailModal">
     <div class="detail-container" id="detailContainer">
@@ -1321,7 +1459,8 @@
       allData: [],
       filteredData: [],
       currentFilter: 'all',
-      searchQuery: ''
+      searchQuery: '',
+      selectedLocation: ''
     };
 
     const elements = {
@@ -1331,7 +1470,7 @@
       detailContainer: document.getElementById('detailContainer'),
       filterButtons: document.querySelectorAll('.filter-button'),
       searchInput: document.getElementById('searchInput'),
-      itemCounter: document.getElementById('itemCounter'),
+      locationFilter: document.getElementById('locationFilter'),
       detailCloseBtn: null
     };
 
@@ -1379,26 +1518,27 @@
           </div>
           <div class="card-body">
             <div class="card-company" onclick="openDetailView('${item.id}')">${item.company}</div>
+            <p class="card-description" onclick="openDetailView('${item.id}')">${item.jobRole}</p>
             <p class="card-description" onclick="openDetailView('${item.id}')">${item.description}</p>
             <div class="card-location">
               <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
-              ${item.location}
+              ${item.category === 'internship' ? item.package : item.location}
             </div>
-            <div class="card-email">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M3 8v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8"/></svg>
-              <a href="mailto:${item.email}" onclick="event.stopPropagation()">${item.email}</a>
+            <div class="card-duration-location">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
+              ${item.category === 'internship' ? item.duration : item.package}
             </div>
+            ${item.category === 'job' ? `<div class="card-experience">${item.experience}</div>` : ''}
             <div class="card-tags">
               ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
             </div>
-            <div class="card-rating">
-              <span class="rating-stars">${'★'.repeat(Math.floor(item.rating))}</span>
-              <span>${item.rating}/5.0</span>
+            <div class="card-requirements">
+              <span>Requirements: ${item.requirements}</span>
             </div>
           </div>
           <div class="card-actions">
             <button class="action-btn" onclick="openDetailView('${item.id}')">Details</button>
-            <button class="action-btn primary">Apply Now</button>
+            <button class="action-btn primary" onclick="applyForPosition('${item.id}', '${item.category}')">Apply Now</button>
           </div>
         `;
         elements.cardsGrid.appendChild(card);
@@ -1407,13 +1547,24 @@
 
     // Open detail view - Navigate to details page
     function openDetailView(itemId) {
-      window.location.href = `{% url 'details' %}?id=${itemId}`;
+      const item = state.allData.find(item => item.id == itemId);
+      window.location.href = `{% url 'details' %}?id=${itemId}&type=${item.category}`;
+    }
+
+    // Apply for position - Navigate to application form
+    function applyForPosition(itemId, category) {
+      if (category === 'internship') {
+        window.location.href = `/internship/${itemId}/apply/`;
+      } else if (category === 'job') {
+        window.location.href = `/job/${itemId}/apply/`;
+      }
     }
 
     // Update counter
     function updateCounter() {
       const count = state.filteredData.length;
-      elements.itemCounter.textContent = count;
+      const counterInfo = document.querySelector('.counter-info');
+      counterInfo.innerHTML = `<span id="itemCounter">${count}</span> opportunities found`;
     }
 
     // Apply filters and search
@@ -1423,7 +1574,9 @@
         const matchesSearch = item.company.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
                             item.description.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
                             item.jobRole.toLowerCase().includes(state.searchQuery.toLowerCase());
-        return matchesFilter && matchesSearch;
+        const matchesLocation = !state.selectedLocation || 
+                              (item.location && item.location.toLowerCase().includes(state.selectedLocation.toLowerCase()));
+        return matchesFilter && matchesSearch && matchesLocation;
       });
 
       updateCounter();
@@ -1454,21 +1607,27 @@
       applyFilters();
     });
 
+    elements.locationFilter.addEventListener('change', (e) => {
+      state.selectedLocation = e.target.value;
+      applyFilters();
+    });
+
     // Load data
     function loadData() {
       try {
         const vacanciesData = JSON.parse(document.getElementById('vacancies-data').textContent);
         
-        state.allData = vacanciesData.map((item, index) => ({
-          id: index, // Using index as id for now
+        state.allData = vacanciesData.map(item => ({
+          id: item.id, // Using id from database
           category: item.type,
           categoryLabel: item.type.charAt(0).toUpperCase() + item.type.slice(1),
           company: item.company_name,
           description: item.job_description,
-          location: 'N/A',
-          email: 'N/A',
+          location: item.location || 'N/A',
+          duration: item.duration || 'N/A',
+          requirements: item.requirements || 'N/A',
+          experience: item.experience || 'N/A',
           tags: [],
-          rating: 0,
           jobRole: item.role,
           package: item.package
         }));
@@ -1477,7 +1636,6 @@
         updateCounter();
         renderCards();
       } catch (error) {
-        console.error('Error loading data:', error);
         elements.emptyState.style.display = 'block';
       }
     }
@@ -1485,5 +1643,4 @@
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', loadData);
   </script>
-</body>
-</html>
+{% endblock %}
