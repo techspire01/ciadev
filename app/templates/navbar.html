@@ -28,7 +28,7 @@
           {% else %}
             <a
               href="{% url 'login' %}"
-              class="flex items-center space-x-2 text-[#3d2d29] hover:text-yellow-700 px-4 py-2 transition font-medium"
+              class="flex items-center space-x-2 text-black hover:text-yellow-700 px-4 py-2 transition font-medium"
             >
               <i class="fas fa-user"></i>
               <span>Login</span>
@@ -66,20 +66,20 @@
         <div class="hidden lg:flex items-center space-x-9 order-3 ml-4">
           <a
             href="{% url 'index' %}"
-            class="text-[#3d2d29] hover:text-yellow-700 font-medium transition"
+            class="text-black hover:text-yellow-700 font-medium transition"
             >Home</a>
           <a
             href="{% url 'about' %}"
-            class="text-[#3d2d29] hover:text-yellow-700 font-medium transition"
+            class="text-black hover:text-yellow-700 font-medium transition"
             >About Us</a
           >
           <a
             href="{% url 'category' %}"
-            class="text-[#3d2d29] hover:text-yellow-700 font-medium transition"
+            class="text-black hover:text-yellow-700 font-medium transition"
             >Categories</a>
             <a
             href="{% url 'suppliers' %}"
-            class="text-[#3d2d29] hover:text-yellow-700 font-medium transition"
+            class="text-black hover:text-yellow-700 font-medium transition"
             >Suppliers</a>
           <!-- Language Translation Buttons -->
           <div class="flex items-center space-x-1">
@@ -90,7 +90,7 @@
 
         <!-- Mobile Menu Button -->
         <div class="lg:hidden order-3 flex items-center space-x-2">
-          <button id="mobileMenuBtn" class="relative p-2 text-[#3d2d29] hover:text-yellow-700 transition-all duration-300 focus:outline-none">
+          <button id="mobileMenuBtn" class="relative p-2 text-black hover:text-yellow-700 transition-all duration-300 focus:outline-none">
             <div class="space-y-1">
               <span class="hamburger-line block w-6 h-0.5 bg-current transition-all duration-300"></span>
               <span class="hamburger-line block w-6 h-0.5 bg-current transition-all duration-300"></span>
@@ -147,24 +147,24 @@
 
             <!-- Navigation Links -->
             <nav class="space-y-1">
-              <a href="{% url 'index' %}" class="flex items-center space-x-3 px-3 py-3 text-[#3d2d29] hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'index' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-home w-5"></i>
                 <span class="font-medium">Home</span>
               </a>
-              <a href="{% url 'about' %}" class="flex items-center space-x-3 px-3 py-3 text-[#3d2d29] hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'about' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-info-circle w-5"></i>
-                <span class="font-medium">About Us</span>
+                <span class="font-medium">About</span>
               </a>
-              <a href="{% url 'category' %}" class="flex items-center space-x-3 px-3 py-3 text-[#3d2d29] hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'category' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-th-large w-5"></i>
                 <span class="font-medium">Categories</span>
               </a>
-              <a href="{% url 'suppliers' %}" class="flex items-center space-x-3 px-3 py-3 text-[#3d2d29] hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'suppliers' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-building w-5"></i>
                 <span class="font-medium">Suppliers</span>
               </a>
               {% if user.is_authenticated %}
-              <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-3 py-3 text-[#3d2d29] hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-user-circle w-5"></i>
                 <span class="font-medium">My Profile</span>
               </a>

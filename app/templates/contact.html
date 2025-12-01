@@ -142,14 +142,14 @@
     {% include 'navbar.html' %}
 
     <!-- Hero Section -->
-    <section class="relative py-20 bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 hero-animated overflow-hidden">
+    <section class="relative py-6 sm:py-12 md:py-20 bg-gradient-to-br from-yellow-50 via-orange-50 to-yellow-100 hero-animated overflow-hidden">
         <div class="absolute inset-0 bg-black bg-opacity-10"></div>
-        <div class="container mx-auto px-4 relative z-10">
+        <div class="container mx-auto px-3 sm:px-4 relative z-10">
             <div class="text-center">
-                <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6 glow-text">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6 glow-text">
                     Contact Us
                 </h1>
-                <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
                     Get in touch with the Chinnavedampatti Industrial Association. We're here to help you connect with the right machinery suppliers and support your business needs.
                 </p>
             </div>
@@ -162,14 +162,14 @@
     </section>
 
     <!-- Contact Information Section -->
-    <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <section class="py-6 sm:py-8 md:py-12 lg:py-16 bg-gray-50">
+        <div class="container mx-auto px-3 sm:px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
                 <!-- Contact Details -->
-                <div class="space-y-8">
+                <div class="space-y-5 sm:space-y-6 md:space-y-8">
                     <div>
-                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Get In Touch</h2>
-                        <p class="text-gray-600 leading-relaxed mb-8">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">Get In Touch</h2>
+                        <p class="text-sm sm:text-base text-gray-600 leading-relaxed mb-6 sm:mb-8">
                             Have questions about our services, need help finding suppliers, or want to join our network? Reach out to us using the contact information below.
                         </p>
                     </div>
@@ -177,14 +177,14 @@
                     {% if contact_info %}
                         <!-- Email -->
                         {% if contact_info.email %}
-                        <div class="contact-card p-6 rounded-xl animated-card">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-envelope text-yellow-600 text-xl"></i>
+                        <div class="contact-card p-4 sm:p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-3 sm:space-x-4">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-envelope text-yellow-600 text-lg sm:text-xl"></i>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">Email</h3>
-                                    <a href="mailto:{{ contact_info.email }}" class="text-gray-600 hover:text-yellow-600 transition-colors">
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="font-semibold text-sm sm:text-base text-gray-800">Email</h3>
+                                    <a href="mailto:{{ contact_info.email }}" class="text-xs sm:text-sm text-gray-600 hover:text-yellow-600 transition-colors break-all">
                                         {{ contact_info.email }}
                                     </a>
                                 </div>
@@ -194,14 +194,14 @@
 
                         <!-- Phone -->
                         {% if contact_info.phone %}
-                        <div class="contact-card p-6 rounded-xl animated-card">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-phone text-green-600 text-xl"></i>
+                        <div class="contact-card p-4 sm:p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-3 sm:space-x-4">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-phone text-green-600 text-lg sm:text-xl"></i>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">Phone</h3>
-                                    <a href="tel:{{ contact_info.phone }}" class="text-gray-600 hover:text-green-600 transition-colors">
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="font-semibold text-sm sm:text-base text-gray-800">Phone</h3>
+                                    <a href="tel:{{ contact_info.phone }}" class="text-xs sm:text-sm text-gray-600 hover:text-green-600 transition-colors">
                                         {{ contact_info.phone }}
                                     </a>
                                 </div>
@@ -211,14 +211,14 @@
 
                         <!-- Address -->
                         {% if contact_info.address %}
-                        <div class="contact-card p-6 rounded-xl animated-card">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-map-marker-alt text-blue-600 text-xl"></i>
+                        <div class="contact-card p-4 sm:p-6 rounded-xl animated-card">
+                            <div class="flex items-start space-x-3 sm:space-x-4">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fas fa-map-marker-alt text-blue-600 text-lg sm:text-xl"></i>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">Address</h3>
-                                    <p class="text-gray-600">{{ contact_info.address }}</p>
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="font-semibold text-sm sm:text-base text-gray-800">Address</h3>
+                                    <p class="text-xs sm:text-sm text-gray-600 leading-relaxed break-all">{{ contact_info.address }}</p>
                                 </div>
                             </div>
                         </div>
@@ -226,14 +226,14 @@
 
                         <!-- Website -->
                         {% if contact_info.website %}
-                        <div class="contact-card p-6 rounded-xl animated-card">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-globe text-purple-600 text-xl"></i>
+                        <div class="contact-card p-4 sm:p-6 rounded-xl animated-card">
+                            <div class="flex items-center space-x-3 sm:space-x-4">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-globe text-purple-600 text-lg sm:text-xl"></i>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800">Website</h3>
-                                    <a href="{{ contact_info.website }}" target="_blank" class="text-gray-600 hover:text-purple-600 transition-colors">
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="font-semibold text-sm sm:text-base text-gray-800">Website</h3>
+                                    <a href="{{ contact_info.website }}" target="_blank" class="text-xs sm:text-sm text-gray-600 hover:text-purple-600 transition-colors break-all">
                                         {{ contact_info.website }}
                                     </a>
                                 </div>
@@ -243,23 +243,23 @@
 
                         <!-- Description -->
                         {% if contact_info.description %}
-                        <div class="contact-card p-6 rounded-xl animated-card">
-                            <div class="flex items-start space-x-4">
-                                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mt-1">
-                                    <i class="fas fa-info-circle text-indigo-600 text-xl"></i>
+                        <div class="contact-card p-4 sm:p-6 rounded-xl animated-card">
+                            <div class="flex items-start space-x-3 sm:space-x-4">
+                                <div class="w-10 sm:w-12 h-10 sm:h-12 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="fas fa-info-circle text-indigo-600 text-lg sm:text-xl"></i>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-800 mb-2">About Us</h3>
-                                    <p class="text-gray-600 leading-relaxed">{{ contact_info.description }}</p>
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="font-semibold text-sm sm:text-base text-gray-800 mb-2">About Us</h3>
+                                    <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">{{ contact_info.description }}</p>
                                 </div>
                             </div>
                         </div>
                         {% endif %}
                     {% else %}
-                        <div class="contact-card p-6 rounded-xl text-center">
+                        <div class="contact-card p-4 sm:p-6 rounded-xl text-center">
                             <div class="text-gray-500">
-                                <i class="fas fa-info-circle text-4xl mb-4"></i>
-                                <p>Contact information will be available soon.</p>
+                                <i class="fas fa-info-circle text-2xl sm:text-4xl mb-4"></i>
+                                <p class="text-sm sm:text-base">Contact information will be available soon.</p>
                             </div>
                         </div>
                     {% endif %}
@@ -267,8 +267,8 @@
 
                 <!-- Map Section -->
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6">Find Us</h2>
-                    <div class="map-container">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">Find Us</h2>
+                    <div class="map-container h-64 sm:h-80 md:h-96 lg:h-full">
                         <!-- Embedded Google Map (placeholder - replace with actual coordinates) -->
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.0!2d76.95!3d11.0167!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTEuMDE2NjcwMDAwMDAwMac!5e0!3m2!1sen!2sin!4v1630000000000!5m2!1sen!2sin"
@@ -279,7 +279,7 @@
                             loading="lazy">
                         </iframe>
                     </div>
-                    <p class="text-sm text-gray-500 mt-4">
+                    <p class="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4">
                         * Map shows approximate location. Please use the address above for precise directions.
                     </p>
                 </div>
@@ -288,19 +288,19 @@
     </section>
 
     <!-- Call to Action -->
-    <section class="py-16 bg-gradient-to-r from-yellow-600 to-orange-600 text-white">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+    <section class="py-6 sm:py-8 md:py-12 lg:py-16 bg-gradient-to-r from-yellow-600 to-orange-600 text-white">
+        <div class="container mx-auto px-3 sm:px-4 text-center">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
                 Ready to Connect?
             </h2>
-            <p class="text-xl mb-8 opacity-90">
+            <p class="text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8 opacity-90">
                 Join our network of industrial suppliers and manufacturers. Let's build something great together.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{% url 'suppliers' %}" class="bg-transparent border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-yellow-600 transition-all duration-300">
+            <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+                <a href="{% url 'suppliers' %}" class="bg-transparent border-2 border-white px-6 sm:px-8 py-2.5 sm:py-4 rounded-full font-semibold text-sm sm:text-base hover:bg-white hover:text-yellow-600 transition-all duration-300">
                     Browse Suppliers
                 </a>
-                <a href="{% url 'about' %}" class="bg-transparent border-2 border-white px-8 py-4 rounded-full font-bold hover:bg-white hover:text-yellow-600 transition-all duration-300">
+                <a href="{% url 'about' %}" class="bg-transparent border-2 border-white px-6 sm:px-8 py-2.5 sm:py-4 rounded-full font-semibold text-sm sm:text-base hover:bg-white hover:text-yellow-600 transition-all duration-300">
                     Learn More About Us
                 </a>
             </div>

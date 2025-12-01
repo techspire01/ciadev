@@ -1,7 +1,42 @@
+.modal-content {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    max-width: 500px;
+    width: 100%;
+    margin: 5% auto;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+}
+.modal-body {
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+    flex: 1;
+    max-height: 60vh;
+}
+.btn-warning {
+    background: #f59e0b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.7rem 1.5rem;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(245,158,11,0.08);
+    margin-left: 0.5rem;
+}
+.btn-warning:hover {
+    background: #d97706;
+}
 /* Admin Dashboard Styles - Professional Modern Theme */
 :root {
     --primary-color: #F59E0B;
-    --primary-dark: #D97706;
+    --primary-dark: #f99828;
     --primary-light: #FCD34D;
     --accent: #F59E0B;
     --bg-light: #FFFBF0;
@@ -377,6 +412,29 @@ html, body {
     font-size: 0.85rem;
 }
 
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
+.filter-select {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+}
+
 /* Internships/Jobs Container */
 .internships-container,
 .jobs-container {
@@ -395,6 +453,7 @@ html, body {
     transition: all 0.3s ease;
     border-left: 4px solid var(--primary-color);
     animation: slideDown 0.4s ease backwards;
+    overflow: hidden;
 }
 
 .opportunity-card:nth-child(1) { animation-delay: 0.1s; }
@@ -424,6 +483,19 @@ html, body {
 .card-company {
     font-size: 0.9rem;
     color: var(--text-light);
+}
+
+.card-details {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.card-details p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin: 0.5rem 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .card-actions {
@@ -473,11 +545,14 @@ html, body {
 
 .modal-content {
     background-color: white;
-    margin: 5% auto;
-    padding: 2rem;
+    margin: 2% auto;
+    padding: 0;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
@@ -485,9 +560,10 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0;
     border-bottom: 2px solid var(--border-color);
-    padding-bottom: 1rem;
+    padding: 2rem 2rem 1rem 2rem;
+    flex-shrink: 0;
 }
 
 .modal-header h2 {
@@ -509,13 +585,19 @@ html, body {
 }
 
 .modal-body {
-    margin-bottom: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    margin: 0;
 }
 
 .modal-footer {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
+    padding: 1rem 2rem 2rem 2rem;
+    border-top: 2px solid var(--border-color);
+    flex-shrink: 0;
 }
 
 .modal-footer .btn {
@@ -783,16 +865,29 @@ tbody td {
 
     .modal-content {
         width: 95%;
-        margin: 50% auto;
-        padding: 1rem;
+        margin: 5% auto;
+        padding: 0;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
     }
 
     .modal-header {
-        margin-bottom: 1rem;
+        margin-bottom: 0;
+        padding: 1rem 1.5rem 0.5rem 1.5rem;
+        flex-shrink: 0;
     }
 
     .modal-body {
-        margin-bottom: 1rem;
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem 1.5rem;
+        margin: 0;
+    }
+
+    .modal-footer {
+        padding: 0.5rem 1.5rem 1rem 1.5rem;
+        flex-shrink: 0;
     }
 
     .modal-footer {

@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import ssl
+import smtplib
 import dj_database_url
 
 
@@ -30,6 +32,10 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
+
+# Site font family configurable here. Change this value to update font across the site.
+# Provide a CSS font-family value, including fallbacks and quotes if needed.
+SITE_FONT_FAMILY = "'Times New Roman', Times, serif"
 
 
 
@@ -80,6 +86,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # expose SITE_FONT_FAMILY to templates
+                'app.context_processors.site_font',
             ],
         },
     },
@@ -162,9 +170,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'app/static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Media files (Uploaded images)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -181,9 +190,6 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
 
 # Google OAuth2 Configuration
 SOCIALACCOUNT_PROVIDERS = {
@@ -204,9 +210,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_URL = '/login/'
-LOGOUT_REDIRECT_URL = "/logout/"
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to dashboard after login
-LOG_OUT_REDIRECT_URL = 'home'  # Redirect to home after logout
+LOGOUT_REDIRECT_URL = 'home'  # Redirect to home after logout
 
 # Allauth settings
 ACCOUNT_LOGIN_METHODS = {'email'}
@@ -215,26 +220,37 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 
+# Email Configuration
+EMAIL_BACKEND = "app.utils.DynamicEmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "cianextcbe@gmail.com"
-EMAIL_HOST_PASSWORD = "cwgk azyb oxsp pfih"  # Google App Password
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# Create a custom SSL context for Gmail SMTP
+_custom_ssl_context = ssl.create_default_context()
+# Relax verification for problematic certificates
+_custom_ssl_context.check_hostname = False
+_custom_ssl_context.verify_mode = ssl.CERT_NONE
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+
+# Override smtplib to use our custom context
+_original_smtp_init = smtplib.SMTP.__init__
+
+def _patched_smtp_init(self, *args, **kwargs):
+    _original_smtp_init(self, *args, **kwargs)
+
+smtplib.SMTP.__init__ = _patched_smtp_init
+
+# Monkey-patch ssl module for smtplib
+_original_create_default_context = ssl.create_default_context
+
+def _create_default_context_with_patch(*args, **kwargs):
+    ctx = _original_create_default_context(*args, **kwargs)
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+ssl.create_default_context = _create_default_context_with_patch
 
 AUTH_USER_MODEL = "app.CustomUser"
 
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users after social login
-
-
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Whitenoise setup
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
