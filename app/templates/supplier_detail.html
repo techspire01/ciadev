@@ -607,7 +607,7 @@
             <nav class="flex items-center space-x-2 text-sm">
                 <a href="{% url 'index' %}" class="text-yellow-600 hover:text-yellow-700 font-medium">Home</a>
                 <span class="text-gray-400">/</span>
-                <a href="{% url 'suppliers' %}" class="text-yellow-600 hover:text-yellow-700 font-medium">Member Companies</a>
+                <a href="{% url 'cia_networks' %}" class="text-yellow-600 hover:text-yellow-700 font-medium">CIA Networks</a>
                 <span class="text-gray-400">/</span>
                 <span class="text-gray-700 font-medium">{{ supplier.name }}</span>
             </nav>
@@ -864,9 +864,9 @@
 
             <!-- Back to Suppliers Button -->
             <div class="text-center pt-12 border-t-2 border-yellow-200">
-                <a href="{% url 'suppliers' %}" class="back-button">
+                <a href="{% url 'cia_networks' %}" class="back-button">
                     <i class="fas fa-arrow-left"></i>
-                    <span>Back to Member Companies</span>
+                    <span>Back to CIA Networks</span>
                 </a>
             </div>
         </div>
