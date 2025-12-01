@@ -3,8 +3,11 @@ from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 import json
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
+from app.models import Supplier
 
 # Create your views here.
 
@@ -86,6 +89,20 @@ def brand_new_site_dashboard(request):
 
     return render(request, 'brand_new_site/dashboard.html', context)
 
+
+def supplier_required(view_func):
+    """Decorator to check if user is a supplier (email exists in Supplier table)"""
+    @login_required
+    def _wrapped_view(request, *args, **kwargs):
+        try:
+            Supplier.objects.get(email=request.user.email)
+            return view_func(request, *args, **kwargs)
+        except Supplier.DoesNotExist:
+            raise PermissionDenied("Access denied. Only suppliers can access this page.")
+    return _wrapped_view
+
+
+@supplier_required
 def job_portal_admin(request):
     """Render the job portal admin dashboard"""
     internships = PortalInternship.objects.all().order_by('-posted_date')
