@@ -1743,18 +1743,40 @@ a:focus-visible {
    RESPONSIVE MOBILE-FIRST UTILITIES
    ============================================ */
 
-/* Mobile Navigation Overlay Container */
+/* Mobile Menu Wrapper - Root container with fixed positioning */
+.mobile-menu-wrapper {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000 !important;
+  display: flex !important;
+  flex-direction: row;
+  pointer-events: none;
+}
+
+.mobile-menu-wrapper.hidden {
+  display: none !important;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.mobile-menu-wrapper:not(.hidden) {
+  pointer-events: auto;
+}
+
+/* Mobile Menu Overlay - Semi-transparent backdrop */
 .mobile-menu-overlay {
   position: fixed !important;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999 !important;
-  display: flex !important;
-  flex-direction: column;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 9999 !important;
   animation: fadeInOverlay 0.3s ease-out;
+  pointer-events: auto;
 }
 
 @keyframes fadeInOverlay {
@@ -1764,11 +1786,6 @@ a:focus-visible {
   to {
     background: rgba(0, 0, 0, 0.5);
   }
-}
-
-.mobile-menu-overlay.hidden {
-  display: none !important;
-  z-index: -1;
 }
 
 /* Mobile Navigation Drawer */
@@ -1782,13 +1799,14 @@ a:focus-visible {
   height: 100dvh;
   background: #ffffff;
   box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
-  z-index: 10000 !important;
+  z-index: 10001 !important;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   animation: slideInPanel 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
 }
 
 @keyframes slideInPanel {
@@ -1817,22 +1835,6 @@ a:focus-visible {
 
 .mobile-panel::-webkit-scrollbar-thumb:hover {
   background: #f59e0b;
-}
-
-/* Mobile Menu Overlay Fade */
-#mobileMenu.active::before,
-.mobile-menu-overlay::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9998 !important;
-  animation: fadeInOverlay 0.3s ease-out;
-  pointer-events: auto;
-}
-
-#mobileMenu.active::before {
-  display: none;
 }
 
 /* Hamburger Menu Animation */
