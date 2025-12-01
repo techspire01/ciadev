@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from app.models import Supplier
 
 # Create your models here.
 
@@ -9,8 +10,9 @@ class PortalInternship(models.Model):
     duration = models.CharField(max_length=255)
     posted_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    company_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
+    company_name = models.CharField(max_length=255, blank=True)
+    email = models.CharField(max_length=255, blank=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True, related_name='internships')
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
     salary = models.CharField(max_length=100)
@@ -29,8 +31,9 @@ class PortalJob(models.Model):
     location = models.CharField(max_length=255)
     posted_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    company_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
+    company_name = models.CharField(max_length=255, blank=True)
+    email = models.CharField(max_length=255, blank=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True, related_name='jobs')
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
     salary = models.CharField(max_length=100)
@@ -86,6 +89,7 @@ class InternshipApplication(models.Model):
     # Metadata
     applied_date = models.DateTimeField(auto_now_add=True)
     internship = models.ForeignKey(PortalInternship, on_delete=models.CASCADE, related_name='applications')
+    supplier = models.ForeignKey('app.Supplier', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.full_name} - {self.internship.title}"
@@ -148,6 +152,7 @@ class JobApplication(models.Model):
     # Metadata
     applied_date = models.DateTimeField(auto_now_add=True)
     job = models.ForeignKey(PortalJob, on_delete=models.CASCADE, related_name='applications')
+    supplier = models.ForeignKey('app.Supplier', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.full_name} - {self.job.title}"
