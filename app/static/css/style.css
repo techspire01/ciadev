@@ -968,7 +968,7 @@ img:not([src]) {
 }
 
 .hamburger-line.active:nth-child(1) {
-  transform: rotate(45deg) translate(8px, 8px);
+  transform: rotate(45deg) translate(4px, 4px);
 }
 
 .hamburger-line.active:nth-child(2) {
@@ -976,7 +976,7 @@ img:not([src]) {
 }
 
 .hamburger-line.active:nth-child(3) {
-  transform: rotate(-45deg) translate(8px, -8px);
+  transform: rotate(-45deg) translate(4px, -4px);
 }
 
 /* Responsive hero grid and image showcase for mobile */
