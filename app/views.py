@@ -703,6 +703,7 @@ def search_suggestions(request):
             "name": supplier.name,
             "category": supplier.category,
             "url": f"/cia_networks/?search={query}",
+            "url": f"/cia_networks/{supplier.name.replace(' ', '-').lower()}/",
             "icon": "fas fa-building"
         })
     
