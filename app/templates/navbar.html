@@ -84,8 +84,8 @@
             >Suppliers</a>
           <!-- Language Translation Buttons -->
           <div class="flex items-center space-x-1">
-            <button id="translate-en" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition active">EN</button>
-            <button id="translate-ta" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition">TA</button>
+            <button id="translate-en" class="translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md">EN</button>
+            <button id="translate-ta" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md">TA</button>
           </div>
         </div>
 
@@ -192,11 +192,11 @@
                 <!-- Language toggle (desktop version embedded here) -->
                 <div class="flex items-center space-x-1">
                   <button id="translate-en-mobile" 
-                          class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition active">
+                          class="translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md">
                     EN
                   </button>
                   <button id="translate-ta-mobile" 
-                          class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 transition">
+                          class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md">
                     TA
                   </button>
                 </div>
@@ -282,15 +282,55 @@
           const lang = id.includes('ta') ? 'ta' : 'en';
           console.log('Button clicked:', id, 'Language:', lang);
           setLanguage(lang);
+          updateLanguageButtonStyles(lang);
         });
       }
     });
+  }
+
+  function updateLanguageButtonStyles(lang) {
+    const enBtns = ['#translate-en', '#translate-en-mobile'];
+    const taBtns = ['#translate-ta', '#translate-ta-mobile'];
+    
+    if (lang === 'en') {
+      // EN is active - yellow, TA is inactive - gray
+      enBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md';
+        }
+      });
+      taBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md';
+        }
+      });
+    } else {
+      // TA is active - orange, EN is inactive - gray
+      taBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600 transition active shadow-md';
+        }
+      });
+      enBtns.forEach(id => {
+        const btn = document.querySelector(id);
+        if (btn) {
+          btn.className = 'translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md';
+        }
+      });
+    }
   }
 
   // run once after DOM ready
   document.addEventListener('DOMContentLoaded', () => {
     // Initial attachment
     attachTranslateHandlers();
+    
+    // Initialize button styles based on saved language
+    const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+    updateLanguageButtonStyles(savedLang);
 
     // 🧠 Watch for new buttons in mobile menu after toggle
     const observer = new MutationObserver(() => attachTranslateHandlers());
