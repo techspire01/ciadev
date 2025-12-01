@@ -2,7 +2,8 @@
 {% load custom_filters %}
 
 <footer class="bg-gray-100 text-gray-800 py-0.125 md:py-0.25 border-t border-gray-200">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-0.125 md:gap-0.25">
+  <div class="container mx-auto px-4 md:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-0.125 md:gap-0.25">
         <!-- Company Info -->
         <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:text-left flex flex-col justify-center">
           <div class="flex items-center justify-center md:justify-start mb-0.125 md:mb-0.25">
@@ -113,17 +114,16 @@
             </div>
         </div>
       </div>
+    </div>
 
-      <!-- Bottom Section -->
-      <div class="border-t border-gray-300 mt-1 md:mt-3 pt-1 md:pt-2">
-        <div class="flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs gap-1">
-          <div>
-            <p class="text-xs">© 2025 CIA. All rights reserved.</p>
-          </div>
-          <div>
-            <p class="text-xs">Developed by <a href="{% url 'coders_club' %}" class="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors duration-300">Coders Club</a></p>
-          </div>
-        </div>
+    <!-- Bottom Section -->
+    <div class="border-t border-gray-300 mt-1 md:mt-3 pt-1 md:pt-2">
+      <div class="flex flex-wrap items-center justify-center gap-1 py-0.5 text-xs text-gray-500">
+        <p class="flex flex-nowrap items-center justify-center gap-1 text-center">
+          <span>© 2025 CIA. All rights reserved. | Developed by - </span>
+          <span><a href= "{% url 'coders_club' %}" class="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors duration-300">Coders Club</a></span>
+        </p>
       </div>
     </div>
+  </div>
 </footer>
