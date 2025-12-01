@@ -41,87 +41,58 @@
             </div>
           </div>
 
-          <!-- Quick Links -->
-          <div class="rounded p-3 sm:p-4 md:p-5 border border-gray-100 text-center sm:col-span-1 md:col-span-2">
-            <h4 class="text-xs sm:text-sm md:text-base font-bold mb-4 sm:mb-5 md:mb-6 text-gray-800">Quick Links</h4>
-            <div class="space-y-4 sm:space-y-2 md:space-y-0">
-              <!-- First Row: Home, About, Category, Suppliers -->
-              <div class="flex justify-center items-center gap-3 sm:gap-4 md:gap-5 flex-wrap">
-                <a
-                  href="{% url 'index' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  Home
-                </a>
-                <span class="text-gray-400 text-xs sm:text-sm">|</span>
-                <a
-                  href="{% url 'about' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  About
-                </a>
-                <span class="text-gray-400 text-xs sm:text-sm">|</span>
-                <a
-                  href="{% url 'category' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  Category
-                </a>
-                <span class="text-gray-400 text-xs sm:text-sm">|</span>
-                <a
-                  href="{% url 'suppliers' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  Suppliers
-                </a>
-              </div>
-              <!-- Second Row: Contact, Profile, Gallery (Mobile Only) -->
-              <div class="sm:hidden flex justify-center items-center gap-3 flex-wrap">
-                <a
-                  href="{% url 'contact' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs whitespace-nowrap font-medium"
-                >
-                  Contact
-                </a>
-                <span class="text-gray-400 text-xs">|</span>
-                <a
-                  href="{% url 'profile' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs whitespace-nowrap font-medium"
-                >
-                  Profile
-                </a>
-                <span class="text-gray-400 text-xs">|</span>
-                <a
-                  href="{% url 'photo_gallery' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs whitespace-nowrap font-medium"
-                >
-                  Gallery
-                </a>
-              </div>
-              <!-- Tablet+ Row: Contact, Profile, Gallery -->
-              <div class="hidden sm:flex justify-center items-center gap-3 sm:gap-4 md:gap-5 flex-wrap">
-                <a
-                  href="{% url 'contact' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  Contact
-                </a>
-                <span class="text-gray-400 text-xs sm:text-sm">|</span>
-                <a
-                  href="{% url 'profile' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  Profile
-                </a>
-                <span class="text-gray-400 text-xs sm:text-sm">|</span>
-                <a
-                  href="{% url 'photo_gallery' %}"
-                  class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-xs sm:text-sm whitespace-nowrap font-medium"
-                >
-                  Gallery
-                </a>
-              </div>
-            </div>
+        <!-- Quick Links -->
+        <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:col-span-2">
+          <h4 class="text-4xs md:text-3xs font-bold mb-0.125 text-gray-800">Quick Links</h4>
+          <div class="flex justify-center items-center gap-0.75 md:gap-1.5 flex-wrap">
+            <a
+              href="{% url 'index' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Home
+            </a>
+            <span class="text-gray-400 text-4xs"> </span>
+            <a
+              href="{% url 'about' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              About
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'category' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Category
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'cia_networks' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              CIA Networks
+            </a>
+            <span class="w-full"></span>
+            <a
+              href="{% url 'contact' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Contact
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'profile' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Profile
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'photo_gallery' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Gallery
+            </a>
           </div>
 
           <!-- Contact Info -->

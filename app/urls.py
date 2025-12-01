@@ -11,10 +11,10 @@ urlpatterns = [
     path('announcement/', views.announcement, name='announcement'),
     path('announcement/<int:announcement_id>/', views.announcement_detail, name='announcement_detail'),
     path('signup/', views.signup_view, name='signup'),
-    path('suppliers/', views.suppliers, name='suppliers'),
+    path('cia_networks/', views.cia_networks, name='cia_networks'),
     
-    # Supplier detail page with dynamic URL
-    path('supplier/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
+    # Supplier detail page with dynamic URL under cia_networks
+    path('cia_networks/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
     
     # Authentication URLs
     path("login/", views.login_view, name="login"),

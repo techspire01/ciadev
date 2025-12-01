@@ -309,7 +309,7 @@ def login_view(request):
 def signup_view(request):
     return render(request, "signup.html")
 
-def suppliers(request):
+def cia_networks(request):
     category = request.GET.get('category', '')
     product_filter = request.GET.get('product', '')
     search_query = request.GET.get('search', '')
@@ -380,7 +380,7 @@ def suppliers(request):
     ))
     products = [p for p in products if p]  # Remove empty strings
 
-    return render(request, "suppliers.html", {
+    return render(request, "cia_networks.html", {
         "suppliers": suppliers,
         "categories": categories,
         "sub_categories": sub_categories,
@@ -393,7 +393,7 @@ def create_supplier(request):
         form = SupplierForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('suppliers')
+            return redirect('cia_networks')
     else:
         form = SupplierForm()
     return render(request, 'create_supplier.html', {'form': form})
@@ -708,7 +708,8 @@ def search_suggestions(request):
             "type": "supplier",
             "name": supplier.name,
             "category": supplier.category,
-            "url": f"/suppliers/?search={query}",
+            "url": f"/cia_networks/?search={query}",
+            "url": f"/cia_networks/{supplier.name.replace(' ', '-').lower()}/",
             "icon": "fas fa-building"
         })
     
@@ -725,7 +726,7 @@ def search_suggestions(request):
             suggestions.append({
                 "type": "category",
                 "name": category,
-                "url": f"/suppliers/?category={category}",
+                "url": f"/cia_networks/?category={category}",
                 "icon": "fas fa-tag"
             })
     
@@ -749,7 +750,7 @@ def search_suggestions(request):
                 suggestions.append({
                     "type": "product",
                     "name": product,
-                    "url": f"/suppliers/?product={product}",
+                    "url": f"/cia_networks/?product={product}",
                     "icon": "fas fa-box"
                 })
     
@@ -805,7 +806,7 @@ def search_api(request):
             "type": "supplier",
             "title": supplier.name,
             "description": supplier.business_description or f"{supplier.category} supplier",
-            "url": f"/suppliers/?search={query}",
+            "url": f"/cia_networks/?search={query}",
             "category": supplier.category,
             "score": 1.0
         })
@@ -853,7 +854,7 @@ def search_html_content(query):
         'category.html',
         'announcement.html',
         'announcement_detail.html',
-        'suppliers.html',
+        'cia_networks.html',
         'login.html',
         'signup.html'
     ]
@@ -914,7 +915,7 @@ def get_url_from_template(template_name):
         'category.html': '/category/',
         'announcement.html': '/announcement/',
         'announcement_detail.html': '/announcement/',  # Generic announcement page
-        'suppliers.html': '/suppliers/',
+        'cia_networks.html': '/cia_networks/',
         'login.html': '/login/',
         'signup.html': '/signup/'
     }
@@ -962,7 +963,7 @@ def search_results(request):
             "type": "supplier",
             "title": supplier.name,
             "description": supplier.business_description or f"{supplier.category} supplier",
-            "url": f"/suppliers/?search={query}",
+            "url": f"/cia_networks/{supplier.name.replace(' ', '-').lower()}/",
             "phone_number": supplier.phone_number,
             "category": supplier.category,
             "score": 1.0
