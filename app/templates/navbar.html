@@ -40,11 +40,12 @@
               type="text"
               id="searchInput"
               placeholder="Search..!!"
-              class="w-40 py-2 px-3 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent pr-10 shadow-md search-box"
+              class="w-40 py-2 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
             />
             <button
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 text-yellow-700 hover:text-yellow-800"
+              class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-3 pl-2"
               title="Search"
+              type="button"
             >
               <i class="fas fa-search"></i>
             </button>
@@ -136,13 +137,19 @@
             <!-- Mobile Search Bar -->
             <div class="relative mb-6">
               <input
-                type="text"
-                placeholder="Search suppliers..."
-                class="w-full py-3 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
+              type="text"
+              id="searchInput"
+              placeholder="Search..!!"
+              class="w-40 py-2 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
               />
-              <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-yellow-700 hover:text-yellow-800 text-lg" title="Search">
-                <i class="fas fa-search"></i>
-              </button>
+                <button
+                  class="absolute right-0 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-end pr-3"
+                  title="Search"
+                  type="button"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              <div id="searchResults" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-60 max-h-80 overflow-y-auto hidden"></div>
             </div>
 
             <!-- Navigation Links -->
@@ -289,8 +296,32 @@
     const observer = new MutationObserver(() => attachTranslateHandlers());
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // 🕐 re-run binding after mobile menu toggle delay
+    // Mobile menu toggle functionality
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        mobileMenu.classList.toggle('show');
+        
+        // Toggle hamburger animation
+        const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+        lines.forEach(line => line.classList.toggle('active'));
+      });
+
+      // Close menu when a link is clicked
+      const menuLinks = mobileMenu.querySelectorAll('a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('show');
+          const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+          lines.forEach(line => line.classList.remove('active'));
+        });
+      });
+    }
+
+    // 🕐 re-run binding after mobile menu toggle delay
     if (mobileMenuBtn) {
       mobileMenuBtn.addEventListener('click', () => {
         setTimeout(attachTranslateHandlers, 400);
