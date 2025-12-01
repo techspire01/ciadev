@@ -23,7 +23,7 @@
   <section class="w-full relative px-0 py-0 shadow-lg shadow-black/30" style="height: calc(70vh - 2cm);" id="heroSection">
     <!-- Dimming Overlay with Caption -->
     <div class="absolute inset-0 z-20 rounded-xl flex items-center justify-center pointer-events-none" style="background-color: rgba(136, 178, 233, 0.2);">
-      <div class="text-center text-white p-4 bg-black/50 rounded-lg backdrop-blur-sm max-w-sm flex flex-col items-center justify-center">
+      <div class="text-center text-white p-4 bg-black/50 rounded-lg max-w-sm flex flex-col items-center justify-center">
         <h2 class="text-xl md:text-2xl font-bold mb-2 text-yellow-100">Discover Industrial Excellence</h2>
         <p class="text-sm md:text-base opacity-90 mb-3">Explore our diverse industrial sectors</p>
         <div class="w-full flex justify-center">
@@ -86,14 +86,16 @@
         </div>
       </div>
     </div>
-
-    <!-- Carousel Indicators -->
-    <div class="carousel-indicators flex justify-center mt-1 md:mt-2 space-x-0.5 z-30">
-      <button class="carousel-dot w-0.5 h-0.5 md:w-0.5 md:h-0.5 rounded-full bg-gray-400 hover:bg-gray-500 transition-all duration-200" data-slide="0"></button>
-      <button class="carousel-dot active w-0.5 h-0.5 md:w-0.5 md:h-0.5 rounded-full bg-yellow-500 transition-all duration-200 shadow-sm shadow-yellow-500/20" data-slide="1"></button>
-      <button class="carousel-dot w-0.5 h-0.5 md:w-0.5 md:h-0.5 rounded-full bg-gray-400 hover:bg-gray-500 transition-all duration-200" data-slide="2"></button>
-    </div>
   </section>
+
+  <!-- Carousel Indicators -->
+  <div class="flex justify-center py-6 bg-white shadow-sm">
+    <div class="carousel-indicators flex justify-center space-x-4">
+      <button class="carousel-dot w-4 h-4 md:w-4 md:h-4 rounded-full bg-gray-400 hover:bg-gray-600 transition-all duration-200 cursor-pointer" data-slide="0"></button>
+      <button class="carousel-dot active w-4 h-4 md:w-4 md:h-4 rounded-full bg-yellow-500 transition-all duration-200 shadow-md" data-slide="1"></button>
+      <button class="carousel-dot w-4 h-4 md:w-4 md:h-4 rounded-full bg-gray-400 hover:bg-gray-600 transition-all duration-200 cursor-pointer" data-slide="2"></button>
+    </div>
+  </div>
 
   <!-- Categories Section -->
   <section class="py-12 md:py-16 w-full px-4 bg-gradient-to-br from-yellow-100 via-orange-100 to-red-100 relative overflow-hidden shadow-xl">
@@ -399,14 +401,16 @@
 
           <!-- Book images data for JS (safe escaped) -->
           <script>
+            /* eslint-disable */
             var BOOK_IMAGES = [
               {% for img in book_showcase_images %}
               {
-                url: "{% if img.image_url %}{{ img.image_url|escapejs }}{% elif img.image and img.image.name %}{{ img.image.url|escapejs }}{% else %}{% endif %}",
-                title: "{{ img.title|default:''|escapejs }}"
+                url: "{% if img.image_url %}{{ img.image_url }}{% elif img.image %}{{ img.image.url }}{% endif %}",
+                title: "{{ img.title|default:'' }}"
               }{% if not forloop.last %},{% endif %}
               {% endfor %}
             ];
+            /* eslint-enable */
           </script>
         </div>
         </div>

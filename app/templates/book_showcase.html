@@ -64,7 +64,7 @@
             <!-- Gallery Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
                 {% for photo in book_photos %}
-                <div class="gallery-item group relative" onclick="openBookImageModal({{ forloop.counter0 }})">
+                <div class="gallery-item group relative book-modal-trigger" data-index="{{ forloop.counter0 }}">
                     {% if photo.image_url %}
                         <img src="{{ photo.image_url }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
                     {% elif photo.image %}
@@ -116,15 +116,24 @@
 
     <script src="{% static 'js/script.js' %}"></script>
     <script>
+        /* eslint-disable */
         let currentBookImageIndex = 0;
         const bookImages = [
             {% for photo in book_photos %}
             {
-                url: "{% if photo.image_url %}{{ photo.image_url }}{% elif photo.image %}{{ photo.image.url }}{% endif %}",
+                url: "{{ photo.image_url|default:photo.image.url|default:'' }}",
                 title: "{{ photo.title|default:'Untitled' }}"
             }{% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
+        /* eslint-enable */
+
+        // Add click handlers to gallery items
+        document.querySelectorAll('.book-modal-trigger').forEach((item, index) => {
+            item.addEventListener('click', function() {
+                openBookImageModal(index);
+            });
+        });
 
         function openBookImageModal(index) {
             if (bookImages.length === 0) return;

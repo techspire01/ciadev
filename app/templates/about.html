@@ -764,9 +764,9 @@
                 {% for photo in latest_photos %}
                 <div class="gallery-item photo-gallery-item">
                     {% if photo.image_url %}
-                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-pointer object-cover" onclick="openLightbox('{{ photo.image_url|escapejs }}', '{{ photo.title|default:'CIA Photo'|escapejs }}')" loading="lazy" />
+                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ photo.image_url }}" data-title="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
                     {% elif photo.image %}
-                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-pointer object-cover" onclick="openLightbox('{{ photo.image.url|escapejs }}', '{{ photo.title|default:'CIA Photo'|escapejs }}')" loading="lazy" />
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ photo.image.url }}" data-title="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
                     {% else %}
                         <div class="flex h-full w-full items-center justify-center bg-gray-200">
                             <span class="text-gray-500">No Image</span>
@@ -801,9 +801,9 @@
                 {% for newspaper in latest_newspapers %}
                 <div class="gallery-item news-gallery-item">
                     {% if newspaper.image_url %}
-                        <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover" onclick="openLightbox('{{ newspaper.image_url|escapejs }}', '{{ newspaper.title|default:'CIA Newspaper Cutting'|escapejs }}')" loading="lazy" />
+                        <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ newspaper.image_url }}" data-title="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
                     {% elif newspaper.image %}
-                        <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover" onclick="openLightbox('{{ newspaper.image.url|escapejs }}', '{{ newspaper.title|default:'CIA Newspaper Cutting'|escapejs }}')" loading="lazy" />
+                        <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ newspaper.image.url }}" data-title="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
                     {% else %}
                         <div class="flex h-full w-full items-center justify-center bg-gray-200">
                             <span class="text-gray-500">No Image</span>
@@ -845,11 +845,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for member in leadership_members %}
                 <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300 border-2 border-orange-300 hover:border-red-500">
-                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-orange-500 shadow-xl team-member-image-spin">
                         {% if member.photo_url %}
-                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer" onclick="openLightbox('{{ member.photo_url|escapejs }}', '{{ member.name|escapejs }}')">
+                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer gallery-image" data-src="{{ member.photo_url }}" data-title="{{ member.name }}">
                         {% elif member.photo %}
-                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer" onclick="openLightbox('{{ member.photo.url|escapejs }}', '{{ member.name|escapejs }}')">
+                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer gallery-image" data-src="{{ member.photo.url }}" data-title="{{ member.name }}">
                         {% else %}
                             <div class="flex items-center justify-center w-full h-full bg-gray-200">
                                 <i class="fas fa-user text-3xl text-gray-400"></i>
@@ -1072,6 +1071,15 @@
         if (e.target === this) {
             closeLightbox();
         }
+    });
+
+    // Add click event listeners to gallery images
+    document.querySelectorAll('.gallery-image').forEach(img => {
+        img.addEventListener('click', function() {
+            const src = this.getAttribute('data-src');
+            const title = this.getAttribute('data-title');
+            openLightbox(src, title);
+        });
     });
     </script>
 
