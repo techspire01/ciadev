@@ -106,7 +106,7 @@
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6" id="categories">
         {% for category in categories %}
           <a
-            href="{% url 'suppliers' %}?category={{ category|urlencode }}"
+            href="{% url 'cia_networks' %}?category={{ category|urlencode }}"
             class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-lg md:rounded-xl shadow-md p-4 md:p-6 text-center card-hover group hover:shadow-lg transition-all duration-300"
           >
             <div
@@ -150,7 +150,7 @@
       </div>
     </section>
 
-  <!-- Featured Suppliers -->
+  <!-- Featured CIA Networks -->
   <section class="py-12 bg-gray-50">
     <div class="container mx-auto px-4">
       <div class="text-center mb-8">
@@ -273,9 +273,9 @@
       </div>
       <div class="rounded -2l p-2 text-center mt-8">
         <div class="text-center mt-8">
-          <a href="{% url 'suppliers' %}"
+          <a href="{% url 'cia_networks' %}"
              class="inline-block bg-gradient-to-r from-blue-400 to-blue-500 text-white font-semibold px-8 py-3 rounded-full hover:from-blue-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-            View All Suppliers <i class="fas fa-arrow-right ml-2"></i>
+            View All CIA Networks <i class="fas fa-arrow-right ml-2"></i>
           </a>
         </div>
       </div>
