@@ -24,6 +24,12 @@ from django.views.decorators.http import require_http_methods
 def internship_view(request):
     return render(request, "intern.html")
 
+def coders_club(request):
+    return render(request, "coders_club.html")
+
+def coders_contact(request):
+    return render(request, "coders_contact.html")
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def intern_submit_view(request):
