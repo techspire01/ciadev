@@ -504,19 +504,19 @@
     
     {% include 'navbar.html' %}
 <!-- Hero Section with Unique Design -->
-<section class="relative py-20 overflow-hidden group bg-gradient-to-br from-slate-700 via-amber-800 to-orange-900">
+<section class="relative py-24 md:py-32 overflow-hidden group bg-gradient-to-br from-slate-800 via-orange-700 to-amber-800">
     <!-- Animated Background Blobs -->
-    <div class="absolute top-0 left-10 w-72 h-72 bg-amber-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob"></div>
-    <div class="absolute top-0 right-10 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob animation-delay-2000"></div>
-    <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-slate-600 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-blob animation-delay-4000"></div>
+    <div class="absolute top-0 left-10 w-72 h-72 bg-orange-700 rounded-full mix-blend-multiply filter blur-3xl opacity-12 animate-blob" style="animation: blob 8s infinite;"></div>
+    <div class="absolute top-0 right-10 w-72 h-72 bg-amber-700 rounded-full mix-blend-multiply filter blur-3xl opacity-12 animate-blob animation-delay-2000" style="animation: blob 8s infinite 2s;"></div>
+    <div class="absolute -bottom-8 left-1/2 w-72 h-72 bg-slate-700 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000" style="animation: blob 8s infinite 4s;"></div>
     
     <!-- Floating Particles -->
-    <div class="absolute top-1/4 left-1/4 w-1 h-1 bg-amber-300 rounded-full opacity-50 animate-float"></div>
-    <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-indigo-300 rounded-full opacity-40 animate-float animation-delay-1000"></div>
-    <div class="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-slate-300 rounded-full opacity-30 animate-float animation-delay-2000"></div>
+    <div class="absolute top-1/4 left-1/4 w-2 h-2 bg-amber-300/70 rounded-full opacity-70 animate-float" style="animation: float 8s ease-in-out infinite;"></div>
+    <div class="absolute top-1/3 right-1/4 w-3 h-3 bg-orange-200/60 rounded-full opacity-60 animate-float animation-delay-1000" style="animation: float 8s ease-in-out infinite 1s;"></div>
+    <div class="absolute bottom-1/4 left-1/3 w-2.5 h-2.5 bg-amber-200/50 rounded-full opacity-50 animate-float animation-delay-2000" style="animation: float 8s ease-in-out infinite 2s;"></div>
     
     <!-- Dark Gradient Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30 group-hover:from-black/20 group-hover:via-transparent group-hover:to-black/20 transition-all duration-700"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-black/25 via-black/15 to-black/25 group-hover:from-black/20 group-hover:via-black/10 group-hover:to-black/20 transition-all duration-700"></div>
     
     <div class="container mx-auto px-4 text-center relative z-10">
         <div class="max-w-2xl mx-auto">
@@ -550,12 +550,14 @@
     <style>
         @keyframes blob {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+            33% { transform: translate(60px, -80px) scale(1.15); }
+            66% { transform: translate(-40px, 40px) scale(0.85); }
         }
         @keyframes float {
             0%, 100% { transform: translateY(0px) translateX(0px); }
-            50% { transform: translateY(-20px) translateX(10px); }
+            25% { transform: translateY(-40px) translateX(20px); }
+            50% { transform: translateY(-60px) translateX(-15px); }
+            75% { transform: translateY(-30px) translateX(25px); }
         }
         @keyframes text-shimmer {
             0%, 100% { filter: brightness(1); }
@@ -644,48 +646,48 @@
 
 
     <!-- Our Values Section -->
-    <section class="py-16 sm:py-20 md:py-24 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 overflow-hidden relative">
+    <section class="py-16 sm:py-20 md:py-24 bg-gradient-to-br from-orange-50 via-red-50 to-amber-50 overflow-hidden relative">
         <!-- Animated background shapes -->
-        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-200 to-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-gradient-to-br from-purple-200 to-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-300 to-red-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-gradient-to-br from-red-300 to-rose-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-blob animation-delay-2000"></div>
         
         <div class="container mx-auto px-3 sm:px-4 md:px-6 relative z-10">
             <div class="text-center mb-12 sm:mb-16" data-aos="fade-up">
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-pulse">Our Core Values</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-700 via-red-700 to-rose-700 bg-clip-text text-transparent mb-4 animate-pulse">Our Core Values</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto text-base sm:text-lg font-medium">
                     These principles guide our actions and define our commitment to you.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                 <!-- Trust & Transparency -->
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl animated-card border-2 border-blue-200 hover:border-blue-400 transition-all duration-300 transform hover:-translate-y-2" data-aos="flip-left" data-aos-delay="0">
-                    <div class="bg-gradient-to-br from-blue-400 to-blue-600 text-white mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce transform hover:scale-110 transition-transform">
+                <div class="bg-gradient-to-br from-orange-100 to-amber-100 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl animated-card border-4 border-orange-400 hover:border-red-500 transition-all duration-300 transform hover:-translate-y-2" data-aos="flip-left" data-aos-delay="0">
+                    <div class="bg-gradient-to-br from-orange-500 to-red-600 text-white mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce transform hover:scale-110 transition-transform">
                         <i class="fas fa-handshake text-3xl"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-3 text-blue-900">Trust & Transparency</h3>
-                    <p class="text-gray-700 leading-relaxed">
+                    <h3 class="font-bold text-xl mb-3 text-orange-900">Trust & Transparency</h3>
+                    <p class="text-gray-800 leading-relaxed font-medium">
                         Building lasting relationships through honest dealings and clear information.
                     </p>
                 </div>
                 
                 <!-- Innovation -->
-                <div class="bg-gradient-to-br from-green-50 to-emerald-100 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl animated-card border-2 border-green-200 hover:border-green-400 transition-all duration-300 transform hover:-translate-y-2" data-aos="flip-left" data-aos-delay="100">
-                    <div class="bg-gradient-to-br from-green-400 to-emerald-600 text-white mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce transform hover:scale-110 transition-transform">
+                <div class="bg-gradient-to-br from-red-100 to-rose-100 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl animated-card border-4 border-red-400 hover:border-orange-500 transition-all duration-300 transform hover:-translate-y-2" data-aos="flip-left" data-aos-delay="100">
+                    <div class="bg-gradient-to-br from-red-500 to-rose-600 text-white mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce transform hover:scale-110 transition-transform">
                         <i class="fas fa-lightbulb text-3xl"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-3 text-green-900">Innovation</h3>
-                    <p class="text-gray-700 leading-relaxed">
+                    <h3 class="font-bold text-xl mb-3 text-red-900">Innovation</h3>
+                    <p class="text-gray-800 leading-relaxed font-medium">
                         Continuously evolving our platform to meet the dynamic needs of the market.
                     </p>
                 </div>
                 
                 <!-- Customer Centricity -->
-                <div class="bg-gradient-to-br from-amber-50 to-yellow-100 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl animated-card border-2 border-yellow-200 hover:border-yellow-400 transition-all duration-300 transform hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
-                    <div class="bg-gradient-to-br from-amber-400 to-orange-600 text-white mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce transform hover:scale-110 transition-transform">
+                <div class="bg-gradient-to-br from-amber-100 to-yellow-100 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl animated-card border-4 border-amber-400 hover:border-orange-500 transition-all duration-300 transform hover:-translate-y-2" data-aos="flip-left" data-aos-delay="200">
+                    <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white mx-auto mb-6 w-16 h-16 rounded-full flex items-center justify-center shadow-lg core-value-icon-bounce transform hover:scale-110 transition-transform">
                         <i class="fas fa-users-gear text-3xl"></i>
                     </div>
                     <h3 class="font-bold text-xl mb-3 text-amber-900">Customer Centricity</h3>
-                    <p class="text-gray-700 leading-relaxed">
+                    <p class="text-gray-800 leading-relaxed font-medium">
                         Placing our users at the heart of every decision and service we provide.
                     </p>
                 </div>
@@ -694,96 +696,65 @@
     </section>
 
     <!-- Our Story Section -->
-    <section class="py-16 sm:py-20 md:py-24 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 relative overflow-hidden story-gradient-animate">
-        <!-- Multiple animated background shapes with different colors -->
-        <div class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-blob"></div>
-        <div class="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-tl from-blue-400 to-indigo-400 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
-        <div class="absolute top-1/2 left-1/4 w-72 h-72 bg-gradient-to-br from-pink-400 to-red-400 rounded-full mix-blend-screen filter blur-3xl opacity-5 animate-blob animation-delay-4000"></div>
+    <section id="story" class="relative py-20 overflow-hidden group bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800">
+        <!-- Subtle animated background -->
+        <div class="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-orange-400/10 to-transparent rounded-full blur-3xl animate-blob"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-orange-400/10 to-transparent rounded-full blur-3xl animate-blob animation-delay-2000"></div>
         
-        <div class="container mx-auto px-3 sm:px-4 md:px-6 relative z-10">
-            <div class="w-full">
-                <div class="float-text">
-                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 bg-clip-text text-transparent mb-2 text-center animate-pulse">Our Story</h2>
-                    <p class="text-center text-gray-300 text-sm sm:text-base mb-8">Transforming Industrial Innovation</p>
+        <div class="container mx-auto px-4 relative z-10">
+            <h2 class="text-4xl font-bold text-white mb-8 text-center drop-shadow-lg">Our Story</h2>
+            <div class="max-w-4xl mx-auto">
+                        {% if about_info.story %}
+                            <div class="text-white drop-shadow-md leading-relaxed text-lg">{{ about_info.story|safe }}</div>
+                        {% else %}
+                            <p class="text-white leading-relaxed mb-6 text-lg drop-shadow-md">
+                              CIA represents various industrial sectors including robotics and automation, motors and pumps, corrugated box manufacturing, packaging solutions, kitchen equipment and food machinery, steel doors and safety lockers, printing machinery, CNC job works, metal and steel fabrication, and laser cutting and sheet bending.
+                            </p>
+                            <p class="text-white leading-relaxed text-lg drop-shadow-md">
+                                The association is committed to community engagement through initiatives like implementing CCTV surveillance for enhanced security, organizing annual flag hoisting ceremonies, and participating in disaster relief efforts such as the Kerala Flood Fund arrangements. We help member companies become more resilient, innovative and ready for new markets.
+                            </p>
+                        {% endif %}
+            </div>
+        </div>
+        
+        <!-- Professional Statistics Section -->
+        <div class="mt-16 container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Member Companies -->
+                <div class="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-white/20 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-building text-3xl text-orange-400"></i>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-2 counter" data-target="{{ about_info.member_companies|default:161 }}">{{ about_info.member_companies|default:161 }}</h3>
+                    <p class="text-gray-300 text-sm font-medium">Member Companies</p>
                 </div>
                 
-                <div class="max-w-4xl mx-auto">
-                    {% if about_info.story %}
-                        <div class="bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-pink-500/15 p-6 sm:p-8 md:p-12 rounded-2xl border-2 border-indigo-500/40 backdrop-blur-sm slide-in-left hover:border-purple-400/60 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
-                            <div class="relative">
-                                <div class="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-blue-400 to-purple-400 rounded-full"></div>
-                                {{ about_info.story|safe }}
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="bg-gradient-to-r from-indigo-500/15 via-purple-500/15 to-pink-500/15 p-6 sm:p-8 md:p-12 rounded-2xl border-2 border-indigo-500/40 backdrop-blur-sm slide-in-left hover:border-purple-400/60 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
-                            <div class="relative">
-                                <div class="absolute -left-4 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-400 via-blue-400 to-purple-400 rounded-full"></div>
-                                <p class="text-gray-100 leading-relaxed text-lg mb-6 font-medium">
-                                  CIA represents various industrial sectors including robotics and automation, motors and pumps, corrugated box manufacturing, packaging solutions, kitchen equipment and food machinery, steel doors and safety lockers, printing machinery, CNC job works, metal and steel fabrication, and laser cutting and sheet bending.
-                                </p>
-                                <p class="text-gray-200 leading-relaxed text-lg font-medium">
-                                    The association is committed to community engagement through initiatives like implementing CCTV surveillance for enhanced security, organizing annual flag hoisting ceremonies, and participating in disaster relief efforts such as the Kerala Flood Fund arrangements. We help member companies become more resilient, innovative and ready for new markets.
-                                </p>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    <!-- Enhanced Stats Grid with multiple colors -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-16">
-                        <!-- Member Companies - Teal/Cyan Soft Theme -->
-                        <div class="bg-gradient-to-br from-teal-500/20 via-cyan-500/15 to-sky-500/20 rounded-2xl p-6 sm:p-8 text-center shadow-xl hover:shadow-2xl hover:shadow-teal-400/30 animated-card border-2 border-teal-400/50 hover:border-cyan-300/70 transition-all duration-300 transform hover:-translate-y-4 group stats-card-glow" data-aos="zoom-in" data-aos-delay="0">
-                            <div class="text-teal-300 mb-4 group-hover:scale-125 transition-transform duration-300 slide-in-left">
-                                <i class="fas fa-building text-5xl sm:text-6xl animate-bounce"></i>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute inset-0 bg-gradient-to-r from-teal-400/15 to-cyan-400/15 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                                <h3 class="text-4xl sm:text-5xl font-bold text-transparent bg-gradient-to-r from-teal-300 to-cyan-300 bg-clip-text mb-2 counter pulse-med" data-target="{{ about_info.member_companies|default:161 }}">{{ about_info.member_companies|default:161 }}{% if about_info.member_companies %}<span class="text-2xl animate-bounce" style="animation-delay: 0.3s;">+</span>{% endif %}</h3>
-                                <p class="text-gray-300 font-bold text-lg">Member Companies</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Industrial Sectors - Purple/Pink Theme -->
-                        <div class="bg-gradient-to-br from-purple-500/25 via-pink-500/15 to-purple-600/25 rounded-2xl p-6 sm:p-8 text-center shadow-xl hover:shadow-2xl hover:shadow-purple-500/40 animated-card border-2 border-purple-400/60 hover:border-pink-300/80 transition-all duration-300 transform hover:-translate-y-4 group stats-card-glow" style="animation-delay: 0.5s;" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="text-purple-300 mb-4 group-hover:scale-125 transition-transform duration-300 slide-in-right">
-                                <i class="fas fa-industry text-5xl sm:text-6xl animate-bounce" style="animation-delay: 0.2s;"></i>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                                <h3 class="text-4xl sm:text-5xl font-bold text-transparent bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text mb-2 counter pulse-med" style="animation-delay: 0.3s;" data-target="{{ about_info.industrial_sectors|default:20 }}">{{ about_info.industrial_sectors|default:20 }}{% if about_info.industrial_sectors %}<span class="text-2xl animate-bounce" style="animation-delay: 0.5s;">+</span>{% endif %}</h3>
-                                <p class="text-gray-300 font-bold text-lg">Industrial Sectors</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Established Year - Amber/Orange Theme -->
-                        <div class="bg-gradient-to-br from-amber-500/25 via-orange-500/15 to-orange-600/25 rounded-2xl p-6 sm:p-8 text-center shadow-xl hover:shadow-2xl hover:shadow-orange-500/40 animated-card border-2 border-amber-400/60 hover:border-orange-300/80 transition-all duration-300 transform hover:-translate-y-4 group stats-card-glow" style="animation-delay: 1s;" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="text-amber-300 mb-4 group-hover:scale-125 transition-transform duration-300 slide-in-left">
-                                <i class="fas fa-calendar-alt text-5xl sm:text-6xl animate-bounce" style="animation-delay: 0.4s;"></i>
-                            </div>
-                            <div class="relative">
-                                <div class="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-orange-400/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-300"></div>
-                                <h3 class="text-4xl sm:text-5xl font-bold text-transparent bg-gradient-to-r from-amber-300 to-orange-300 bg-clip-text mb-2 counter pulse-med" style="animation-delay: 0.6s;" data-target="{{ about_info.established_year|default:2020 }}">{{ about_info.established_year|default:2020 }}</h3>
-                                <p class="text-gray-300 font-bold text-lg">Established</p>
-                            </div>
-                        </div>
+                <!-- Industrial Sectors -->
+                <div class="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-white/20 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-industry text-3xl text-orange-400"></i>
                     </div>
+                    <h3 class="text-4xl font-bold text-white mb-2 counter" data-target="{{ about_info.industrial_sectors|default:20 }}">{{ about_info.industrial_sectors|default:20 }}</h3>
+                    <p class="text-gray-300 text-sm font-medium">Industrial Sectors</p>
+                </div>
+                
+                <!-- Established Year -->
+                <div class="bg-white/5 backdrop-blur-sm rounded-lg p-8 border border-white/10 hover:border-white/20 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-calendar-alt text-3xl text-orange-400"></i>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-2">{{ about_info.established_year|default:2020 }}</h3>
+                    <p class="text-gray-300 text-sm font-medium">Year Established</p>
                 </div>
             </div>
         </div>
     </section>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Photo Gallery Section -->
     <section id="photo-gallery" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Photos Gallery</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Photo Gallery</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto font-medium">
                     Glimpses of our activities, events, and industrial achievements over the years
                 </p>
             </div>
@@ -808,7 +779,7 @@
             <!-- View More Button -->
             {% if show_view_more %}
             <div class="text-center mt-8">
-                <a href="{% url 'photo_gallery' %}" class="inline-block bg-yellow-600 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                <a href="{% url 'photo_gallery' %}" class="inline-block bg-gradient-to-r from-orange-600 via-red-600 to-rose-600 text-white px-8 py-3 rounded-full font-bold hover:from-orange-700 hover:via-red-700 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl">
                     View More Photos
                 </a>
             </div>
@@ -817,11 +788,11 @@
     </section>
 
     <!-- Newspaper Gallery Section -->
-    <section id="newspaper-gallery" class="py-16 bg-gray-50">
+    <section id="newspaper-gallery" class="py-16 bg-gradient-to-br from-orange-50 to-red-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">News Gallery</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">News Gallery</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto font-medium">
                     Recent news, updates, and announcements from CIA   </p>
             </div>
 
@@ -852,7 +823,7 @@
             <!-- View More Button -->
             {% if show_newspaper_view_more %}
             <div class="text-center mt-8">
-                <a href="{% url 'news_gallery' %}" class="inline-block bg-yellow-600 text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                <a href="{% url 'news_gallery' %}" class="inline-block bg-gradient-to-r from-orange-600 via-red-600 to-rose-600 text-white px-8 py-3 rounded-full font-bold hover:from-orange-700 hover:via-red-700 hover:to-rose-700 transition-all duration-300 shadow-lg hover:shadow-xl">
                     View More News Articles
                 </a>
             </div>
@@ -863,18 +834,18 @@
    
 
     <!-- Meet the Team Section -->
-    <section id="team" class="py-16 bg-gray-50">
+    <section id="team" class="py-16 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Meet Our Leadership</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Meet Our Leadership</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto font-medium">
                     The volunteers and office‑bearers who steer CIA's initiatives.
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for member in leadership_members %}
-                <div class="bg-white p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300">
-                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-xl team-member-image-spin">
+                <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300 border-2 border-orange-300 hover:border-red-500">
+                    <div class="relative mx-auto mb-4 w-32 h-32 rounded-full overflow-hidden border-4 border-orange-500 shadow-xl team-member-image-spin">
                         {% if member.photo_url %}
                             <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer" onclick="openLightbox('{{ member.photo_url|escapejs }}', '{{ member.name|escapejs }}')">
                         {% elif member.photo %}
@@ -931,18 +902,17 @@
 
 
     <!-- Call to Action -->
-    <section class="py-16 text-black" style="background-color: #ffffff">
+    <section class="py-16 text-white bg-gradient-to-br from-orange-500/80 via-orange-600/75 to-orange-600/80 backdrop-blur-sm">
         <div class="container mx-auto px-4 text-center">
             <div class="max-w-3xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6 animate-pulse">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 animate-pulse drop-shadow-lg">
                     List Your Machinery Business With Us
                 </h2>
-                <p class="text-lg mb-8">
+                <p class="text-lg mb-8 drop-shadow-md">
                     Join thousands of heavy equipment suppliers reaching customers across India and globally
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-
-                    <a href="{% url 'contact' %}" class="bg-transparent border-2 border-black px-8 py-4 rounded-full font-bold hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <a href="{% url 'contact' %}" class="bg-white text-orange-700 font-bold px-8 py-4 rounded-full hover:bg-orange-50 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-white">
                         Contact Us
                     </a>
                 </div>
