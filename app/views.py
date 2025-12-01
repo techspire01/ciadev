@@ -4,12 +4,12 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.db import models
 import random
-from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, Complaint
+from .models import Supplier, CustomUser, PasswordResetOTP, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, Complaint, SupplierReview
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import Supplier
 import json
-from .forms import SupplierForm, UserCreationForm, UserProfileForm, SupplierEditForm, SupplierListingForm
+from .forms import SupplierForm, UserCreationForm, UserProfileForm, SupplierEditForm, SupplierListingForm, SupplierReviewForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 import datetime
@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.db.models import Avg
 
 def internship_view(request):
     return render(request, "intern.html")
@@ -632,11 +633,39 @@ def supplier_detail_page(request, supplier_name):
             if product:
                 products.append(product)
 
+        reviews = supplier.reviews.select_related('user').all()
+        average_rating = reviews.aggregate(avg_rating=Avg('rating')).get('avg_rating')
+        review_count = reviews.count()
+
+        if request.method == 'POST':
+            review_form = SupplierReviewForm(request.POST)
+            if review_form.is_valid():
+                review = review_form.save(commit=False)
+                review.supplier = supplier
+                if request.user.is_authenticated:
+                    review.user = request.user
+                    if not review.reviewer_name:
+                        review.reviewer_name = request.user.get_full_name() or request.user.email
+                review.save()
+                messages.success(request, "Thank you for reviewing this company.")
+                return redirect('supplier_detail_page', supplier_name=supplier_name)
+            else:
+                messages.error(request, "Please correct the errors below before submitting your review.")
+        else:
+            initial_name = ''
+            if request.user.is_authenticated:
+                initial_name = request.user.get_full_name() or request.user.email
+            review_form = SupplierReviewForm(initial={'reviewer_name': initial_name})
+
         context = {
             'supplier': supplier,
             'sub_categories': sub_categories,
             'product_images': product_images,
             'products': products,
+            'reviews': reviews,
+            'review_form': review_form,
+            'average_rating': average_rating,
+            'review_count': review_count,
         }
         return render(request, 'supplier_detail.html', context)
     except Supplier.DoesNotExist:

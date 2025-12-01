@@ -1,7 +1,7 @@
 from django import forms
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import Supplier, CustomUser, SupplierEditRequest, SupplierListingRequest
+from .models import Supplier, CustomUser, SupplierEditRequest, SupplierListingRequest, SupplierReview
 
 from .models import Complaint
 
@@ -179,4 +179,20 @@ class ComplaintForm(forms.ModelForm):
         widgets = {
             'complaint_text': forms.Textarea(attrs={'rows':4, 'placeholder':'Describe your complaint...'}),
             'contact_number': forms.TextInput(attrs={'placeholder': 'Contact number (optional)'}),
+        }
+
+
+class SupplierReviewForm(forms.ModelForm):
+    class Meta:
+        model = SupplierReview
+        fields = ['reviewer_name', 'rating', 'comment']
+        widgets = {
+            'reviewer_name': forms.TextInput(attrs={'class': 'w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200', 'placeholder': 'Your name'}),
+            'rating': forms.Select(attrs={'class': 'w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200'}),
+            'comment': forms.Textarea(attrs={'rows': 4, 'class': 'w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-200', 'placeholder': 'Share your experience (optional)'}),
+        }
+        labels = {
+            'reviewer_name': 'Name',
+            'rating': 'Rating',
+            'comment': 'Comments',
         }
