@@ -1776,6 +1776,10 @@ a:focus-visible {
   background: rgba(0, 0, 0, 0.5);
   z-index: 9999 !important;
   animation: fadeInOverlay 0.3s ease-out;
+  pointer-events: none;
+}
+
+.mobile-menu-wrapper:not(.hidden) .mobile-menu-overlay {
   pointer-events: auto;
 }
 
@@ -1806,7 +1810,7 @@ a:focus-visible {
   overflow-x: hidden;
   animation: slideInPanel 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -webkit-overflow-scrolling: touch;
-  pointer-events: auto;
+  pointer-events: auto !important;
 }
 
 @keyframes slideInPanel {
