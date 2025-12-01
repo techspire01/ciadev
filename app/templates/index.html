@@ -32,7 +32,8 @@
       </div>
     </div>
 
-    <div id="heroCarousel" class="hero-carousel-grid h-full w-full transition-all duration-200 ease-in-out relative z-10">
+    
+<div id="heroCarousel" class="hero-carousel-grid h-full w-full transition-all duration-200 ease-in-out relative z-10">
       <!-- Container 1 - Large hero (spans 3x2) -->
       <div class="carousel-item carousel-item-large rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
         <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" class="w-full h-full object-cover" />
@@ -84,7 +85,6 @@
       </div>
     </div>
   </section>
-
   <!-- Carousel Indicators -->
   <div class="flex justify-center py-6 bg-white shadow-sm">
     <div class="carousel-indicators flex justify-center space-x-4">
@@ -115,7 +115,7 @@
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6" id="categories">
         {% for category in categories %}
           <a
-            href="{% url 'suppliers' %}?category={{ category|urlencode }}"
+           href="{% url 'cia_networks' %}?category={{ category|urlencode }}"
             class="group relative bg-gradient-to-br from-white via-orange-50 to-yellow-50 rounded-xl shadow-md hover:shadow-2xl p-6 md:p-7 text-center transition-all duration-500 overflow-hidden border-2 border-orange-300 hover:border-red-500 animate-fade-in-up hover:bg-white"
             style="animation-delay: calc({{ forloop.counter0 }} * 80ms)"
           >
@@ -274,9 +274,10 @@
       </div>
       <div class="rounded-2xl p-3 text-center mt-12">
         <div class="text-center">
-          <a href="{% url 'suppliers' %}"
+          
+          <a href="{% url 'cia_networks' %}"
              class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 via-red-700 to-rose-800 text-white font-bold px-8 md:px-10 py-3 md:py-4 rounded-full hover:from-orange-700 hover:via-red-800 hover:to-rose-900 transition-all duration-300 shadow-lg hover:shadow-2xl shadow-red-600/60 transform hover:scale-115 text-sm md:text-base font-semibold tracking-wide drop-shadow-md">
-            View All Suppliers 
+              CIA_networks 
             <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform duration-300"></i>
           </a>
         </div>
