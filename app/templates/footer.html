@@ -1,43 +1,19 @@
 {% load static %}
 {% load custom_filters %}
 
-<footer class="bg-gray-100 text-gray-800 py-6 sm:py-8 md:py-10 border-t border-gray-200">
-      <div class="px-3 sm:px-4 md:px-6">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-          <!-- Company Info -->
-          <div class="rounded p-3 sm:p-4 md:p-5 border border-gray-100 text-center sm:text-left flex flex-col justify-center">
-            <div class="flex items-center justify-center sm:justify-start mb-3 sm:mb-4">
-              <img
-                src="{% static 'images/CIA logo.png' %}"
-                alt="CIA MachineryHub logo"
-                class="h-8 sm:h-10 md:h-12 w-8 sm:w-10 md:w-12 mr-2 sm:mr-3 rounded"
-              />
-              <div>
-                <span class="text-xs sm:text-sm md:text-base font-bold block">CIA</span>
-                <span class="text-xs sm:text-sm md:text-base font-bold text-yellow-600">next</span>
-              </div>
-            </div>
-            <div class="flex justify-center sm:justify-start space-x-2 sm:space-x-3">
-              <a
-                href="#"
-                class="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm"
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a
-                href="#"
-                class="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a
-                href="#"
-                class="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm"
-                ><i class="fab fa-linkedin-in"></i
-              ></a>
-              <a
-                href="#"
-                class="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-xs sm:text-sm"
-                ><i class="fab fa-instagram"></i
-              ></a>
+<footer class="bg-yellow-50 border-t-2 border-yellow-200 text-gray-800 py-0.125 md:py-0.25" style="background-color: #fffaed !important;">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-0.125 md:gap-0.25">
+        <!-- Company Info -->
+        <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:text-left flex flex-col justify-center">
+          <div class="flex items-center justify-center md:justify-start mb-0.125 md:mb-0.25">
+            <img
+              src="{% static 'images/CIA logo.png' %}"
+              alt="CIA MachineryHub logo"
+              class="h-4 md:h-5 w-4 md:w-5 mr-0.5 rounded"
+            />
+            <div>
+              <span class="text-3xs md:text-2xs font-bold">CIA</span>
+              <span class="text-3xs md:text-2xs font-bold text-yellow-600">next</span>
             </div>
           </div>
 

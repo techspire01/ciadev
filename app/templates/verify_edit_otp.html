@@ -10,169 +10,185 @@
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
     <style>
-        /* Enhanced Background with light professional gradient */
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Enhanced background with light professional gradient */
         .verify-background {
             min-height: 100vh;
             background: 
-                linear-gradient(135deg, #FFF8E7 0%, #FFFBF0 15%, #FFE5B4 35%, #FFDAB9 65%, #FFE4E1 85%, #FFF5EE 100%),
+                linear-gradient(135deg, #FFFEF0 0%, #fffbeb 50%, #fefdfb 100%),
                 repeating-linear-gradient(
                     45deg,
                     transparent,
-                    transparent 30px,
-                    rgba(251, 191, 36, 0.08) 30px,
-                    rgba(251, 191, 36, 0.08) 60px
+                    transparent 35px,
+                    rgba(224, 185, 87, 0.03) 35px,
+                    rgba(251, 191, 36, 0.03) 70px
                 ),
                 repeating-linear-gradient(
                     -45deg,
                     transparent,
-                    transparent 30px,
-                    rgba(251, 146, 60, 0.06) 30px,
-                    rgba(251, 146, 60, 0.06) 60px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 50px,
-                    rgba(255, 200, 124, 0.03) 50px,
-                    rgba(255, 200, 124, 0.03) 100px
-                ),
-                radial-gradient(ellipse 800px 600px at 15% 30%, rgba(251, 191, 36, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse 600px 500px at 85% 70%, rgba(251, 146, 60, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse 700px 400px at 50% 0%, rgba(255, 193, 7, 0.08) 0%, transparent 50%);
-            background-attachment: fixed;
+                    transparent 35px,
+                    rgba(251, 146, 60, 0.02) 35px,
+                    rgba(251, 146, 60, 0.02) 70px
+                );
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Floating decorative shapes */
+        /* Simple elegant floating shapes */
         .floating-shape {
             position: fixed;
-            border-radius: 50%;
             pointer-events: none;
             z-index: 1;
-            mix-blend-mode: screen;
+            border-radius: 50%;
         }
 
         .shape-1 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 1), rgba(251, 191, 36, 0.5) 50%, transparent 80%);
-            top: -80px;
-            right: -120px;
-            animation: floatSmooth 14s ease-in-out infinite;
-            opacity: 1;
-            filter: blur(6px);
-            box-shadow: 0 0 180px rgba(251, 191, 36, 1), 0 0 130px rgba(251, 191, 36, 0.9), 0 0 70px rgba(251, 191, 36, 1);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 0.65), rgba(251, 146, 60, 0.52));
+            top: 10%;
+            left: 5%;
+            animation: floatSmooth 6s ease-in-out infinite;
+            filter: blur(30px);
+            box-shadow: 0 0 70px rgba(251, 191, 36, 0.5), 0 0 110px rgba(251, 146, 60, 0.3);
         }
 
         .shape-2 {
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle at 60% 60%, rgba(251, 146, 60, 0.95), rgba(251, 146, 60, 0.45) 50%, transparent 80%);
-            bottom: 120px;
-            left: -120px;
-            animation: floatSmooth 16s ease-in-out infinite 1s;
-            opacity: 0.99;
-            filter: blur(7px);
-            box-shadow: 0 0 170px rgba(251, 146, 60, 1), 0 0 120px rgba(251, 146, 60, 0.85), 0 0 60px rgba(251, 146, 60, 0.95);
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle at 40% 40%, rgba(251, 146, 60, 0.6), rgba(249, 115, 22, 0.48));
+            bottom: 15%;
+            right: 10%;
+            animation: floatSmooth 7s ease-in-out infinite reverse;
+            filter: blur(35px);
+            box-shadow: 0 0 80px rgba(251, 146, 60, 0.48), 0 0 130px rgba(249, 115, 22, 0.28);
         }
 
         @keyframes floatSmooth {
             0%, 100% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
+                transform: translateY(0px) translateX(0px);
+                opacity: 0.7;
             }
-            12% {
-                transform: translate(100px, -120px) scale(1.25);
+            50% {
+                transform: translateY(-50px) translateX(40px);
                 opacity: 0.9;
             }
-            25% {
-                transform: translate(150px, -180px) scale(1.35);
-                opacity: 1;
-            }
-            40% {
-                transform: translate(80px, -220px) scale(1.3);
-                opacity: 0.95;
-            }
-            50% {
-                transform: translate(0, -240px) scale(1.4);
-                opacity: 1;
-            }
-            65% {
-                transform: translate(-120px, -160px) scale(1.28);
-                opacity: 0.93;
-            }
-            80% {
-                transform: translate(-100px, -80px) scale(1.22);
-                opacity: 0.97;
-            }
-            92% {
-                transform: translate(-40px, -30px) scale(1.1);
-                opacity: 0.99;
-            }
         }
 
-        /* Verify container */
-        .verify-container {
+        /* Content wrapper */
+        .verify-content {
             position: relative;
-            z-index: 50;
-            background: linear-gradient(135deg, #FFFFFF 0%, #FAFAF8 50%, #F5F3F0 100%);
-            border: 3px solid;
-            border-color: #FBBF24;
-            border-radius: 2rem;
-            box-shadow: 
-                0 0 0 1px #F59E0B,
-                0 0 0 2px #FB923C,
-                0 40px 80px -20px rgba(251, 191, 36, 0.35),
-                0 0 60px rgba(251, 191, 36, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                inset -1px -1px 20px rgba(251, 191, 36, 0.05);
-            animation: containerGlow 3s ease-in-out infinite;
-            overflow: visible;
-            pointer-events: auto;
-            opacity: 1;
-            visibility: visible;
-            display: block;
-            width: 100%;
-            max-width: 100%;
+            z-index: 10;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        @keyframes containerGlow {
-            0%, 100% {
-                box-shadow: 
-                    0 40px 80px -20px rgba(251, 191, 36, 0.35),
-                    0 0 60px rgba(251, 191, 36, 0.25),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                    inset -1px -1px 20px rgba(251, 191, 36, 0.05);
-            }
-            50% {
-                box-shadow: 
-                    0 40px 80px -20px rgba(251, 191, 36, 0.45),
-                    0 0 80px rgba(251, 191, 36, 0.35),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                    inset -1px -1px 20px rgba(251, 191, 36, 0.08);
-            }
-        }
-
-        /* Verify header */
-        .verify-header {
-            animation: fadeInDown 0.6s ease-out backwards;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 15;
-        }
-
-        @media (min-width: 640px) {
-            .verify-header {
-                margin-bottom: 2rem;
-            }
-        }
-
-        @keyframes fadeInDown {
+        @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Premium glass card */
+        .verify-container {
+            backdrop-filter: blur(20px);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 254, 248, 0.9));
+            border-radius: 1.5rem;
+            box-shadow: 
+                0 25px 80px rgba(251, 146, 60, 0.1),
+                0 0 2px rgba(251, 146, 60, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(251, 146, 60, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animated gradient background for card */
+        .verify-container::before {
+            content: "";
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(
+                from 160deg,
+                rgba(251, 146, 60, 0.15),
+                rgba(251, 146, 60, 0.25),
+                rgba(59, 130, 246, 0.2),
+                rgba(34, 197, 94, 0.15),
+                rgba(251, 146, 60, 0.15)
+            );
+            opacity: 0.2;
+            filter: blur(50px);
+            animation: rotateGradient 12s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateGradient {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        /* Header text animations */
+        .verify-header {
+            animation: fadeInUp 0.8s ease-out backwards;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .verify-header h2 {
+            animation: slideInTitle 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation-delay: 0.1s;
+        }
+
+        .verify-header p {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideInTitle {
+            from {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -212,44 +228,43 @@
         }
 
         .verify-title {
-            font-size: 1.5rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 900;
             color: #1F2937;
             background: linear-gradient(90deg, #FBBF24 0%, #F59E0B 50%, #FBBF24 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 3s ease infinite;
-        }
-
-        @media (min-width: 640px) {
-            .verify-title {
-                font-size: 2rem;
-            }
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-            100% { background-position: 0% center; }
+            margin: 0;
         }
 
         .verify-subtitle {
-            font-size: 0.875rem;
-            color: #374151;
+            font-size: 1rem;
+            color: #6B7280;
             font-weight: 600;
             margin-top: 0.5rem;
+            letter-spacing: 0.3px;
         }
 
-        @media (min-width: 640px) {
-            .verify-subtitle {
-                font-size: 1rem;
+        /* OTP Input styling */
+        .otp-input {
+            position: relative;
+            animation: fadeInWithScale 0.6s ease-out 0.1s backwards;
+        }
+
+        @keyframes fadeInWithScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
             }
         }
 
-        /* OTP Input */
-        .otp-input {
+        .otp-input input {
             width: 100%;
             padding: 0.875rem;
             border: 2px solid rgba(251, 191, 36, 0.3);
@@ -260,32 +275,30 @@
             font-weight: 700;
             letter-spacing: 0.2rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @media (min-width: 640px) {
-            .otp-input {
-                padding: 1rem;
-                font-size: 1.5rem;
-                letter-spacing: 0.3rem;
-            }
-        }
-
-        .otp-input:focus {
+        .otp-input input:focus {
             outline: none;
-            border-color: rgba(251, 191, 36, 0.8);
-            box-shadow: 
-                0 0 0 3px rgba(251, 191, 36, 0.2),
-                0 10px 25px rgba(251, 191, 36, 0.15);
             background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1), 0 0 15px rgba(251, 191, 36, 0.2);
+            border-color: rgba(251, 191, 36, 0.5);
         }
 
-        /* Input group animations */
-        .input-group {
-            animation: fadeInUp 0.6s ease-out 0.1s backwards;
+        /* Submit button */
+        .submit-btn {
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+            color: #1f2937;
+            animation: slideInButton 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
         }
 
-        @keyframes fadeInUp {
+        @keyframes slideInButton {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -296,90 +309,74 @@
             }
         }
 
-        /* Submit button */
-        .submit-btn {
-            position: relative;
-            width: 100%;
-            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
-            color: white;
-            font-weight: 700;
-            padding: 0.875rem;
-            font-size: 0.95rem;
-            border-radius: 1rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            overflow: hidden;
-            animation: slideInUp 0.6s ease-out 0.2s backwards;
-        }
-
-        @media (min-width: 640px) {
-            .submit-btn {
-                padding: 1rem;
-                font-size: 1rem;
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(251, 191, 36, 0.4);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5);
+            background: linear-gradient(135deg, #FCD34D 0%, #FBBF24 100%);
         }
 
         .submit-btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(0.98);
         }
 
-        /* Message alerts */
+        .submit-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Alert animations */
         .alert {
-            padding: 0.75rem;
+            animation: slideInAlert 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            padding: 1rem;
             border-radius: 1rem;
-            margin-bottom: 1rem;
-            border: 2px solid;
-            animation: slideInUp 0.6s ease-out backwards;
-            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid;
+            font-weight: 600;
         }
 
-        @media (min-width: 640px) {
-            .alert {
-                padding: 1rem;
-                margin-bottom: 1.5rem;
-                font-size: 1rem;
+        @keyframes slideInAlert {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
 
         .alert-success {
             background-color: #dcfce7;
             color: #166534;
-            border-color: #86efac;
+            border-left-color: #86efac;
         }
 
         .alert-error {
             background-color: #fee2e2;
             color: #991b1b;
-            border-color: #fca5a5;
+            border-left-color: #fca5a5;
         }
 
         /* Resend link */
         .resend-link {
             text-align: center;
-            margin-top: 1rem;
-            animation: slideInUp 0.6s ease-out 0.3s backwards;
+            margin-top: 1.5rem;
+            animation: slideInUp 0.6s ease-out 0.4s backwards;
+        }
+
+        .resend-link p {
+            color: #6B7280;
+            font-weight: 500;
+            margin: 0;
         }
 
         .resend-link p {
@@ -401,6 +398,7 @@
             font-weight: 700;
             transition: all 0.3s ease;
             position: relative;
+            display: inline-block;
         }
 
         .resend-link a::after {
@@ -418,83 +416,124 @@
             width: 100%;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
+        .resend-link a:hover {
+            color: #F59E0B;
+            transform: translateX(2px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+            .verify-container {
+                margin: 0 1rem;
+            }
+
+            .verify-title {
+                font-size: 2rem;
+            }
+
+            .submit-btn {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Icon animations on button hover */
+        .submit-btn i {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover i {
+            transform: translateX(2px) rotate(12deg);
         }
     </style>
 </head>
-<body class="verify-background" style="display: flex; flex-direction: column; min-height: 100vh;">
-    {% include "navbar.html" %}
-    
-    <!-- Floating decorative shapes -->
+<body class="verify-background">
+    <!-- Simple floating decorative shapes -->
     <div class="floating-shape shape-1"></div>
     <div class="floating-shape shape-2"></div>
-    
-    <div class="relative z-30 flex-1 flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8" style="display: flex; align-items: center; justify-content: center;">
-        <div class="verify-container" style="width: 100%; max-width: 24rem; padding: 1.5rem; border-radius: 2rem;">
-            <style>
-                @media (min-width: 640px) {
-                    .verify-container {
-                        max-width: 28rem !important;
-                        padding: 2rem !important;
-                    }
-                }
-                @media (min-width: 768px) {
-                    .verify-container {
-                        padding: 2.5rem !important;
-                    }
-                }
-            </style>
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert {% if message.tags %}alert-success{% else %}alert-error{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
 
-            <div class="verify-header">
-                <div class="verify-icon">
-                    <i class="fas fa-lock text-white text-lg sm:text-2xl"></i>
+    {% include "navbar.html" %}
+
+    <!-- Verify OTP Container -->
+    <div class="verify-content min-h-[calc(100vh-80px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Header with animations -->
+            <div class="text-center space-y-4 verify-header">
+                <div class="inline-flex items-center justify-center">
+                    <div class="verify-icon">
+                        <i class="fas fa-lock text-white text-2xl"></i>
+                    </div>
                 </div>
                 <h2 class="verify-title">Verify OTP</h2>
-                <p class="verify-subtitle">Enter the code sent to your email</p>
+                <p class="verify-subtitle">Enter the verification code sent to your email</p>
             </div>
 
-            <form method="POST" class="space-y-4 sm:space-y-6">
-                {% csrf_token %}
-                
-                <!-- Hidden user ID field for session persistence -->
-                <input type="hidden" name="user_id" value="{{ user.id }}">
-                
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        name="otp" 
-                        placeholder="000000"
-                        class="otp-input"
-                        maxlength="6"
-                        pattern="[0-9]{6}"
-                        required
-                        autocomplete="off"
-                    />
+            <!-- Verify Form -->
+            <div class="verify-container p-8 text-gray-900">
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %} flex items-start space-x-3" role="alert">
+                            <i class="mt-0.5 fas {% if message.tags == 'error' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %} text-lg flex-shrink-0"></i>
+                            <span class="block sm:inline font-medium">{{ message }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" class="space-y-6">
+                    {% csrf_token %}
+                    
+                    <!-- Hidden user ID field -->
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                    
+                    <!-- OTP Input Field -->
+                    <div class="otp-input">
+                        <input 
+                            type="text" 
+                            name="otp" 
+                            placeholder="000000"
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            required
+                            autocomplete="off"
+                            class="transition-all duration-300"
+                        />
+                    </div>
+
+                    <!-- Verify Button -->
+                    <button
+                        type="submit"
+                        class="submit-btn w-full text-white font-bold py-3.5 px-4 rounded-lg transition-all duration-300 shadow-lg hover:shadow-2xl shadow-orange-900/40 flex items-center justify-center gap-3 group relative"
+                    >
+                        <i class="fas fa-check-circle text-lg group-hover:scale-125 transition-transform duration-300"></i>
+                        <span>Verify OTP</span>
+                    </button>
+                </form>
+
+                <!-- Divider -->
+                <div class="flex items-center space-x-3 my-6">
+                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent"></div>
+                    <span class="text-xs text-gray-600 font-semibold">or</span>
+                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent"></div>
                 </div>
 
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-check-circle"></i> Verify OTP
-                </button>
-            </form>
+                <!-- Resend Link -->
+                <div class="resend-link">
+                    <p>Didn't receive the code? 
+                        <a href="{% url 'resend_otp' %}">Resend OTP</a>
+                    </p>
+                </div>
+            </div>
 
-            <div class="resend-link">
-                <p class="text-gray-600">
-                    Didn't receive the code? 
-                    <a href="{% url 'resend_otp' %}">Resend OTP</a>
-                </p>
+            <!-- Footer info -->
+            <div class="text-center text-xs text-gray-400 space-y-2 px-4 flex items-center justify-center gap-2">
+                <i class="fas fa-shield-alt text-yellow-400"></i>
+                <p>Your data is secure and encrypted</p>
             </div>
         </div>
     </div>
 
+    <!-- JavaScript: Enhanced interactions -->
     <script>
         // Auto-focus on OTP input
         const otpInput = document.querySelector('input[name="otp"]');
@@ -504,8 +543,78 @@
             // Only allow numbers
             otpInput.addEventListener('input', function(e) {
                 this.value = this.value.replace(/[^0-9]/g, '');
+                
+                // Auto-submit when 6 digits are entered
+                if (this.value.length === 6) {
+                    // Optional: auto-focus next field or auto-submit
+                }
+            });
+
+            // Auto-focus on input
+            otpInput.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.01)';
+            });
+
+            otpInput.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
             });
         }
+
+        // Button ripple effect on click
+        const submitBtn = document.querySelector('.submit-btn');
+        if (submitBtn) {
+            submitBtn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.background = 'rgba(255, 255, 255, 0.5)';
+                ripple.style.borderRadius = '50%';
+                ripple.style.position = 'absolute';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.pointerEvents = 'none';
+                ripple.style.animation = 'rippleEffect 0.6s ease-out';
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        }
+
+        // Add ripple effect animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleEffect {
+                from {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Smooth page transitions
+        document.addEventListener('DOMContentLoaded', function() {
+            const formElements = document.querySelectorAll('.otp-input, .submit-btn, .alert');
+            formElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(10px)';
+                el.style.animation = `slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 0.1}s forwards`;
+            });
+        });
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
     </script>
 </body>
 </html>

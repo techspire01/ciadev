@@ -1,6 +1,6 @@
 console.log("script.js loaded successfully."); // Added for debugging
 // Hero Carousel functionality
-let currentSlide = 1;
+let currentSlide = 0;
 const totalSlides = 3;
 
 // Container sets for different slides - Updated for 5 containers (7x2 grid)
@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isPageVisible) {
                 nextSlide();
             }
-        }, 2000); // Changed to 2 seconds
+        }, 5000); // Auto-rotate every 5 seconds
     }
 
     function stopCarousel() {
