@@ -9,7 +9,7 @@ from django.conf import settings
 import json
 import logging
 
-from .models import CustomUser, Supplier, Announcement, PhotoGallery, IndexHover, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, InternshipApplication, Complaint, EmailConfiguration
+from .models import CustomUser, Supplier, Announcement, PhotoGallery, Leadership, NewspaperGallery, BookShowcase, SupplierEditRequest, ContactInformation, About, Complaint, EmailConfiguration
 # Register EmailConfiguration in admin
 @admin.register(EmailConfiguration)
 class EmailConfigurationAdmin(admin.ModelAdmin):
@@ -153,34 +153,6 @@ class PhotoGalleryAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('title', 'image_url', 'image_preview_large')}),
         ('Upload Information', {'fields': ('uploaded_at',)}),
-    )
-
-    def image_preview(self, obj):
-        if obj.image_url:
-            return format_html('<img src="{}" style="width: 50px; height: 50px; object-fit: cover;" />', obj.image_url)
-        elif obj.image:
-            return format_html('<img src="{}" style="width: 50px; height: 50px; object-fit: cover;" />', obj.image.url)
-        return "No Image"
-    image_preview.short_description = "Image Preview"
-
-    def image_preview_large(self, obj):
-        if obj.image_url:
-            return format_html('<img src="{}" style="max-width: 300px; max-height: 300px; object-fit: cover;" />', obj.image_url)
-        elif obj.image:
-            return format_html('<img src="{}" style="max-width: 300px; max-height: 300px; object-fit: cover;" />', obj.image.url)
-        return "No Image"
-    image_preview_large.short_description = "Image Preview"
-
-@admin.register(IndexHover)
-class IndexHoverAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image_preview', 'image_url', 'caption', 'created_at')
-    list_filter = ('created_at',)
-    search_fields = ('title', 'caption')
-    ordering = ('-created_at',)
-    readonly_fields = ('image_preview_large', 'created_at')
-    fieldsets = (
-        (None, {'fields': ('title', 'caption', 'image', 'image_url', 'image_preview_large')}),
-        ('Timestamps', {'fields': ('created_at',)}),
     )
 
     def image_preview(self, obj):
@@ -466,10 +438,4 @@ class AboutAdmin(admin.ModelAdmin):
 admin.site.register(CustomUser, CustomUserAdmin)
 from django.contrib import admin
 
-@admin.register(InternshipApplication)
-class InternshipApplicationAdmin(admin.ModelAdmin):
-    list_display = ('fullname', 'email', 'phone', 'college', 'degree', 'year', 'sector', 'submitted_at')
-    list_filter = ('sector', 'year')
-    search_fields = ('fullname', 'email', 'college', 'sector', 'year')
-    ordering = ('-submitted_at',)
-    date_hierarchy = 'submitted_at'
+
