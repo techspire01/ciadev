@@ -11,10 +11,10 @@ urlpatterns = [
     path('announcement/', views.announcement, name='announcement'),
     path('announcement/<int:announcement_id>/', views.announcement_detail, name='announcement_detail'),
     path('signup/', views.signup_view, name='signup'),
-    path('suppliers/', views.suppliers, name='suppliers'),
+    path('cia_networks/', views.cia_networks, name='cia_networks'),
     
-    # Supplier detail page with dynamic URL
-    path('supplier/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
+    # Supplier detail page with dynamic URL under cia_networks
+    path('cia_networks/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
     
     # Authentication URLs
     path("login/", views.login_view, name="login"),
@@ -46,13 +46,11 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('edit-profile/', views.edit_profile_view, name='edit_profile'),
     path('edit-supplier-profile/', views.edit_supplier_profile_view, name='edit_supplier_profile'),
-    path('verify-edit-otp/', views.verify_edit_otp, name='verify_edit_otp'),
+    path('verify_edit_otp/', views.verify_edit_otp, name='verify_edit_otp'),
 
     # User creation and profile management
     path('create-user/', views.create_user_view, name='create_user'),
     path('verify-user-otp/', views.verify_user_otp, name='verify_user_otp'),
-    path('edit-profile/', views.edit_profile_view, name='edit_profile'),
-    path('verify-edit-otp/', views.verify_edit_otp, name='verify_edit_otp'),
 
     # Supplier listing request
     path('request-supplier-listing/', views.request_supplier_listing_view, name='request_supplier_listing'),

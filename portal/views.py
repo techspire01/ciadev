@@ -3,8 +3,11 @@ from django.http import JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 import json
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
+from app.models import Supplier
 
 # Create your views here.
 
@@ -35,8 +38,9 @@ def details(request):
 
 
 def brand_new_site_dashboard(request):
-    """Render the brand new site dashboard"""
+    """Render the brand new site dashboard - shows all active jobs/internships from all companies"""
     try:
+        # Show all active internships and jobs from all companies
         internships = PortalInternship.objects.filter(is_active=True)
         jobs = PortalJob.objects.filter(is_active=True)
         vacancies = []
@@ -45,7 +49,7 @@ def brand_new_site_dashboard(request):
             vacancies.append({
                 'id': internship.id,
                 'role': internship.title,
-                'company_name': internship.company_name,
+                'company_name': internship.supplier.name if internship.supplier else internship.company_name,
                 'package': internship.salary,
                 'job_description': internship.description,
                 'type': 'internship',
@@ -58,7 +62,7 @@ def brand_new_site_dashboard(request):
             vacancies.append({
                 'id': job.id,
                 'role': job.title,
-                'company_name': job.company_name,
+                'company_name': job.supplier.name if job.supplier else job.company_name,
                 'package': job.salary,
                 'job_description': job.description,
                 'type': 'job',
@@ -86,14 +90,39 @@ def brand_new_site_dashboard(request):
 
     return render(request, 'brand_new_site/dashboard.html', context)
 
+
+def supplier_required(view_func):
+    """Decorator to check if user is a supplier (email exists in Supplier table)"""
+    @login_required
+    def _wrapped_view(request, *args, **kwargs):
+        try:
+            Supplier.objects.get(email=request.user.email)
+            return view_func(request, *args, **kwargs)
+        except Supplier.DoesNotExist:
+            raise PermissionDenied("Access denied. Only suppliers can access this page.")
+    return _wrapped_view
+
+
+@supplier_required
 def job_portal_admin(request):
     """Render the job portal admin dashboard"""
-    internships = PortalInternship.objects.all().order_by('-posted_date')
-    jobs = PortalJob.objects.all().order_by('-posted_date')
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        # Filter by supplier - only show this company's postings
+        internships = PortalInternship.objects.filter(supplier=supplier).order_by('-posted_date')
+        jobs = PortalJob.objects.filter(supplier=supplier).order_by('-posted_date')
+        
+        # Fetch applications for this supplier's postings
+        internship_applications = InternshipApplication.objects.filter(supplier=supplier).order_by('-applied_date')
+        job_applications = JobApplication.objects.filter(supplier=supplier).order_by('-applied_date')
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
     return render(request, 'brand_new_site/job_portal_admin.html', {
         'internships': internships,
-        'jobs': jobs
+        'jobs': jobs,
+        'internship_applications': internship_applications,
+        'job_applications': job_applications,
     })
 
 def job_admin(request):
@@ -108,14 +137,14 @@ def job_admin(request):
 def add_internship(request):
     """Add a new internship via AJAX"""
     try:
+        supplier = Supplier.objects.get(email=request.user.email)
         data = json.loads(request.body)
         internship = PortalInternship.objects.create(
             title=data['title'],
-            company_name=data['company'],
+            supplier=supplier,
             duration=data.get('duration', ''),
             salary=data.get('stipend', ''),
             description=data.get('description', ''),
-            email=data.get('email', ''),
             location=data.get('location', ''),
             requirements=data.get('requirements', ''),
             responsibilities=data.get('responsibilities', '')
@@ -131,7 +160,12 @@ def add_internship(request):
 @require_GET
 def get_internships(request):
     """Get all internships for the admin view"""
-    internships = PortalInternship.objects.all().order_by('-posted_date')
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        internships = PortalInternship.objects.filter(supplier=supplier).order_by('-posted_date')
+    except Supplier.DoesNotExist:
+        internships = PortalInternship.objects.none()
+    
     data = []
     for internship in internships:
         data.append({
@@ -156,6 +190,12 @@ def update_internship(request, internship_id):
     """Update an existing internship"""
     try:
         internship = get_object_or_404(PortalInternship, id=internship_id)
+        
+        # Check ownership
+        supplier = Supplier.objects.get(email=request.user.email)
+        if internship.supplier != supplier:
+            return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
         data = json.loads(request.body)
 
         internship.title = data.get('title', internship.title)
@@ -173,6 +213,8 @@ def update_internship(request, internship_id):
             'success': True,
             'message': 'Internship updated successfully!'
         })
+    except Supplier.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
@@ -182,6 +224,12 @@ def toggle_internship_status(request, internship_id):
     """Toggle internship active status (pause/resume)"""
     try:
         internship = get_object_or_404(PortalInternship, id=internship_id)
+        
+        # Check ownership
+        supplier = Supplier.objects.get(email=request.user.email)
+        if internship.supplier != supplier:
+            return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
         internship.is_active = not internship.is_active
         internship.save()
 
@@ -191,6 +239,8 @@ def toggle_internship_status(request, internship_id):
             'message': f'Internship {status} successfully!',
             'is_active': internship.is_active
         })
+    except Supplier.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
@@ -200,24 +250,35 @@ def delete_internship(request, internship_id):
     """Delete an internship"""
     try:
         internship = get_object_or_404(PortalInternship, id=internship_id)
+        
+        # Check ownership
+        supplier = Supplier.objects.get(email=request.user.email)
+        if internship.supplier != supplier:
+            return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
         internship.delete()
         return JsonResponse({
             'success': True,
             'message': 'Internship deleted successfully!'
         })
+    except Supplier.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
 # API Endpoints for Job Management
 
 @csrf_exempt
+@csrf_exempt
 @require_POST
 def add_job(request):
     """Add a new job via AJAX"""
     try:
+        supplier = Supplier.objects.get(email=request.user.email)
         data = json.loads(request.body)
         job = PortalJob.objects.create(
             title=data['title'],
+            supplier=supplier,
             company_name=data['company'],
             location=data.get('location', ''),
             salary=data.get('salary', ''),
@@ -241,6 +302,12 @@ def update_job(request, job_id):
     """Update an existing job"""
     try:
         job = get_object_or_404(PortalJob, id=job_id)
+        
+        # Check ownership
+        supplier = Supplier.objects.get(email=request.user.email)
+        if job.supplier != supplier:
+            return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
         data = json.loads(request.body)
 
         job.title = data.get('title', job.title)
@@ -258,6 +325,8 @@ def update_job(request, job_id):
             'success': True,
             'message': 'Job updated successfully!'
         })
+    except Supplier.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
@@ -267,6 +336,12 @@ def toggle_job_status(request, job_id):
     """Toggle job active status (pause/resume)"""
     try:
         job = get_object_or_404(PortalJob, id=job_id)
+        
+        # Check ownership
+        supplier = Supplier.objects.get(email=request.user.email)
+        if job.supplier != supplier:
+            return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
         job.is_active = not job.is_active
         job.save()
 
@@ -276,6 +351,8 @@ def toggle_job_status(request, job_id):
             'message': f'Job {status} successfully!',
             'is_active': job.is_active
         })
+    except Supplier.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
@@ -285,17 +362,36 @@ def delete_job(request, job_id):
     """Delete a job"""
     try:
         job = get_object_or_404(PortalJob, id=job_id)
+        
+        # Check ownership
+        supplier = Supplier.objects.get(email=request.user.email)
+        if job.supplier != supplier:
+            return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+        
         job.delete()
         return JsonResponse({
             'success': True,
             'message': 'Job deleted successfully!'
         })
+    except Supplier.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
 # Server-side views for internship management
+@login_required
 def edit_internship(request, id):
     internship = get_object_or_404(PortalInternship, id=id)
+    
+    # Check if user owns this internship
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        if internship.supplier != supplier:
+            raise PermissionDenied("You do not have permission to edit this internship.")
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can edit internships.")
 
     if request.method == 'POST':
         internship.title = request.POST.get('title')
@@ -312,20 +408,49 @@ def edit_internship(request, id):
 
     return redirect('job_portal_admin')
 
+@login_required
 def delete_internship(request, id):
     internship = get_object_or_404(PortalInternship, id=id)
+    
+    # Check if user owns this internship
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        if internship.supplier != supplier:
+            raise PermissionDenied("You do not have permission to delete this internship.")
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can delete internships.")
+    
     internship.delete()
     return redirect('job_portal_admin')
 
+@login_required
 def toggle_internship(request, id):
     internship = get_object_or_404(PortalInternship, id=id)
+    
+    # Check if user owns this internship
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        if internship.supplier != supplier:
+            raise PermissionDenied("You do not have permission to toggle this internship.")
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can toggle internships.")
+    
     internship.is_active = not internship.is_active
     internship.save()
     return redirect('job_portal_admin')
 
 # Server-side views for job management
+@login_required
 def edit_job(request, id):
     job = get_object_or_404(PortalJob, id=id)
+    
+    # Check if user owns this job
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        if job.supplier != supplier:
+            raise PermissionDenied("You do not have permission to edit this job.")
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can edit jobs.")
 
     if request.method == 'POST':
         job.title = request.POST.get('title')
@@ -342,13 +467,33 @@ def edit_job(request, id):
 
     return redirect('job_portal_admin')
 
+@login_required
 def delete_job_view(request, id):
     job = get_object_or_404(PortalJob, id=id)
+    
+    # Check if user owns this job
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        if job.supplier != supplier:
+            raise PermissionDenied("You do not have permission to delete this job.")
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can delete jobs.")
+    
     job.delete()
     return redirect('job_portal_admin')
 
+@login_required
 def toggle_job(request, id):
     job = get_object_or_404(PortalJob, id=id)
+    
+    # Check if user owns this job
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        if job.supplier != supplier:
+            raise PermissionDenied("You do not have permission to toggle this job.")
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can toggle jobs.")
+    
     job.is_active = not job.is_active
     job.save()
     return redirect('job_portal_admin')
@@ -361,6 +506,7 @@ def internship_application(request, internship_id):
         try:
             application = InternshipApplication.objects.create(
                 internship=internship,
+                supplier=internship.supplier,
                 full_name=request.POST.get('full_name'),
                 email=request.POST.get('email'),
                 phone=request.POST.get('phone'),
@@ -394,6 +540,7 @@ def job_application(request, job_id):
         try:
             application = JobApplication.objects.create(
                 job=job,
+                supplier=job.supplier,
                 full_name=request.POST.get('full_name'),
                 email=request.POST.get('email'),
                 phone=request.POST.get('phone'),

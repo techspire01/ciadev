@@ -1,23 +1,65 @@
 {% load static %}
 <!-- Complaint modal partial -->
-<div id="complaintModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-  <div class="bg-white rounded-lg w-11/12 max-w-2xl p-6 shadow-lg">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold">Submit a Complaint</h3>
-      <button id="closeComplaintModal" class="text-gray-600 hover:text-gray-800">✕</button>
+<div id="complaintModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 transition-all duration-300">
+  <div class="bg-gradient-to-br from-white via-yellow-50 to-white rounded-2xl w-11/12 max-w-2xl shadow-2xl border border-yellow-200 transform transition-all duration-300 scale-100">
+    <!-- Header with gradient background -->
+    <div class="bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 rounded-t-2xl px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fas fa-exclamation-circle text-white text-2xl"></i>
+        <h3 class="text-xl font-bold text-white">Submit a Complaint</h3>
+      </div>
+      <button id="closeComplaintModal" class="text-white hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition-all duration-200">
+        <i class="fas fa-times text-lg"></i>
+      </button>
     </div>
-    <div id="complaintAlert" class="hidden mb-3 text-sm"></div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Complaint</label>
-      <textarea id="complaintText" rows="4" class="mt-1 block w-full border rounded-md p-2" placeholder="Describe your complaint..."></textarea>
+
+    <!-- Alert Box -->
+    <div id="complaintAlert" class="hidden mx-6 mt-4 px-4 py-3 rounded-lg text-sm font-medium border-l-4 transition-all duration-300"></div>
+
+    <!-- Form Content -->
+    <div class="p-6 space-y-5">
+      <!-- Complaint Text Area -->
+      <div>
+        <label class="block text-sm font-bold text-gray-800 mb-2 flex items-center">
+          <i class="fas fa-comment-dots text-orange-500 mr-2"></i>
+          Complaint Details <span class="text-red-600">*</span>
+        </label>
+        <textarea 
+          id="complaintText" 
+          rows="4" 
+          class="w-full border-2 border-yellow-300 rounded-lg p-3 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all duration-200 placeholder-gray-400 resize-none" 
+          placeholder="Describe your complaint in detail..."></textarea>
+        <p class="text-xs text-gray-500 mt-1">Min. 10 characters required</p>
+      </div>
+
+      <!-- Contact Number -->
+      <div>
+        <label class="block text-sm font-bold text-gray-800 mb-2 flex items-center">
+          <i class="fas fa-phone text-orange-500 mr-2"></i>
+          Contact Number <span class="text-gray-500 text-xs">(Optional)</span>
+        </label>
+        <input 
+          id="complaintContact" 
+          type="text" 
+          class="w-full border-2 border-yellow-300 rounded-lg p-3 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all duration-200 placeholder-gray-400" 
+          placeholder="Phone or WhatsApp number">
+      </div>
     </div>
-    <div class="mt-3">
-      <label class="block text-sm font-medium text-gray-700">Contact Number (optional)</label>
-      <input id="complaintContact" type="text" class="mt-1 block w-full border rounded-md p-2" placeholder="Phone or WhatsApp number">
-    </div>
-    <div class="mt-4 flex justify-end">
-      <button id="complaintCancel" class="mr-2 px-4 py-2 bg-gray-200 rounded">Cancel</button>
-      <button id="complaintSubmitBtn" class="px-4 py-2 bg-blue-600 text-white rounded">Submit</button>
+
+    <!-- Footer with Action Buttons -->
+    <div class="bg-gray-50 rounded-b-2xl px-6 py-4 flex justify-end gap-3 border-t border-yellow-200">
+      <button 
+        id="complaintCancel" 
+        class="px-6 py-2.5 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold rounded-lg transition-all duration-200 flex items-center gap-2">
+        <i class="fas fa-times"></i>
+        Cancel
+      </button>
+      <button 
+        id="complaintSubmitBtn" 
+        class="px-6 py-2.5 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 flex items-center gap-2">
+        <i class="fas fa-check-circle"></i>
+        Submit Complaint
+      </button>
     </div>
   </div>
 </div>
@@ -32,22 +74,62 @@
   var submitBtn = el('complaintSubmitBtn');
   var alertBox = el('complaintAlert');
 
-  function showModal(){ modal && modal.classList && modal.classList.remove('hidden'); modal && modal.classList && modal.classList.add('flex'); }
-  function hideModal(){ if(modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); } if(alertBox){ alertBox.classList.add('hidden'); alertBox.textContent=''; } if(el('complaintText')) el('complaintText').value=''; if(el('complaintContact')) el('complaintContact').value=''; }
+  function showModal(){ 
+    if(modal){ 
+      modal.classList.remove('hidden'); 
+      modal.classList.add('flex'); 
+      // Add animation
+      setTimeout(() => {
+        modal.querySelector('div').classList.remove('scale-100');
+        modal.querySelector('div').classList.add('scale-100');
+      }, 10);
+    } 
+  }
+  
+  function hideModal(){ 
+    if(modal){ 
+      modal.classList.add('hidden'); 
+      modal.classList.remove('flex'); 
+    } 
+    if(alertBox){ 
+      alertBox.classList.add('hidden'); 
+      alertBox.textContent=''; 
+    } 
+    if(el('complaintText')) el('complaintText').value=''; 
+    if(el('complaintContact')) el('complaintContact').value=''; 
+  }
 
   openBtns.forEach(function(b){ b && b.addEventListener('click', function(e){ e.preventDefault(); showModal(); }); });
   closeBtn && closeBtn.addEventListener('click', hideModal);
   cancelBtn && cancelBtn.addEventListener('click', hideModal);
+
+  // Close modal on outside click
+  modal && modal.addEventListener('click', function(e){
+    if(e.target === modal) hideModal();
+  });
 
   submitBtn && submitBtn.addEventListener('click', function(){
     var complaintEl = el('complaintText');
     var contactEl = el('complaintContact');
     var complaint = complaintEl ? complaintEl.value.trim() : '';
     var contact = contactEl ? contactEl.value.trim() : '';
+    
+    // Validation
     if(!complaint){
-      if(alertBox){ alertBox.className = 'mb-3 text-sm text-red-700'; alertBox.textContent = 'Please enter your complaint.'; alertBox.classList.remove('hidden'); }
+      showAlert('Please enter your complaint.', 'error');
+      complaintEl && complaintEl.classList.add('border-red-500');
       return;
     }
+    
+    if(complaint.length < 10){
+      showAlert('Complaint must be at least 10 characters long.', 'error');
+      complaintEl && complaintEl.classList.add('border-red-500');
+      return;
+    }
+    
+    complaintEl && complaintEl.classList.remove('border-red-500');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
     var formData = new URLSearchParams();
     formData.append('complaint', complaint);
@@ -62,12 +144,27 @@
     }).then(function(res){
       return res.json().then(function(j){ if(res.ok) return j; throw j; });
     }).then(function(data){
-      if(alertBox){ alertBox.className = 'mb-3 text-sm text-green-700'; alertBox.textContent = data.message || 'Submitted successfully.'; alertBox.classList.remove('hidden'); }
-      setTimeout(hideModal, 1400);
+      showAlert(data.message || 'Complaint submitted successfully! We will review it soon.', 'success');
+      setTimeout(hideModal, 1500);
     }).catch(function(err){
       console.error('Complaint submit error', err);
-      if(alertBox){ alertBox.className = 'mb-3 text-sm text-red-700'; alertBox.textContent = (err && err.error) ? err.error : 'Failed to submit.'; alertBox.classList.remove('hidden'); }
+      showAlert((err && err.error) ? err.error : 'Failed to submit complaint. Please try again.', 'error');
+    }).finally(function(){
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Submit Complaint';
     });
   });
+
+  function showAlert(message, type){
+    if(alertBox){
+      alertBox.textContent = message;
+      alertBox.classList.remove('hidden');
+      if(type === 'success'){
+        alertBox.className = 'px-4 py-3 rounded-lg text-sm font-medium border-l-4 border-green-500 bg-green-50 text-green-700';
+      } else {
+        alertBox.className = 'px-4 py-3 rounded-lg text-sm font-medium border-l-4 border-red-500 bg-red-50 text-red-700';
+      }
+    }
+  }
 })();
 </script>
