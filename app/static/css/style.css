@@ -1,3 +1,18 @@
+/* Reset default margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
 /* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
