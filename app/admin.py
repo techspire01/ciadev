@@ -123,6 +123,18 @@ class SupplierAdmin(admin.ModelAdmin):
         return ", ".join(address_parts) if address_parts else "-"
     formatted_address.short_description = "Address"
 
+    def save_model(self, request, obj, form, change):
+        """Override save to handle duplicate email constraint gracefully"""
+        from django.db import IntegrityError
+        try:
+            super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            if "email" in str(e).lower():
+                from django.contrib import messages
+                messages.error(request, f"Email '{obj.email}' is already in use by another supplier. Please use a different email address.")
+            else:
+                raise
+
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'is_critical', 'is_active')
