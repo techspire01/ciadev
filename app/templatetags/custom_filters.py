@@ -17,3 +17,10 @@ def get_attr(obj, attr_name):
     """Get attribute of an object by name"""
     return getattr(obj, attr_name, None)
 
+@register.filter
+def split(value, key):
+    """
+        Returns the value turned into a list.
+    """
+    return [x for x in value.split(key) if x]
+
