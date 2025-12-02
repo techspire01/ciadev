@@ -47,44 +47,66 @@ class PortalJob(models.Model):
         return f"{self.title} at {self.company_name}"
 
 class InternshipApplication(models.Model):
+    STATUS_CHOICES = [
+        ('fresher', 'Fresher'),
+        ('experienced', 'Experienced'),
+    ]
+
     # Personal Information
-    full_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255, default='')
+    last_name = models.CharField(max_length=255, default='')
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     address = models.TextField(blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    country = models.CharField(max_length=255, blank=True)
 
-    # Education & Skills
-    education = models.CharField(max_length=100, choices=[
-        ('high_school', 'High School'),
-        ('undergraduate', 'Undergraduate'),
-        ('graduate', 'Graduate'),
-        ('postgraduate', 'Postgraduate'),
-    ])
-    major = models.CharField(max_length=255, blank=True)
-    skills = models.TextField(blank=True)
+    # Experience Status
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='fresher')
 
-    # Internship Preferences
-    preferred_role = models.CharField(max_length=255, blank=True)
-    availability = models.CharField(max_length=50, choices=[
-        ('full_time', 'Full-time (40 hours/week)'),
-        ('part_time', 'Part-time (20-30 hours/week)'),
-        ('flexible', 'Flexible'),
-    ])
-    duration = models.CharField(max_length=50, choices=[
-        ('3_months', '3 Months'),
-        ('6_months', '6 Months'),
-        ('9_months', '9 Months'),
-        ('12_months', '12 Months'),
-    ], blank=True)
-    start_date = models.DateField(blank=True, null=True)
-
-    # Documents
+    # Resume Upload
     resume = models.FileField(
         upload_to='applications/resumes/',
-        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])]
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])],
+        help_text='Max size: 2MB. Accepted formats: PDF, DOCX, DOC'
     )
-    cover_letter = models.TextField(blank=True)
-    additional_info = models.TextField(blank=True)
+
+    # Education Details (Required for all)
+    school_name = models.CharField(max_length=255, blank=True, default='')
+    city_of_study = models.CharField(max_length=255, blank=True, default='')
+    degree = models.CharField(max_length=255, blank=True, default='')
+    field_of_study = models.CharField(max_length=255, blank=True, default='')
+    study_from_date = models.DateField(blank=True, null=True)
+    study_to_date = models.DateField(blank=True, null=True)
+    currently_studying = models.BooleanField(default=False)
+
+    # Skills (Optional, for clarity)
+    skills = models.TextField(blank=True, help_text='Enter skills separated by commas or as tags')
+
+    # LinkedIn Profile
+    linkedin_profile = models.URLField(blank=True)
+
+    # Internships (Optional for freshers)
+    internships = models.TextField(blank=True, help_text='Details of internships (optional)')
+
+    # Work Experience (For experienced applicants only)
+    # Using JSONField to store multiple work experience entries
+    work_experiences = models.JSONField(default=list, blank=True, help_text='Array of work experience entries')
+
+    # Additional Questions
+    additional_questions = models.TextField(blank=True, max_length=2000)
+
+    # Message to Hiring Manager
+    message_to_manager = models.TextField(blank=True, max_length=2000)
+
+    # Additional Attachments (Optional)
+    additional_attachment = models.FileField(
+        upload_to='applications/attachments/',
+        blank=True,
+        null=True,
+        help_text='Max size: 5MB. Accepted formats: PDF, DOCX, DOC, PNG, JPG'
+    )
 
     # Metadata
     applied_date = models.DateTimeField(auto_now_add=True)
@@ -92,62 +114,77 @@ class InternshipApplication(models.Model):
     supplier = models.ForeignKey('app.Supplier', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.full_name} - {self.internship.title}"
+        return f"{self.first_name} {self.last_name} - {self.internship.title}"
 
 class JobApplication(models.Model):
-    # Personal Information
-    full_name = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    address = models.TextField(blank=True)
+    STATUS_CHOICES = [
+        ('fresher', 'Fresher'),
+        ('experienced', 'Experienced'),
+    ]
 
-    # Education & Experience
-    education = models.CharField(max_length=100, choices=[
-        ('high_school', 'High School'),
-        ('associate', 'Associate Degree'),
-        ('bachelor', "Bachelor's Degree"),
-        ('master', "Master's Degree"),
-        ('phd', 'PhD'),
-    ])
-    major = models.CharField(max_length=255, blank=True)
-    experience_years = models.CharField(max_length=50, choices=[
-        ('0', '0 years (Entry Level)'),
-        ('1-2', '1-2 years'),
-        ('3-5', '3-5 years'),
-        ('6-10', '6-10 years'),
-        ('10+', '10+ years'),
-    ])
-    current_position = models.CharField(max_length=255, blank=True)
-    current_company = models.CharField(max_length=255, blank=True)
-    skills = models.TextField(blank=True)
-
-    # Job Preferences
-    preferred_role = models.CharField(max_length=255, blank=True)
-    employment_type = models.CharField(max_length=50, choices=[
+    EMPLOYMENT_CHOICES = [
         ('full_time', 'Full-time'),
         ('part_time', 'Part-time'),
         ('contract', 'Contract'),
         ('freelance', 'Freelance'),
-    ])
-    salary_expectation = models.CharField(max_length=100, blank=True)
-    availability_date = models.DateField(blank=True, null=True)
-    work_authorization = models.CharField(max_length=100, choices=[
-        ('us_citizen', 'US Citizen'),
-        ('permanent_resident', 'Permanent Resident'),
-        ('h1b', 'H1B Visa'),
-        ('tn_visa', 'TN Visa'),
-        ('other_visa', 'Other Visa'),
-        ('need_sponsorship', 'Require Sponsorship'),
-    ])
+    ]
 
-    # Documents
+    # Personal Information
+    first_name = models.CharField(max_length=255, default='')
+    last_name = models.CharField(max_length=255, default='')
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address = models.TextField(blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    country = models.CharField(max_length=255, blank=True)
+
+    # Experience Status
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='fresher')
+
+    # Resume Upload
     resume = models.FileField(
         upload_to='applications/resumes/',
-        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])]
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])],
+        help_text='Max size: 2MB. Accepted formats: PDF, DOCX, DOC'
     )
-    cover_letter = models.TextField(blank=True)
-    portfolio_url = models.URLField(blank=True)
-    additional_info = models.TextField(blank=True)
+
+    # Education Details (Required for all applicants)
+    school_name = models.CharField(max_length=255, blank=True, default='')
+    city_of_study = models.CharField(max_length=255, blank=True, default='')
+    degree = models.CharField(max_length=255, blank=True, default='')
+    field_of_study = models.CharField(max_length=255, blank=True, default='')
+    study_from_date = models.DateField(blank=True, null=True)
+    study_to_date = models.DateField(blank=True, null=True)
+    currently_studying = models.BooleanField(default=False)
+
+    # Work Experience (at least 1 entry required for experienced applicants)
+    # Using JSONField to store multiple work experience entries
+    work_experiences = models.JSONField(
+        default=list,
+        blank=True,
+        help_text='Array of work experience entries (required for experienced applicants)'
+    )
+
+    # Skills
+    skills = models.TextField(blank=True, help_text='Enter skills separated by commas or as tags')
+
+    # LinkedIn Profile
+    linkedin_profile = models.URLField(blank=True)
+
+    # Screening Questions (Optional)
+    screening_questions = models.TextField(blank=True, max_length=2000)
+
+    # Message to Hiring Manager
+    message_to_manager = models.TextField(blank=True, max_length=2000)
+
+    # Additional Attachments (Optional)
+    additional_attachment = models.FileField(
+        upload_to='applications/attachments/',
+        blank=True,
+        null=True,
+        help_text='Max size: 5MB. Accepted formats: PDF, DOCX, DOC, PNG, JPG'
+    )
 
     # Metadata
     applied_date = models.DateTimeField(auto_now_add=True)
@@ -155,4 +192,4 @@ class JobApplication(models.Model):
     supplier = models.ForeignKey('app.Supplier', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.full_name} - {self.job.title}"
+        return f"{self.first_name} {self.last_name} - {self.job.title}"

@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
 from app.models import Supplier
@@ -115,6 +116,15 @@ def job_portal_admin(request):
         # Fetch applications for this supplier's postings
         internship_applications = InternshipApplication.objects.filter(supplier=supplier).order_by('-applied_date')
         job_applications = JobApplication.objects.filter(supplier=supplier).order_by('-applied_date')
+        
+        # Add application counts to each internship and job object
+        for internship in internships:
+            count = InternshipApplication.objects.filter(internship=internship, supplier=supplier).count()
+            internship.application_count = count
+        
+        for job in jobs:
+            count = JobApplication.objects.filter(job=job, supplier=supplier).count()
+            job.application_count = count
     except Supplier.DoesNotExist:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
@@ -500,73 +510,241 @@ def toggle_job(request, id):
 
 def internship_application(request, internship_id):
     """Handle internship application form"""
+    from .forms import InternshipApplicationForm
+    
     internship = get_object_or_404(PortalInternship, id=internship_id, is_active=True)
 
     if request.method == 'POST':
-        try:
-            application = InternshipApplication.objects.create(
-                internship=internship,
-                supplier=internship.supplier,
-                full_name=request.POST.get('full_name'),
-                email=request.POST.get('email'),
-                phone=request.POST.get('phone'),
-                address=request.POST.get('address', ''),
-                education=request.POST.get('education'),
-                major=request.POST.get('major', ''),
-                skills=request.POST.get('skills', ''),
-                preferred_role=request.POST.get('preferred_role', ''),
-                availability=request.POST.get('availability'),
-                duration=request.POST.get('duration', ''),
-                start_date=request.POST.get('start_date') or None,
-                resume=request.FILES.get('resume'),
-                cover_letter=request.POST.get('cover_letter', ''),
-                additional_info=request.POST.get('additional_info', '')
-            )
-            messages.success(request, 'Your internship application has been submitted successfully!')
-            return redirect('dashboard')
-        except Exception as e:
-            messages.error(request, f'Error submitting application: {str(e)}')
+        form = InternshipApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                application = form.save(commit=False)
+                application.internship = internship
+                application.supplier = internship.supplier
+                application.save()
+                messages.success(request, 'Your internship application has been submitted successfully!')
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, f'Error submitting application: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = InternshipApplicationForm()
 
     context = {
-        'internship': internship
+        'internship': internship,
+        'form': form
     }
     return render(request, 'brand_new_site/internship_application.html', context)
 
 def job_application(request, job_id):
     """Handle job application form"""
+    from .forms import JobApplicationForm
+    import json
+    
     job = get_object_or_404(PortalJob, id=job_id, is_active=True)
 
     if request.method == 'POST':
-        try:
-            application = JobApplication.objects.create(
-                job=job,
-                supplier=job.supplier,
-                full_name=request.POST.get('full_name'),
-                email=request.POST.get('email'),
-                phone=request.POST.get('phone'),
-                address=request.POST.get('address', ''),
-                education=request.POST.get('education'),
-                major=request.POST.get('major', ''),
-                experience_years=request.POST.get('experience_years'),
-                current_position=request.POST.get('current_position', ''),
-                current_company=request.POST.get('current_company', ''),
-                skills=request.POST.get('skills', ''),
-                preferred_role=request.POST.get('preferred_role', ''),
-                employment_type=request.POST.get('employment_type'),
-                salary_expectation=request.POST.get('salary_expectation', ''),
-                availability_date=request.POST.get('availability_date') or None,
-                work_authorization=request.POST.get('work_authorization'),
-                resume=request.FILES.get('resume'),
-                cover_letter=request.POST.get('cover_letter', ''),
-                portfolio_url=request.POST.get('portfolio_url', ''),
-                additional_info=request.POST.get('additional_info', '')
-            )
-            messages.success(request, 'Your job application has been submitted successfully!')
-            return redirect('dashboard')
-        except Exception as e:
-            messages.error(request, f'Error submitting application: {str(e)}')
+        form = JobApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                application = form.save(commit=False)
+                application.job = job
+                application.supplier = job.supplier
+                application.save()
+                messages.success(request, 'Your job application has been submitted successfully!')
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, f'Error submitting application: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = JobApplicationForm()
 
     context = {
-        'job': job
+        'job': job,
+        'form': form
     }
     return render(request, 'brand_new_site/job_application.html', context)
+
+
+@supplier_required
+def view_job_applicants(request, job_id):
+    """View all applicants for a specific job - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the job and verify the supplier owns it
+        job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
+        
+        # Get applications for this job
+        applications_list = JobApplication.objects.filter(job=job).order_by('-applied_date')
+        
+        # Paginate results - 10 applicants per page
+        paginator = Paginator(applications_list, 10)
+        page = request.GET.get('page', 1)
+        
+        try:
+            applications = paginator.page(page)
+        except PageNotAnInteger:
+            applications = paginator.page(1)
+        except EmptyPage:
+            applications = paginator.page(paginator.num_pages)
+        
+        context = {
+            'job': job,
+            'applications': applications,
+            'type': 'job',
+            'paginator': paginator,
+            'page_obj': applications
+        }
+        return render(request, 'brand_new_site/applicants_list.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def view_internship_applicants(request, internship_id):
+    """View all applicants for a specific internship - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the internship and verify the supplier owns it
+        internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
+        
+        # Get applications for this internship
+        applications_list = InternshipApplication.objects.filter(internship=internship).order_by('-applied_date')
+        
+        # Paginate results - 10 applicants per page
+        paginator = Paginator(applications_list, 10)
+        page = request.GET.get('page', 1)
+        
+        try:
+            applications = paginator.page(page)
+        except PageNotAnInteger:
+            applications = paginator.page(1)
+        except EmptyPage:
+            applications = paginator.page(paginator.num_pages)
+        
+        context = {
+            'internship': internship,
+            'applications': applications,
+            'type': 'internship',
+            'paginator': paginator,
+            'page_obj': applications
+        }
+        return render(request, 'brand_new_site/applicants_list.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def view_job_applicant_detail(request, job_id, application_id):
+    """View details of a specific job applicant - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the job and verify the supplier owns it
+        job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this job
+        application = get_object_or_404(JobApplication, id=application_id, job=job, supplier=supplier)
+        
+        context = {
+            'application': application,
+            'job': job,
+            'type': 'job'
+        }
+        return render(request, 'brand_new_site/applicant_detail.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def view_internship_applicant_detail(request, internship_id, application_id):
+    """View details of a specific internship applicant - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the internship and verify the supplier owns it
+        internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this internship
+        application = get_object_or_404(InternshipApplication, id=application_id, internship=internship, supplier=supplier)
+        
+        context = {
+            'application': application,
+            'internship': internship,
+            'type': 'internship'
+        }
+        return render(request, 'brand_new_site/applicant_detail.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def delete_job_applicant(request, job_id, application_id):
+    """Delete a job applicant and/or their resume - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the job and verify the supplier owns it
+        job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this job
+        application = get_object_or_404(JobApplication, id=application_id, job=job, supplier=supplier)
+        
+        # Check if only deleting resume
+        delete_resume_only = request.POST.get('delete_resume_only') == 'true'
+        
+        if delete_resume_only:
+            # Delete the resume file if it exists
+            if application.resume:
+                application.resume.delete()
+                application.resume = None
+                application.save()
+        else:
+            # Delete entire application
+            if application.resume:
+                application.resume.delete()
+            if application.additional_attachment:
+                application.additional_attachment.delete()
+            application.delete()
+        
+        return redirect('view_job_applicants', job_id=job_id)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def delete_internship_applicant(request, internship_id, application_id):
+    """Delete an internship applicant and/or their resume - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the internship and verify the supplier owns it
+        internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this internship
+        application = get_object_or_404(InternshipApplication, id=application_id, internship=internship, supplier=supplier)
+        
+        # Check if only deleting resume
+        delete_resume_only = request.POST.get('delete_resume_only') == 'true'
+        
+        if delete_resume_only:
+            # Delete the resume file if it exists
+            if application.resume:
+                application.resume.delete()
+                application.resume = None
+                application.save()
+        else:
+            # Delete entire application
+            if application.resume:
+                application.resume.delete()
+            if application.additional_attachment:
+                application.additional_attachment.delete()
+            application.delete()
+        
+        return redirect('view_internship_applicants', internship_id=internship_id)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
