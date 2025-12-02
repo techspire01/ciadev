@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isPageVisible) {
                 nextSlide();
             }
-        }, 5000); // Auto-rotate every 5 seconds
+        }, 3000); // Auto-rotate every 3 seconds
     }
 
     function stopCarousel() {
