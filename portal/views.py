@@ -500,73 +500,59 @@ def toggle_job(request, id):
 
 def internship_application(request, internship_id):
     """Handle internship application form"""
+    from .forms import InternshipApplicationForm
+    
     internship = get_object_or_404(PortalInternship, id=internship_id, is_active=True)
 
     if request.method == 'POST':
-        try:
-            application = InternshipApplication.objects.create(
-                internship=internship,
-                supplier=internship.supplier,
-                full_name=request.POST.get('full_name'),
-                email=request.POST.get('email'),
-                phone=request.POST.get('phone'),
-                address=request.POST.get('address', ''),
-                education=request.POST.get('education'),
-                major=request.POST.get('major', ''),
-                skills=request.POST.get('skills', ''),
-                preferred_role=request.POST.get('preferred_role', ''),
-                availability=request.POST.get('availability'),
-                duration=request.POST.get('duration', ''),
-                start_date=request.POST.get('start_date') or None,
-                resume=request.FILES.get('resume'),
-                cover_letter=request.POST.get('cover_letter', ''),
-                additional_info=request.POST.get('additional_info', '')
-            )
-            messages.success(request, 'Your internship application has been submitted successfully!')
-            return redirect('dashboard')
-        except Exception as e:
-            messages.error(request, f'Error submitting application: {str(e)}')
+        form = InternshipApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                application = form.save(commit=False)
+                application.internship = internship
+                application.supplier = internship.supplier
+                application.save()
+                messages.success(request, 'Your internship application has been submitted successfully!')
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, f'Error submitting application: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = InternshipApplicationForm()
 
     context = {
-        'internship': internship
+        'internship': internship,
+        'form': form
     }
     return render(request, 'brand_new_site/internship_application.html', context)
 
 def job_application(request, job_id):
     """Handle job application form"""
+    from .forms import JobApplicationForm
+    import json
+    
     job = get_object_or_404(PortalJob, id=job_id, is_active=True)
 
     if request.method == 'POST':
-        try:
-            application = JobApplication.objects.create(
-                job=job,
-                supplier=job.supplier,
-                full_name=request.POST.get('full_name'),
-                email=request.POST.get('email'),
-                phone=request.POST.get('phone'),
-                address=request.POST.get('address', ''),
-                education=request.POST.get('education'),
-                major=request.POST.get('major', ''),
-                experience_years=request.POST.get('experience_years'),
-                current_position=request.POST.get('current_position', ''),
-                current_company=request.POST.get('current_company', ''),
-                skills=request.POST.get('skills', ''),
-                preferred_role=request.POST.get('preferred_role', ''),
-                employment_type=request.POST.get('employment_type'),
-                salary_expectation=request.POST.get('salary_expectation', ''),
-                availability_date=request.POST.get('availability_date') or None,
-                work_authorization=request.POST.get('work_authorization'),
-                resume=request.FILES.get('resume'),
-                cover_letter=request.POST.get('cover_letter', ''),
-                portfolio_url=request.POST.get('portfolio_url', ''),
-                additional_info=request.POST.get('additional_info', '')
-            )
-            messages.success(request, 'Your job application has been submitted successfully!')
-            return redirect('dashboard')
-        except Exception as e:
-            messages.error(request, f'Error submitting application: {str(e)}')
+        form = JobApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                application = form.save(commit=False)
+                application.job = job
+                application.supplier = job.supplier
+                application.save()
+                messages.success(request, 'Your job application has been submitted successfully!')
+                return redirect('dashboard')
+            except Exception as e:
+                messages.error(request, f'Error submitting application: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors in the form.')
+    else:
+        form = JobApplicationForm()
 
     context = {
-        'job': job
+        'job': job,
+        'form': form
     }
     return render(request, 'brand_new_site/job_application.html', context)

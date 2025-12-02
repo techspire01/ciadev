@@ -130,8 +130,8 @@
     .application-header {
       background: rgba(255, 251, 240, 0.95);
       backdrop-filter: blur(10px);
-      border-bottom: 2px solid rgba(245, 158, 11, 0.1);
-      padding: 20px 40px;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.1);
+      padding: 2px 4px;
       box-shadow: var(--shadow);
     }
 
@@ -142,19 +142,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 2px;
       box-sizing: border-box;
     }
 
     .header-branding {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 1.5px;
     }
 
     .header-logo {
-      width: 50px;
-      height: 50px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--blue), var(--red));
       display: flex;
@@ -162,7 +162,7 @@
       justify-content: center;
       font-weight: 700;
       color: white;
-      font-size: 24px;
+      font-size: 2.4px;
     }
 
     .header-logo img {
@@ -173,14 +173,14 @@
     }
 
     .header-title {
-      font-size: 24px;
+      font-size: 2.4px;
       font-weight: 700;
       color: var(--dark);
       margin: 0;
     }
 
     .header-subtitle {
-      font-size: 12px;
+      font-size: 1.2px;
       color: var(--gray);
       margin: 0;
       font-weight: 500;
@@ -188,7 +188,7 @@
 
     .header-nav {
       display: flex;
-      gap: 20px;
+      gap: 2px;
     }
 
     .nav-link {
@@ -196,6 +196,7 @@
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
+      font-size: 2px;
     }
 
     .nav-link:hover {
@@ -463,28 +464,28 @@
 
     @media (max-width: 640px) {
       .application-header {
-        padding: 15px 20px;
+        padding: 1.5px 2px;
       }
 
       .header-content {
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 1.5px;
       }
 
       .header-nav {
-        gap: 15px;
+        gap: 1.5px;
       }
 
       .application-main {
-        padding: 30px 15px;
+        padding: 3px 1.5px;
       }
 
       .hero-title {
-        font-size: 28px;
+        font-size: 2.8px;
       }
 
       .application-form {
-        padding: 20px 15px;
+        padding: 2px 1.5px;
       }
     }
   </style>
@@ -527,127 +528,242 @@
         <p class="hero-subtitle">Apply for exciting internship opportunities and kickstart your career journey.</p>
       </section>
 
-      <form class="application-form" method="post" enctype="multipart/form-data">
+      <form class="application-form" method="post" enctype="multipart/form-data" id="applicationForm">
         {% csrf_token %}
 
+        <!-- SECTION 1: BASIC DETAILS -->
         <div class="form-section">
           <h2 class="form-title">
             <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Personal Information
+            1. Basic Details
           </h2>
 
           <div class="form-group">
-            <label for="full_name" class="form-label">Full Name *</label>
-            <input type="text" id="full_name" name="full_name" class="form-input" required>
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name *</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}<div style="color: red;">{{ form.first_name.errors }}</div>{% endif %}
           </div>
 
           <div class="form-group">
-            <label for="email" class="form-label">Email Address *</label>
-            <input type="email" id="email" name="email" class="form-input" required>
+            <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name *</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}<div style="color: red;">{{ form.last_name.errors }}</div>{% endif %}
           </div>
 
           <div class="form-group">
-            <label for="phone" class="form-label">Phone Number *</label>
-            <input type="tel" id="phone" name="phone" class="form-input" required>
+            <label for="{{ form.phone.id_for_label }}" class="form-label">Phone Number *</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}<div style="color: red;">{{ form.phone.errors }}</div>{% endif %}
           </div>
 
           <div class="form-group">
-            <label for="address" class="form-label">Address</label>
-            <textarea id="address" name="address" class="form-textarea" placeholder="Your current address"></textarea>
+            <label for="{{ form.email.id_for_label }}" class="form-label">Email Address *</label>
+            {{ form.email }}
+            {% if form.email.errors %}<div style="color: red;">{{ form.email.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.address.id_for_label }}" class="form-label">Address</label>
+            {{ form.address }}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.city.id_for_label }}" class="form-label">City</label>
+            {{ form.city }}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.state.id_for_label }}" class="form-label">State</label>
+            {{ form.state }}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.country.id_for_label }}" class="form-label">Country</label>
+            {{ form.country }}
           </div>
         </div>
 
-        <div class="form-section">
-          <h2 class="form-title">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
-            Education & Skills
-          </h2>
-
-          <div class="form-group">
-            <label for="education" class="form-label">Current Education *</label>
-            <select id="education" name="education" class="form-select" required>
-              <option value="">Select your current education level</option>
-              <option value="high_school">High School</option>
-              <option value="undergraduate">Undergraduate</option>
-              <option value="graduate">Graduate</option>
-              <option value="postgraduate">Postgraduate</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="major" class="form-label">Field of Study/Major</label>
-            <input type="text" id="major" name="major" class="form-input" placeholder="e.g., Computer Science, Business, Engineering">
-          </div>
-
-          <div class="form-group">
-            <label for="skills" class="form-label">Skills & Technologies</label>
-            <textarea id="skills" name="skills" class="form-textarea" placeholder="List your technical skills, programming languages, software proficiency, etc."></textarea>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <h2 class="form-title">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
-            Internship Preferences
-          </h2>
-
-          <div class="form-group">
-            <label for="preferred_role" class="form-label">Preferred Role/Department</label>
-            <input type="text" id="preferred_role" name="preferred_role" class="form-input" placeholder="e.g., Software Development, Marketing, Design">
-          </div>
-
-          <div class="form-group">
-            <label for="availability" class="form-label">Availability *</label>
-            <select id="availability" name="availability" class="form-select" required>
-              <option value="">Select your availability</option>
-              <option value="full_time">Full-time (40 hours/week)</option>
-              <option value="part_time">Part-time (20-30 hours/week)</option>
-              <option value="flexible">Flexible</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="duration" class="form-label">Preferred Internship Duration</label>
-            <select id="duration" name="duration" class="form-select">
-              <option value="">Select preferred duration</option>
-              <option value="3_months">3 Months</option>
-              <option value="6_months">6 Months</option>
-              <option value="9_months">9 Months</option>
-              <option value="12_months">12 Months</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="start_date" class="form-label">Preferred Start Date</label>
-            <input type="date" id="start_date" name="start_date" class="form-input">
-          </div>
-        </div>
-
+        <!-- SECTION 2: RESUME UPLOAD -->
         <div class="form-section">
           <h2 class="form-title">
             <svg viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-            Documents & Cover Letter
+            2. Resume Upload
           </h2>
 
           <div class="form-group">
-            <label class="file-input-label">Resume/CV *</label>
+            <label class="file-input-label">Upload Resume *</label>
             <div class="file-input-wrapper">
-              <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+              {{ form.resume }}
               <div class="file-input-button">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
                 Choose Resume File
               </div>
             </div>
+            <small style="display: block; margin-top: 8px; color: var(--gray);">{{ form.resume.help_text }}</small>
+            {% if form.resume.errors %}<div style="color: red;">{{ form.resume.errors }}</div>{% endif %}
+          </div>
+        </div>
+
+        <!-- SECTION 3: EXPERIENCE STATUS -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            3. Experience Status
+          </h2>
+
+          <div class="form-group">
+            <label class="form-label">{{ form.status.label }} *</label>
+            <div style="display: flex; gap: 2rem; margin: 1rem 0;">
+              {% for radio in form.status %}
+                <div style="display: flex; align-items: center;">
+                  {{ radio.tag }}
+                  <label class="form-label" for="{{ radio.id_for_label }}" style="margin-bottom: 0; margin-left: 8px;">
+                    {{ radio.choice_label }}
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+            {% if form.status.errors %}<div style="color: red;">{{ form.status.errors }}</div>{% endif %}
+          </div>
+        </div>
+
+        <!-- SECTION 4: EDUCATION DETAILS -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+            4. Education Details
+          </h2>
+
+          <div class="form-group">
+            <label for="{{ form.school_name.id_for_label }}" class="form-label">{{ form.school_name.label }} *</label>
+            {{ form.school_name }}
+            {% if form.school_name.errors %}<div style="color: red;">{{ form.school_name.errors }}</div>{% endif %}
           </div>
 
           <div class="form-group">
-            <label for="cover_letter" class="form-label">Cover Letter</label>
-            <textarea id="cover_letter" name="cover_letter" class="form-textarea" placeholder="Tell us why you're interested in this internship and what makes you a great fit..."></textarea>
+            <label for="{{ form.city_of_study.id_for_label }}" class="form-label">{{ form.city_of_study.label }} *</label>
+            {{ form.city_of_study }}
+            {% if form.city_of_study.errors %}<div style="color: red;">{{ form.city_of_study.errors }}</div>{% endif %}
           </div>
 
           <div class="form-group">
-            <label for="additional_info" class="form-label">Additional Information</label>
-            <textarea id="additional_info" name="additional_info" class="form-textarea" placeholder="Any additional information you'd like to share (projects, achievements, etc.)"></textarea>
+            <label for="{{ form.degree.id_for_label }}" class="form-label">{{ form.degree.label }} *</label>
+            {{ form.degree }}
+            {% if form.degree.errors %}<div style="color: red;">{{ form.degree.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.field_of_study.id_for_label }}" class="form-label">{{ form.field_of_study.label }} *</label>
+            {{ form.field_of_study }}
+            {% if form.field_of_study.errors %}<div style="color: red;">{{ form.field_of_study.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.study_from_date.id_for_label }}" class="form-label">{{ form.study_from_date.label }} *</label>
+            {{ form.study_from_date }}
+            {% if form.study_from_date.errors %}<div style="color: red;">{{ form.study_from_date.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.study_to_date.id_for_label }}" class="form-label">{{ form.study_to_date.label }}</label>
+            {{ form.study_to_date }}
+            {% if form.study_to_date.errors %}<div style="color: red;">{{ form.study_to_date.errors }}</div>{% endif %}
+          </div>
+
+          <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+            {{ form.currently_studying }}
+            <label class="form-label" for="{{ form.currently_studying.id_for_label }}" style="margin-bottom: 0; margin-left: 8px;">
+              {{ form.currently_studying.label }}
+            </label>
+          </div>
+        </div>
+
+        <!-- SECTION 5: SKILLS -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            5. Skills
+          </h2>
+
+          <div class="form-group">
+            <label for="{{ form.skills.id_for_label }}" class="form-label">{{ form.skills.label }}</label>
+            {{ form.skills }}
+            <small style="display: block; margin-top: 8px; color: var(--gray);">{{ form.skills.help_text }}</small>
+          </div>
+        </div>
+
+        <!-- SECTION 6: LINKEDIN PROFILE -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            6. LinkedIn Profile
+          </h2>
+
+          <div class="form-group">
+            <label for="{{ form.linkedin_profile.id_for_label }}" class="form-label">{{ form.linkedin_profile.label }}</label>
+            {{ form.linkedin_profile }}
+          </div>
+        </div>
+
+        <!-- SECTION 7: INTERNSHIPS (Conditional for Freshers) -->
+        <div class="form-section" id="internships-section" style="display: none;">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+            7. Internships (Optional)
+          </h2>
+
+          <div class="form-group">
+            <label for="{{ form.internships.id_for_label }}" class="form-label">{{ form.internships.label }}</label>
+            {{ form.internships }}
+            <small style="display: block; margin-top: 8px; color: var(--gray);">{{ form.internships.help_text }}</small>
+          </div>
+        </div>
+
+        <!-- SECTION 8: ADDITIONAL QUESTIONS -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            8. Additional Questions
+          </h2>
+
+          <div class="form-group">
+            <label for="{{ form.additional_questions.id_for_label }}" class="form-label">{{ form.additional_questions.label }}</label>
+            {{ form.additional_questions }}
+            <small style="display: block; margin-top: 8px; color: var(--gray);">0-2000 characters</small>
+          </div>
+        </div>
+
+        <!-- SECTION 9: MESSAGE TO HIRING MANAGER -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            9. Message to Hiring Manager
+          </h2>
+
+          <div class="form-group">
+            <label for="{{ form.message_to_manager.id_for_label }}" class="form-label">{{ form.message_to_manager.label }}</label>
+            {{ form.message_to_manager }}
+            <small style="display: block; margin-top: 8px; color: var(--gray);">0-2000 characters</small>
+          </div>
+        </div>
+
+        <!-- SECTION 10: ADDITIONAL ATTACHMENTS -->
+        <div class="form-section">
+          <h2 class="form-title">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            10. Additional Attachments (Optional)
+          </h2>
+
+          <div class="form-group">
+            <label class="file-input-label">{{ form.additional_attachment.label }}</label>
+            <div class="file-input-wrapper">
+              {{ form.additional_attachment }}
+              <div class="file-input-button">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+                Choose File
+              </div>
+            </div>
+            <small style="display: block; margin-top: 8px; color: var(--gray);">{{ form.additional_attachment.help_text }}</small>
           </div>
         </div>
 
@@ -686,6 +802,29 @@
           `;
         }
       });
+    });
+
+    // Handle conditional field visibility based on fresher/experienced status
+    document.addEventListener('DOMContentLoaded', function() {
+      const statusInputs = document.querySelectorAll('input[name="status"]');
+      const internshipsSection = document.getElementById('internships-section');
+
+      function updateFieldVisibility() {
+        const selectedStatus = document.querySelector('input[name="status"]:checked');
+        if (selectedStatus && selectedStatus.value === 'fresher') {
+          internshipsSection.style.display = 'block';
+        } else {
+          internshipsSection.style.display = 'none';
+        }
+      }
+
+      // Add event listeners to radio buttons
+      statusInputs.forEach(input => {
+        input.addEventListener('change', updateFieldVisibility);
+      });
+
+      // Initialize on page load
+      updateFieldVisibility();
     });
   </script>
 {% endblock %}
