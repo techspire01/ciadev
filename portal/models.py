@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from app.models import Supplier
 
@@ -14,13 +13,6 @@ class PortalInternship(models.Model):
     company_name = models.CharField(max_length=255, blank=True)
     email = models.CharField(max_length=255, blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True, related_name='internships')
-    posted_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='posted_internships'
-    )
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
     salary = models.CharField(max_length=100)
@@ -42,13 +34,6 @@ class PortalJob(models.Model):
     company_name = models.CharField(max_length=255, blank=True)
     email = models.CharField(max_length=255, blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True, related_name='jobs')
-    posted_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='posted_jobs'
-    )
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
     salary = models.CharField(max_length=100)
@@ -127,13 +112,6 @@ class InternshipApplication(models.Model):
     applied_date = models.DateTimeField(auto_now_add=True)
     internship = models.ForeignKey(PortalInternship, on_delete=models.CASCADE, related_name='applications')
     supplier = models.ForeignKey('app.Supplier', on_delete=models.CASCADE, null=True, blank=True)
-    posted_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='internship_applications'
-    )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.internship.title}"
@@ -210,16 +188,8 @@ class JobApplication(models.Model):
 
     # Metadata
     applied_date = models.DateTimeField(auto_now_add=True)
-    job = models.ForeignKey(PortalJob, on_delete=models.CASCADE, null=True, blank=True, related_name='applications')
+    job = models.ForeignKey(PortalJob, on_delete=models.CASCADE, related_name='applications')
     supplier = models.ForeignKey('app.Supplier', on_delete=models.CASCADE, null=True, blank=True)
-    posted_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name='job_applications'
-    )
 
     def __str__(self):
-        job_title = self.job.title if self.job else 'Unknown Job'
-        return f"{self.first_name} {self.last_name} - {job_title}"
+        return f"{self.first_name} {self.last_name} - {self.job.title}"
