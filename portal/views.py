@@ -653,3 +653,71 @@ def view_internship_applicant_detail(request, internship_id, application_id):
         return render(request, 'brand_new_site/applicant_detail.html', context)
     except Supplier.DoesNotExist:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def delete_job_applicant(request, job_id, application_id):
+    """Delete a job applicant and/or their resume - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the job and verify the supplier owns it
+        job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this job
+        application = get_object_or_404(JobApplication, id=application_id, job=job, supplier=supplier)
+        
+        # Check if only deleting resume
+        delete_resume_only = request.POST.get('delete_resume_only') == 'true'
+        
+        if delete_resume_only:
+            # Delete the resume file if it exists
+            if application.resume:
+                application.resume.delete()
+                application.resume = None
+                application.save()
+        else:
+            # Delete entire application
+            if application.resume:
+                application.resume.delete()
+            if application.additional_attachment:
+                application.additional_attachment.delete()
+            application.delete()
+        
+        return redirect('view_job_applicants', job_id=job_id)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def delete_internship_applicant(request, internship_id, application_id):
+    """Delete an internship applicant and/or their resume - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the internship and verify the supplier owns it
+        internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this internship
+        application = get_object_or_404(InternshipApplication, id=application_id, internship=internship, supplier=supplier)
+        
+        # Check if only deleting resume
+        delete_resume_only = request.POST.get('delete_resume_only') == 'true'
+        
+        if delete_resume_only:
+            # Delete the resume file if it exists
+            if application.resume:
+                application.resume.delete()
+                application.resume = None
+                application.save()
+        else:
+            # Delete entire application
+            if application.resume:
+                application.resume.delete()
+            if application.additional_attachment:
+                application.additional_attachment.delete()
+            application.delete()
+        
+        return redirect('view_internship_applicants', internship_id=internship_id)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")

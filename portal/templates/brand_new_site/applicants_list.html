@@ -245,9 +245,17 @@
             </div>
         </div>
 
+        <div class="filter-section" style="margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(245, 158, 11, 0.2);">
+            <div class="filter-title">Sort by Application Date:</div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="sortApplications('newest')">📅 Newest First (Default)</button>
+                <button class="filter-btn" onclick="sortApplications('oldest')">📅 Oldest First</button>
+            </div>
+        </div>
+
         <div class="applicants-grid" id="applicants-grid">
             {% for application in applications %}
-                <div class="applicant-card" data-status="{{ application.status }}">
+                <div class="applicant-card" data-status="{{ application.status }}" data-date="{{ application.applied_date|date:'U' }}">
                     <h3 class="applicant-name">{{ application.first_name }} {{ application.last_name }}</h3>
                     
                     <span class="applicant-status">
@@ -308,8 +316,12 @@ function filterApplications(status) {
     const cards = document.querySelectorAll('.applicant-card');
     const buttons = document.querySelectorAll('.filter-btn');
     
-    // Update active button
-    buttons.forEach(btn => btn.classList.remove('active'));
+    // Update active button (only for filter buttons, not sort buttons)
+    buttons.forEach(btn => {
+        if (btn.textContent.includes('Fresher') || btn.textContent.includes('Experienced') || btn.textContent.includes('All')) {
+            btn.classList.remove('active');
+        }
+    });
     event.target.classList.add('active');
     
     // Filter cards
@@ -319,6 +331,37 @@ function filterApplications(status) {
         } else {
             card.style.display = 'none';
         }
+    });
+}
+
+function sortApplications(order) {
+    const grid = document.getElementById('applicants-grid');
+    const cards = Array.from(document.querySelectorAll('.applicant-card'));
+    const buttons = document.querySelectorAll('.filter-btn');
+    
+    // Update active sort button
+    buttons.forEach(btn => {
+        if (btn.textContent.includes('Newest') || btn.textContent.includes('Oldest')) {
+            btn.classList.remove('active');
+        }
+    });
+    event.target.classList.add('active');
+    
+    // Sort cards
+    cards.sort((a, b) => {
+        const dateA = parseInt(a.getAttribute('data-date'));
+        const dateB = parseInt(b.getAttribute('data-date'));
+        
+        if (order === 'newest') {
+            return dateB - dateA; // Descending
+        } else {
+            return dateA - dateB; // Ascending
+        }
+    });
+    
+    // Reorder cards in the grid
+    cards.forEach(card => {
+        grid.appendChild(card);
     });
 }
 </script>

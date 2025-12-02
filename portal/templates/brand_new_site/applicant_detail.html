@@ -431,6 +431,21 @@
         </div>
     </div>
 
+    <!-- Delete Section -->
+    <div class="detail-section">
+        <h2 class="section-title" style="color: #d97706; border-bottom-color: rgba(217, 119, 6, 0.2);">Danger Zone</h2>
+        <div class="action-buttons" style="gap: 15px;">
+            <button class="btn" style="background: #dc2626; color: white; border: 2px solid #991b1b;" 
+                    onclick="if(confirm('Are you sure you want to delete the resume? This action cannot be undone.')) { deleteResume(); }">
+                🗑️ Delete Resume Only
+            </button>
+            <button class="btn" style="background: #7c3aed; color: white; border: 2px solid #6d28d9;"
+                    onclick="if(confirm('Are you sure you want to delete this entire application and all associated data? This action cannot be undone.')) { deleteApplication(); }">
+                ⚠️ Delete Entire Application
+            </button>
+        </div>
+    </div>
+
     <!-- Back Button -->
     <div class="action-buttons">
         {% if type == 'job' %}
@@ -440,5 +455,42 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+function deleteResume() {
+    // This will be handled by AJAX or form submission
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% if type == "job" %}{% url "delete_job_applicant" job_id=job.id application_id=application.id %}{% else %}{% url "delete_internship_applicant" internship_id=internship.id application_id=application.id %}{% endif %}';
+    
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'delete_resume_only';
+    input.value = 'true';
+    
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    csrfInput.value = '{{ csrf_token }}';
+    
+    form.appendChild(input);
+    form.appendChild(csrfInput);
+    form.submit();
+}
+
+function deleteApplication() {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{% if type == "job" %}{% url "delete_job_applicant" job_id=job.id application_id=application.id %}{% else %}{% url "delete_internship_applicant" internship_id=internship.id application_id=application.id %}{% endif %}';
+    
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = 'csrfmiddlewaretoken';
+    csrfInput.value = '{{ csrf_token }}';
+    
+    form.appendChild(csrfInput);
+    form.submit();
+}
+</script>
 
 {% endblock %}
