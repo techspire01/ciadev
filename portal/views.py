@@ -1,14 +1,30 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse, Http404, FileResponse, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
 import json
+import os
+import logging
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
 from app.models import Supplier
+from app.utils import get_supplier_for_user_or_raise
+
+logger = logging.getLogger('cai_security')
+
+# Try to import ratelimit, provide fallback if not installed
+try:
+    from ratelimit.decorators import ratelimit
+except ImportError:
+    # Fallback: create a no-op decorator if ratelimit is not installed
+    def ratelimit(key=None, rate=None, method=None, block=False):
+        def decorator(func):
+            return func
+        return decorator
 
 # Create your views here.
 
@@ -93,22 +109,94 @@ def brand_new_site_dashboard(request):
 
 
 def supplier_required(view_func):
-    """Decorator to check if user is a supplier (email exists in Supplier table)"""
+    """
+    Decorator to check if user is a supplier and attach supplier to request.
+    
+    Uses new OneToOne relationship first, falls back to email lookup for migration window.
+    """
     @login_required
     def _wrapped_view(request, *args, **kwargs):
         try:
-            Supplier.objects.get(email=request.user.email)
+            supplier = get_supplier_for_user_or_raise(request)
+            request.supplier = supplier  # Attach supplier to request for downstream use
             return view_func(request, *args, **kwargs)
-        except Supplier.DoesNotExist:
-            raise PermissionDenied("Access denied. Only suppliers can access this page.")
+        except PermissionDenied:
+            raise
     return _wrapped_view
+
+
+def protected_media(request, path):
+    """
+    Protected endpoint for downloading files (resumes, attachments).
+    
+    Validates ownership before serving files.
+    Only staff or application owner can access.
+    """
+    try:
+        # Sanitize path to prevent directory traversal
+        safe_path = os.path.normpath(path).lstrip(os.sep)
+        file_path = os.path.join(settings.MEDIA_ROOT, safe_path)
+        
+        # Verify file exists
+        if not os.path.exists(file_path):
+            logger.warning("Attempt to access non-existent file: %s by user %s", path, request.user)
+            raise Http404("File not found.")
+        
+        # Staff members can access any file
+        if request.user.is_staff:
+            return FileResponse(open(file_path, 'rb'), as_attachment=True)
+        
+        # Find application referencing this file
+        job_app = JobApplication.objects.filter(resume__contains=safe_path).first()
+        if not job_app:
+            job_app = JobApplication.objects.filter(additional_attachment__contains=safe_path).first()
+        
+        if not job_app:
+            internship_app = InternshipApplication.objects.filter(resume__contains=safe_path).first()
+            if not internship_app:
+                internship_app = InternshipApplication.objects.filter(additional_attachment__contains=safe_path).first()
+        
+        # Check ownership
+        if job_app:
+            app = job_app
+        elif internship_app:
+            app = internship_app
+        else:
+            logger.warning("Attempt to access file with no application reference: %s by user %s", path, request.user)
+            raise Http404("File not found.")
+        
+        # Verify user is logged in and owns the application
+        if not request.user.is_authenticated:
+            logger.warning("Unauthenticated access attempt to protected media: %s", path)
+            return HttpResponseForbidden("Authentication required.")
+        
+        # Check if user is the supplier who posted the job/internship
+        if app.supplier and app.supplier.user_id == request.user.id:
+            logger.info("Protected media access granted to supplier %s for file %s", request.user.id, path)
+            return FileResponse(open(file_path, 'rb'), as_attachment=True)
+        
+        # Also allow if supplier user is matched by email (migration window)
+        if app.supplier and app.supplier.email and app.supplier.email.lower() == request.user.email.lower():
+            logger.info("Protected media access granted to supplier (by email) %s for file %s", request.user.email, path)
+            return FileResponse(open(file_path, 'rb'), as_attachment=True)
+        
+        logger.warning("Unauthorized media access attempt by %s for %s (application supplier: %s)", 
+                      request.user.email, path, app.supplier.email if app.supplier else "None")
+        return HttpResponseForbidden("You do not have permission to access this file.")
+    
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error("Error in protected_media: %s", str(e))
+        raise Http404("Error accessing file.")
 
 
 @supplier_required
 def job_portal_admin(request):
-    """Render the job portal admin dashboard"""
+    """Render the job portal admin dashboard with optimized queries"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = request.supplier  # Use supplier attached by decorator
+        
         # Filter by supplier - only show this company's postings
         internships = PortalInternship.objects.filter(supplier=supplier).order_by('-posted_date')
         jobs = PortalJob.objects.filter(supplier=supplier).order_by('-posted_date')
@@ -117,16 +205,13 @@ def job_portal_admin(request):
         internship_applications = InternshipApplication.objects.filter(supplier=supplier).order_by('-applied_date')
         job_applications = JobApplication.objects.filter(supplier=supplier).order_by('-applied_date')
         
-        # Add application counts to each internship and job object
-        for internship in internships:
-            count = InternshipApplication.objects.filter(internship=internship, supplier=supplier).count()
-            internship.application_count = count
+        # Use annotate instead of N+1 count() queries
+        from django.db.models import Count
+        internships = internships.annotate(application_count=Count('applications'))
+        jobs = jobs.annotate(application_count=Count('applications'))
         
-        for job in jobs:
-            count = JobApplication.objects.filter(job=job, supplier=supplier).count()
-            job.application_count = count
-    except Supplier.DoesNotExist:
-        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+    except PermissionDenied:
+        raise
 
     return render(request, 'brand_new_site/job_portal_admin.html', {
         'internships': internships,
@@ -147,7 +232,7 @@ def job_admin(request):
 def add_internship(request):
     """Add a new internship via AJAX"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         data = json.loads(request.body)
         internship = PortalInternship.objects.create(
             title=data['title'],
@@ -159,21 +244,26 @@ def add_internship(request):
             requirements=data.get('requirements', ''),
             responsibilities=data.get('responsibilities', '')
         )
+        logger.info("Internship created: %s by supplier %s", internship.id, supplier.id)
         return JsonResponse({
             'success': True,
             'id': internship.id,
             'message': 'Internship added successfully!'
         })
+    except PermissionDenied as e:
+        logger.warning("Permission denied for add_internship: %s", str(e))
+        return JsonResponse({'success': False, 'message': str(e)}, status=403)
     except Exception as e:
+        logger.error("Error in add_internship: %s", str(e))
         return JsonResponse({'success': False, 'message': str(e)})
 
 @require_GET
 def get_internships(request):
     """Get all internships for the admin view"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         internships = PortalInternship.objects.filter(supplier=supplier).order_by('-posted_date')
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         internships = PortalInternship.objects.none()
     
     data = []
@@ -202,8 +292,9 @@ def update_internship(request, internship_id):
         internship = get_object_or_404(PortalInternship, id=internship_id)
         
         # Check ownership
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if internship.supplier != supplier:
+            logger.warning("Unauthorized internship update attempt by user %s for internship %s", request.user.id, internship_id)
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
         data = json.loads(request.body)
@@ -219,11 +310,12 @@ def update_internship(request, internship_id):
         internship.location = data.get('location', internship.location)
         internship.save()
 
+        logger.info("Internship %s updated by supplier %s", internship_id, supplier.id)
         return JsonResponse({
             'success': True,
             'message': 'Internship updated successfully!'
         })
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
@@ -236,7 +328,7 @@ def toggle_internship_status(request, internship_id):
         internship = get_object_or_404(PortalInternship, id=internship_id)
         
         # Check ownership
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if internship.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
@@ -249,20 +341,20 @@ def toggle_internship_status(request, internship_id):
             'message': f'Internship {status} successfully!',
             'is_active': internship.is_active
         })
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
 @csrf_exempt
 @require_POST
-def delete_internship(request, internship_id):
-    """Delete an internship"""
+def delete_internship_api(request, internship_id):
+    """Delete an internship via API"""
     try:
         internship = get_object_or_404(PortalInternship, id=internship_id)
         
         # Check ownership
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if internship.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
@@ -271,20 +363,17 @@ def delete_internship(request, internship_id):
             'success': True,
             'message': 'Internship deleted successfully!'
         })
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
-# API Endpoints for Job Management
-
-@csrf_exempt
 @csrf_exempt
 @require_POST
-def add_job(request):
+def add_job_api(request):
     """Add a new job via AJAX"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         data = json.loads(request.body)
         job = PortalJob.objects.create(
             title=data['title'],
@@ -308,13 +397,13 @@ def add_job(request):
 
 @csrf_exempt
 @require_POST
-def update_job(request, job_id):
-    """Update an existing job"""
+def update_job_api(request, job_id):
+    """Update an existing job via API"""
     try:
         job = get_object_or_404(PortalJob, id=job_id)
         
         # Check ownership
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if job.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
@@ -335,20 +424,20 @@ def update_job(request, job_id):
             'success': True,
             'message': 'Job updated successfully!'
         })
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
 @csrf_exempt
 @require_POST
-def toggle_job_status(request, job_id):
-    """Toggle job active status (pause/resume)"""
+def toggle_job_status_api(request, job_id):
+    """Toggle job active status (pause/resume) via API"""
     try:
         job = get_object_or_404(PortalJob, id=job_id)
         
         # Check ownership
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if job.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
@@ -361,20 +450,20 @@ def toggle_job_status(request, job_id):
             'message': f'Job {status} successfully!',
             'is_active': job.is_active
         })
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
 @csrf_exempt
 @require_POST
-def delete_job(request, job_id):
-    """Delete a job"""
+def delete_job_api(request, job_id):
+    """Delete a job via API"""
     try:
         job = get_object_or_404(PortalJob, id=job_id)
         
         # Check ownership
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if job.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
@@ -383,10 +472,8 @@ def delete_job(request, job_id):
             'success': True,
             'message': 'Job deleted successfully!'
         })
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
-    except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)})
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})
 
@@ -397,10 +484,10 @@ def edit_internship(request, id):
     
     # Check if user owns this internship
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if internship.supplier != supplier:
             raise PermissionDenied("You do not have permission to edit this internship.")
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can edit internships.")
 
     if request.method == 'POST':
@@ -424,10 +511,10 @@ def delete_internship(request, id):
     
     # Check if user owns this internship
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if internship.supplier != supplier:
             raise PermissionDenied("You do not have permission to delete this internship.")
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can delete internships.")
     
     internship.delete()
@@ -439,10 +526,10 @@ def toggle_internship(request, id):
     
     # Check if user owns this internship
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if internship.supplier != supplier:
             raise PermissionDenied("You do not have permission to toggle this internship.")
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can toggle internships.")
     
     internship.is_active = not internship.is_active
@@ -456,10 +543,10 @@ def edit_job(request, id):
     
     # Check if user owns this job
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if job.supplier != supplier:
             raise PermissionDenied("You do not have permission to edit this job.")
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can edit jobs.")
 
     if request.method == 'POST':
@@ -478,15 +565,15 @@ def edit_job(request, id):
     return redirect('job_portal_admin')
 
 @login_required
-def delete_job_view(request, id):
+def delete_job(request, id):
     job = get_object_or_404(PortalJob, id=id)
     
     # Check if user owns this job
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if job.supplier != supplier:
             raise PermissionDenied("You do not have permission to delete this job.")
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can delete jobs.")
     
     job.delete()
@@ -498,18 +585,19 @@ def toggle_job(request, id):
     
     # Check if user owns this job
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         if job.supplier != supplier:
             raise PermissionDenied("You do not have permission to toggle this job.")
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can toggle jobs.")
     
     job.is_active = not job.is_active
     job.save()
     return redirect('job_portal_admin')
 
+@ratelimit(key='ip', rate='30/h', method='POST', block=True)
 def internship_application(request, internship_id):
-    """Handle internship application form"""
+    """Handle internship application form with rate-limiting"""
     from .forms import InternshipApplicationForm
     
     internship = get_object_or_404(PortalInternship, id=internship_id, is_active=True)
@@ -522,9 +610,12 @@ def internship_application(request, internship_id):
                 application.internship = internship
                 application.supplier = internship.supplier
                 application.save()
+                logger.info("Internship application submitted successfully for internship %s by %s", 
+                           internship_id, request.META.get('REMOTE_ADDR'))
                 messages.success(request, 'Your internship application has been submitted successfully!')
                 return redirect('dashboard')
             except Exception as e:
+                logger.error("Error submitting internship application: %s", str(e))
                 messages.error(request, f'Error submitting application: {str(e)}')
         else:
             messages.error(request, 'Please correct the errors in the form.')
@@ -537,8 +628,9 @@ def internship_application(request, internship_id):
     }
     return render(request, 'brand_new_site/internship_application.html', context)
 
+@ratelimit(key='ip', rate='30/h', method='POST', block=True)
 def job_application(request, job_id):
-    """Handle job application form"""
+    """Handle job application form with rate-limiting"""
     from .forms import JobApplicationForm
     import json
     
@@ -552,9 +644,12 @@ def job_application(request, job_id):
                 application.job = job
                 application.supplier = job.supplier
                 application.save()
+                logger.info("Job application submitted successfully for job %s by %s", 
+                           job_id, request.META.get('REMOTE_ADDR'))
                 messages.success(request, 'Your job application has been submitted successfully!')
                 return redirect('dashboard')
             except Exception as e:
+                logger.error("Error submitting job application: %s", str(e))
                 messages.error(request, f'Error submitting application: {str(e)}')
         else:
             messages.error(request, 'Please correct the errors in the form.')
@@ -572,7 +667,7 @@ def job_application(request, job_id):
 def view_job_applicants(request, job_id):
     """View all applicants for a specific job - ONLY for the employer who posted it"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         
         # Get the job and verify the supplier owns it
         job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
@@ -599,7 +694,7 @@ def view_job_applicants(request, job_id):
             'page_obj': applications
         }
         return render(request, 'brand_new_site/applicants_list.html', context)
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
 
@@ -607,7 +702,7 @@ def view_job_applicants(request, job_id):
 def view_internship_applicants(request, internship_id):
     """View all applicants for a specific internship - ONLY for the employer who posted it"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         
         # Get the internship and verify the supplier owns it
         internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
@@ -634,7 +729,7 @@ def view_internship_applicants(request, internship_id):
             'page_obj': applications
         }
         return render(request, 'brand_new_site/applicants_list.html', context)
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
 
@@ -642,7 +737,7 @@ def view_internship_applicants(request, internship_id):
 def view_job_applicant_detail(request, job_id, application_id):
     """View details of a specific job applicant - ONLY for the employer who posted it"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         
         # Get the job and verify the supplier owns it
         job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
@@ -656,7 +751,7 @@ def view_job_applicant_detail(request, job_id, application_id):
             'type': 'job'
         }
         return render(request, 'brand_new_site/applicant_detail.html', context)
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
 
@@ -664,7 +759,7 @@ def view_job_applicant_detail(request, job_id, application_id):
 def view_internship_applicant_detail(request, internship_id, application_id):
     """View details of a specific internship applicant - ONLY for the employer who posted it"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         
         # Get the internship and verify the supplier owns it
         internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
@@ -678,7 +773,7 @@ def view_internship_applicant_detail(request, internship_id, application_id):
             'type': 'internship'
         }
         return render(request, 'brand_new_site/applicant_detail.html', context)
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
 
@@ -686,7 +781,7 @@ def view_internship_applicant_detail(request, internship_id, application_id):
 def delete_job_applicant(request, job_id, application_id):
     """Delete a job applicant and/or their resume - ONLY for the employer who posted it"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         
         # Get the job and verify the supplier owns it
         job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
@@ -712,7 +807,7 @@ def delete_job_applicant(request, job_id, application_id):
             application.delete()
         
         return redirect('view_job_applicants', job_id=job_id)
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
 
@@ -720,7 +815,7 @@ def delete_job_applicant(request, job_id, application_id):
 def delete_internship_applicant(request, internship_id, application_id):
     """Delete an internship applicant and/or their resume - ONLY for the employer who posted it"""
     try:
-        supplier = Supplier.objects.get(email=request.user.email)
+        supplier = get_supplier_for_user_or_raise(request)
         
         # Get the internship and verify the supplier owns it
         internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
@@ -746,5 +841,5 @@ def delete_internship_applicant(request, internship_id, application_id):
             application.delete()
         
         return redirect('view_internship_applicants', internship_id=internship_id)
-    except Supplier.DoesNotExist:
+    except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")

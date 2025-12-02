@@ -84,6 +84,15 @@ class Supplier(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     cia_id = models.PositiveIntegerField(unique=True, blank=True, null=True)  # CIA serial id
+    
+    # Link supplier to a user account (OneToOne, optional for migration window)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='supplier_profile'
+    )
 
     def __str__(self):
         return self.name
