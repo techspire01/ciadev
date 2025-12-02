@@ -64,12 +64,14 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first (after SecurityMiddleware)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Must be last
     'allauth.account.middleware.AccountMiddleware',  # Added for django-allauth
     "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
@@ -135,6 +137,21 @@ DATABASES = {
         'PORT': '6543',
     }
 }
+
+# Performance Optimization - Add caching for faster page loads
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'cia-cache',
+        'OPTIONS': {
+            'MAX_ENTRIES': 10000,
+        },
+        'TIMEOUT': 300,  # Cache timeout in seconds (5 minutes)
+    }
+}
+
+# Enable query caching for database queries
+CONN_MAX_AGE = 600  # Connection pooling for 10 minutes
 
 
 

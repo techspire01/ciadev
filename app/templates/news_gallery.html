@@ -11,9 +11,9 @@
         {% for newspaper in all_newspapers %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             {% if newspaper.image_url %}
-                <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title }}" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openLightbox('{{ newspaper.image_url|escapejs }}', '{{ newspaper.title|escapejs }}')">
+                <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title }}" loading="lazy" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openLightbox('{{ newspaper.image_url|escapejs }}', '{{ newspaper.title|escapejs }}')">
             {% elif newspaper.image %}
-                <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title }}" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openLightbox('{{ newspaper.image.url|escapejs }}', '{{ newspaper.title|escapejs }}')">
+                <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title }}" loading="lazy" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openLightbox('{{ newspaper.image.url|escapejs }}', '{{ newspaper.title|escapejs }}')">
             {% else %}
                 <div class="w-full h-48 sm:h-56 md:h-64 bg-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors duration-300">
                     <span class="text-gray-500 text-xs sm:text-sm">No Image</span>

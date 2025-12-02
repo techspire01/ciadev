@@ -66,9 +66,9 @@
                 {% for photo in book_photos %}
                 <div class="gallery-item group relative book-modal-trigger" data-index="{{ forloop.counter0 }}">
                     {% if photo.image_url %}
-                        <img src="{{ photo.image_url }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                        <img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy" class="w-full h-full object-cover">
                     {% elif photo.image %}
-                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy" class="w-full h-full object-cover">
                     {% else %}
                         <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                             <i class="fas fa-image text-gray-400 text-4xl"></i>

@@ -11,9 +11,9 @@
         {% for photo in all_photos %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             {% if photo.image_url %}
-                <img src="{{ photo.image_url }}" alt="{{ photo.title }}" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300">
+                <img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300">
             {% elif photo.image %}
-                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy" class="w-full h-48 sm:h-56 md:h-64 object-cover cursor-pointer hover:scale-105 transition-transform duration-300">
             {% else %}
                 <div class="w-full h-48 sm:h-56 md:h-64 bg-gray-200 flex items-center justify-center">
                     <span class="text-gray-500 text-xs sm:text-sm">No Image</span>

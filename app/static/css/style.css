@@ -173,8 +173,11 @@ html, body, input, textarea, select, button {
   z-index: 1000;
   transition: all 0.3s ease-in-out;
   background-color: #fffaed !important;
-  position: relative;
-  z-index: 1000;
+  width: 100%;
+}
+
+body {
+  padding-top: 0;
 }
 
 .fixed-header:hover {
@@ -491,13 +494,14 @@ footer a:hover {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 0.625rem;
+  gap: 0.75rem;
   height: 100%;
   width: 100%;
+  padding: 0.5rem;
 }
 
 .carousel-item {
-  border-radius: 0.75rem;
+  border-radius: 0.9rem;
   overflow: hidden;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   background-color: #000;
