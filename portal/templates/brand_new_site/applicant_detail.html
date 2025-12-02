@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load custom_filters %}
+{% load portal_filters %}
 
 {% block content %}
 <style>
@@ -353,7 +353,7 @@
         <h2 class="section-title">Skills</h2>
         <div class="skills-list">
             {% for skill in application.skills|split:"," %}
-                <span class="skill-tag">{{ skill.strip }}</span>
+                <span class="skill-tag">{{ skill }}</span>
             {% endfor %}
         </div>
     </div>

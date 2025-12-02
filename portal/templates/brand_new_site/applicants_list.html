@@ -303,6 +303,25 @@
                 </div>
             {% endfor %}
         </div>
+
+        <!-- Pagination -->
+        {% if paginator %}
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 30px; padding: 20px; flex-wrap: wrap;">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" style="padding: 8px 12px; background: #f59e0b; color: white; border-radius: 4px; text-decoration: none; font-weight: 600;">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}" style="padding: 8px 12px; background: #f59e0b; color: white; border-radius: 4px; text-decoration: none; font-weight: 600;">Previous</a>
+            {% endif %}
+            
+            <span style="padding: 8px 12px; background: #e5e7eb; color: var(--dark); border-radius: 4px; font-weight: 600;">
+                Page {{ page_obj.number }} of {{ paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" style="padding: 8px 12px; background: #f59e0b; color: white; border-radius: 4px; text-decoration: none; font-weight: 600;">Next</a>
+                <a href="?page={{ paginator.num_pages }}" style="padding: 8px 12px; background: #f59e0b; color: white; border-radius: 4px; text-decoration: none; font-weight: 600;">Last</a>
+            {% endif %}
+        </div>
+        {% endif %}
     {% else %}
         <div class="no-applications">
             <h2>No Applications Yet</h2>

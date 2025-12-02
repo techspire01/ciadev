@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
 from app.models import Supplier
@@ -577,12 +578,25 @@ def view_job_applicants(request, job_id):
         job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
         
         # Get applications for this job
-        applications = JobApplication.objects.filter(job=job).order_by('-applied_date')
+        applications_list = JobApplication.objects.filter(job=job).order_by('-applied_date')
+        
+        # Paginate results - 10 applicants per page
+        paginator = Paginator(applications_list, 10)
+        page = request.GET.get('page', 1)
+        
+        try:
+            applications = paginator.page(page)
+        except PageNotAnInteger:
+            applications = paginator.page(1)
+        except EmptyPage:
+            applications = paginator.page(paginator.num_pages)
         
         context = {
             'job': job,
             'applications': applications,
-            'type': 'job'
+            'type': 'job',
+            'paginator': paginator,
+            'page_obj': applications
         }
         return render(request, 'brand_new_site/applicants_list.html', context)
     except Supplier.DoesNotExist:
@@ -599,12 +613,25 @@ def view_internship_applicants(request, internship_id):
         internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
         
         # Get applications for this internship
-        applications = InternshipApplication.objects.filter(internship=internship).order_by('-applied_date')
+        applications_list = InternshipApplication.objects.filter(internship=internship).order_by('-applied_date')
+        
+        # Paginate results - 10 applicants per page
+        paginator = Paginator(applications_list, 10)
+        page = request.GET.get('page', 1)
+        
+        try:
+            applications = paginator.page(page)
+        except PageNotAnInteger:
+            applications = paginator.page(1)
+        except EmptyPage:
+            applications = paginator.page(paginator.num_pages)
         
         context = {
             'internship': internship,
             'applications': applications,
-            'type': 'internship'
+            'type': 'internship',
+            'paginator': paginator,
+            'page_obj': applications
         }
         return render(request, 'brand_new_site/applicants_list.html', context)
     except Supplier.DoesNotExist:
