@@ -33,7 +33,6 @@
                 <li class="nav-item"><a class="nav-link" onclick="switchTab('view-internships')">View Internships</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="switchTab('add-jobs')">Add Jobs</a></li>
                 <li class="nav-item"><a class="nav-link" onclick="switchTab('view-jobs')">View Jobs</a></li>
-                <li class="nav-item"><a class="nav-link" onclick="switchTab('applications')">Applications</a></li>
             </nav>
         </aside>
 
@@ -172,6 +171,7 @@
                                    onclick="return confirm('Are you sure you want to delete this internship?');">
                                    Delete
                                 </a>
+                                <a href="{% url 'view_internship_applicants' internship_id=internship.id %}" class="btn btn-info btn-small">View Applications ({{ internship.applications.count }})</a>
                             </div>
                         </div>
                         {% endfor %}
@@ -333,6 +333,7 @@
                                    onclick="return confirm('Are you sure you want to delete this job?');">
                                    Delete
                                 </a>
+                                <a href="{% url 'view_job_applicants' job_id=job.id %}" class="btn btn-info btn-small">View Applications ({{ job.applications.count }})</a>
                             </div>
                         </div>
                         {% endfor %}
@@ -346,34 +347,7 @@
                 </div>
             </div>
 
-            <!-- APPLICATIONS TAB -->
-            <div id="applications" class="tab-content">
-                <div class="page-header">
-                    <h2>Applications</h2>
-                    <p>View and manage all applications</p>
-                </div>
-                <div class="table-container">
-                    <table id="applications-table">
-                        <thead>
-                            <tr>
-                                <th>Applicant Name</th>
-                                <th>Email</th>
-                                <th>Applied For</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Applications will be rendered here -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="empty-state" id="empty-applications">
-                    <div class="icon">📧</div>
-                    <h3>No applications yet</h3>
-                    <p>Applications will appear here once received</p>
-                </div>
-            </div>
+
         </main>
     </div>
 

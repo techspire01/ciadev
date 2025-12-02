@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    :root {
+      --blue: #F59E0B;
+      --red: #D97706;
+      --dark: #78350F;
+      --gray: #92400E;
+      --light-bg: #FFFBF0;
+    }
+
+    body {
+      background: var(--light-bg);
+      color: var(--dark);
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .applicants-container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+      padding: 30px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .header-section h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .header-section p {
+      margin: 10px 0 0 0;
+      opacity: 0.9;
+    }
+
+    .applicants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .applicant-card {
+      background: white;
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .applicant-card:hover {
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .applicant-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0 0 10px 0;
+    }
+
+    .applicant-status {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .info-row {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: var(--gray);
+      margin-right: 5px;
+    }
+
+    .info-value {
+      color: var(--dark);
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .skill-tag {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--dark);
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .message-section {
+      background: rgba(245, 158, 11, 0.05);
+      padding: 12px;
+      border-left: 4px solid var(--blue);
+      border-radius: 4px;
+      margin: 15px 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-download {
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-linkedin {
+      background: #0077B5;
+      color: white;
+    }
+
+    .btn-linkedin:hover {
+      background: #005885;
+    }
+
+    .applied-date {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(245, 158, 11, 0.1);
+    }
+
+    .no-applications {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+    }
+
+    .no-applications h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: var(--red);
+    }
+</style>
+
+<div class="applicants-container">
+    <a href="{% url 'job_portal_admin' %}" class="back-link">← Back to Dashboard</a>
+
+    {% if job %}
+        <div class="header-section">
+            <h1>Applications for {{ job.title }}</h1>
+            <p>{{ job.company_name }} • {{ job.location }}</p>
+        </div>
+    {% elif internship %}
+        <div class="header-section">
+            <h1>Applications for {{ internship.title }}</h1>
+            <p>{{ internship.company_name }} • {{ internship.location }}</p>
+        </div>
+    {% endif %}
+
+    {% if applications %}
+        <div class="applicants-grid">
+            {% for application in applications %}
+                <div class="applicant-card">
+                    <h3 class="applicant-name">{{ application.first_name }} {{ application.last_name }}</h3>
+                    
+                    <span class="applicant-status">
+                        {% if application.status == 'fresher' %}
+                            🎓 Fresher
+                        {% else %}
+                            💼 Experienced
+                        {% endif %}
+                    </span>
+
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value"><a href="mailto:{{ application.email }}" style="color: var(--blue); text-decoration: none;">{{ application.email }}</a></span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">Phone:</span>
+                        <span class="info-value">{{ application.phone }}</span>
+                    </div>
+
+                    {% if application.school_name %}
+                    <div class="info-row">
+                        <span class="info-label">Education:</span>
+                        <span class="info-value">{{ application.degree }} in {{ application.field_of_study }} from {{ application.school_name }}</span>
+                    </div>
+                    {% endif %}
+
+                    {% if application.skills %}
+                    <div class="skills-list">
+                        {% for skill in application.skills.split:',' %}
+                            <span class="skill-tag">{{ skill.strip }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if application.message_to_manager %}
+                    <div class="message-section">
+                        <strong>Message to Recruiter:</strong><br>
+                        {{ application.message_to_manager }}
+                    </div>
+                    {% endif %}
+
+                    <div class="action-buttons">
+                        <a href="{{ application.resume.url }}" target="_blank" class="btn btn-download">📥 Resume</a>
+                        {% if application.linkedin_profile %}
+                        <a href="{{ application.linkedin_profile }}" target="_blank" class="btn btn-linkedin">LinkedIn</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="applied-date">
+                        Applied on: <strong>{{ application.applied_date|date:"M d, Y" }}</strong>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-applications">
+            <h2>No Applications Yet</h2>
+            <p>No one has applied for this position yet. Keep waiting!</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
