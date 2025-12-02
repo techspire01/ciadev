@@ -31,4 +31,12 @@ urlpatterns = [
     # Application forms
     path('internship/<int:internship_id>/apply/', views.internship_application, name='internship_application'),
     path('job/<int:job_id>/apply/', views.job_application, name='job_application'),
+    
+    # View applicants for jobs and internships
+    path('portal-admin/job/<int:job_id>/applicants/', views.view_job_applicants, name='view_job_applicants'),
+    path('portal-admin/internship/<int:internship_id>/applicants/', views.view_internship_applicants, name='view_internship_applicants'),
+    
+    # View individual applicant details
+    path('portal-admin/job/<int:job_id>/applicant/<int:application_id>/', views.view_job_applicant_detail, name='view_job_applicant_detail'),
+    path('portal-admin/internship/<int:internship_id>/applicant/<int:application_id>/', views.view_internship_applicant_detail, name='view_internship_applicant_detail'),
    ]

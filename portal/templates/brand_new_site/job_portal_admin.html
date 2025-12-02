@@ -135,6 +135,19 @@
                                 <p><strong>Requirements:</strong> {{ internship.requirements|default:'N/A' }}</p>
                                 <p><strong>Responsibilities:</strong> {{ internship.responsibilities|default:'N/A' }}</p>
                             </div>
+                            <div class="card-details" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                                    <span style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                                        👥 {{ internship.application_count|default:0 }} Applications
+                                    </span>
+                                    <a href="{% url 'view_internship_applicants' internship_id=internship.id %}" 
+                                       class="btn btn-primary btn-small"
+                                       style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600;">
+                                       View Applicants →
+                                    </a>
+                                </div>
+                            </div>
+
                             <div class="card-actions">
                                 <!-- Edit Button -->
                                 <button class="btn btn-primary btn-small"
@@ -285,7 +298,7 @@
                                 </div>
                             </div>
 
-                            <div class="card-details">
+                            <div class="card-details" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb;">
                                 <p><strong>Location:</strong> {{ job.location|default:'N/A' }}</p>
                                 <p><strong>Salary:</strong> {{ job.salary|default:'N/A' }}</p>
                                 <p><strong>Experience:</strong> {{ job.experience|default:'N/A' }}</p>
@@ -294,6 +307,17 @@
                                 <p><strong>Description:</strong> {{ job.description|default:'N/A' }}</p>
                                 <p><strong>Requirements:</strong> {{ job.requirements|default:'N/A' }}</p>
                                 <p><strong>Responsibilities:</strong> {{ job.responsibilities|default:'N/A' }}</p>
+                                
+                                <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                                    <span style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                                        👥 {{ job.application_count|default:0 }} Applications
+                                    </span>
+                                    <a href="{% url 'view_job_applicants' job_id=job.id %}" 
+                                       class="btn btn-primary btn-small"
+                                       style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600;">
+                                       View Applicants →
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="card-actions">

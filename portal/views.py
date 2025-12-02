@@ -115,6 +115,15 @@ def job_portal_admin(request):
         # Fetch applications for this supplier's postings
         internship_applications = InternshipApplication.objects.filter(supplier=supplier).order_by('-applied_date')
         job_applications = JobApplication.objects.filter(supplier=supplier).order_by('-applied_date')
+        
+        # Add application counts to each internship and job object
+        for internship in internships:
+            count = InternshipApplication.objects.filter(internship=internship, supplier=supplier).count()
+            internship.application_count = count
+        
+        for job in jobs:
+            count = JobApplication.objects.filter(job=job, supplier=supplier).count()
+            job.application_count = count
     except Supplier.DoesNotExist:
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
@@ -556,3 +565,91 @@ def job_application(request, job_id):
         'form': form
     }
     return render(request, 'brand_new_site/job_application.html', context)
+
+
+@supplier_required
+def view_job_applicants(request, job_id):
+    """View all applicants for a specific job - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the job and verify the supplier owns it
+        job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
+        
+        # Get applications for this job
+        applications = JobApplication.objects.filter(job=job).order_by('-applied_date')
+        
+        context = {
+            'job': job,
+            'applications': applications,
+            'type': 'job'
+        }
+        return render(request, 'brand_new_site/applicants_list.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def view_internship_applicants(request, internship_id):
+    """View all applicants for a specific internship - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the internship and verify the supplier owns it
+        internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
+        
+        # Get applications for this internship
+        applications = InternshipApplication.objects.filter(internship=internship).order_by('-applied_date')
+        
+        context = {
+            'internship': internship,
+            'applications': applications,
+            'type': 'internship'
+        }
+        return render(request, 'brand_new_site/applicants_list.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def view_job_applicant_detail(request, job_id, application_id):
+    """View details of a specific job applicant - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the job and verify the supplier owns it
+        job = get_object_or_404(PortalJob, id=job_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this job
+        application = get_object_or_404(JobApplication, id=application_id, job=job, supplier=supplier)
+        
+        context = {
+            'application': application,
+            'job': job,
+            'type': 'job'
+        }
+        return render(request, 'brand_new_site/applicant_detail.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+
+
+@supplier_required
+def view_internship_applicant_detail(request, internship_id, application_id):
+    """View details of a specific internship applicant - ONLY for the employer who posted it"""
+    try:
+        supplier = Supplier.objects.get(email=request.user.email)
+        
+        # Get the internship and verify the supplier owns it
+        internship = get_object_or_404(PortalInternship, id=internship_id, supplier=supplier)
+        
+        # Get the application and verify it belongs to this internship
+        application = get_object_or_404(InternshipApplication, id=application_id, internship=internship, supplier=supplier)
+        
+        context = {
+            'application': application,
+            'internship': internship,
+            'type': 'internship'
+        }
+        return render(request, 'brand_new_site/applicant_detail.html', context)
+    except Supplier.DoesNotExist:
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
