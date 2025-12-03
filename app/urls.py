@@ -59,8 +59,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
 
     # Book showcase page
-    path('internship/', views.internship_view, name='internship'),
-    path('internship/submit/', views.intern_submit_view, name='intern_submit'),
+
     path('complaint/submit/', views.submit_complaint, name='submit_complaint'),
     path('book-showcase/', views.book_showcase, name='book_showcase'),
 ]

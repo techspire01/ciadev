@@ -84,6 +84,15 @@ class Supplier(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     cia_id = models.PositiveIntegerField(unique=True, blank=True, null=True)  # CIA serial id
+    
+    # Link supplier to a user account (OneToOne, optional for migration window)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='supplier_profile'
+    )
 
     def __str__(self):
         return self.name
@@ -148,20 +157,6 @@ class PhotoGallery(models.Model):
 
     def __str__(self):
         return self.title or f"Photo {self.id}"
-
-class IndexHover(models.Model):
-    id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=255)
-    caption = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to="index_hover/images/", blank=True, null=True)
-    image_url = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return self.title
 
 class Leadership(models.Model):
     name = models.CharField(max_length=255)
@@ -347,21 +342,6 @@ class Complaint(models.Model):
 
     def __str__(self):
         return f"Complaint #{self.id} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
-
-# New model for InternshipApplication
-class InternshipApplication(models.Model):
-    fullname = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
-    college = models.CharField(max_length=255)
-    degree = models.CharField(max_length=255)
-    year = models.CharField(max_length=50)
-    skills = models.TextField()
-    sector = models.CharField(max_length=100)
-    submitted_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.fullname} ({self.email}) - {self.sector}"
 
 class EmailConfiguration(models.Model):
     host = models.CharField(max_length=255, default='smtp.gmail.com')

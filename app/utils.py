@@ -1,8 +1,12 @@
 import random
+import logging
 from django.core.mail import send_mail
 from django.core.mail.backends.smtp import EmailBackend
 from django.conf import settings
-from .models import EmailConfiguration
+from django.core.exceptions import PermissionDenied
+from .models import EmailConfiguration, Supplier
+
+logger = logging.getLogger('cai_security')
 
 def generate_otp():
     return str(random.randint(100000, 999999))
@@ -59,3 +63,55 @@ class DynamicEmailBackend(EmailBackend):
         use_tls = use_tls if use_tls is not None else email_settings['use_tls']
         use_ssl = use_ssl if use_ssl is not None else email_settings['use_ssl']
         super().__init__(host, port, username, password, use_tls, fail_silently, use_ssl, timeout, ssl_keyfile, ssl_certfile)
+
+
+def get_supplier_for_user_or_raise(request):
+    """
+    Get the Supplier associated with the current user.
+    
+    Tries the new OneToOne relationship first (preferred).
+    Falls back to email lookup for migration window.
+    
+    Raises PermissionDenied if user is not a supplier.
+    Logs fallback usage for audit trail.
+    
+    Args:
+        request: Django request object
+        
+    Returns:
+        Supplier: The supplier associated with the user
+        
+    Raises:
+        PermissionDenied: If user is not associated with any supplier
+    """
+    try:
+        # Try new OneToOne relationship first
+        supplier = Supplier.objects.get(user=request.user)
+        return supplier
+    except Supplier.DoesNotExist:
+        pass
+    
+    # Fallback: Try email lookup (for migration window)
+    try:
+        supplier = Supplier.objects.get(email__iexact=request.user.email)
+        logger.warning(
+            "Supplier fallback used for user %s (email: %s). Link Supplier.user to prevent this.",
+            request.user.id,
+            request.user.email
+        )
+        return supplier
+    except Supplier.DoesNotExist:
+        logger.warning(
+            "Supplier lookup failed for user %s (email: %s). Not a supplier.",
+            request.user.id,
+            getattr(request.user, 'email', 'unknown')
+        )
+        raise PermissionDenied("Access denied. Only suppliers can access this page.")
+    except Supplier.MultipleObjectsReturned:
+        logger.error(
+            "Multiple suppliers found with email %s for user %s",
+            request.user.email,
+            request.user.id
+        )
+        raise PermissionDenied("Database integrity error. Please contact support.")
+

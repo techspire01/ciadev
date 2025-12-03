@@ -21,71 +21,11 @@ logger = logging.getLogger(__name__)
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
-def internship_view(request):
-    return render(request, "intern.html")
-
 def coders_club(request):
     return render(request, "coders_club.html")
 
 def coders_contact(request):
     return render(request, "coders_contact.html")
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def intern_submit_view(request):
-    fullname = request.POST.get('fullname')
-    email = request.POST.get('email')
-    phone = request.POST.get('phone')
-    college = request.POST.get('college')
-    degree = request.POST.get('degree')
-    year = request.POST.get('year')
-    skills = request.POST.get('skills')
-    sector = request.POST.get('sector')
-
-    if not all([fullname, email, phone, college, degree, year, skills, sector]):
-        from django.http import HttpResponse
-        return HttpResponse('{"error": "Please fill all required fields."}', content_type="application/json", status=400)
-
-    # Save to database
-    try:
-        from .models import InternshipApplication
-        application = InternshipApplication.objects.create(
-            fullname=fullname,
-            email=email,
-            phone=phone,
-            college=college,
-            degree=degree,
-            year=year,
-            skills=skills,
-            sector=sector,
-        )
-        application.save()
-
-        # Send notification email
-        subject = "New Internship Application Submitted"
-        message = (
-            f"New internship application received:\n\n"
-            f"Full Name: {fullname}\n"
-            f"Email: {email}\n"
-            f"Phone: {phone}\n"
-            f"College: {college}\n"
-            f"Degree: {degree}\n"
-            f"Year: {year}\n"
-            f"Skills: {skills}\n"
-            f"Sector Interested: {sector}"
-        )
-        from django.conf import settings
-        admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
-        if admin_email:
-            send_mail(subject, message, admin_email, [admin_email], fail_silently=False)
-
-        from django.http import HttpResponse
-        return HttpResponse('{"message": "Application submitted successfully."}', content_type="application/json", status=201)
-    except Exception as e:
-        logger.exception("Failed to submit internship application: %s", e)
-        from django.http import HttpResponse
-        return HttpResponse('{"error": "Failed to submit application."}', content_type="application/json", status=500)
-
 
 @csrf_exempt
 @require_http_methods(["POST"])

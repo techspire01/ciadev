@@ -73,7 +73,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',  # Must be last
     'allauth.account.middleware.AccountMiddleware',  # Added for django-allauth
-    "whitenoise.middleware.WhiteNoiseMiddleware"
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    'proj.middleware.SecurityLoggingMiddleware',  # Security event logging
 ]
 
 ROOT_URLCONF = 'proj.urls'
@@ -271,3 +272,90 @@ ssl.create_default_context = _create_default_context_with_patch
 AUTH_USER_MODEL = "app.CustomUser"
 
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users after social login
+
+# ==================== SECURITY & LOGGING CONFIGURATION ====================
+
+# HTTPS & Security Headers (for production)
+SECURE_SSL_REDIRECT = False  # Set to True in production
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
+SECURE_HSTS_PRELOAD = False  # Set to True in production
+SECURE_REFERRER_POLICY = "strict-origin"
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# If behind reverse proxy (Nginx/Load Balancer), tell Django HTTPS is upstream
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file_security': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'security.log'),
+            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
+        'file_error': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'errors.log'),
+            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'backupCount': 10,
+            'formatter': 'verbose',
+            'level': 'ERROR',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'cai_security': {
+            'handlers': ['console', 'file_security'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['file_error'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}
+
+# Ensure logs directory exists
+import os
+_logs_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(_logs_dir):
+    os.makedirs(_logs_dir, exist_ok=True)
+
