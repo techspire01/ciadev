@@ -119,6 +119,10 @@ def index(request):
     # Fetch book showcase images
     book_showcase_images = BookShowcase.objects.all()
 
+    # Fetch latest active announcement
+    from announcements.models import Announcement
+    announcement = Announcement.objects.filter(is_active=True).first()
+
     context = {
         'user': request.user,
         'featured_suppliers': random_suppliers,
@@ -126,6 +130,7 @@ def index(request):
         'category_counts': category_counts,
         'category_subcategories': category_subcategories,
         'book_showcase_images': book_showcase_images,
+        'announcement': announcement,
     }
     return render(request, "index.html", context)
 
@@ -178,10 +183,15 @@ def announcement(request):
     # Get latest 3 announcements for the sidebar
     latest_announcements = Announcement.objects.filter(is_active=True).order_by('-date')[:3]
     
+    # Get flash announcements from announcements app
+    from announcements.models import Announcement as FlashAnnouncement
+    flash_announcements = FlashAnnouncement.objects.filter(is_active=True).order_by('-created_at')
+
     context = {
         'announcements': announcements,
         'critical_announcement': critical_announcement,
         'latest_announcements': latest_announcements,
+        'flash_announcements': flash_announcements,
         'show_inactive': show_inactive,
         'current_filter': filter_type
     }
