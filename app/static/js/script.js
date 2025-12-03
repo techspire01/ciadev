@@ -600,6 +600,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize search functionality
     setupSearchFunctionality();
+
+    // Ensure page content is pushed below the fixed navbar by setting
+    // body padding-top equal to the navbar height. This handles dynamic
+    // navbar height across viewports (logo size, wrapped menus, etc.).
+    function adjustBodyPaddingForNavbar() {
+        try {
+            const nav = document.querySelector('.fixed-header');
+            if (!nav) return;
+            const navHeight = nav.getBoundingClientRect().height || 0;
+            // Apply as inline style so it overrides CSS fallbacks and adapts dynamically
+            document.body.style.paddingTop = navHeight + 'px';
+        } catch (e) {
+            console.warn('adjustBodyPaddingForNavbar error', e);
+        }
+    }
+
+    // Run once on load
+    adjustBodyPaddingForNavbar();
+
+    // Recalculate when window resizes or orientation changes
+    window.addEventListener('resize', function() {
+        // debounce-ish small delay to avoid thrashing during resize
+        clearTimeout(window.__adjustNavbarPaddingTimeout);
+        window.__adjustNavbarPaddingTimeout = setTimeout(adjustBodyPaddingForNavbar, 80);
+    });
+
+    // Also adjust when mobile menu toggles visibility (menu code modifies body styles)
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            // small timeout to allow menu to open/close and navbar to reflow
+            setTimeout(adjustBodyPaddingForNavbar, 120);
+        });
+    }
 });
 
 

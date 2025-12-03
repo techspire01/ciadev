@@ -1,7 +1,7 @@
 /* Google Translate Widget Styling - Positioned below navbar */
 #google_translate_element {
   position: fixed !important;
-  top: 80px !important;
+  top: 56px !important;
   right: 10px !important;
   z-index: 999 !important;
   background: white !important;
