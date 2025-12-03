@@ -62,15 +62,8 @@ function switchTab(tabName) {
     event.target.classList.add('active');
 }
 
-// Load Internships
-function loadInternships() {
-    // Fetch from JSON or load from localStorage
-    const stored = localStorage.getItem('internships');
-    if (stored) {
-        internships = JSON.parse(stored);
-        renderInternships();
-    }
-}
+// Load Internships - Removed localStorage caching
+// Internships are now fully managed server-side
 
 
 
@@ -89,7 +82,8 @@ function addInternship() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
+            'X-CSRFToken': getCSRFToken(),
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
         },
         body: JSON.stringify(data)
     })
@@ -119,7 +113,8 @@ function addJob() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
+            'X-CSRFToken': getCSRFToken(),
+            'Cache-Control': 'no-cache, no-store, must-revalidate'
         },
         body: JSON.stringify(data)
     })
@@ -187,7 +182,8 @@ function toggleJobStatus(id) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken()
+                'X-CSRFToken': getCSRFToken(),
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
             }
         })
         .then(response => response.json())
@@ -215,10 +211,27 @@ function toggleJobStatus(id) {
 // Delete Job
 function deleteJob(id) {
     if (confirm('Are you sure you want to delete this job?')) {
-        jobs = jobs.filter(j => j.id !== id);
-        localStorage.setItem('jobs', JSON.stringify(jobs));
-        renderJobs();
-        alert('Job deleted successfully!');
+        fetch(`/portal/api/jobs/${id}/delete/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // Reload to show fresh data
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while deleting the job.');
+        });
     }
 }
 

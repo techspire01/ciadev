@@ -75,6 +75,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',  # Added for django-allauth
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'proj.middleware.SecurityLoggingMiddleware',  # Security event logging
+    'proj.middleware.CacheControlMiddleware',  # Prevent browser caching of dynamic pages
 ]
 
 ROOT_URLCONF = 'proj.urls'

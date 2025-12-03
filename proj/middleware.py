@@ -9,6 +9,7 @@ Logs security-related events including:
 
 import logging
 from django.utils.deprecation import MiddlewareMixin
+from django.http import HttpResponse
 
 logger = logging.getLogger('cai_security')
 
@@ -63,3 +64,20 @@ class SecurityLoggingMiddleware(MiddlewareMixin):
         else:
             ip = request.META.get('REMOTE_ADDR', 'unknown')
         return ip
+
+
+class CacheControlMiddleware(MiddlewareMixin):
+    """
+    Add cache control headers to prevent browser caching of dynamic pages.
+    Ensures users always see the latest data from the server.
+    """
+    
+    def process_response(self, request, response):
+        """Add cache control headers to all responses"""
+        
+        # Never cache pages by default
+        response['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
+        response['Pragma'] = 'no-cache'
+        response['Expires'] = '0'
+        
+        return response
