@@ -104,13 +104,19 @@
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <div id="mobileMenu" class="lg:hidden hidden">
+    <div id="mobileMenu" class="lg:hidden">
       <div class="mobile-panel">
+        <!-- Close Button Header (Sticky) -->
+        <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0 z-50">
+          <h3 class="text-lg font-bold text-gray-800">Menu</h3>
+          <button id="closeMobileMenu" type="button" class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
         <!-- Mobile Menu Content -->
-        <div class="flex flex-col h-full">
-          <div class="flex-1 overflow-y-auto p-4">
-            <!-- User Profile Section -->
-            <div class="mb-6">
+        <div class="flex-1 overflow-y-auto p-4">
+          <!-- User Profile Section -->
+          <div class="mb-6">
               {% if user.is_authenticated %}
                 <div class="flex items-center space-x-3 p-3 bg-orange-100 rounded-lg">
                   <div class="w-12 h-12 bg-orange-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
@@ -177,7 +183,7 @@
                 <span class="font-medium">My Profile</span>
               </a>
               {% endif %}
-
+            </nav>
               
           <!-- Mobile Menu Footer -->
           <div class="border-t border-gray-200 p-4">
@@ -210,7 +216,6 @@
               <p>&copy; 2025 CIA MachineryHub</p>
               <p>All rights reserved</p>
             </div>
-          </div>
         </div>
       </div>
     </div>
@@ -341,6 +346,16 @@
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     
+    function closeMenu() {
+      if (mobileMenu) {
+        mobileMenu.classList.remove('show');
+      }
+      if (mobileMenuBtn) {
+        const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
+        lines.forEach(line => line.classList.remove('active'));
+      }
+    }
+    
     if (mobileMenuBtn && mobileMenu) {
       mobileMenuBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -355,12 +370,27 @@
       const menuLinks = mobileMenu.querySelectorAll('a');
       menuLinks.forEach(link => {
         link.addEventListener('click', () => {
-          mobileMenu.classList.remove('show');
-          const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
-          lines.forEach(line => line.classList.remove('active'));
+          closeMenu();
         });
       });
+
+      // Close menu when clicking on overlay
+      mobileMenu.addEventListener('click', (e) => {
+        if (e.target === mobileMenu) {
+          closeMenu();
+        }
+      });
     }
+
+    // Close button handler - Use event delegation for reliability
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('#closeMobileMenu')) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeMenu();
+        return false;
+      }
+    }, true); // Use capture phase to ensure it fires first
 
     // 🕐 re-run binding after mobile menu toggle delay
     if (mobileMenuBtn) {

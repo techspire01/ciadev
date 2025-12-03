@@ -1081,14 +1081,37 @@ img:not([src]) {
 
 /* Mobile menu styles */
 #mobileMenu {
-  transition: all 0.3s ease;
-  max-height: 0;
-  overflow: hidden;
+  display: block;
 }
 
-#mobileMenu.show {
-  display: block;
-  max-height: 100vh;
+#mobileMenu .mobile-panel {
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#mobileMenu.show .mobile-panel {
+  transform: translateX(0);
+}
+
+/* Mobile menu overlay */
+#mobileMenu::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+#mobileMenu.show::before {
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 #mobileProductsMenu {
@@ -1996,9 +2019,7 @@ a:focus-visible {
   z-index: 10001 !important;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   pointer-events: auto !important;
   transform: translateX(-100%);
   transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -2023,6 +2044,63 @@ a:focus-visible {
 
 .mobile-panel::-webkit-scrollbar-thumb:hover {
   background: #f59e0b;
+}
+
+/* Mobile Panel Header - Sticky Close Button */
+.mobile-panel > div:first-child {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
+/* Scrollable content area */
+.mobile-panel > div:nth-child(2) {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-panel > div:nth-child(2)::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-panel > div:nth-child(2)::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.mobile-panel > div:nth-child(2)::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+  border-radius: 3px;
+}
+
+.mobile-panel > div:nth-child(2)::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
+}
+
+/* Close Button Styling */
+#closeMobileMenu {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px !important;
+  position: relative;
+  z-index: 51 !important;
+}
+
+#closeMobileMenu:hover {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
+#closeMobileMenu:active {
+  transform: scale(0.95);
 }
 
 /* Hamburger Menu Animation */
