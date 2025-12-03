@@ -87,8 +87,8 @@
   <!-- Carousel Indicators -->
   <div class="flex justify-center py-2 bg-yellow-100 shadow-sm">
     <div class="carousel-indicators flex justify-center space-x-4">
-      <button class="carousel-dot w-4 h-4 md:w-4 md:h-4 rounded-full bg-orange-400 hover:bg-orange-600 transition-all duration-200 cursor-pointer" data-slide="0"></button>
-      <button class="carousel-dot active w-4 h-4 md:w-4 md:h-4 rounded-full bg-yellow-500 transition-all duration-200 shadow-md" data-slide="1"></button>
+      <button class="carousel-dot active w-4 h-4 md:w-4 md:h-4 rounded-full bg-yellow-500 hover:bg-orange-600 transition-all duration-200 shadow-md cursor-pointer" data-slide="0"></button>
+      <button class="carousel-dot w-4 h-4 md:w-4 md:h-4 rounded-full bg-orange-400 hover:bg-orange-600 transition-all duration-200 cursor-pointer" data-slide="1"></button>
       <button class="carousel-dot w-4 h-4 md:w-4 md:h-4 rounded-full bg-orange-400 hover:bg-orange-600 transition-all duration-200 cursor-pointer" data-slide="2"></button>
     </div>
   </div>
@@ -501,6 +501,222 @@
 
   <!-- Announcement Button & Bar -->
   {% include 'partials/floating_buttons.html' %}
+
+  <!-- Flash Announcement Popup -->
+  {% if announcement %}
+  <div id="announcementPopup" class="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="announceTitle">
+      <div class="popup-container">
+          <button id="closeAnnouncement" class="close-btn" aria-label="Close announcement">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+          </button>
+          {% if announcement.image %}
+              <a id="announce-link" href="{{ announcement.url|default:'#' }}" target="_blank" rel="noopener">
+                  <img src="{{ announcement.image.url }}" class="popup-image" alt="{{ announcement.title }}">
+              </a>
+          {% endif %}
+          <div class="popup-content">
+              <h2 id="announceTitle">{{ announcement.title }}</h2>
+              <p class="popup-caption">{{ announcement.caption|linebreaksbr }}</p>
+
+              {% if announcement.url %}
+                  <a href="{{ announcement.url }}" target="_blank" rel="noopener" class="popup-link">Learn More →</a>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+
+  <style>
+  .popup-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      padding: 16px;
+  }
+
+  .popup-container {
+      width: 100%;
+      max-width: 600px;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+      from {
+          opacity: 0;
+          transform: translateY(20px);
+      }
+      to {
+          opacity: 1;
+          transform: translateY(0);
+      }
+  }
+
+  .popup-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+  }
+
+  .popup-content {
+      padding: 20px;
+  }
+
+  #announceTitle {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0 0 12px 0;
+      color: #1a1a1a;
+  }
+
+  .popup-caption {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #555;
+      margin: 0 0 16px 0;
+  }
+
+  .popup-link {
+      display: inline-block;
+      background: #007bff;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s;
+  }
+
+  .popup-link:hover {
+      background: #0056b3;
+  }
+
+  .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s;
+      padding: 0;
+  }
+
+  .close-btn:hover {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .close-btn svg {
+      color: #333;
+      width: 24px;
+      height: 24px;
+  }
+
+  /* Mobile Optimization */
+  @media (max-width: 640px) {
+      .popup-overlay {
+          padding: 12px;
+      }
+
+      .popup-container {
+          border-radius: 12px;
+      }
+
+      .popup-content {
+          padding: 16px;
+      }
+
+      #announceTitle {
+          font-size: 18px;
+          margin-bottom: 10px;
+      }
+
+      .popup-caption {
+          font-size: 13px;
+          margin-bottom: 14px;
+      }
+
+      .close-btn {
+          top: 10px;
+          right: 10px;
+          width: 36px;
+          height: 36px;
+      }
+
+      .popup-link {
+          padding: 9px 14px;
+          font-size: 13px;
+      }
+  }
+
+  @media (max-width: 480px) {
+      .popup-overlay {
+          padding: 8px;
+      }
+
+      .popup-content {
+          padding: 14px;
+      }
+
+      #announceTitle {
+          font-size: 16px;
+      }
+
+      .popup-caption {
+          font-size: 12px;
+      }
+
+      .close-btn {
+          width: 32px;
+          height: 32px;
+      }
+
+      .close-btn svg {
+          width: 20px;
+          height: 20px;
+      }
+  }
+  </style>
+
+  <script>
+  (function(){
+      const popup = document.getElementById("announcementPopup");
+      const closeBtn = document.getElementById("closeAnnouncement");
+      if(!popup) return;
+      // Show immediately
+      popup.style.display = "flex";
+
+      // Close handler
+      closeBtn.addEventListener("click", function(){
+          popup.style.display = "none";
+      });
+
+      // Optional: close when clicking outside container
+      popup.addEventListener("click", function(e){
+          if(e.target === popup) popup.style.display = "none";
+      });
+  })();
+  </script>
+  {% endif %}
 
   <script src="{% static 'js/script.js' %}"></script>
   <script src="{% static 'js/book-showcase.js' %}"></script>

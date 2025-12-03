@@ -183,15 +183,15 @@ function updateCarousel() {
         dots.forEach((dot, index) => {
             if (index === currentSlide) {
                 dot.classList.add('active');
-                dot.classList.remove('bg-gray-300');
+                dot.classList.remove('bg-orange-400');
                 dot.classList.add('bg-yellow-500');
-                dot.style.transform = 'scale(0.6)';
-                dot.style.boxShadow = '0 0 3px rgba(251, 191, 36, 0.15)';
+                dot.style.transform = 'scale(1.2)';
+                dot.style.boxShadow = '0 0 10px rgba(251, 191, 36, 0.5)';
             } else {
                 dot.classList.remove('active');
                 dot.classList.remove('bg-yellow-500');
-                dot.classList.add('bg-gray-300');
-                dot.style.transform = 'scale(0.6)';
+                dot.classList.add('bg-orange-400');
+                dot.style.transform = 'scale(1)';
                 dot.style.boxShadow = 'none';
             }
         });
