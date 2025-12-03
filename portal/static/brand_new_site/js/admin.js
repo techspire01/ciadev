@@ -12,11 +12,15 @@ document.addEventListener('DOMContentLoaded', function() {
 function setupMobileMenu() {
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const sidebar = document.getElementById('sidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
 
     if (mobileMenuToggle) {
         mobileMenuToggle.addEventListener('click', function() {
             mobileMenuToggle.classList.toggle('active');
             sidebar.classList.toggle('active');
+            if (mobileOverlay) {
+                mobileOverlay.classList.toggle('active');
+            }
         });
 
         // Close sidebar when a nav link is clicked
@@ -25,14 +29,29 @@ function setupMobileMenu() {
             link.addEventListener('click', function() {
                 mobileMenuToggle.classList.remove('active');
                 sidebar.classList.remove('active');
+                if (mobileOverlay) {
+                    mobileOverlay.classList.remove('active');
+                }
             });
         });
+
+        // Close sidebar when clicking the overlay
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', function() {
+                mobileMenuToggle.classList.remove('active');
+                sidebar.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+        }
 
         // Close sidebar when clicking outside
         document.addEventListener('click', function(event) {
             if (!sidebar.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
                 mobileMenuToggle.classList.remove('active');
                 sidebar.classList.remove('active');
+                if (mobileOverlay) {
+                    mobileOverlay.classList.remove('active');
+                }
             }
         });
     }

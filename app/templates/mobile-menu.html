@@ -7,6 +7,13 @@
   
   <!-- Menu panel -->
   <div class="mobile-panel">
+    <!-- Close Button -->
+    <div class="flex justify-end p-4 border-b border-gray-200">
+      <button id="closeMobileMenuBtn" type="button" class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px;">
+        ✕
+      </button>
+    </div>
+    
     <!-- Mobile Menu Content -->
     <div class="flex flex-col h-full">
       <div class="flex-1 overflow-y-auto p-4">
@@ -50,26 +57,26 @@
 
         <!-- Navigation Links -->
         <nav class="space-y-1">
-          <a href="{% url 'index' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+          <a href="{% url 'index' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-900 hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
             <i class="fas fa-home w-5"></i>
-            <span class="font-medium">Home</span>
+            <span>Home</span>
           </a>
-          <a href="{% url 'about' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+          <a href="{% url 'about' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-900 hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
             <i class="fas fa-info-circle w-5"></i>
-            <span class="font-medium">About</span>
+            <span>About</span>
           </a>
-          <a href="{% url 'category' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+          <a href="{% url 'category' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-900 hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
             <i class="fas fa-th-large w-5"></i>
-            <span class="font-medium">Categories</span>
+            <span>Categories</span>
           </a>
-          <a href="{% url 'cia_networks' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+          <a href="{% url 'cia_networks' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-900 hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
             <i class="fas fa-building w-5"></i>
-            <span class="font-medium">Suppliers</span>
+            <span>Suppliers</span>
           </a>
           {% if user.is_authenticated %}
-          <a href="{% url 'profile' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+          <a href="{% url 'profile' %}" class="mobile-menu-link flex items-center space-x-3 px-3 py-2 text-sm font-medium text-gray-900 hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
             <i class="fas fa-user-circle w-5"></i>
-            <span class="font-medium">My Profile</span>
+            <span>My Profile</span>
           </a>
           {% endif %}
         </nav>
