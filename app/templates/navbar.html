@@ -349,6 +349,7 @@
     function closeMenu() {
       if (mobileMenu) {
         mobileMenu.classList.remove('show');
+        mobileMenu.classList.add('hidden');
       }
       if (mobileMenuBtn) {
         const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
@@ -359,6 +360,10 @@
     if (mobileMenuBtn && mobileMenu) {
       mobileMenuBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+        }
         mobileMenu.classList.toggle('show');
         
         // Toggle hamburger animation
@@ -384,7 +389,7 @@
 
     // Close button handler - Use event delegation for reliability
     document.addEventListener('click', (e) => {
-      if (e.target.closest('#closeMobileMenu')) {
+      if (e.target.closest('#closeMobileMenu') || e.target.closest('#closeMobileMenuBtn')) {
         e.preventDefault();
         e.stopPropagation();
         closeMenu();
