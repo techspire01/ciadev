@@ -174,10 +174,16 @@ html, body, input, textarea, select, button {
   transition: all 0.3s ease-in-out;
   background-color: #fffaed !important;
   width: 100%;
+  min-height: 56px;
 }
 
+/* Prevent hero sections from overlapping the fixed navbar */
 body {
-  padding-top: 0;
+  padding-top: 56px;
+}
+
+html {
+  scroll-padding-top: 56px;
 }
 
 .fixed-header:hover {
@@ -1626,7 +1632,6 @@ img.lazy-load.loaded {
 body {
   font-display: swap;
   margin-top: 0;
-  padding-top: 80px;
 }
 
 /* Critical CSS for above-the-fold content */

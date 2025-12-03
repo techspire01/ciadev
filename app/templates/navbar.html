@@ -6,14 +6,14 @@
   <!-- Navbar -->
   <nav class="bg-yellow-50 border-b-2 border-yellow-200 fixed-header shadow-md" style="background-color: #fffaed !important;">
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between py-4">
+      <div class="flex items-center justify-between py-2">
         <!-- Left Side: Login + Search -->
         <div class="flex items-center space-x-4 order-1">
          <!-- Login Button -->
           {% if user.is_authenticated %}
             <!-- Profile Icon with Initials -->
             <div class="relative group">
-              <a href="{% url 'profile' %}" class="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-lg focus:outline-none hover:bg-orange-600 transition-colors">
+              <a href="{% url 'profile' %}" class="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm focus:outline-none hover:bg-orange-600 transition-colors">
                 {{ user.get_full_name|default:user.email|slice:":1"|upper }}
               </a>
               <div class="absolute hidden group-hover:block bg-white text-gray-700 mt-2 w-48 rounded shadow-lg z-[9999] border border-orange-300">
@@ -28,7 +28,7 @@
           {% else %}
             <a
               href="{% url 'login' %}"
-              class="flex items-center space-x-2 text-orange-700 hover:text-orange-900 px-4 py-2 transition font-medium"
+              class="flex items-center space-x-2 text-orange-700 hover:text-orange-900 px-3 py-1 transition text-sm font-medium"
             >
               <i class="fas fa-user"></i>
               <span>Login</span>
@@ -40,7 +40,7 @@
               type="text"
               id="searchInput"
               placeholder="Search..!!"
-              class="w-40 py-2 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
+              class="w-32 py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
             />
             <button
               class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-3 pl-2"
@@ -55,38 +55,38 @@
 
 
         <!-- Center: Logo -->
-        <a href="{% url 'index' %}" class="flex items-center space-x-4 order-2 mx-auto px-8">
+        <a href="{% url 'index' %}" class="flex items-center space-x-2 order-2 mx-auto px-6">
           <img
             src="{% static 'images/CIA logo.png' %}"
             alt="CIA logo"
-            class="h-10 rounded-lg logo-black-filter"
+            class="h-8 rounded-lg logo-black-filter"
           />
-          <span class="text-2xl font-bold text-orange-800">CIA<span class="text-orange-600">next</span></span>
+          <span class="text-lg font-bold text-orange-800">CIA<span class="text-orange-600">next</span></span>
         </a>
 
         <!-- Right Side: Navigation + Language - Added margin -->
-        <div class="hidden lg:flex items-center space-x-9 order-3 ml-4">
+        <div class="hidden lg:flex items-center space-x-6 order-3 ml-4">
           <a
             href="{% url 'index' %}"
-            class="text-orange-800 hover:text-orange-600 font-medium transition"
+            class="text-orange-800 hover:text-orange-600 font-medium transition text-sm"
             >Home</a>
           <a
             href="{% url 'about' %}"
-            class="text-orange-800 hover:text-orange-600 font-medium transition"
+            class="text-orange-800 hover:text-orange-600 font-medium transition text-sm"
             >About Us</a
           >
           <a
             href="{% url 'dashboard' %}"
-            class="text-orange-800 hover:text-orange-600 font-medium transition"
+            class="text-orange-800 hover:text-orange-600 font-medium transition text-sm"
             >Career@CIA</a>
           <a
             href="{% url 'cia_networks' %}"
-            class="text-orange-800 hover:text-orange-600 font-medium transition"
+            class="text-orange-800 hover:text-orange-600 font-medium transition text-sm"
             >CIA Networks</a>
           <!-- Language Translation Buttons -->
           <div class="flex items-center space-x-1">
-            <button id="translate-en" class="translate-btn px-3 py-1 text-sm font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md">EN</button>
-            <button id="translate-ta" class="translate-btn px-3 py-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md">TA</button>
+            <button id="translate-en" class="translate-btn px-2 py-0.5 text-xs font-medium text-white bg-yellow-500 rounded-md hover:bg-yellow-600 transition active shadow-md">EN</button>
+            <button id="translate-ta" class="translate-btn px-2 py-0.5 text-xs font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition shadow-md">TA</button>
           </div>
         </div>
 
@@ -141,10 +141,10 @@
               type="text"
               id="searchInput"
               placeholder="Search..!!"
-              class="w-40 py-2 pl-4 pr-12 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box"
+              class="w-full py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
               />
                 <button
-                  class="absolute right-0 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-end pr-3"
+                  class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-2 pl-1 text-sm"
                   title="Search"
                   type="button"
                 >
@@ -155,24 +155,24 @@
 
             <!-- Navigation Links -->
             <nav class="space-y-1">
-              <a href="{% url 'index' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
+              <a href="{% url 'index' %}" class="flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
                 <i class="fas fa-home w-5"></i>
                 <span class="font-medium">Home</span>
               </a>
-              <a href="{% url 'about' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
+              <a href="{% url 'about' %}" class="flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
                 <i class="fas fa-info-circle w-5"></i>
                 <span class="font-medium">About</span>
               </a>
-              <a href="{% url 'dashboard' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
+              <a href="{% url 'dashboard' %}" class="flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
                 <i class="fas fa-briefcase w-5"></i>
                 <span class="font-medium">Career@CIA</span>
               </a>
-              <a href="{% url 'cia_networks' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
+              <a href="{% url 'cia_networks' %}" class="flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-yellow-700 hover:bg-yellow-50 rounded-lg transition">
                 <i class="fas fa-building w-5"></i>
                 <span class="font-medium">CIA Networks</span>
               </a>
               {% if user.is_authenticated %}
-              <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-3 py-3 text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
+              <a href="{% url 'profile' %}" class="flex items-center space-x-3 px-3 py-2 text-sm text-black hover:text-orange-700 hover:bg-orange-100 rounded-lg transition">
                 <i class="fas fa-user-circle w-5"></i>
                 <span class="font-medium">My Profile</span>
               </a>
@@ -193,11 +193,11 @@
                 <!-- Language toggle (desktop version embedded here) -->
                 <div class="flex items-center space-x-1">
                   <button id="translate-en-mobile" 
-                          class="translate-btn px-3 py-1 text-sm font-medium text-orange-700 bg-white rounded-md hover:bg-yellow-100 transition active">
+                          class="translate-btn px-2 py-0.5 text-xs font-medium text-orange-700 bg-white rounded-md hover:bg-yellow-100 transition active">
                     EN
                   </button>
                   <button id="translate-ta-mobile" 
-                          class="translate-btn px-3 py-1 text-sm font-medium text-white bg-orange-700 border border-orange-800 rounded-md hover:bg-orange-800 transition">
+                          class="translate-btn px-2 py-0.5 text-xs font-medium text-white bg-orange-700 border border-orange-800 rounded-md hover:bg-orange-800 transition">
                     TA
                   </button>
                 </div>
