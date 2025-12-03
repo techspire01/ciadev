@@ -116,6 +116,23 @@ class InternshipApplication(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.internship.title}"
 
+    def delete(self, *args, **kwargs):
+        """
+        Override model delete to remove resume and additional_attachment from Supabase storage.
+        """
+        resume_name = self.resume.name if self.resume else None
+        attachment_name = self.additional_attachment.name if self.additional_attachment else None
+        super().delete(*args, **kwargs)  # remove DB record
+        # After DB delete, remove storage objects
+        try:
+            from django.core.files.storage import default_storage
+            if resume_name:
+                default_storage.delete(resume_name)
+            if attachment_name:
+                default_storage.delete(attachment_name)
+        except Exception:
+            pass
+
 class JobApplication(models.Model):
     STATUS_CHOICES = [
         ('fresher', 'Fresher'),
@@ -193,3 +210,20 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.job.title}"
+
+    def delete(self, *args, **kwargs):
+        """
+        Override model delete to remove resume and additional_attachment from Supabase storage.
+        """
+        resume_name = self.resume.name if self.resume else None
+        attachment_name = self.additional_attachment.name if self.additional_attachment else None
+        super().delete(*args, **kwargs)  # remove DB record
+        # After DB delete, remove storage objects
+        try:
+            from django.core.files.storage import default_storage
+            if resume_name:
+                default_storage.delete(resume_name)
+            if attachment_name:
+                default_storage.delete(attachment_name)
+        except Exception:
+            pass
