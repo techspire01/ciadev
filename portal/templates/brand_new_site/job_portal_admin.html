@@ -464,33 +464,57 @@
             animation: slideInUp 0.6s ease-out;
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 50%, #374151 100%);
+            box-shadow: 0 20px 50px rgba(245, 158, 11, 0.25);
+            border: 2px solid rgba(217, 119, 6, 0.5);
         }
         
-        /* Floating decorative elements in page headers */
+        /* Animated background overlay for header */
         .page-header::before {
             content: '';
             position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
-            top: -100px;
-            right: -150px;
-            animation: floatSide 10s ease-in-out infinite;
+            inset: -50%;
+            background: conic-gradient(
+                from 180deg,
+                rgba(245, 158, 11, 0.08),
+                rgba(217, 119, 6, 0.12),
+                rgba(251, 191, 36, 0.08),
+                rgba(245, 158, 11, 0.08),
+                rgba(245, 158, 11, 0.08)
+            );
+            opacity: 0.6;
+            filter: blur(60px);
+            animation: rotateGradient 20s linear infinite;
             z-index: 0;
             pointer-events: none;
         }
         
+        /* Floating decorative elements in page headers */
         .page-header::after {
             content: '';
             position: absolute;
             width: 350px;
             height: 350px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.08), transparent);
+            background: radial-gradient(circle, rgba(217, 119, 6, 0.12), transparent);
             bottom: -80px;
             left: -120px;
-            animation: pulse 5s ease-in-out infinite;
+            animation: floatSide 8s ease-in-out infinite;
             z-index: 0;
             pointer-events: none;
+        }
+        
+        /* Additional background animation elements */
+        .page-header {
+            background-attachment: fixed;
+        }
+        
+        @keyframes rotateGradient {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
         
         .form-container {
@@ -576,14 +600,18 @@
         
         /* Page header text */
         .page-header h2 {
-            color: #ffffff !important;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            color: #fef3c7 !important;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .page-header p {
-            color: #f3f4f6 !important;
+            color: #fde68a !important;
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         /* Card text */
@@ -628,7 +656,7 @@
         </button>
 
         <!-- ==================== SIDEBAR ==================== -->
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar gray-600" id="sidebar" >
             <div class="sidebar-header">
                 <a href="{% url 'index' %}" class="flex items-center space-x-2">
                     <img src="{% static 'images/CIA logo.png' %}" alt="CIA logo" class="h-10 rounded-lg logo-black-filter" />
@@ -647,9 +675,9 @@
         <main class="main-content">
             <!-- ADD INTERNSHIPS TAB -->
             <div id="add-internships" class="tab-content active">
-                <div class="page-header bg-gradient-to-br from-gray-600 via-gray-500 to-gray-700 text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
-                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full -ml-20 -mb-20 blur-3xl"></div>
+                <div class="page-header text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/15 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse"></div>
+                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/15 rounded-full -ml-20 -mb-20 blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
                     <div class="relative z-10">
                         <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight">📝 Add New Internship</h2>
                         <p class="text-lg md:text-xl opacity-95 font-semibold">Create and manage internship opportunities for talented candidates</p>
@@ -718,9 +746,9 @@
 
             <!-- VIEW INTERNSHIPS TAB -->
             <div id="view-internships" class="tab-content">
-                <div class="page-header bg-gradient-to-br from-gray-600 via-gray-500 to-gray-700 text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
-                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full -ml-20 -mb-20 blur-3xl"></div>
+                <div class="page-header text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/15 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse"></div>
+                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/15 rounded-full -ml-20 -mb-20 blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
                     <div class="relative z-10">
                         <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight">📋 Internship Listings</h2>
                         <p class="text-lg md:text-xl opacity-95 font-semibold">View and manage all internship opportunities</p>
@@ -822,9 +850,9 @@
 
             <!-- ADD JOBS TAB -->
             <div id="add-jobs" class="tab-content">
-                <div class="page-header bg-gradient-to-br from-gray-600 via-gray-500 to-gray-700 text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
-                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full -ml-20 -mb-20 blur-3xl"></div>
+                <div class="page-header text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/15 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse"></div>
+                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/15 rounded-full -ml-20 -mb-20 blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
                     <div class="relative z-10">
                         <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight">💼 Add New Job</h2>
                         <p class="text-lg md:text-xl opacity-95 font-semibold">Create and manage job opportunities for professionals</p>
@@ -890,9 +918,9 @@
 
             <!-- ==================== VIEW JOBS TAB ==================== -->
             <div id="view-jobs" class="tab-content">
-                <div class="page-header bg-gradient-to-br from-gray-600 via-gray-500 to-gray-700 text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl"></div>
-                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full -ml-20 -mb-20 blur-3xl"></div>
+                <div class="page-header text-white py-8 px-6 md:py-16 md:px-12 rounded-3xl mb-12 shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-white/15 rounded-full -mr-20 -mt-20 blur-3xl animate-pulse"></div>
+                    <div class="absolute bottom-0 left-0 w-40 h-40 bg-white/15 rounded-full -ml-20 -mb-20 blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
                     <div class="relative z-10">
                         <h2 class="text-4xl md:text-5xl font-black mb-3 tracking-tight">🎯 Job Listings</h2>
                         <p class="text-lg md:text-xl opacity-95 font-semibold">View and manage all job opportunities</p>
