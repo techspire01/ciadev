@@ -502,9 +502,9 @@
                   <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
           </button>
-          {% if announcement.image %}
+          {% if announcement_image_url %}
               <a id="announce-link" href="{{ announcement.url|default:'#' }}" target="_blank" rel="noopener">
-                  <img src="{{ announcement.image.url }}" class="popup-image" alt="{{ announcement.title }}">
+                  <img src="{{ announcement_image_url }}" class="popup-image" alt="{{ announcement.title }}">
               </a>
           {% endif %}
           <div class="popup-content">

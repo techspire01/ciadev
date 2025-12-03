@@ -39,6 +39,9 @@ urlpatterns = [
     path('portal-admin/job/<int:job_id>/applicant/<int:application_id>/', views.view_job_applicant_detail, name='view_job_applicant_detail'),
     path('portal-admin/internship/<int:internship_id>/applicant/<int:application_id>/', views.view_internship_applicant_detail, name='view_internship_applicant_detail'),
     
+    # Preview application files (resume, attachment)
+    path('portal-admin/preview/<str:application_type>/<int:application_id>/<str:file_type>/', views.preview_application_file, name='preview_application_file'),
+    
     # Delete applicants
     path('portal-admin/job/<int:job_id>/applicant/<int:application_id>/delete/', views.delete_job_applicant, name='delete_job_applicant'),
     path('portal-admin/internship/<int:internship_id>/applicant/<int:application_id>/delete/', views.delete_internship_applicant, name='delete_internship_applicant'),

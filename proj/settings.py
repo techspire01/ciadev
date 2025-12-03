@@ -108,14 +108,14 @@ WSGI_APPLICATION = 'proj.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-'''
+
 
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv("DATABASE_URL")
     )
 }
-
+'''
 DATABASES = {
     'default': dj_database_url.config(
         default=f"postgres://{os.environ.get('DB_USER')}:{os.environ.get('DB_PASSWORD')}@{os.environ.get('DB_HOST')}:{os.environ.get('DB_PORT')}/{os.environ.get('DB_NAME')}"
@@ -132,7 +132,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': os.getenv('DB_ENGINE'),
@@ -143,7 +143,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
-
+'''
 # Performance Optimization - Add caching for faster page loads
 CACHES = {
     'default': {
@@ -206,7 +206,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # ==================== SUPABASE STORAGE CONFIGURATION ====================
 # Supabase credentials (from .env)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "cia_uploads")
 SUPABASE_SIGNED_URL_EXPIRES = int(os.getenv("SUPABASE_SIGNED_URL_EXPIRES", 3600))

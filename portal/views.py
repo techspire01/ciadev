@@ -778,8 +778,56 @@ def view_internship_applicant_detail(request, internship_id, application_id):
 
 
 @supplier_required
+def preview_application_file(request, application_type, application_id, file_type):
+    """Preview a resume or attachment file (PDF/Image) - ONLY for the employer who posted it"""
+    try:
+        supplier = get_supplier_for_user_or_raise(request)
+        
+        if application_type == 'job':
+            application = get_object_or_404(JobApplication, id=application_id, supplier=supplier)
+        elif application_type == 'internship':
+            application = get_object_or_404(InternshipApplication, id=application_id, supplier=supplier)
+        else:
+            return Http404("Invalid application type")
+        
+        # Get the file based on file_type
+        if file_type == 'resume':
+            file_field = application.resume
+            if not file_field:
+                return Http404("Resume not found")
+        elif file_type == 'attachment':
+            file_field = application.additional_attachment
+            if not file_field:
+                return Http404("Attachment not found")
+        else:
+            return Http404("Invalid file type")
+        
+        try:
+            # Get the signed URL from Supabase
+            signed_url = file_field.url
+            logger.info(f"Generated preview URL for {application_type} application {application_id}")
+            return JsonResponse({
+                'success': True,
+                'url': signed_url,
+                'filename': file_field.name.split('/')[-1],
+                'file_type': file_type
+            })
+        except Exception as e:
+            logger.error(f"Error generating preview URL: {str(e)}")
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    
+    except PermissionDenied:
+        raise PermissionDenied("Access denied.")
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error(f"Error in preview_application_file: {str(e)}")
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+
+@supplier_required
 def delete_job_applicant(request, job_id, application_id):
-    """Delete a job applicant and/or their resume - ONLY for the employer who posted it"""
+    """Delete a job applicant and/or their files - ONLY for the employer who posted it"""
     try:
         supplier = get_supplier_for_user_or_raise(request)
         
@@ -789,31 +837,106 @@ def delete_job_applicant(request, job_id, application_id):
         # Get the application and verify it belongs to this job
         application = get_object_or_404(JobApplication, id=application_id, job=job, supplier=supplier)
         
-        # Check if only deleting resume
+        # Check what to delete
         delete_resume_only = request.POST.get('delete_resume_only') == 'true'
+        delete_attachment_only = request.POST.get('delete_attachment_only') == 'true'
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         
-        if delete_resume_only:
-            # Delete the resume file if it exists
-            if application.resume:
-                application.resume.delete()
-                application.resume = None
-                application.save()
-        else:
-            # Delete entire application
-            if application.resume:
-                application.resume.delete()
-            if application.additional_attachment:
-                application.additional_attachment.delete()
-            application.delete()
+        try:
+            if delete_resume_only:
+                # Delete only the resume file
+                if application.resume:
+                    resume_name = application.resume.name
+                    try:
+                        # Delete from Supabase storage
+                        application.resume.delete()
+                        application.resume = None
+                        application.save()
+                        logger.info(f"Resume deleted for job application {application.id}: {resume_name}")
+                        messages.success(request, "Resume deleted successfully.")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': True, 'message': 'Resume deleted successfully'})
+                    except Exception as e:
+                        logger.error(f"Error deleting resume from storage: {str(e)}")
+                        messages.error(request, f"Error deleting resume: {str(e)}")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                else:
+                    msg = "No resume found to delete."
+                    messages.warning(request, msg)
+                    
+                    if is_ajax:
+                        return JsonResponse({'success': False, 'error': msg}, status=400)
+            
+            elif delete_attachment_only:
+                # Delete only the additional attachment
+                if application.additional_attachment:
+                    attachment_name = application.additional_attachment.name
+                    try:
+                        # Delete from Supabase storage
+                        application.additional_attachment.delete()
+                        application.additional_attachment = None
+                        application.save()
+                        logger.info(f"Attachment deleted for job application {application.id}: {attachment_name}")
+                        messages.success(request, "Document deleted successfully.")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': True, 'message': 'Document deleted successfully'})
+                    except Exception as e:
+                        logger.error(f"Error deleting attachment from storage: {str(e)}")
+                        messages.error(request, f"Error deleting document: {str(e)}")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                else:
+                    msg = "No document found to delete."
+                    messages.warning(request, msg)
+                    
+                    if is_ajax:
+                        return JsonResponse({'success': False, 'error': msg}, status=400)
+            
+            else:
+                # Delete entire application and all files
+                resume_name = application.resume.name if application.resume else None
+                attachment_name = application.additional_attachment.name if application.additional_attachment else None
+                
+                try:
+                    # Delete from Supabase storage
+                    if application.resume:
+                        application.resume.delete()
+                    if application.additional_attachment:
+                        application.additional_attachment.delete()
+                except Exception as e:
+                    logger.error(f"Error deleting files from storage: {str(e)}")
+                
+                # Delete application record from database
+                application.delete()
+                logger.info(f"Job application {application_id} deleted completely (resume: {resume_name}, attachment: {attachment_name})")
+                messages.success(request, "Application and all associated files deleted successfully.")
+                
+                if is_ajax:
+                    return JsonResponse({'success': True, 'message': 'Application deleted successfully'})
+        
+        except Exception as e:
+            logger.error(f"Error in delete_job_applicant: {str(e)}")
+            messages.error(request, f"Error deleting: {str(e)}")
+            
+            if is_ajax:
+                return JsonResponse({'success': False, 'error': str(e)}, status=500)
         
         return redirect('view_job_applicants', job_id=job_id)
+    
     except PermissionDenied:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'error': 'Access denied'}, status=403)
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
 
 
 @supplier_required
 def delete_internship_applicant(request, internship_id, application_id):
-    """Delete an internship applicant and/or their resume - ONLY for the employer who posted it"""
+    """Delete an internship applicant and/or their files - ONLY for the employer who posted it"""
     try:
         supplier = get_supplier_for_user_or_raise(request)
         
@@ -823,23 +946,98 @@ def delete_internship_applicant(request, internship_id, application_id):
         # Get the application and verify it belongs to this internship
         application = get_object_or_404(InternshipApplication, id=application_id, internship=internship, supplier=supplier)
         
-        # Check if only deleting resume
+        # Check what to delete
         delete_resume_only = request.POST.get('delete_resume_only') == 'true'
+        delete_attachment_only = request.POST.get('delete_attachment_only') == 'true'
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         
-        if delete_resume_only:
-            # Delete the resume file if it exists
-            if application.resume:
-                application.resume.delete()
-                application.resume = None
-                application.save()
-        else:
-            # Delete entire application
-            if application.resume:
-                application.resume.delete()
-            if application.additional_attachment:
-                application.additional_attachment.delete()
-            application.delete()
+        try:
+            if delete_resume_only:
+                # Delete only the resume file
+                if application.resume:
+                    resume_name = application.resume.name
+                    try:
+                        # Delete from Supabase storage
+                        application.resume.delete()
+                        application.resume = None
+                        application.save()
+                        logger.info(f"Resume deleted for internship application {application.id}: {resume_name}")
+                        messages.success(request, "Resume deleted successfully.")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': True, 'message': 'Resume deleted successfully'})
+                    except Exception as e:
+                        logger.error(f"Error deleting resume from storage: {str(e)}")
+                        messages.error(request, f"Error deleting resume: {str(e)}")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                else:
+                    msg = "No resume found to delete."
+                    messages.warning(request, msg)
+                    
+                    if is_ajax:
+                        return JsonResponse({'success': False, 'error': msg}, status=400)
+            
+            elif delete_attachment_only:
+                # Delete only the additional attachment
+                if application.additional_attachment:
+                    attachment_name = application.additional_attachment.name
+                    try:
+                        # Delete from Supabase storage
+                        application.additional_attachment.delete()
+                        application.additional_attachment = None
+                        application.save()
+                        logger.info(f"Attachment deleted for internship application {application.id}: {attachment_name}")
+                        messages.success(request, "Document deleted successfully.")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': True, 'message': 'Document deleted successfully'})
+                    except Exception as e:
+                        logger.error(f"Error deleting attachment from storage: {str(e)}")
+                        messages.error(request, f"Error deleting document: {str(e)}")
+                        
+                        if is_ajax:
+                            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                else:
+                    msg = "No document found to delete."
+                    messages.warning(request, msg)
+                    
+                    if is_ajax:
+                        return JsonResponse({'success': False, 'error': msg}, status=400)
+            
+            else:
+                # Delete entire application and all files
+                resume_name = application.resume.name if application.resume else None
+                attachment_name = application.additional_attachment.name if application.additional_attachment else None
+                
+                try:
+                    # Delete from Supabase storage
+                    if application.resume:
+                        application.resume.delete()
+                    if application.additional_attachment:
+                        application.additional_attachment.delete()
+                except Exception as e:
+                    logger.error(f"Error deleting files from storage: {str(e)}")
+                
+                # Delete application record from database
+                application.delete()
+                logger.info(f"Internship application {application_id} deleted completely (resume: {resume_name}, attachment: {attachment_name})")
+                messages.success(request, "Application and all associated files deleted successfully.")
+                
+                if is_ajax:
+                    return JsonResponse({'success': True, 'message': 'Application deleted successfully'})
+        
+        except Exception as e:
+            logger.error(f"Error in delete_internship_applicant: {str(e)}")
+            messages.error(request, f"Error deleting: {str(e)}")
+            
+            if is_ajax:
+                return JsonResponse({'success': False, 'error': str(e)}, status=500)
         
         return redirect('view_internship_applicants', internship_id=internship_id)
+    
     except PermissionDenied:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'error': 'Access denied'}, status=403)
         raise PermissionDenied("Access denied. Only suppliers can access this page.")
