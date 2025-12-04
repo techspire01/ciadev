@@ -4,22 +4,35 @@
   padding: 0;
 }
 
-html, body {
+html {
   margin: 0 !important;
   padding: 0 !important;
 }
 
 body {
   overflow-x: hidden;
+  padding-top: 65px !important;
+  margin: 0 !important;
 }
 
 /* Fixed header navbar styling */
 .fixed-header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   background-color: #fffaed !important;
   border-bottom: 2px solid #fef08a !important;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   z-index: 100;
+  height: auto;
+}
+
+/* Hero section spacing below navbar */
+#heroSection {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Smooth scrolling for the entire page */
