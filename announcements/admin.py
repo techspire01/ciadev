@@ -7,7 +7,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ("title", "is_active", "created_at", "admin_image_preview")
     list_filter = ("is_active",)
     readonly_fields = ("admin_image_preview",)
-    fields = ("title", "caption", "image", "admin_image_preview", "url", "is_active")
+    fields = ("title", "caption", "image", "admin_image_preview", "is_active")
 
     actions = ["delete_announcements_and_files"]
 
