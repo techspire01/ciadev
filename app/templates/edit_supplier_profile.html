@@ -460,6 +460,40 @@
                 transform: translateY(0);
             }
         }
+
+        /* Navbar Styling for Edit Supplier Profile Page - Match Index Page */
+        nav.bg-yellow-50 {
+            background-color: #fffaed !important;
+            border-bottom: 2px solid #fef08a !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+            position: relative !important;
+            z-index: 100 !important;
+        }
+
+        nav.fixed-header {
+            position: relative !important;
+        }
+
+        /* Mobile Menu Styles for Edit Supplier Profile Page */
+        #mobileMenu {
+            z-index: 10001 !important;
+        }
+
+        #mobileMenu.hidden {
+            display: none !important;
+        }
+
+        #mobileMenu .mobile-panel {
+            z-index: 10001 !important;
+        }
+
+        #mobileMenuBtn {
+            z-index: 50 !important;
+        }
+
+        #mobileMenu .mobile-menu-overlay {
+            z-index: 9999 !important;
+        }
     </style>
     <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
 </head>

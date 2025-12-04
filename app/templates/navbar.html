@@ -35,7 +35,7 @@
             </a>
           {% endif %}
           <!-- Search Bar -->
-                 <div class="relative hidden md:block">
+          <div class="relative hidden md:block">
             <input
               type="text"
               id="searchInputDesktop"
@@ -145,21 +145,21 @@
             </div>
 
             <!-- Mobile Search Bar -->
-            <div class="relative mb-6">
+            <div class="relative mb-6 z-50">
               <input
-              type="text"
-              id="searchInputMobile"
-              placeholder="Search..!!"
-              class="w-full py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
+                type="text"
+                id="searchInputMobile"
+                placeholder="Search..!!"
+                class="w-full py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
               />
-                <button
-                  class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-2 pl-1 text-sm"
-                  title="Search"
-                  type="button"
-                >
-                  <i class="fas fa-search"></i>
-                </button>
-              <div id="searchResultsMobile" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-60 max-h-80 overflow-y-auto hidden"></div>
+              <button
+                class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-3 pl-2"
+                title="Search"
+                type="button"
+              >
+                <i class="fas fa-search"></i>
+              </button>
+              <div id="searchResultsMobile" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-[9999] max-h-80 overflow-y-auto hidden"></div>
             </div>
 
             <!-- Navigation Links -->
