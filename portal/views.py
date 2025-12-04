@@ -1048,8 +1048,8 @@ def delete_internship_applicant(request, internship_id, application_id):
 @login_required
 def view_resume(request, application_id):
     """
-    Serve resume inline for PDFs, download for other formats.
-    Retrieves file from Supabase Storage.
+    Serve resume file directly from Supabase Storage through Django.
+    For PDFs, sets inline display. For other formats, triggers download.
     Ensures supplier can only view their own applicants' resumes.
     """
     try:
@@ -1082,41 +1082,44 @@ def view_resume(request, application_id):
         if not application.resume:
             raise Http404("Resume not found for this application.")
         
-        # Get file content from Supabase Storage
-        try:
-            resume_file = application.resume
-            # The open() method on SupabaseStorage returns a BytesIO object
-            file_obj = resume_file.open('rb')
-            file_content = file_obj.read()
-            file_obj.close()
-        except Exception as e:
-            logger.error(f"Error reading resume file from Supabase: {str(e)}")
-            raise Http404(f"Error reading resume: {str(e)}")
-        
-        # Get filename from the storage path
+        # Get the resume filename and content from storage
         filename = application.resume.name
         if '/' in filename:
-            filename = filename.split('/')[-1]
+            display_name = filename.split('/')[-1]
+        else:
+            display_name = filename
         
         # Auto-detect content type
-        content_type, _ = mimetypes.guess_type(filename)
+        content_type, _ = mimetypes.guess_type(display_name)
         if content_type is None:
             content_type = 'application/octet-stream'
         
-        # Create response with FileResponse
+        # Download file from Supabase storage
+        try:
+            file_obj = application.resume.open('rb')
+            file_content = file_obj.read()
+            file_obj.close()
+            logger.info(f"Successfully read resume {filename} ({len(file_content)} bytes) for application {application_id}")
+        except Exception as e:
+            logger.error(f"Error reading resume from Supabase: {str(e)}")
+            raise Http404(f"Error reading resume file: {str(e)}")
+        
+        # Create response
         response = FileResponse(BytesIO(file_content), content_type=content_type)
         
-        # For PDFs, use inline display; for other types, trigger download
+        # Set content disposition based on file type
         if content_type == 'application/pdf':
-            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            # PDFs open inline in browser
+            response['Content-Disposition'] = f'inline; filename="{display_name}"'
+            logger.info(f"Serving PDF inline for application {application_id}: {display_name}")
         else:
-            # For DOCX and other formats, download with proper filename
-            clean_filename = f"{application.first_name}_{application.last_name}_Resume.{filename.split('.')[-1]}"
+            # Other formats download
+            clean_filename = f"{application.first_name}_{application.last_name}_Resume.{display_name.split('.')[-1]}"
             response['Content-Disposition'] = f'attachment; filename="{clean_filename}"'
+            logger.info(f"Serving {display_name} for download (as {clean_filename}) for application {application_id}")
         
         response['Content-Length'] = len(file_content)
         
-        logger.info(f"Resume served for application {application_id}: {filename}")
         return response
     
     except PermissionDenied as e:

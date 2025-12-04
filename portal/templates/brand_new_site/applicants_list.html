@@ -298,7 +298,7 @@
                         {% elif type == 'internship' %}
                             <a href="{% url 'view_internship_applicant_detail' internship_id=internship.id application_id=application.id %}" class="btn btn-view">View Full Profile</a>
                         {% endif %}
-                        <a href="{{ application.resume.url }}" target="_blank" class="btn btn-download">Resume</a>
+                        <a href="{% url 'view_resume' application.id %}" target="_blank" class="btn btn-download">👁️ View Resume</a>
                     </div>
                 </div>
             {% endfor %}
