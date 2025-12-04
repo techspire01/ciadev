@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+from announcements import views as announcement_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -9,6 +10,7 @@ urlpatterns = [
     path('coders-contact/', views.coders_contact, name='coders_contact'),
     path('category/', views.category, name='category'),
     path('announcement/', views.announcement, name='announcement'),
+    path('announcement/create/', announcement_views.create_announcement, name='create_announcement'),
     path('announcement/<int:announcement_id>/', views.announcement_detail, name='announcement_detail'),
     path('signup/', views.signup_view, name='signup'),
     path('cia_networks/', views.cia_networks, name='cia_networks'),

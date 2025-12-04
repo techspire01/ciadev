@@ -605,7 +605,7 @@
                                 <div class="max-w-xs">
                                     <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2">{{ flash.title }}</h3>
                                     <p class="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed mb-3 sm:mb-4 line-clamp-2">
-                                        {{ flash.caption|linebreaksbr }}
+                                        {{ flash.description|linebreaksbr }}
                                     </p>
                                     
                                     <!-- Action Link -->
@@ -677,7 +677,7 @@
                                 </div>
                                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition">{{ announcement.title }}</h3>
                                 <p class="text-xs sm:text-sm md:text-base text-gray-600 leading-relaxed mb-2 sm:mb-3">
-                                    {{ announcement.content|truncatewords:30 }}
+                                    {{ announcement.description|truncatewords:30 }}
                                 </p>
                                 <a href="{% url 'announcement_detail' announcement.id %}" class="inline-flex items-center text-blue-600 hover:text-blue-800 hover:translate-x-1 transition font-medium text-xs sm:text-sm md:text-base">
                                     Read More <i class="fas fa-arrow-right ml-2"></i>
