@@ -1,0 +1,128 @@
+{% load static %}
+{% load custom_filters %}
+
+<footer class="bg-gray-100 text-gray-800 py-0.125 md:py-0.25 border-t border-gray-200">
+  <div class="container mx-auto px-4 md:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-0.125 md:gap-0.25">
+        <!-- Company Info -->
+        <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:text-left flex flex-col justify-center">
+          <div class="flex items-center justify-center md:justify-start mb-0.125 md:mb-0.25">
+            <img
+              src="{% static 'images/CIA logo.png' %}"
+              alt="CIA MachineryHub logo"
+              class="h-4 md:h-5 w-4 md:w-5 mr-0.5 rounded"
+            />
+            <div>
+              <span class="text-3xs md:text-2xs font-bold">CIA</span>
+              <span class="text-3xs md:text-2xs font-bold text-yellow-600">next</span>
+            </div>
+          </div>
+          <div class="flex justify-center md:justify-start space-x-0.125 md:space-x-0.25">
+            <a
+              href="#"
+              class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
+              ><i class="fab fa-facebook-f text-4xs"></i
+            ></a>
+            <a
+              href="#"
+              class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
+              ><i class="fab fa-twitter text-4xs"></i
+            ></a>
+            <a
+              href="#"
+              class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
+              ><i class="fab fa-linkedin-in text-4xs"></i
+            ></a>
+            <a
+              href="#"
+              class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
+              ><i class="fab fa-instagram text-4xs"></i
+            ></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:col-span-2">
+          <h4 class="text-4xs md:text-3xs font-bold mb-0.125 text-gray-800">Quick Links</h4>
+          <div class="flex justify-center items-center gap-0.75 md:gap-1.5 flex-wrap">
+            <a
+              href="{% url 'index' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Home
+            </a>
+            <span class="text-gray-400 text-4xs"> </span>
+            <a
+              href="{% url 'about' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              About
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'category' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Category
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+             <a href="{% url 'cia_networks' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              CIA Networks
+            </a>
+            <span class="w-full"></span>
+            <a
+              href="{% url 'contact' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Contact
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'profile' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Profile
+            </a>
+            <span class="text-gray-400 text-4xs"></span>
+            <a
+              href="{% url 'photo_gallery' %}"
+              class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs"
+            >
+              Gallery
+            </a>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:text-center">
+          <h4 class="text-4xs md:text-3xs font-bold mb-0.125 text-gray-800">Contact</h4>
+          <div class="space-y-0.05 md:space-y-0.06 text-4xs">
+            <div class="flex items-start justify-center text-4xs">
+              <i class="fas fa-map-marker-alt text-yellow-600 mr-0.125 mt-0.0625 flex-shrink-0 text-4xs"></i>
+              <span class="text-gray-600 text-4xs">CIA Coimbatore</span>
+            </div>
+            <div class="flex items-center justify-center text-4xs">
+              <i class="fas fa-phone-alt text-yellow-600 mr-0.125 mt-0.0625 flex-shrink-0 text-4xs"></i>
+              <a href="tel:+919087133005" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs">+91 9087133005</a>
+            </div>
+            <div class="flex items-center justify-center text-4xs">
+              <i class="fas fa-envelope text-yellow-600 mr-0.125 flex-shrink-0 text-4xs"></i>
+              <a href="mailto:contact@machineryhub.com" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs truncate">contact@cia.com</a>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="border-t border-gray-300 mt-1 md:mt-3 pt-1 md:pt-2">
+      <div class="flex flex-wrap items-center justify-center gap-1 py-0.5 text-xs text-gray-500">
+        <p class="flex flex-nowrap items-center justify-center gap-1 text-center">
+          <span>© 2025 CIA. All rights reserved. | Developed by - </span>
+          <span><a href= "{% url 'coders_club' %}" class="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors duration-300">Coders Club</a></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
