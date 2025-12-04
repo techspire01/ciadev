@@ -13,6 +13,15 @@ body {
   overflow-x: hidden;
 }
 
+/* Fixed header navbar styling */
+.fixed-header {
+  position: relative;
+  background-color: #fffaed !important;
+  border-bottom: 2px solid #fef08a !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
 /* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
@@ -1082,46 +1091,64 @@ img:not([src]) {
 /* Mobile menu styles */
 #mobileMenu {
   display: block;
-}
-
-#mobileMenu .mobile-panel {
   position: fixed;
   top: 0;
   left: 0;
-  width: 80%;
-  max-width: 400px;
-  height: 100vh;
-  background: white;
+  right: 0;
+  bottom: 0;
   z-index: 10000;
-  transform: translateX(-100%);
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
-  overflow-y: auto;
+  pointer-events: none;
 }
 
-#mobileMenu.show .mobile-panel {
-  transform: translateX(0);
+#mobileMenu.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+#mobileMenu:not(.hidden) {
+  display: block !important;
+  pointer-events: auto !important;
 }
 
 /* Mobile menu overlay */
-#mobileMenu::before {
-  content: '';
+#mobileMenu .mobile-menu-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
   z-index: 9999;
+  pointer-events: none;
+  transition: background-color 0.3s ease;
 }
 
-#mobileMenu.show::before {
+#mobileMenu.show .mobile-menu-overlay {
   background: rgba(0, 0, 0, 0.5);
-  opacity: 1;
   pointer-events: auto;
+}
+
+#mobileMenu .mobile-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 85vw;
+  max-width: 320px;
+  height: 100vh;
+  height: 100dvh;
+  background: white;
+  z-index: 10001;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+#mobileMenu.show .mobile-panel {
+  transform: translateX(0);
 }
 
 #mobileProductsMenu {
@@ -1151,6 +1178,56 @@ img:not([src]) {
 
 .hamburger-line.active:nth-child(3) {
   transform: rotate(-45deg) translate(4px, -4px);
+}
+
+/* Mobile menu button styling */
+#mobileMenuBtn {
+  position: relative;
+  z-index: 50;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mobileMenuBtn:hover {
+  opacity: 0.8;
+}
+
+/* Mobile panel content sections */
+#mobileMenu .mobile-panel > div:nth-child(1) {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: white;
+  flex-shrink: 0;
+}
+
+#mobileMenu .mobile-panel > div:nth-child(2) {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+#mobileMenu .mobile-panel > div:nth-child(2)::-webkit-scrollbar {
+  width: 6px;
+}
+
+#mobileMenu .mobile-panel > div:nth-child(2)::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#mobileMenu .mobile-panel > div:nth-child(2)::-webkit-scrollbar-thumb {
+  background: #fbbf24;
+  border-radius: 3px;
+}
+
+#mobileMenu .mobile-panel > div:nth-child(2)::-webkit-scrollbar-thumb:hover {
+  background: #f59e0b;
 }
 
 /* Responsive hero grid and image showcase for mobile */

@@ -104,7 +104,10 @@
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <div id="mobileMenu" class="lg:hidden">
+    <div id="mobileMenu" class="lg:hidden hidden">
+      <!-- Mobile Menu Overlay -->
+      <div class="mobile-menu-overlay fixed inset-0 bg-black bg-opacity-0 transition-all duration-300 pointer-events-none z-[9999]"></div>
+      
       <div class="mobile-panel">
         <!-- Close Button Header (Sticky) -->
         <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0 z-50">
@@ -345,6 +348,7 @@
     // Mobile menu toggle functionality
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuOverlay = mobileMenu ? mobileMenu.querySelector('.mobile-menu-overlay') : null;
     
     function closeMenu() {
       if (mobileMenu) {
@@ -360,11 +364,17 @@
     if (mobileMenuBtn && mobileMenu) {
       mobileMenuBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        
         const isHidden = mobileMenu.classList.contains('hidden');
         if (isHidden) {
           mobileMenu.classList.remove('hidden');
+          setTimeout(() => {
+            mobileMenu.classList.add('show');
+          }, 10);
+        } else {
+          closeMenu();
         }
-        mobileMenu.classList.toggle('show');
         
         // Toggle hamburger animation
         const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
@@ -380,22 +390,23 @@
       });
 
       // Close menu when clicking on overlay
-      mobileMenu.addEventListener('click', (e) => {
-        if (e.target === mobileMenu) {
+      if (mobileMenuOverlay) {
+        mobileMenuOverlay.addEventListener('click', (e) => {
+          e.stopPropagation();
           closeMenu();
-        }
-      });
+        });
+      }
     }
 
-    // Close button handler - Use event delegation for reliability
+    // Close button handler
     document.addEventListener('click', (e) => {
-      if (e.target.closest('#closeMobileMenu') || e.target.closest('#closeMobileMenuBtn')) {
+      if (e.target.closest('#closeMobileMenu')) {
         e.preventDefault();
         e.stopPropagation();
         closeMenu();
         return false;
       }
-    }, true); // Use capture phase to ensure it fires first
+    }, true);
 
     // 🕐 re-run binding after mobile menu toggle delay
     if (mobileMenuBtn) {
