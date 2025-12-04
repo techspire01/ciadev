@@ -122,6 +122,15 @@ def index(request):
     # Fetch latest active announcement
     from announcements.models import Announcement
     announcement = Announcement.objects.filter(is_active=True).first()
+    
+    # Pre-generate announcement image URL (with error handling)
+    announcement_image_url = None
+    if announcement and announcement.image:
+        try:
+            announcement_image_url = announcement.image.url
+        except Exception as e:
+            logger.warning(f"Could not generate announcement image URL: {str(e)}")
+            announcement_image_url = None
 
     context = {
         'user': request.user,
@@ -131,6 +140,7 @@ def index(request):
         'category_subcategories': category_subcategories,
         'book_showcase_images': book_showcase_images,
         'announcement': announcement,
+        'announcement_image_url': announcement_image_url,
     }
     return render(request, "index.html", context)
 
