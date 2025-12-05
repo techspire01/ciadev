@@ -141,4 +141,4 @@ Thumbs.db
 media/
 
 # Static files (collected)
-staticfiles/
+staticfiles/cia-dev/
