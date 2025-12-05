@@ -172,6 +172,18 @@ class SupplierListingForm(forms.ModelForm):
         ]
 
 
+from announcements.models import Announcement
+
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = Announcement
+        fields = ['title', 'description', 'image']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-input w-full'}),
+            'description': forms.Textarea(attrs={'class': 'form-input w-full', 'rows': 4}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-input w-full'}),
+        }
+
 class ComplaintForm(forms.ModelForm):
     class Meta:
         model = Complaint

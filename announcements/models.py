@@ -3,10 +3,10 @@ from django.utils.html import mark_safe
 
 
 class Announcement(models.Model):
-    title = models.CharField(max_length=200)
-    caption = models.TextField(blank=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
     image = models.ImageField(upload_to="announcements/", blank=True, null=True)
-    url = models.URLField(blank=True, null=True, help_text="Optional URL to open when user clicks announcement.")
+    #url = models.URLField(blank=True, null=True, help_text="Optional URL to open when user clicks announcement.")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
