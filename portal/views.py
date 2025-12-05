@@ -601,6 +601,7 @@ def internship_application(request, internship_id):
     from .forms import InternshipApplicationForm
     
     internship = get_object_or_404(PortalInternship, id=internship_id, is_active=True)
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
     if request.method == 'POST':
         form = InternshipApplicationForm(request.POST, request.FILES)
@@ -612,12 +613,22 @@ def internship_application(request, internship_id):
                 application.save()
                 logger.info("Internship application submitted successfully for internship %s by %s", 
                            internship_id, request.META.get('REMOTE_ADDR'))
+                if is_ajax:
+                    return JsonResponse({'status': 'success', 'message': 'Your internship application has been submitted successfully!'})
                 messages.success(request, 'Your internship application has been submitted successfully!')
                 return redirect('dashboard')
             except Exception as e:
                 logger.error("Error submitting internship application: %s", str(e))
+                if is_ajax:
+                    return JsonResponse({'status': 'error', 'message': f'Error submitting application: {str(e)}'})
                 messages.error(request, f'Error submitting application: {str(e)}')
         else:
+            error_messages = []
+            for field, errors in form.errors.items():
+                for error in errors:
+                    error_messages.append(f'{field}: {error}')
+            if is_ajax:
+                return JsonResponse({'status': 'error', 'message': 'Please correct the errors: ' + ', '.join(error_messages)})
             messages.error(request, 'Please correct the errors in the form.')
     else:
         form = InternshipApplicationForm()
@@ -635,6 +646,7 @@ def job_application(request, job_id):
     import json
     
     job = get_object_or_404(PortalJob, id=job_id, is_active=True)
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
     if request.method == 'POST':
         form = JobApplicationForm(request.POST, request.FILES)
@@ -646,12 +658,22 @@ def job_application(request, job_id):
                 application.save()
                 logger.info("Job application submitted successfully for job %s by %s", 
                            job_id, request.META.get('REMOTE_ADDR'))
+                if is_ajax:
+                    return JsonResponse({'status': 'success', 'message': 'Your job application has been submitted successfully!'})
                 messages.success(request, 'Your job application has been submitted successfully!')
                 return redirect('dashboard')
             except Exception as e:
                 logger.error("Error submitting job application: %s", str(e))
+                if is_ajax:
+                    return JsonResponse({'status': 'error', 'message': f'Error submitting application: {str(e)}'})
                 messages.error(request, f'Error submitting application: {str(e)}')
         else:
+            error_messages = []
+            for field, errors in form.errors.items():
+                for error in errors:
+                    error_messages.append(f'{field}: {error}')
+            if is_ajax:
+                return JsonResponse({'status': 'error', 'message': 'Please correct the errors: ' + ', '.join(error_messages)})
             messages.error(request, 'Please correct the errors in the form.')
     else:
         form = JobApplicationForm()
