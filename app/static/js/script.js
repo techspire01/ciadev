@@ -625,15 +625,6 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(window.__adjustNavbarPaddingTimeout);
         window.__adjustNavbarPaddingTimeout = setTimeout(adjustBodyPaddingForNavbar, 80);
     });
-
-    // Also adjust when mobile menu toggles visibility (menu code modifies body styles)
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            // small timeout to allow menu to open/close and navbar to reflow
-            setTimeout(adjustBodyPaddingForNavbar, 120);
-        });
-    }
 });
 
 
