@@ -35,10 +35,10 @@
             </a>
           {% endif %}
           <!-- Search Bar -->
-                 <div class="relative hidden md:block">
+          <div class="relative hidden md:block">
             <input
               type="text"
-              id="searchInput"
+              id="searchInputDesktop"
               placeholder="Search..!!"
               class="w-32 py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
             />
@@ -49,7 +49,7 @@
             >
               <i class="fas fa-search"></i>
             </button>
-            <div id="searchResults" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-60 max-h-80 overflow-y-auto hidden"></div>
+            <div id="searchResultsDesktop" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-60 max-h-80 overflow-y-auto hidden"></div>
           </div>
         </div>
 
@@ -104,7 +104,10 @@
     </div>
 
     <!-- Mobile Navigation Menu -->
-    <div id="mobileMenu" class="lg:hidden">
+    <div id="mobileMenu" class="lg:hidden hidden">
+      <!-- Mobile Menu Overlay -->
+      <div class="mobile-menu-overlay fixed inset-0 bg-black bg-opacity-0 transition-all duration-300 pointer-events-none z-[9999]"></div>
+      
       <div class="mobile-panel">
         <!-- Close Button Header (Sticky) -->
         <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white sticky top-0 z-50">
@@ -142,21 +145,21 @@
             </div>
 
             <!-- Mobile Search Bar -->
-            <div class="relative mb-6">
+            <div class="relative mb-6 z-50">
               <input
-              type="text"
-              id="searchInput"
-              placeholder="Search..!!"
-              class="w-full py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
+                type="text"
+                id="searchInputMobile"
+                placeholder="Search..!!"
+                class="w-full py-1.5 pl-3 pr-10 rounded-full text-[#000000] bg-[#FFF9E5] border-2 border-[#fbbf24] shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent search-box text-sm"
               />
-                <button
-                  class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-2 pl-1 text-sm"
-                  title="Search"
-                  type="button"
-                >
-                  <i class="fas fa-search"></i>
-                </button>
-              <div id="searchResults" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-60 max-h-80 overflow-y-auto hidden"></div>
+              <button
+                class="absolute right-1 top-0 bottom-0 text-yellow-700 hover:text-yellow-800 transition-colors duration-200 flex items-center justify-center pr-3 pl-2"
+                title="Search"
+                type="button"
+              >
+                <i class="fas fa-search"></i>
+              </button>
+              <div id="searchResultsMobile" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-md shadow-lg border border-gray-300 z-[9999] max-h-80 overflow-y-auto hidden"></div>
             </div>
 
             <!-- Navigation Links -->
@@ -345,6 +348,7 @@
     // Mobile menu toggle functionality
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuOverlay = mobileMenu ? mobileMenu.querySelector('.mobile-menu-overlay') : null;
     
     function closeMenu() {
       if (mobileMenu) {
@@ -360,11 +364,17 @@
     if (mobileMenuBtn && mobileMenu) {
       mobileMenuBtn.addEventListener('click', (e) => {
         e.preventDefault();
+        e.stopPropagation();
+        
         const isHidden = mobileMenu.classList.contains('hidden');
         if (isHidden) {
           mobileMenu.classList.remove('hidden');
+          setTimeout(() => {
+            mobileMenu.classList.add('show');
+          }, 10);
+        } else {
+          closeMenu();
         }
-        mobileMenu.classList.toggle('show');
         
         // Toggle hamburger animation
         const lines = mobileMenuBtn.querySelectorAll('.hamburger-line');
@@ -380,22 +390,23 @@
       });
 
       // Close menu when clicking on overlay
-      mobileMenu.addEventListener('click', (e) => {
-        if (e.target === mobileMenu) {
+      if (mobileMenuOverlay) {
+        mobileMenuOverlay.addEventListener('click', (e) => {
+          e.stopPropagation();
           closeMenu();
-        }
-      });
+        });
+      }
     }
 
-    // Close button handler - Use event delegation for reliability
+    // Close button handler
     document.addEventListener('click', (e) => {
-      if (e.target.closest('#closeMobileMenu') || e.target.closest('#closeMobileMenuBtn')) {
+      if (e.target.closest('#closeMobileMenu')) {
         e.preventDefault();
         e.stopPropagation();
         closeMenu();
         return false;
       }
-    }, true); // Use capture phase to ensure it fires first
+    }, true);
 
     // 🕐 re-run binding after mobile menu toggle delay
     if (mobileMenuBtn) {
@@ -403,5 +414,106 @@
         setTimeout(attachTranslateHandlers, 400);
       });
     }
+
+    // ===== SEARCH FUNCTIONALITY =====
+    // Desktop Search
+    const desktopSearch = document.getElementById('searchInputDesktop');
+    const desktopResults = document.getElementById('searchResultsDesktop');
+
+    if (desktopSearch && desktopResults) {
+      desktopSearch.addEventListener('input', async (e) => {
+        const query = e.target.value.trim();
+
+        if (query.length < 2) {
+          desktopResults.classList.add('hidden');
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/search/?q=${encodeURIComponent(query)}`);
+          const data = await response.json();
+
+          if (data.results && data.results.length > 0) {
+            desktopResults.innerHTML = data.results.map(result => `
+              <a href="/cia_networks/${encodeURIComponent(result.name)}/" class="block px-4 py-2 hover:bg-yellow-50 border-b border-gray-200 last:border-b-0">
+                <div class="font-medium text-gray-800">${result.name}</div>
+                <div class="text-xs text-gray-600">${result.category || ''} ${result.location ? '• ' + result.location : ''}</div>
+              </a>
+            `).join('');
+            desktopResults.classList.remove('hidden');
+          } else {
+            desktopResults.innerHTML = '<div class="px-4 py-2 text-gray-500 text-sm">No results found</div>';
+            desktopResults.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error('Search error:', error);
+          desktopResults.innerHTML = '<div class="px-4 py-2 text-red-500 text-sm">Error searching</div>';
+          desktopResults.classList.remove('hidden');
+        }
+      });
+
+      desktopSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = desktopSearch.value.trim();
+          if (query) {
+            window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    // Mobile Search
+    const mobileSearch = document.getElementById('searchInputMobile');
+    const mobileResults = document.getElementById('searchResultsMobile');
+
+    if (mobileSearch && mobileResults) {
+      mobileSearch.addEventListener('input', async (e) => {
+        const query = e.target.value.trim();
+
+        if (query.length < 2) {
+          mobileResults.classList.add('hidden');
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/search/?q=${encodeURIComponent(query)}`);
+          const data = await response.json();
+
+          if (data.results && data.results.length > 0) {
+            mobileResults.innerHTML = data.results.map(result => `
+              <a href="/cia_networks/${encodeURIComponent(result.name)}/" class="block px-4 py-2 hover:bg-yellow-50 border-b border-gray-200 last:border-b-0">
+                <div class="font-medium text-gray-800">${result.name}</div>
+                <div class="text-xs text-gray-600">${result.category || ''} ${result.location ? '• ' + result.location : ''}</div>
+              </a>
+            `).join('');
+            mobileResults.classList.remove('hidden');
+          } else {
+            mobileResults.innerHTML = '<div class="px-4 py-2 text-gray-500 text-sm">No results found</div>';
+            mobileResults.classList.remove('hidden');
+          }
+        } catch (error) {
+          console.error('Search error:', error);
+          mobileResults.innerHTML = '<div class="px-4 py-2 text-red-500 text-sm">Error searching</div>';
+          mobileResults.classList.remove('hidden');
+        }
+      });
+
+      mobileSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const query = mobileSearch.value.trim();
+          if (query) {
+            window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    // Close search results when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.relative') && !e.target.closest('#searchInputDesktop') && !e.target.closest('#searchInputMobile')) {
+        if (desktopResults) desktopResults.classList.add('hidden');
+        if (mobileResults) mobileResults.classList.add('hidden');
+      }
+    });
   });
   </script>
