@@ -13,6 +13,8 @@ import logging
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
 from app.models import Supplier
 from app.utils import get_supplier_for_user_or_raise
+import mimetypes
+from io import BytesIO
 
 logger = logging.getLogger('cai_security')
 
@@ -57,9 +59,28 @@ def details(request):
 def brand_new_site_dashboard(request):
     """Render the brand new site dashboard - shows all active jobs/internships from all companies"""
     try:
-        # Show all active internships and jobs from all companies
-        internships = PortalInternship.objects.filter(is_active=True)
-        jobs = PortalJob.objects.filter(is_active=True)
+        # Get filter and location from query parameters
+        current_filter = request.GET.get('filter', 'all')
+        selected_location = request.GET.get('location', '')
+
+        # Base querysets
+        internships_query = PortalInternship.objects.filter(is_active=True)
+        jobs_query = PortalJob.objects.filter(is_active=True)
+
+        # Apply location filter
+        if selected_location:
+            internships_query = internships_query.filter(location__icontains=selected_location)
+            jobs_query = jobs_query.filter(location__icontains=selected_location)
+
+        # Apply type filter
+        if current_filter == 'internship':
+            jobs_query = jobs_query.none()
+        elif current_filter == 'job':
+            internships_query = internships_query.none()
+
+        internships = list(internships_query)
+        jobs = list(jobs_query)
+        
         vacancies = []
 
         for internship in internships:
@@ -88,19 +109,26 @@ def brand_new_site_dashboard(request):
                 'experience': job.experience
             })
 
-        # Collect unique locations from active internships and jobs
+        # Collect unique locations from all active internships and jobs for the dropdown
+        all_internships = PortalInternship.objects.filter(is_active=True)
+        all_jobs = PortalJob.objects.filter(is_active=True)
         locations = set()
-        for internship in internships:
+        for internship in all_internships:
             if internship.location:
                 locations.add(internship.location.strip())
-        for job in jobs:
+        for job in all_jobs:
             if job.location:
                 locations.add(job.location.strip())
 
         # Sort locations alphabetically
         unique_locations = sorted(list(locations))
 
-        context = {'vacancies': vacancies, 'locations': unique_locations}
+        context = {
+            'vacancies': vacancies, 
+            'locations': unique_locations,
+            'current_filter': current_filter,
+            'selected_location': selected_location
+        }
     except Exception as e:
         # In a real app, you'd use proper logging
         context = {'vacancies': [], 'locations': [], 'error': str(e)}
@@ -358,14 +386,22 @@ def delete_internship_api(request, internship_id):
         if internship.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
+        # Get count of applications before deletion
+        app_count = internship.applications.count()
+        internship_title = internship.title
+        
+        # Delete internship (cascades to applications and files)
         internship.delete()
+        
+        logger.info(f"API: Internship '{internship_title}' (ID: {internship_id}) deleted with {app_count} related applications")
         return JsonResponse({
             'success': True,
-            'message': 'Internship deleted successfully!'
+            'message': f'Internship deleted successfully! ({app_count} applications and all files removed)'
         })
     except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
+        logger.error(f"Error deleting internship: {str(e)}")
         return JsonResponse({'success': False, 'message': str(e)})
 
 @csrf_exempt
@@ -467,14 +503,22 @@ def delete_job_api(request, job_id):
         if job.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
+        # Get count of applications before deletion
+        app_count = job.applications.count()
+        job_title = job.title
+        
+        # Delete job (cascades to applications and files)
         job.delete()
+        
+        logger.info(f"API: Job '{job_title}' (ID: {job_id}) deleted with {app_count} related applications")
         return JsonResponse({
             'success': True,
-            'message': 'Job deleted successfully!'
+            'message': f'Job deleted successfully! ({app_count} applications and all files removed)'
         })
     except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
+        logger.error(f"Error deleting job: {str(e)}")
         return JsonResponse({'success': False, 'message': str(e)})
 
 # Server-side views for internship management
@@ -517,7 +561,15 @@ def delete_internship(request, id):
     except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can delete internships.")
     
+    # Get count of applications before deletion for logging
+    app_count = internship.applications.count()
+    internship_title = internship.title
+    
+    # Delete internship (cascades to applications and files)
     internship.delete()
+    
+    logger.info(f"Internship '{internship_title}' (ID: {id}) deleted with {app_count} related applications and their files")
+    messages.success(request, f"Internship deleted successfully! ({app_count} applications and all files removed)")
     return redirect('job_portal_admin')
 
 @login_required
@@ -576,7 +628,15 @@ def delete_job(request, id):
     except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can delete jobs.")
     
+    # Get count of applications before deletion for logging
+    app_count = job.applications.count()
+    job_title = job.title
+    
+    # Delete job (cascades to applications and files)
     job.delete()
+    
+    logger.info(f"Job '{job_title}' (ID: {id}) deleted with {app_count} related applications and their files")
+    messages.success(request, f"Job deleted successfully! ({app_count} applications and all files removed)")
     return redirect('job_portal_admin')
 
 @login_required
@@ -845,6 +905,96 @@ def preview_application_file(request, application_type, application_id, file_typ
     except Exception as e:
         logger.error(f"Error in preview_application_file: {str(e)}")
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+
+@supplier_required
+def view_resume(request, application_id):
+    """Serve the resume inline for a given application (job or internship).
+    Sets Content-Disposition to inline so browser opens the file when possible.
+    """
+    try:
+        supplier = get_supplier_for_user_or_raise(request)
+
+        # Try job application first, then internship
+        application = None
+        try:
+            application = JobApplication.objects.get(id=application_id, supplier=supplier)
+        except JobApplication.DoesNotExist:
+            application = get_object_or_404(InternshipApplication, id=application_id, supplier=supplier)
+
+        if not application.resume:
+            raise Http404("Resume not found")
+
+        file_field = application.resume
+        filename = file_field.name.split('/')[-1]
+        content_type, _ = mimetypes.guess_type(filename)
+        if not content_type:
+            content_type = 'application/octet-stream'
+
+        try:
+            # Some storage backends provide a file-like object via open()
+            fobj = file_field.open('rb')
+            response = FileResponse(fobj, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+        except Exception:
+            # Fallback to reading into memory
+            data = file_field.read()
+            bio = BytesIO(data)
+            response = FileResponse(bio, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+
+    except PermissionDenied:
+        raise PermissionDenied("Access denied.")
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error(f"Error in view_resume: {str(e)}")
+        raise Http404("Error accessing resume")
+
+
+@supplier_required
+def view_attachment(request, application_id):
+    """Serve the additional attachment inline for a given application.
+    """
+    try:
+        supplier = get_supplier_for_user_or_raise(request)
+
+        application = None
+        try:
+            application = JobApplication.objects.get(id=application_id, supplier=supplier)
+        except JobApplication.DoesNotExist:
+            application = get_object_or_404(InternshipApplication, id=application_id, supplier=supplier)
+
+        if not application.additional_attachment:
+            raise Http404("Attachment not found")
+
+        file_field = application.additional_attachment
+        filename = file_field.name.split('/')[-1]
+        content_type, _ = mimetypes.guess_type(filename)
+        if not content_type:
+            content_type = 'application/octet-stream'
+
+        try:
+            fobj = file_field.open('rb')
+            response = FileResponse(fobj, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+        except Exception:
+            data = file_field.read()
+            bio = BytesIO(data)
+            response = FileResponse(bio, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+
+    except PermissionDenied:
+        raise PermissionDenied("Access denied.")
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error(f"Error in view_attachment: {str(e)}")
+        raise Http404("Error accessing attachment")
 
 
 @supplier_required
