@@ -386,14 +386,22 @@ def delete_internship_api(request, internship_id):
         if internship.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
+        # Get count of applications before deletion
+        app_count = internship.applications.count()
+        internship_title = internship.title
+        
+        # Delete internship (cascades to applications and files)
         internship.delete()
+        
+        logger.info(f"API: Internship '{internship_title}' (ID: {internship_id}) deleted with {app_count} related applications")
         return JsonResponse({
             'success': True,
-            'message': 'Internship deleted successfully!'
+            'message': f'Internship deleted successfully! ({app_count} applications and all files removed)'
         })
     except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
+        logger.error(f"Error deleting internship: {str(e)}")
         return JsonResponse({'success': False, 'message': str(e)})
 
 @csrf_exempt
@@ -495,14 +503,22 @@ def delete_job_api(request, job_id):
         if job.supplier != supplier:
             return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
         
+        # Get count of applications before deletion
+        app_count = job.applications.count()
+        job_title = job.title
+        
+        # Delete job (cascades to applications and files)
         job.delete()
+        
+        logger.info(f"API: Job '{job_title}' (ID: {job_id}) deleted with {app_count} related applications")
         return JsonResponse({
             'success': True,
-            'message': 'Job deleted successfully!'
+            'message': f'Job deleted successfully! ({app_count} applications and all files removed)'
         })
     except PermissionDenied:
         return JsonResponse({'success': False, 'message': 'Permission denied'}, status=403)
     except Exception as e:
+        logger.error(f"Error deleting job: {str(e)}")
         return JsonResponse({'success': False, 'message': str(e)})
 
 # Server-side views for internship management
@@ -545,7 +561,15 @@ def delete_internship(request, id):
     except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can delete internships.")
     
+    # Get count of applications before deletion for logging
+    app_count = internship.applications.count()
+    internship_title = internship.title
+    
+    # Delete internship (cascades to applications and files)
     internship.delete()
+    
+    logger.info(f"Internship '{internship_title}' (ID: {id}) deleted with {app_count} related applications and their files")
+    messages.success(request, f"Internship deleted successfully! ({app_count} applications and all files removed)")
     return redirect('job_portal_admin')
 
 @login_required
@@ -604,7 +628,15 @@ def delete_job(request, id):
     except PermissionDenied:
         raise PermissionDenied("Access denied. Only suppliers can delete jobs.")
     
+    # Get count of applications before deletion for logging
+    app_count = job.applications.count()
+    job_title = job.title
+    
+    # Delete job (cascades to applications and files)
     job.delete()
+    
+    logger.info(f"Job '{job_title}' (ID: {id}) deleted with {app_count} related applications and their files")
+    messages.success(request, f"Job deleted successfully! ({app_count} applications and all files removed)")
     return redirect('job_portal_admin')
 
 @login_required
