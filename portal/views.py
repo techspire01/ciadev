@@ -57,9 +57,28 @@ def details(request):
 def brand_new_site_dashboard(request):
     """Render the brand new site dashboard - shows all active jobs/internships from all companies"""
     try:
-        # Show all active internships and jobs from all companies
-        internships = PortalInternship.objects.filter(is_active=True)
-        jobs = PortalJob.objects.filter(is_active=True)
+        # Get filter and location from query parameters
+        current_filter = request.GET.get('filter', 'all')
+        selected_location = request.GET.get('location', '')
+
+        # Base querysets
+        internships_query = PortalInternship.objects.filter(is_active=True)
+        jobs_query = PortalJob.objects.filter(is_active=True)
+
+        # Apply location filter
+        if selected_location:
+            internships_query = internships_query.filter(location__icontains=selected_location)
+            jobs_query = jobs_query.filter(location__icontains=selected_location)
+
+        # Apply type filter
+        if current_filter == 'internship':
+            jobs_query = jobs_query.none()
+        elif current_filter == 'job':
+            internships_query = internships_query.none()
+
+        internships = list(internships_query)
+        jobs = list(jobs_query)
+        
         vacancies = []
 
         for internship in internships:
@@ -88,19 +107,26 @@ def brand_new_site_dashboard(request):
                 'experience': job.experience
             })
 
-        # Collect unique locations from active internships and jobs
+        # Collect unique locations from all active internships and jobs for the dropdown
+        all_internships = PortalInternship.objects.filter(is_active=True)
+        all_jobs = PortalJob.objects.filter(is_active=True)
         locations = set()
-        for internship in internships:
+        for internship in all_internships:
             if internship.location:
                 locations.add(internship.location.strip())
-        for job in jobs:
+        for job in all_jobs:
             if job.location:
                 locations.add(job.location.strip())
 
         # Sort locations alphabetically
         unique_locations = sorted(list(locations))
 
-        context = {'vacancies': vacancies, 'locations': unique_locations}
+        context = {
+            'vacancies': vacancies, 
+            'locations': unique_locations,
+            'current_filter': current_filter,
+            'selected_location': selected_location
+        }
     except Exception as e:
         # In a real app, you'd use proper logging
         context = {'vacancies': [], 'locations': [], 'error': str(e)}

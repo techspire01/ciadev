@@ -1433,7 +1433,40 @@
       </section>
 
       <section class="cards-grid" id="cardsGrid">
-        <!-- Cards will be rendered here -->
+        {% for item in vacancies %}
+        <div class="opportunity-card">
+          <div class="card-header">
+            <div class="card-logo" onclick="openDetailView('{{ item.id }}')">
+              {{ item.company_name|first }}
+            </div>
+            <span class="category-badge {% if item.type == 'job' %}work{% endif %}">{{ item.type|title }}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-company" onclick="openDetailView('{{ item.id }}')">{{ item.company_name }}</div>
+            <p class="card-description" onclick="openDetailView('{{ item.id }}')">{{ item.role }}</p>
+            <p class="card-description" onclick="openDetailView('{{ item.id }}')">{{ item.job_description }}</p>
+            <div class="card-location">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
+              {% if item.type == 'internship' %}{{ item.package }}{% else %}{{ item.location }}{% endif %}
+            </div>
+            <div class="card-duration-location">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
+              {% if item.type == 'internship' %}{{ item.duration }}{% else %}{{ item.package }}{% endif %}
+            </div>
+            {% if item.type == 'job' %}<div class="card-experience">{{ item.experience }}</div>{% endif %}
+            <div class="card-tags">
+              
+            </div>
+            <div class="card-requirements">
+              <span>Requirements: {{ item.requirements }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn" onclick="openDetailView('{{ item.id }}')">Details</button>
+            <button class="action-btn primary" onclick="applyForPosition('{{ item.id }}', '{{ item.type }}')">Apply Now</button>
+          </div>
+        </div>
+        {% endfor %}
       </section>
 
       <div class="empty-state" id="emptyState" style="display: none;">
@@ -1452,12 +1485,9 @@
     </div>
   </div>
 
-  {{ vacancies|json_script:"vacancies-data" }}
-  <script>
+<script>
     // State management
     const state = {
-      allData: [],
-      filteredData: [],
       currentFilter: 'all',
       searchQuery: '',
       selectedLocation: ''
@@ -1490,65 +1520,10 @@
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
-    // Render cards
-    function renderCards() {
-      elements.cardsGrid.innerHTML = '';
-      
-      if (state.filteredData.length === 0) {
-        elements.emptyState.style.display = 'block';
-        elements.cardsGrid.style.display = 'none';
-        return;
-      }
-
-      elements.emptyState.style.display = 'none';
-      elements.cardsGrid.style.display = 'grid';
-
-      state.filteredData.forEach(item => {
-        const categoryClass = item.category === 'work' ? 'work' : '';
-        const badgeClass = item.category === 'work' ? 'work' : '';
-
-        const card = document.createElement('div');
-        card.className = 'opportunity-card';
-        card.innerHTML = `
-          <div class="card-header">
-            <div class="card-logo" onclick="openDetailView('${item.id}')">
-              ${item.company.charAt(0)}
-            </div>
-            <span class="category-badge ${badgeClass}">${item.categoryLabel}</span>
-          </div>
-          <div class="card-body">
-            <div class="card-company" onclick="openDetailView('${item.id}')">${item.company}</div>
-            <p class="card-description" onclick="openDetailView('${item.id}')">${item.jobRole}</p>
-            <p class="card-description" onclick="openDetailView('${item.id}')">${item.description}</p>
-            <div class="card-location">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
-              ${item.category === 'internship' ? item.package : item.location}
-            </div>
-            <div class="card-duration-location">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
-              ${item.category === 'internship' ? item.duration : item.package}
-            </div>
-            ${item.category === 'job' ? `<div class="card-experience">${item.experience}</div>` : ''}
-            <div class="card-tags">
-              ${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-            </div>
-            <div class="card-requirements">
-              <span>Requirements: ${item.requirements}</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="action-btn" onclick="openDetailView('${item.id}')">Details</button>
-            <button class="action-btn primary" onclick="applyForPosition('${item.id}', '${item.category}')">Apply Now</button>
-          </div>
-        `;
-        elements.cardsGrid.appendChild(card);
-      });
-    }
-
     // Open detail view - Navigate to details page
     function openDetailView(itemId) {
-      const item = state.allData.find(item => item.id == itemId);
-      window.location.href = `{% url 'details' %}?id=${itemId}&type=${item.category}`;
+        const type = document.querySelector(`.opportunity-card[data-id="${itemId}"]`).dataset.type;
+        window.location.href = `{% url 'details' %}?id=${itemId}&type=${type}`;
     }
 
     // Apply for position - Navigate to application form
@@ -1558,29 +1533,6 @@
       } else if (category === 'job') {
         window.location.href = `/job/${itemId}/apply/`;
       }
-    }
-
-    // Update counter
-    function updateCounter() {
-      const count = state.filteredData.length;
-      const counterInfo = document.querySelector('.counter-info');
-      counterInfo.innerHTML = `<span id="itemCounter">${count}</span> opportunities found`;
-    }
-
-    // Apply filters and search
-    function applyFilters() {
-      state.filteredData = state.allData.filter(item => {
-        const matchesFilter = state.currentFilter === 'all' || item.category === state.currentFilter;
-        const matchesSearch = item.company.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
-                            item.description.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
-                            item.jobRole.toLowerCase().includes(state.searchQuery.toLowerCase());
-        const matchesLocation = !state.selectedLocation || 
-                              (item.location && item.location.toLowerCase().includes(state.selectedLocation.toLowerCase()));
-        return matchesFilter && matchesSearch && matchesLocation;
-      });
-
-      updateCounter();
-      renderCards();
     }
 
     // Set active filter button
@@ -1596,51 +1548,27 @@
     // Event listeners
     elements.filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
-        state.currentFilter = btn.getAttribute('data-filter');
-        setActiveFilterButton();
-        applyFilters();
+        const filter = btn.getAttribute('data-filter');
+        window.location.href = `?filter=${filter}`;
       });
     });
 
-    elements.searchInput.addEventListener('input', (e) => {
-      state.searchQuery = e.target.value;
-      applyFilters();
-    });
-
     elements.locationFilter.addEventListener('change', (e) => {
-      state.selectedLocation = e.target.value;
-      applyFilters();
+        const location = e.target.value;
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('location', location);
+        window.location.href = currentUrl.toString();
     });
 
-    // Load data
-    function loadData() {
-      try {
-        const vacanciesData = JSON.parse(document.getElementById('vacancies-data').textContent);
-        
-        state.allData = vacanciesData.map(item => ({
-          id: item.id, // Using id from database
-          category: item.type,
-          categoryLabel: item.type.charAt(0).toUpperCase() + item.type.slice(1),
-          company: item.company_name,
-          description: item.job_description,
-          location: item.location || 'N/A',
-          duration: item.duration || 'N/A',
-          requirements: item.requirements || 'N/A',
-          experience: item.experience || 'N/A',
-          tags: [],
-          jobRole: item.role,
-          package: item.package
-        }));
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filter = urlParams.get('filter') || 'all';
+        state.currentFilter = filter;
+        setActiveFilterButton();
 
-        state.filteredData = [...state.allData];
-        updateCounter();
-        renderCards();
-      } catch (error) {
-        elements.emptyState.style.display = 'block';
-      }
-    }
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', loadData);
+        if (elements.cardsGrid.children.length === 0) {
+            elements.emptyState.style.display = 'block';
+        }
+    });
   </script>
 {% endblock %}
