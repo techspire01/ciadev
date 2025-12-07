@@ -41,6 +41,9 @@ urlpatterns = [
     
     # Preview application files (resume, attachment)
     path('portal-admin/preview/<str:application_type>/<int:application_id>/<str:file_type>/', views.preview_application_file, name='preview_application_file'),
+    # Direct view endpoints to open files inline in new tab
+    path('portal-admin/view-resume/<int:application_id>/', views.view_resume, name='view_resume'),
+    path('portal-admin/view-attachment/<int:application_id>/', views.view_attachment, name='view_attachment'),
     
     # Delete applicants
     path('portal-admin/job/<int:job_id>/applicant/<int:application_id>/delete/', views.delete_job_applicant, name='delete_job_applicant'),

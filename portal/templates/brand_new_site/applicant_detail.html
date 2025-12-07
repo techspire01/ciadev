@@ -428,10 +428,11 @@
         <div style="margin-bottom: 20px;">
             <h3 style="font-size: 16px; color: var(--dark); margin-bottom: 10px;">📄 Resume</h3>
             <div class="action-buttons" style="gap: 10px;">
-                <button class="btn btn-primary" onclick="previewFile('resume')">
-                    👁️ Preview Resume
-                </button>
-                <a href="{{ application.resume.url }}" download class="btn btn-primary">
+                <a class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+                   href="{% url 'view_resume' application.id %}">
+                    👁️ View Resume
+                </a>
+                <a href="{% url 'view_resume' application.id %}" class="btn btn-primary" download>
                     📥 Download Resume
                 </a>
                 <button class="btn" style="background: #ef4444; color: white;"
@@ -446,10 +447,11 @@
         <div style="padding-top: 20px; border-top: 1px solid rgba(245, 158, 11, 0.2);">
             <h3 style="font-size: 16px; color: var(--dark); margin-bottom: 10px;">📎 Additional Document</h3>
             <div class="action-buttons" style="gap: 10px;">
-                <button class="btn btn-primary" onclick="previewFile('attachment')">
-                    👁️ Preview Document
-                </button>
-                <a href="{{ application.additional_attachment.url }}" download class="btn btn-primary">
+                <a class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+                   href="{% url 'view_attachment' application.id %}">
+                    👁️ View Document
+                </a>
+                <a href="{% url 'view_attachment' application.id %}" class="btn btn-primary" download>
                     📥 Download Document
                 </a>
                 <button class="btn" style="background: #ef4444; color: white;"
@@ -459,14 +461,6 @@
             </div>
         </div>
         {% endif %}
-    </div>
-
-    <!-- Preview Modal -->
-    <div id="previewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; justify-content: center; align-items: center;">
-        <div style="background: white; border-radius: 12px; max-width: 90%; max-height: 90%; width: 800px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-            <button onclick="closePreview()" style="position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 15px; cursor: pointer; font-weight: 600; z-index: 10001;">✕ Close</button>
-            <iframe id="previewFrame" style="width: 100%; height: 100%; border: none; border-radius: 12px;"></iframe>
-        </div>
     </div>
 
     <!-- Delete Full Application Section -->
@@ -498,74 +492,7 @@ const applicationId = {{ application.id }};
 const jobId = {% if job %}{{ job.id }}{% else %}null{% endif %};
 const internshipId = {% if internship %}{{ internship.id }}{% else %}null{% endif %};
 
-// Preview file functionality
-function previewFile(fileType) {
-    const csrfToken = '{{ csrf_token }}';
     
-    // Show loading state
-    const modal = document.getElementById('previewModal');
-    const frame = document.getElementById('previewFrame');
-    modal.style.display = 'flex';
-    frame.src = 'about:blank';
-    
-    // Call preview endpoint to get signed URL
-    fetch(`/portal-admin/preview/${applicationType}/${applicationId}/${fileType}/`, {
-        method: 'GET',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success && data.url) {
-            // Display PDF in iframe using Google PDF Viewer
-            const encodedUrl = encodeURIComponent(data.url);
-            frame.src = `https://docs.google.com/gview?url=${encodedUrl}&embedded=true`;
-        } else {
-            frame.src = 'about:blank';
-            alert('Error: Could not generate preview URL. ' + (data.error || 'Unknown error'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        frame.src = 'about:blank';
-        alert('Error loading preview: ' + error.message);
-    });
-}
-
-// Close preview modal
-function closePreview() {
-    const modal = document.getElementById('previewModal');
-    const frame = document.getElementById('previewFrame');
-    modal.style.display = 'none';
-    frame.src = 'about:blank';
-}
-
-// Close modal when clicking outside the modal content
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('previewModal');
-    if (modal) {
-        modal.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                closePreview();
-            }
-        });
-    }
-    
-    // Allow Escape key to close modal
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closePreview();
-        }
-    });
-});
 
 // Delete individual file (resume or attachment)
 function deleteFile(fileType) {

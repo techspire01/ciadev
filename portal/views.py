@@ -13,6 +13,8 @@ import logging
 from .models import PortalInternship, PortalJob, InternshipApplication, JobApplication
 from app.models import Supplier
 from app.utils import get_supplier_for_user_or_raise
+import mimetypes
+from io import BytesIO
 
 logger = logging.getLogger('cai_security')
 
@@ -871,6 +873,96 @@ def preview_application_file(request, application_type, application_id, file_typ
     except Exception as e:
         logger.error(f"Error in preview_application_file: {str(e)}")
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+
+@supplier_required
+def view_resume(request, application_id):
+    """Serve the resume inline for a given application (job or internship).
+    Sets Content-Disposition to inline so browser opens the file when possible.
+    """
+    try:
+        supplier = get_supplier_for_user_or_raise(request)
+
+        # Try job application first, then internship
+        application = None
+        try:
+            application = JobApplication.objects.get(id=application_id, supplier=supplier)
+        except JobApplication.DoesNotExist:
+            application = get_object_or_404(InternshipApplication, id=application_id, supplier=supplier)
+
+        if not application.resume:
+            raise Http404("Resume not found")
+
+        file_field = application.resume
+        filename = file_field.name.split('/')[-1]
+        content_type, _ = mimetypes.guess_type(filename)
+        if not content_type:
+            content_type = 'application/octet-stream'
+
+        try:
+            # Some storage backends provide a file-like object via open()
+            fobj = file_field.open('rb')
+            response = FileResponse(fobj, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+        except Exception:
+            # Fallback to reading into memory
+            data = file_field.read()
+            bio = BytesIO(data)
+            response = FileResponse(bio, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+
+    except PermissionDenied:
+        raise PermissionDenied("Access denied.")
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error(f"Error in view_resume: {str(e)}")
+        raise Http404("Error accessing resume")
+
+
+@supplier_required
+def view_attachment(request, application_id):
+    """Serve the additional attachment inline for a given application.
+    """
+    try:
+        supplier = get_supplier_for_user_or_raise(request)
+
+        application = None
+        try:
+            application = JobApplication.objects.get(id=application_id, supplier=supplier)
+        except JobApplication.DoesNotExist:
+            application = get_object_or_404(InternshipApplication, id=application_id, supplier=supplier)
+
+        if not application.additional_attachment:
+            raise Http404("Attachment not found")
+
+        file_field = application.additional_attachment
+        filename = file_field.name.split('/')[-1]
+        content_type, _ = mimetypes.guess_type(filename)
+        if not content_type:
+            content_type = 'application/octet-stream'
+
+        try:
+            fobj = file_field.open('rb')
+            response = FileResponse(fobj, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+        except Exception:
+            data = file_field.read()
+            bio = BytesIO(data)
+            response = FileResponse(bio, content_type=content_type)
+            response['Content-Disposition'] = f'inline; filename="{filename}"'
+            return response
+
+    except PermissionDenied:
+        raise PermissionDenied("Access denied.")
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error(f"Error in view_attachment: {str(e)}")
+        raise Http404("Error accessing attachment")
 
 
 @supplier_required
