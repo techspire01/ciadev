@@ -315,6 +315,18 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # If behind reverse proxy (Nginx/Load Balancer), tell Django HTTPS is upstream
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+# When Django is behind a TLS-terminating proxy (ngrok, Cloudflare Tunnel, Caddy, nginx, etc.)
+# enable honoring forwarded host headers so Django builds correct absolute URLs.
+USE_X_FORWARDED_HOST = True
+
+# Add any external HTTPS origins you use for testing (ngrok, tunnels, etc.) here.
+# Example: when using ngrok add the full https URL (e.g. 'https://abcd-1234.ngrok.io').
+CSRF_TRUSTED_ORIGINS = [
+    'https://127.0.0.1',
+    'https://localhost',
+    # 'https://your-ngrok-subdomain.ngrok.io',
+]
+
 # Logging Configuration
 LOGGING = {
     'version': 1,
@@ -384,17 +396,3 @@ import os
 _logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(_logs_dir):
     os.makedirs(_logs_dir, exist_ok=True)
-
-#reomve this production
-
-# When Django is behind a TLS-terminating proxy (ngrok, Cloudflare Tunnel, Caddy, nginx, etc.)
-# enable honoring forwarded host headers so Django builds correct absolute URLs.
-USE_X_FORWARDED_HOST = True
-
-# Add any external HTTPS origins you use for testing (ngrok, tunnels, etc.) here.
-# Example: when using ngrok add the full https URL (e.g. 'https://abcd-1234.ngrok.io').
-CSRF_TRUSTED_ORIGINS = [
-    'https://127.0.0.1',
-    'https://localhost',
-    # 'https://your-ngrok-subdomain.ngrok.io',
-]
