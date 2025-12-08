@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CIAnext - Announcement Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}" />
+</head>
+<body class="bg-white">
+  
+    {% include 'navbar.html' %}
+
+    <!-- Breadcrumb -->
+    <div class="container mx-auto px-4 py-6">
+        <nav class="text-sm">
+            <a href="{% url 'index' %}" class="text-gray-600 hover:text-yellow-600">Home</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <a href="{% url 'announcement' %}" class="text-gray-600 hover:text-yellow-600">Announcements</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="text-gray-800">{{ announcement.title }}</span>
+        </nav>
+    </div>
+
+    <!-- Announcement Detail Section -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Announcement Content -->
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <div class="flex items-center mb-6">
+                        {% if announcement.is_critical %}
+                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold mr-3">URGENT</span>
+                        {% else %}
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold mr-3">ANNOUNCEMENT</span>
+                        {% endif %}
+                        <span class="text-gray-500 text-sm">{{ announcement.date|date:"F d, Y" }}</span>
+                    </div>
+                    
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ announcement.title }}</h1>
+
+                    <div class="prose max-w-none mb-8">
+                        <p class="text-gray-700 leading-relaxed text-lg">{{ announcement.description }}</p>
+                    </div>
+
+                    <!-- Images -->
+                    {% if announcement.image1 or announcement.image2 or announcement.image3 %}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        {% if announcement.image1 %}
+                        <img src="{{ announcement.image1.url }}" alt="Announcement Image 1" class="w-full h-48 object-cover rounded-lg">
+                        {% endif %}
+                        {% if announcement.image2 %}
+                        <img src="{{ announcement.image2.url }}" alt="Announcement Image 2" class="w-full h-48 object-cover rounded-lg">
+                        {% endif %}
+                        {% if announcement.image3 %}
+                        <img src="{{ announcement.image3.url }}" alt="Announcement Image 3" class="w-full h-48 object-cover rounded-lg">
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Referral URL -->
+                    {% if announcement.referral_url %}
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Related Link</h3>
+                        <a href="{{ announcement.referral_url }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium">
+                            {{ announcement.referral_url }}
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    <!-- Back Button -->
+                    <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+                        <a href="{% url 'announcement' %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                            ← Back to Announcements
+                        </a>
+                        {% if announcement.referral_url %}
+                        <a href="{{ announcement.referral_url }}" target="_blank" class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-2 rounded-lg font-semibold transition">
+                            Visit Website
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Announcements Sidebar -->
+    {% if latest_announcements %}
+    <div class="fixed right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-lg rounded-l-2xl p-6 w-80 hidden lg:block">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Latest Announcements</h3>
+        <div class="space-y-3">
+            {% for latest in latest_announcements %}
+            <a href="{% url 'announcement_detail' latest.id %}" class="block p-3 rounded-lg hover:bg-gray-50 transition">
+                <h4 class="font-semibold text-gray-800 text-sm mb-1">{{ latest.title }}</h4>
+                <p class="text-gray-500 text-xs">{{ latest.date|date:"M d, Y" }}</p>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% include 'footer.html' %}
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

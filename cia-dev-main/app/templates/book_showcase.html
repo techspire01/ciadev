@@ -1,0 +1,194 @@
+{% load static %}
+{% load tz %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Showcase - CIA Next</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/CIA logo.png' %}">
+    <style>
+        .gallery-item {
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 2px solid #d97706;
+            aspect-ratio: 1 / 1;
+        }
+
+        .gallery-item:nth-child(2n) { border-color: #f59e0b; }
+        .gallery-item:nth-child(3n) { border-color: #ea580c; }
+        .gallery-item:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(217, 119, 6, 0.25); }
+        .gallery-item::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(180, 83, 9, 0.2)); opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 2; }
+        .gallery-item:nth-child(2n)::after { background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(245, 158, 11, 0.2)); }
+        .gallery-item:nth-child(3n)::after { background: linear-gradient(135deg, rgba(217, 119, 6, 0.3), rgba(245, 158, 11, 0.2)); }
+        .gallery-item:hover::after { opacity: 1; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .book-image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; }
+        .book-image-modal.active { display: flex; }
+        .book-image-modal-content { position: relative; width: 90vw; height: 90vw; max-width: 90vh; max-height: 90vh; aspect-ratio: 1; background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3); }
+        .book-image-modal img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(0, 0, 0, 0.5); color: white; border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; font-size: 1.5rem; cursor: pointer; transition: all 0.3s ease; z-index: 10000; }
+        .modal-close:hover { background: rgba(0, 0, 0, 0.8); transform: rotate(90deg); }
+        .modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; padding: 1rem; cursor: pointer; font-size: 1.5rem; border-radius: 0.5rem; transition: all 0.3s ease; z-index: 10000; }
+        .modal-nav:hover { background: rgba(0, 0, 0, 0.8); }
+        .modal-nav.prev { left: 1rem; }
+        .modal-nav.next { right: 1rem; }
+        .showcase-header { background: linear-gradient(135deg, #d97706 0%, #b45309 50%, #92400e 100%); box-shadow: 0 20px 60px rgba(217, 119, 6, 0.3); border-radius: 2rem; }
+        .showcase-header h1 { color: white; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); }
+        .showcase-header p { color: rgba(255, 255, 255, 0.9); }
+    </style>
+</head>
+<body class="bg-white">
+    {% include 'navbar.html' %}
+
+    <div class="bg-gradient-to-b from-yellow-100 via-orange-100 to-amber-100 min-h-screen relative z-0">
+        <!-- Header Section -->
+        <div class="container mx-auto px-4 py-12">
+            <section class="showcase-header rounded-3xl p-8 shadow-lg mb-12">
+                <div class="text-center space-y-3">
+                    <p class="text-sm uppercase tracking-[0.3em] text-white/90">Our Collection</p>
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight">Book Showcase Gallery</h1>
+                    <div class="w-32 h-2 bg-white/30 rounded-full mx-auto"></div>
+                    <p class="text-base md:text-lg text-white/90 max-w-2xl mx-auto">Explore our curated collection of featured images showcasing our work and expertise</p>
+                </div>
+            </section>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+                {% for photo in book_photos %}
+                <div class="gallery-item group relative book-modal-trigger" data-index="{{ forloop.counter0 }}">
+                    {% if photo.image_url %}
+                        <img src="{{ photo.image_url }}" alt="{{ photo.title }}" loading="lazy" class="w-full h-full object-cover">
+                    {% elif photo.image %}
+                        <img src="{{ photo.image.url }}" alt="{{ photo.title }}" loading="lazy" class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                            <i class="fas fa-image text-gray-400 text-4xl"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                        <div class="text-white text-center p-4">
+                            <i class="fas fa-search-plus text-2xl mb-2"></i>
+                            <p class="font-medium">Click to view</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full py-16 text-center">
+                    <div class="max-w-md mx-auto">
+                        <i class="fas fa-images text-gray-300 text-5xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">No Book Showcase Images</h3>
+                        <p class="text-gray-500">Add images to the Book Showcase via the admin panel.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Image Modal -->
+        <div class="book-image-modal" id="bookImageModal">
+            <div class="book-image-modal-content">
+                <button class="modal-close" onclick="closeBookImageModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <img id="bookModalImage" src="" alt="Full size book image">
+                <button class="modal-nav prev" onclick="previousBookImage()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-nav next" onclick="nextBookImage()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+    {% include 'partials/floating_buttons.html' %}
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script>
+        /* eslint-disable */
+        let currentBookImageIndex = 0;
+        /* eslint-disable */
+        const bookImages = [
+            {% for photo in book_photos %}
+            {
+                url: "{% if photo.image_url %}{{ photo.image_url }}{% elif photo.image %}{{ photo.image.url }}{% endif %}",
+                title: "{{ photo.title|default:'Untitled' }}"
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+        /* eslint-enable */
+        /* eslint-enable */
+
+        // Add click handlers to gallery items
+        document.querySelectorAll('.book-modal-trigger').forEach((item, index) => {
+            item.addEventListener('click', function() {
+                openBookImageModal(index);
+            });
+        });
+
+        function openBookImageModal(index) {
+            if (bookImages.length === 0) return;
+            currentBookImageIndex = index;
+            const imgElement = document.getElementById('bookModalImage');
+            imgElement.src = bookImages[index].url;
+            imgElement.onload = function() {
+                document.getElementById('bookImageModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+            // Fallback in case image doesn't load quickly
+            setTimeout(() => {
+                if (!document.getElementById('bookImageModal').classList.contains('active')) {
+                    document.getElementById('bookImageModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }, 500);
+        }
+
+        function closeBookImageModal() {
+            document.getElementById('bookImageModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextBookImage() {
+            if (bookImages.length === 0) return;
+            currentBookImageIndex = (currentBookImageIndex + 1) % bookImages.length;
+            document.getElementById('bookModalImage').src = bookImages[currentBookImageIndex].url;
+        }
+
+        function previousBookImage() {
+            if (bookImages.length === 0) return;
+            currentBookImageIndex = (currentBookImageIndex - 1 + bookImages.length) % bookImages.length;
+            document.getElementById('bookModalImage').src = bookImages[currentBookImageIndex].url;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('bookImageModal');
+            if (modal && modal.classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextBookImage();
+                if (e.key === 'ArrowLeft') previousBookImage();
+                if (e.key === 'Escape') closeBookImageModal();
+            }
+        });
+
+        // Close modal when clicking outside the image
+        const modalElement = document.getElementById('bookImageModal');
+        if (modalElement) {
+            modalElement.addEventListener('click', (e) => {
+                if (e.target.id === 'bookImageModal') closeBookImageModal();
+            });
+        }
+    </script>
+</body>
+</html>

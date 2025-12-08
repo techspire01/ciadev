@@ -1,0 +1,576 @@
+{% extends 'base.html' %}
+{% load portal_filters %}
+
+{% block content %}
+<style>
+    :root {
+      --blue: #F59E0B;
+      --red: #D97706;
+      --dark: #78350F;
+      --gray: #92400E;
+      --light-bg: #FFFBF0;
+      --shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+    }
+
+    body {
+      background: var(--light-bg);
+      color: var(--dark);
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .detail-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: var(--blue);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .back-button:hover {
+      background: var(--red);
+      transform: translateX(-3px);
+    }
+
+    .header-card {
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .header-card h1 {
+      margin: 0 0 10px 0;
+      font-size: 32px;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .detail-section {
+      background: white;
+      border: 2px solid rgba(245, 158, 11, 0.2);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 0 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .info-block {
+      padding: 12px;
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 8px;
+      border-left: 4px solid var(--blue);
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: var(--dark);
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .skill-tag {
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .message-box {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--blue);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .work-experience-item {
+      padding: 15px;
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid var(--red);
+    }
+
+    .work-exp-title {
+      font-weight: 700;
+      color: var(--dark);
+      font-size: 15px;
+    }
+
+    .work-exp-company {
+      color: var(--gray);
+      font-size: 13px;
+      margin-top: 3px;
+    }
+
+    .work-exp-duration {
+      color: var(--gray);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .work-exp-description {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--dark);
+      line-height: 1.5;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+    }
+
+    .btn-secondary:hover {
+      background: var(--blue);
+      color: white;
+    }
+
+    .status-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), var(--red));
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .education-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .education-item {
+      padding: 12px;
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 8px;
+    }
+
+    .education-label {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .education-text {
+      font-size: 13px;
+      color: var(--dark);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+</style>
+
+<div class="detail-wrapper">
+    {% if type == 'job' %}
+        <a href="{% url 'view_job_applicants' job_id=job.id %}" class="back-button">← Back to Job Applicants</a>
+    {% elif type == 'internship' %}
+        <a href="{% url 'view_internship_applicants' internship_id=internship.id %}" class="back-button">← Back to Internship Applicants</a>
+    {% endif %}
+
+    <div class="header-card">
+        <h1>{{ application.first_name }} {{ application.last_name }}</h1>
+        <div class="header-meta">
+            <div>📧 {{ application.email }}</div>
+            <div>📱 {{ application.phone }}</div>
+            <div>📍 {{ application.city|default:'N/A' }}</div>
+            <div>📅 Applied: {{ application.applied_date|date:"M d, Y" }}</div>
+        </div>
+    </div>
+
+    <!-- Experience Status -->
+    <div class="detail-section">
+        <div class="status-badge">
+            {% if application.status == 'fresher' %}
+                🎓 Fresher
+            {% else %}
+                💼 Experienced
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Personal Information -->
+    <div class="detail-section">
+        <h2 class="section-title">Personal Information</h2>
+        <div class="info-grid">
+            <div class="info-block">
+                <div class="info-label">Full Name</div>
+                <div class="info-value">{{ application.first_name }} {{ application.last_name }}</div>
+            </div>
+            <div class="info-block">
+                <div class="info-label">Email Address</div>
+                <div class="info-value"><a href="mailto:{{ application.email }}" style="color: var(--blue);">{{ application.email }}</a></div>
+            </div>
+            <div class="info-block">
+                <div class="info-label">Phone Number</div>
+                <div class="info-value"><a href="tel:{{ application.phone }}" style="color: var(--blue);">{{ application.phone }}</a></div>
+            </div>
+            {% if application.address %}
+            <div class="info-block">
+                <div class="info-label">Address</div>
+                <div class="info-value">{{ application.address }}</div>
+            </div>
+            {% endif %}
+            <div class="info-block">
+                <div class="info-label">City</div>
+                <div class="info-value">{{ application.city|default:'N/A' }}</div>
+            </div>
+            <div class="info-block">
+                <div class="info-label">State</div>
+                <div class="info-value">{{ application.state|default:'N/A' }}</div>
+            </div>
+            <div class="info-block">
+                <div class="info-label">Country</div>
+                <div class="info-value">{{ application.country|default:'N/A' }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Education Details -->
+    <div class="detail-section">
+        <h2 class="section-title">Education Details</h2>
+        <div class="education-details">
+            <div class="education-item">
+                <div class="education-label">School/University</div>
+                <div class="education-text">{{ application.school_name|default:'N/A' }}</div>
+            </div>
+            <div class="education-item">
+                <div class="education-label">Degree</div>
+                <div class="education-text">{{ application.degree|default:'N/A' }}</div>
+            </div>
+            <div class="education-item">
+                <div class="education-label">Field of Study</div>
+                <div class="education-text">{{ application.field_of_study|default:'N/A' }}</div>
+            </div>
+            <div class="education-item">
+                <div class="education-label">Study From</div>
+                <div class="education-text">{{ application.study_from_date|date:"M Y"|default:'N/A' }}</div>
+            </div>
+            <div class="education-item">
+                <div class="education-label">Study To</div>
+                <div class="education-text">
+                    {% if application.currently_studying %}
+                        Currently Studying
+                    {% else %}
+                        {{ application.study_to_date|date:"M Y"|default:'N/A' }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills -->
+    {% if application.skills %}
+    <div class="detail-section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-list">
+            {% for skill in application.skills|split:"," %}
+                <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Work Experience (for job applications) -->
+    {% if type == 'job' and application.work_experiences %}
+    <div class="detail-section">
+        <h2 class="section-title">Work Experience</h2>
+        {% for exp in application.work_experiences %}
+        <div class="work-experience-item">
+            <div class="work-exp-title">{{ exp.job_title|default:'Position' }}</div>
+            <div class="work-exp-company">{{ exp.company_name|default:'Company' }} • {{ exp.city|default:'Location' }}</div>
+            <div class="work-exp-duration">
+                {{ exp.from_date|default:'Start' }} 
+                {% if exp.currently_working %}
+                    - Present
+                {% else %}
+                    - {{ exp.to_date|default:'End' }}
+                {% endif %}
+            </div>
+            {% if exp.description %}
+            <div class="work-exp-description">{{ exp.description }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Internships (for internship applications) -->
+    {% if type == 'internship' and application.internships %}
+    <div class="detail-section">
+        <h2 class="section-title">Internship Experience</h2>
+        <div class="message-box">{{ application.internships }}</div>
+    </div>
+    {% endif %}
+
+    <!-- LinkedIn Profile -->
+    {% if application.linkedin_profile %}
+    <div class="detail-section">
+        <h2 class="section-title">LinkedIn Profile</h2>
+        <a href="{{ application.linkedin_profile }}" target="_blank" class="btn btn-secondary">View LinkedIn Profile →</a>
+    </div>
+    {% endif %}
+
+    <!-- Screening Questions / Additional Questions -->
+    {% if type == 'job' and application.screening_questions %}
+    <div class="detail-section">
+        <h2 class="section-title">Screening Questions</h2>
+        <div class="message-box">{{ application.screening_questions }}</div>
+    </div>
+    {% elif type == 'internship' and application.additional_questions %}
+    <div class="detail-section">
+        <h2 class="section-title">Additional Questions</h2>
+        <div class="message-box">{{ application.additional_questions }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Message to Recruiter -->
+    {% if application.message_to_manager %}
+    <div class="detail-section">
+        <h2 class="section-title">Message to Recruiter</h2>
+        <div class="message-box">{{ application.message_to_manager }}</div>
+    </div>
+    {% endif %}
+
+    <!-- Attachments -->
+    <div class="detail-section">
+        <h2 class="section-title">Documents</h2>
+        
+        <!-- Resume Section -->
+        <div style="margin-bottom: 20px;">
+            <h3 style="font-size: 16px; color: var(--dark); margin-bottom: 10px;">📄 Resume</h3>
+            <div class="action-buttons" style="gap: 10px;">
+                <a class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+                   href="{% url 'view_resume' application.id %}">
+                    👁️ View Resume
+                </a>
+                <a href="{% url 'view_resume' application.id %}" class="btn btn-primary" download>
+                    📥 Download Resume
+                </a>
+                <button class="btn" style="background: #ef4444; color: white;"
+                        onclick="if(confirm('Are you sure you want to delete the resume? This action cannot be undone.')) { deleteFile('resume'); }">
+                    🗑️ Delete Resume Only
+                </button>
+            </div>
+        </div>
+        
+        <!-- Additional Attachment Section -->
+        {% if application.additional_attachment %}
+        <div style="padding-top: 20px; border-top: 1px solid rgba(245, 158, 11, 0.2);">
+            <h3 style="font-size: 16px; color: var(--dark); margin-bottom: 10px;">📎 Additional Document</h3>
+            <div class="action-buttons" style="gap: 10px;">
+                <a class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+                   href="{% url 'view_attachment' application.id %}">
+                    👁️ View Document
+                </a>
+                <a href="{% url 'view_attachment' application.id %}" class="btn btn-primary" download>
+                    📥 Download Document
+                </a>
+                <button class="btn" style="background: #ef4444; color: white;"
+                        onclick="if(confirm('Are you sure you want to delete this document? This action cannot be undone.')) { deleteFile('attachment'); }">
+                    🗑️ Delete Document Only
+                </button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Delete Full Application Section -->
+    <div class="detail-section">
+        <h2 class="section-title" style="color: #d97706; border-bottom-color: rgba(217, 119, 6, 0.2);">Danger Zone</h2>
+        <p style="color: #666; margin-bottom: 15px;">Delete this entire application and all associated documents.</p>
+        <div class="action-buttons" style="gap: 15px;">
+            <button class="btn" style="background: #7c3aed; color: white; border: 2px solid #6d28d9;"
+                    onclick="if(confirm('⚠️ WARNING: Are you sure you want to delete this entire application and ALL associated data? This action CANNOT be undone.')) { deleteApplication(); }">
+                ⚠️ Delete Entire Application
+            </button>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="action-buttons">
+        {% if type == 'job' %}
+            <a href="{% url 'view_job_applicants' job_id=job.id %}" class="btn btn-secondary">← Back to Job Applicants</a>
+        {% elif type == 'internship' %}
+            <a href="{% url 'view_internship_applicants' internship_id=internship.id %}" class="btn btn-secondary">← Back to Internship Applicants</a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Application and file information
+const applicationType = '{{ type }}';
+const applicationId = {{ application.id }};
+const jobId = {% if job %}{{ job.id }}{% else %}null{% endif %};
+const internshipId = {% if internship %}{{ internship.id }}{% else %}null{% endif %};
+
+    
+
+// Delete individual file (resume or attachment)
+function deleteFile(fileType) {
+    const csrfToken = '{{ csrf_token }}';
+    const endpoint = `{% if type == "job" %}{% url "delete_job_applicant" job_id=job.id application_id=application.id %}{% else %}{% url "delete_internship_applicant" internship_id=internship.id application_id=application.id %}{% endif %}`;
+    
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', csrfToken);
+    formData.append('delete_resume_only', fileType === 'resume' ? 'true' : 'false');
+    formData.append('delete_attachment_only', fileType === 'attachment' ? 'true' : 'false');
+    
+    fetch(endpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ ' + (fileType === 'resume' ? 'Resume' : 'Document') + ' deleted successfully!');
+            location.reload(); // Reload page to show updated state
+        } else {
+            alert('❌ Error: ' + (data.error || 'Could not delete file'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('❌ Error deleting file: ' + error.message);
+    });
+}
+
+// Delete entire application
+function deleteApplication() {
+    const csrfToken = '{{ csrf_token }}';
+    const endpoint = `{% if type == "job" %}{% url "delete_job_applicant" job_id=job.id application_id=application.id %}{% else %}{% url "delete_internship_applicant" internship_id=internship.id application_id=application.id %}{% endif %}`;
+    
+    // Show confirmation loading state
+    const confirmDelete = confirm('🔄 Processing... This may take a moment.');
+    if (!confirmDelete) return;
+    
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', csrfToken);
+    
+    fetch(endpoint, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': csrfToken,
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (response.ok && response.redirected) {
+            // Server redirected to list view
+            window.location.href = response.url;
+        } else if (response.ok) {
+            return response.json().then(data => {
+                if (data.success) {
+                    alert('✅ Application deleted successfully!');
+                    // Redirect to appropriate list view
+                    const redirectUrl = `{% if type == "job" %}{% url "view_job_applicants" job_id=job.id %}{% else %}{% url "view_internship_applicants" internship_id=internship.id %}{% endif %}`;
+                    window.location.href = redirectUrl;
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Could not delete application'));
+                }
+            });
+        } else {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('❌ Error deleting application: ' + error.message);
+    });
+}
+</script>
+
+{% endblock %}
