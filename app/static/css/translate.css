@@ -1,0 +1,150 @@
+/* Google Translate Widget Styling - Positioned below navbar */
+#google_translate_element {
+  position: fixed !important;
+  top: 56px !important;
+  right: 10px !important;
+  z-index: 999 !important;
+  background: white !important;
+  padding: 5px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+  border: 1px solid #ddd !important;
+  font-size: 12px !important;
+}
+
+/* Hide the Google Translate banner frame completely */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Hide Google Translate top bar */
+#goog-gt-tt {
+  display: none !important;
+}
+
+.goog-tooltip {
+  display: none !important;
+}
+
+/* Prevent Google Translate from adding margin to body */
+body {
+  top: 0px !important;
+  margin-top: 0px !important;
+}
+
+body.translated-ltr,
+body.translated-rtl {
+  margin-top: 0px !important;
+  top: 0px !important;
+}
+
+html.translated-ltr,
+html.translated-rtl {
+  margin-top: 0px !important;
+}
+
+/* Override any inline styles Google Translate might add */
+body[style*="margin-top"] {
+  margin-top: 0px !important;
+}
+
+html[style*="margin-top"] {
+  margin-top: 0px !important;
+}
+
+/* Make the Google Translate dropdown smaller */
+.goog-te-gadget-simple {
+  background-color: white !important;
+  border: 1px solid #ced4da !important;
+  border-radius: 3px !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+  color: #495057 !important;
+  min-width: 80px !important;
+  text-align: center !important;
+}
+
+.goog-te-gadget-simple:hover {
+  background-color: #f8f9fa !important;
+}
+
+/* Style the Google Translate gadget */
+.goog-te-gadget {
+  font-size: 11px !important;
+}
+
+/* Style the Google Translate menu */
+.goog-te-menu-value {
+  color: #495057 !important;
+  font-size: 11px !important;
+}
+
+.goog-te-menu-value span {
+  color: #007bff !important;
+  font-size: 11px !important;
+}
+
+/* Style the Google Translate icon */
+.goog-te-gadget-icon {
+  width: 16px !important;
+  height: 11px !important;
+}
+
+/* Make the dropdown menu smaller */
+.goog-te-menu-frame {
+  max-width: 150px !important;
+  font-size: 11px !important;
+}
+
+/* Hide any additional Google Translate elements that might interfere */
+.skiptranslate {
+  position: static !important;
+}
+
+/* Ensure navbar stays visible */
+nav.fixed-header {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Custom button styles (backup) */
+.translate-btn {
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  background-color: white;
+  border: 1px solid #cbd5e0;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.translate-btn:hover {
+  background-color: #f7fafc;
+}
+
+.translate-btn.active {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Primary and outline variants used by JS to indicate active/inactive states */
+.translate-btn.primary {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+  border-color: transparent;
+}
+
+.translate-btn.outline {
+  background-color: white;
+  color: #374151; /* gray-700 */
+  border: 1px solid #d1d5db; /* gray-300 */
+}
