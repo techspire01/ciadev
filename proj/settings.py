@@ -308,12 +308,12 @@ CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
-SECURE_REFERRER_POLICY = "strict-origin"
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "no-referrer"
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
 
 # If behind reverse proxy (Nginx/Load Balancer), tell Django HTTPS is upstream
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # When Django is behind a TLS-terminating proxy (ngrok, Cloudflare Tunnel, Caddy, nginx, etc.)
 # enable honoring forwarded host headers so Django builds correct absolute URLs.
