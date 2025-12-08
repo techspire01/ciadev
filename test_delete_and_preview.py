@@ -12,12 +12,15 @@ import sys
 import django
 import json
 from django.test import TestCase, Client
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 # Setup Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
 django.setup()
+
+# Expose User model for tests (custom user)
+User = get_user_model()
 
 from app.models import Supplier
 from portal.models import PortalJob, PortalInternship, JobApplication, InternshipApplication
@@ -29,9 +32,9 @@ class DeleteAndPreviewTests(TestCase):
     
     def setUp(self):
         """Create test data"""
-        # Create a test user and supplier
+        # Create a test user and supplier using the project's custom user model
+        User = get_user_model()
         self.user = User.objects.create_user(
-            username='testemployer',
             email='employer@test.com',
             password='testpass123'
         )
@@ -42,26 +45,25 @@ class DeleteAndPreviewTests(TestCase):
             email='employer@test.com',
         )
         
-        # Create a test job
+        # Create a test job (align fields with current PortalJob model)
         self.job = PortalJob.objects.create(
             title='Test Job',
             description='Test job description',
             supplier=self.supplier,
-            date_posted=timezone.now(),
-            salary_min=30000,
-            salary_max=50000,
-            position_type='Full-Time',
-            work_type='On-site'
+            posted_date=timezone.now(),
+            salary='30000-50000',
+            location='Test City',
         )
         
-        # Create a test internship
+        # Create a test internship (align fields with current PortalInternship model)
         self.internship = PortalInternship.objects.create(
             title='Test Internship',
             description='Test internship description',
             supplier=self.supplier,
-            date_posted=timezone.now(),
-            position_type='Summer',
-            work_type='On-site'
+            posted_date=timezone.now(),
+            duration='3 months',
+            location='Test City',
+            salary='Stipend'
         )
         
         # Create test files
@@ -77,28 +79,30 @@ class DeleteAndPreviewTests(TestCase):
             content_type="application/pdf"
         )
         
-        # Create a job application
+        # Create a job application (align fields with current JobApplication model)
         self.job_app = JobApplication.objects.create(
             job=self.job,
             supplier=self.supplier,
-            applicant_name='John Doe',
-            applicant_email='john@test.com',
-            applicant_phone='1234567890',
+            first_name='John',
+            last_name='Doe',
+            email='john@test.com',
+            phone='1234567890',
             resume=self.test_resume,
             additional_attachment=self.test_attachment,
-            date_applied=timezone.now()
+            applied_date=timezone.now()
         )
         
-        # Create an internship application
+        # Create an internship application (align fields with current InternshipApplication model)
         self.internship_app = InternshipApplication.objects.create(
             internship=self.internship,
             supplier=self.supplier,
-            applicant_name='Jane Doe',
-            applicant_email='jane@test.com',
-            applicant_phone='0987654321',
+            first_name='Jane',
+            last_name='Doe',
+            email='jane@test.com',
+            phone='0987654321',
             resume=SimpleUploadedFile("int_resume.pdf", b"PDF content"),
             additional_attachment=SimpleUploadedFile("int_attachment.pdf", b"PDF content"),
-            date_applied=timezone.now()
+            applied_date=timezone.now()
         )
         
         # Create test client
@@ -106,8 +110,8 @@ class DeleteAndPreviewTests(TestCase):
         
     def test_preview_job_resume(self):
         """Test preview endpoint for job application resume"""
-        # Login as supplier
-        self.client.login(username='testemployer', password='testpass123')
+        # Login as supplier (use email as username for custom user model)
+        self.client.login(username='employer@test.com', password='testpass123')
         
         # Call preview endpoint
         response = self.client.get(
@@ -125,8 +129,8 @@ class DeleteAndPreviewTests(TestCase):
         
     def test_preview_internship_attachment(self):
         """Test preview endpoint for internship application attachment"""
-        # Login as supplier
-        self.client.login(username='testemployer', password='testpass123')
+        # Login as supplier (use email as username for custom user model)
+        self.client.login(username='employer@test.com', password='testpass123')
         
         # Call preview endpoint
         response = self.client.get(
@@ -149,12 +153,12 @@ class DeleteAndPreviewTests(TestCase):
         self.assertTrue(self.job_app.additional_attachment)
         initial_id = self.job_app.id
         
-        # Login as supplier
-        self.client.login(username='testemployer', password='testpass123')
+        # Login as supplier (use email as username for custom user model)
+        self.client.login(username='employer@test.com', password='testpass123')
         
         # Send delete request
         response = self.client.post(
-            f'/portal/job/{self.job.id}/applicant/{self.job_app.id}/delete/',
+            f'/portal-admin/job/{self.job.id}/applicant/{self.job_app.id}/delete/',
             {'delete_resume_only': 'true'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
@@ -177,12 +181,12 @@ class DeleteAndPreviewTests(TestCase):
         self.assertTrue(self.internship_app.additional_attachment)
         initial_id = self.internship_app.id
         
-        # Login as supplier
-        self.client.login(username='testemployer', password='testpass123')
+        # Login as supplier (use email as username for custom user model)
+        self.client.login(username='employer@test.com', password='testpass123')
         
         # Send delete request
         response = self.client.post(
-            f'/portal/internship/{self.internship.id}/applicant/{self.internship_app.id}/delete/',
+            f'/portal-admin/internship/{self.internship.id}/applicant/{self.internship_app.id}/delete/',
             {'delete_attachment_only': 'true'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
@@ -202,12 +206,12 @@ class DeleteAndPreviewTests(TestCase):
         """Test deleting entire application"""
         job_app_id = self.job_app.id
         
-        # Login as supplier
-        self.client.login(username='testemployer', password='testpass123')
+        # Login as supplier (use email for custom user model)
+        self.client.login(username='employer@test.com', password='testpass123')
         
         # Send delete request (no specific flags = delete all)
         response = self.client.post(
-            f'/portal/job/{self.job.id}/applicant/{self.job_app.id}/delete/',
+            f'/portal-admin/job/{self.job.id}/applicant/{self.job_app.id}/delete/',
             {},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
@@ -226,7 +230,6 @@ class DeleteAndPreviewTests(TestCase):
         """Test that unauthorized users cannot preview/delete"""
         # Create another supplier
         other_user = User.objects.create_user(
-            username='otheremployer',
             email='other@test.com',
             password='testpass123'
         )
@@ -236,8 +239,8 @@ class DeleteAndPreviewTests(TestCase):
             email='other@test.com'
         )
         
-        # Login as different supplier
-        self.client.login(username='otheremployer', password='testpass123')
+        # Login as different supplier (use email for authentication)
+        self.client.login(username='other@test.com', password='testpass123')
         
         # Try to preview
         response = self.client.get(

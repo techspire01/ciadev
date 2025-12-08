@@ -64,8 +64,9 @@ def brand_new_site_dashboard(request):
         selected_location = request.GET.get('location', '')
 
         # Base querysets
-        internships_query = PortalInternship.objects.filter(is_active=True)
-        jobs_query = PortalJob.objects.filter(is_active=True)
+        # Order by posted_date descending so newest appear first
+        internships_query = PortalInternship.objects.filter(is_active=True).order_by('-posted_date')
+        jobs_query = PortalJob.objects.filter(is_active=True).order_by('-posted_date')
 
         # Apply location filter
         if selected_location:
@@ -80,9 +81,10 @@ def brand_new_site_dashboard(request):
 
         internships = list(internships_query)
         jobs = list(jobs_query)
-        
+
         vacancies = []
 
+        # Include posted_date in the dict for sorting, then remove/keep as needed
         for internship in internships:
             vacancies.append({
                 'id': internship.id,
@@ -93,7 +95,8 @@ def brand_new_site_dashboard(request):
                 'type': 'internship',
                 'requirements': internship.requirements,
                 'duration': internship.duration,
-                'location': internship.location
+                'location': internship.location,
+                'posted_date': getattr(internship, 'posted_date', None)
             })
 
         for job in jobs:
@@ -106,8 +109,12 @@ def brand_new_site_dashboard(request):
                 'type': 'job',
                 'requirements': job.requirements,
                 'location': job.location,
-                'experience': job.experience
+                'experience': job.experience,
+                'posted_date': getattr(job, 'posted_date', None)
             })
+
+        # Sort combined vacancies by posted_date descending (newest first). None dates go last.
+        vacancies.sort(key=lambda v: v.get('posted_date') or 0, reverse=True)
 
         # Collect unique locations from all active internships and jobs for the dropdown
         all_internships = PortalInternship.objects.filter(is_active=True)

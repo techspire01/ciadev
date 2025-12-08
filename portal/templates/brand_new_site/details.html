@@ -544,16 +544,7 @@
   </div>
 
   <div class="dashboard-wrapper">
-    <header class="dashboard-header">
-      <div class="header-content">
-        <a href="{% url 'index' %}" class="header-branding">
-          <div class="header-logo">
-            <img src="{% static 'images/CIA logo.png' %}" alt="CIA logo">
-          </div>
-          <h1 class="header-title">CIA<span style="color: #b45309;">next</span></h1>
-        </a>
-      </div>
-    </header>
+    {% include 'navbar.html' %}
 
     <main class="dashboard-main">
       <div class="detail-container">
@@ -646,9 +637,7 @@
       </div>
     </main>
 
-    <footer class="dashboard-footer">
-      <p>&copy; {% now "Y" %} CIA Next - Career Portal. All rights reserved.</p>
-    </footer>
+    {% include 'footer.html' %}
   </div>
 </body>
 </html>
