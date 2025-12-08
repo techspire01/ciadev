@@ -27,6 +27,10 @@ def coders_club(request):
 def coders_contact(request):
     return render(request, "coders_contact.html")
 
+def cia_students(request):
+    """Render CIA Students page with information about student programs"""
+    return render(request, "cia_students.html")
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def submit_complaint(request):
