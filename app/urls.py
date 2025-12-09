@@ -6,6 +6,7 @@ from announcements import views as announcement_views
 urlpatterns = [
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
+    path('cia-students/', views.cia_students, name='cia_students'),
     path('coders-club/', views.coders_club, name='coders_club'),
     path('coders-contact/', views.coders_contact, name='coders_contact'),
     path('category/', views.category, name='category'),

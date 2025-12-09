@@ -901,6 +901,49 @@
         </div>
     </section>
 
+    <!-- CIA Students Section -->
+    <section class="py-16 md:py-24 bg-gradient-to-br from-blue-50 to-orange-50 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-400 to-orange-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-br from-orange-400 to-amber-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-black mb-8 text-center bg-gradient-to-r from-blue-900 to-orange-700 bg-clip-text text-transparent">
+                    Opportunities for Students
+                </h2>
+                <div class="bg-white rounded-2xl p-8 md:p-12 shadow-lg border-2 border-orange-300">
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        <strong>Transform your future with CIA's comprehensive student programs.</strong> We provide students with real-world industrial experience, professional training, and entrepreneurship mentorship. Join hundreds of students who have launched successful careers through our network of 200+ partner companies.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg p-6 text-center">
+                            <i class="fas fa-briefcase text-3xl text-blue-600 mb-3"></i>
+                            <h3 class="font-bold text-gray-800 mb-2">Internship Programs</h3>
+                            <p class="text-sm text-gray-600">3-6 months hands-on experience with leading companies</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-6 text-center">
+                            <i class="fas fa-graduation-cap text-3xl text-orange-600 mb-3"></i>
+                            <h3 class="font-bold text-gray-800 mb-2">Training Programs</h3>
+                            <p class="text-sm text-gray-600">Expert-led skill development workshops and certifications</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-lg p-6 text-center">
+                            <i class="fas fa-rocket text-3xl text-green-600 mb-3"></i>
+                            <h3 class="font-bold text-gray-800 mb-2">Entrepreneurship</h3>
+                            <p class="text-sm text-gray-600">Mentorship to launch your own venture with industry support</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <a href="{% url 'cia_students' %}" class="inline-block bg-gradient-to-r from-blue-600 to-orange-600 text-white font-bold px-10 py-4 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-arrow-right mr-2"></i>View More About Student Programs
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="inline-block ml-4 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold px-10 py-4 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            <i class="fas fa-envelope mr-2"></i>Career Opportunities
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Call to Action -->
     <section class="py-16 text-white bg-gradient-to-br from-orange-500/80 via-orange-600/75 to-orange-600/80 backdrop-blur-sm">
