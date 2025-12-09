@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit a Complaint{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-semibold mb-4">Submit a Complaint</h1>
+        <div id="complaintAlert" class="hidden mb-3 text-sm p-3 rounded-md"></div>
+        <form id="complaintForm">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="complaintText" class="block text-sm font-medium text-gray-700">Your Complaint</label>
+                <textarea id="complaintText" name="complaint" rows="5" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Please describe your issue in detail..." required></textarea>
+            </div>
+            <div class="mb-4">
+                <label for="complaintContact" class="block text-sm font-medium text-gray-700">Contact Number (Optional)</label>
+                <input id="complaintContact" name="contact_number" type="text" class="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500" placeholder="So we can reach you if needed">
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button type="submit" id="complaintSubmitBtn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('complaintForm');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const complaint = document.getElementById('complaintText').value.trim();
+        const contact = document.getElementById('complaintContact').value.trim();
+        const alertBox = document.getElementById('complaintAlert');
+        const submitBtn = document.getElementById('complaintSubmitBtn');
+        const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+        if (!complaint) {
+            showAlert('Please enter your complaint.', 'error');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Submitting...';
+
+        const formData = new URLSearchParams();
+        formData.append('complaint', complaint);
+        formData.append('contact_number', contact);
+
+        fetch('{% url "submit_complaint" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': csrfToken
+            },
+            body: formData.toString()
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            return response.json().then(err => { throw err; });
+        })
+        .then(data => {
+            showAlert(data.message || 'Submitted successfully.', 'success');
+            form.reset();
+        })
+        .catch(err => {
+            console.error('Complaint submit error:', err);
+            showAlert((err && err.error) ? err.error : 'Failed to submit. Please try again.', 'error');
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Submit';
+        });
+    });
+
+    function showAlert(message, type) {
+        const alertBox = document.getElementById('complaintAlert');
+        alertBox.textContent = message;
+        if (type === 'success') {
+            alertBox.className = 'mb-3 text-sm p-3 rounded-md bg-green-100 text-green-800';
+        } else {
+            alertBox.className = 'mb-3 text-sm p-3 rounded-md bg-red-100 text-red-800';
+        }
+        alertBox.classList.remove('hidden');
+    }
+});
+</script>
+{% endblock %}
