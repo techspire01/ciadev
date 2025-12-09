@@ -36,10 +36,6 @@ DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
-]
 
 # Site font family configurable here. Change this value to update font across the site.
 # Provide a CSS font-family value, including fallbacks and quotes if needed.
@@ -69,38 +65,22 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+
 MIDDLEWARE = [
-    # 1) Security first
     'django.middleware.security.SecurityMiddleware',
-
-    # 2) Static files (WhiteNoise MUST be here)
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-
-    # 3) Cache system (optional, but must wrap request AFTER WhiteNoise)
-    'django.middleware.cache.UpdateCacheMiddleware',
-
-    # 4) Standard Django core
+    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first (after SecurityMiddleware)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-
-    # 5) CSRF MUST COME BEFORE any auth / custom middleware
     'django.middleware.csrf.CsrfViewMiddleware',
-
-    # 6) Auth + user session
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # 7) Cache fetch must be AFTER response middleware
-    'django.middleware.cache.FetchFromCacheMiddleware',
-
-    # 8) Your custom middleware
-    'proj.middleware.SecurityLoggingMiddleware',
-    'proj.middleware.CacheControlMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Must be last
+    'allauth.account.middleware.AccountMiddleware',  # Added for django-allauth
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    'proj.middleware.SecurityLoggingMiddleware',  # Security event logging
+    'proj.middleware.CacheControlMiddleware',  # Prevent browser caching of dynamic pages
 ]
-CACHE_MIDDLEWARE_SECONDS = 0
-
 
 ROOT_URLCONF = 'proj.urls'
 
@@ -324,27 +304,17 @@ SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users after social log
 # HTTPS & Security Headers (for production)
 SECURE_SSL_REDIRECT = False  # Set to True in production
 SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
-SECURE_REFERRER_POLICY = "same-origin"
+SECURE_REFERRER_POLICY = "strict-origin"
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # If behind reverse proxy (Nginx/Load Balancer), tell Django HTTPS is upstream
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# When Django is behind a TLS-terminating proxy (ngrok, Cloudflare Tunnel, Caddy, nginx, etc.)
-# enable honoring forwarded host headers so Django builds correct absolute URLs.
-USE_X_FORWARDED_HOST = True
-
-# Session Cookie Settings
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
-SESSION_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
-CSRF_COOKIE_HTTPONLY = False #Prevent JavaScript access
-CSRF_COOKIE_SAMESITE = 'Lax'  # default safe
-SESSION_COOKIE_SAMESITE = 'Lax'
 # Logging Configuration
 LOGGING = {
     'version': 1,
@@ -414,3 +384,4 @@ import os
 _logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(_logs_dir):
     os.makedirs(_logs_dir, exist_ok=True)
+

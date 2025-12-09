@@ -100,7 +100,7 @@ def brand_new_site_dashboard(request):
 
         internships = list(internships_query)
         jobs = list(jobs_query)
-
+        
         vacancies = []
 
         # Include posted_date in the dict for sorting, then remove/keep as needed
