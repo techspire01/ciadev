@@ -53,7 +53,26 @@ def details(request):
         return render(request, 'brand_new_site/details.html', {'vacancy': None})
 
 
-    return render(request, 'brand_new_site/details.html', {'vacancy': vacancy})
+    # Build supplier address string to simplify template rendering
+    supplier_address = None
+    try:
+        supplier = getattr(vacancy, 'supplier', None)
+        if supplier:
+            parts = [
+                supplier.door_number or '',
+                supplier.street or '',
+                supplier.area or '',
+                supplier.city or '',
+                supplier.state or '',
+                supplier.pin_code or ''
+            ]
+            parts = [p.strip() for p in parts if p and p.strip()]
+            supplier_address = ', '.join(parts) if parts else None
+    except Exception:
+        supplier_address = None
+
+    context = {'vacancy': vacancy, 'supplier_address': supplier_address}
+    return render(request, 'brand_new_site/details.html', context)
 
 
 def brand_new_site_dashboard(request):
