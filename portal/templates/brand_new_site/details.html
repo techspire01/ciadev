@@ -631,9 +631,9 @@
             <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
               <div style="flex:0 0 120px;">
                 {% if vacancy.supplier.logo_url %}
-                  <img src="{{ vacancy.supplier.logo_url }}" alt="{{ vacancy.supplier.name }} logo" style="width:120px;height:120px;object-fit:cover;border-radius:12px;border:2px solid rgba(0,0,0,0.04);"/>
+                  <img src="{{ vacancy.supplier.logo_url }}" alt="{{ vacancy.supplier.name }} logo" loading="lazy" style="width:120px;height:120px;object-fit:cover;border-radius:12px;border:2px solid rgba(0,0,0,0.04);"/>
                 {% elif vacancy.supplier.image_url %}
-                  <img src="{{ vacancy.supplier.image_url }}" alt="{{ vacancy.supplier.name }} image" style="width:120px;height:120px;object-fit:cover;border-radius:12px;border:2px solid rgba(0,0,0,0.04);"/>
+                  <img src="{{ vacancy.supplier.image_url }}" alt="{{ vacancy.supplier.name }} image" loading="lazy" style="width:120px;height:120px;object-fit:cover;border-radius:12px;border:2px solid rgba(0,0,0,0.04);"/>
                 {% else %}
                   <div style="width:120px;height:120px;border-radius:12px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-weight:800;color:#374151">{{ vacancy.supplier.name|slice:":1"|upper }}</div>
                 {% endif %}

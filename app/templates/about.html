@@ -848,9 +848,9 @@
                 <div class="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition-all duration-300 border-2 border-orange-300 hover:border-red-500">
                     <div class="w-32 h-32 mx-auto mb-4 rounded-lg overflow-hidden">
                         {% if member.photo_url %}
-                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer gallery-image" data-src="{{ member.photo_url }}" data-title="{{ member.name }}">
+                            <img src="{{ member.photo_url }}" alt="{{ member.name }}" loading="lazy" class="w-full h-full object-cover cursor-pointer gallery-image" data-src="{{ member.photo_url }}" data-title="{{ member.name }}">
                         {% elif member.photo %}
-                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="w-full h-full object-cover cursor-pointer gallery-image" data-src="{{ member.photo.url }}" data-title="{{ member.name }}">
+                            <img src="{{ member.photo.url }}" alt="{{ member.name }}" loading="lazy" class="w-full h-full object-cover cursor-pointer gallery-image" data-src="{{ member.photo.url }}" data-title="{{ member.name }}">
                         {% else %}
                             <div class="flex items-center justify-center w-full h-full bg-gray-200">
                                 <i class="fas fa-user text-3xl text-gray-400"></i>
@@ -1039,7 +1039,7 @@
     <!-- Lightbox Modal -->
     <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden opacity-0 transition-all duration-300 ease-out">
         <div class="relative w-full h-full p-4 flex items-center justify-center">
-            <img id="lightbox-img" src="" alt="" class="max-w-full max-h-full object-contain transition-all duration-300 ease-out">
+            <img id="lightbox-img" src="" alt="" loading="lazy" class="max-w-full max-h-full object-contain transition-all duration-300 ease-out">
             <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center hover:bg-opacity-75 transition-all duration-200">&times;</button>
         </div>
     </div>

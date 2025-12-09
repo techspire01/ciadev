@@ -596,7 +596,7 @@
                                 {% if flash.image %}
                                 <div class="mb-4 sm:mb-5 -mx-5 sm:-mx-6 sm:rounded-t-xl overflow-hidden">
                                     <a href="{{ flash.url|default:'#' }}" target="_blank" rel="noopener">
-                                        <img src="{{ flash.image.url }}" alt="{{ flash.title }}" class="w-full h-auto object-cover transition-transform duration-300 hover:scale-105 max-h-64 sm:max-h-80">
+                                        <img src="{{ flash.image.url }}" alt="{{ flash.title }}" loading="lazy" class="w-full h-auto object-cover transition-transform duration-300 hover:scale-105 max-h-64 sm:max-h-80">
                                     </a>
                                 </div>
                                 {% endif %}

@@ -144,7 +144,7 @@
               <!-- Image Section - Company Logo/Image Display -->
               <div class="relative h-56 flex-shrink-0 overflow-hidden bg-gradient-to-br from-orange-100 via-red-100 to-orange-100 flex items-center justify-center">
                 {% if supplier.logo_url %}
-                  <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" class="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
+                  <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" loading="lazy" class="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-110"
                        onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-logo').style.display='flex';" />
                   <div class="fallback-logo w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center" style="display: none;">
                     <div class="text-center">
@@ -153,7 +153,7 @@
                     </div>
                   </div>
                 {% elif supplier.image_url %}
-                  <img src="{{ supplier.image_url }}" alt="{{ supplier.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  <img src="{{ supplier.image_url }}" alt="{{ supplier.name }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                        onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-logo').style.display='flex';" />
                   <div class="fallback-logo w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 items-center justify-center" style="display: none;">
                     <span class="text-white text-2xl font-bold">{{ supplier.name|slice:":2"|upper }}</span>

@@ -35,7 +35,7 @@
 <div id="heroCarousel" class="hero-carousel-grid h-full w-full transition-all duration-200 ease-in-out relative z-10">
       <!-- Container 1 - Large hero (spans 3x2) -->
       <div class="carousel-item carousel-item-large rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
-        <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" class="w-full h-full object-cover" />
+        <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" loading="lazy" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
         <div class="absolute bottom-3 md:bottom-6 left-3 md:left-6 text-white max-w-xs md:max-w-none">
           <h3 class="text-base md:text-xl font-bold mb-1 md:mb-1">Industrial Excellence</h3>
@@ -45,7 +45,7 @@
 
       <!-- Container 2 - Medium (spans 2x1) -->
       <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg" alt="Electrical Power Equipment" class="w-full h-full object-cover" />
+        <img src="https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg" alt="Electrical Power Equipment" loading="lazy" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
           <h4 class="text-sm md:text-lg font-bold">Electrical</h4>
@@ -55,7 +55,7 @@
 
       <!-- Container 3 - Small (spans 2x1) -->
       <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
+        <img src="https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg" alt="Plastic Manufacturing" loading="lazy" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
           <h4 class="text-sm md:text-lg font-bold">Plastic</h4>
@@ -65,7 +65,7 @@
 
       <!-- Container 4 - Medium tall (spans 2x1) -->
       <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg" alt="Textile Manufacturing" class="w-full h-full object-cover" />
+        <img src="https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg" alt="Textile Manufacturing" loading="lazy" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
           <h4 class="text-sm md:text-lg font-bold">Textile</h4>
@@ -75,7 +75,7 @@
 
       <!-- Container 5 - Small (spans 2x1) -->
       <div class="carousel-item carousel-item-medium rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg" alt="Automation Equipment" class="w-full h-full object-cover" />
+        <img src="https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg" alt="Automation Equipment" loading="lazy" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white">
           <h4 class="text-sm md:text-lg font-bold">Automation</h4>
@@ -157,13 +157,13 @@
           <!-- Image Section -->
           <div class="relative h-48 flex-shrink-0">
             {% if supplier.image_url %}
-              <img src="{{ supplier.image_url }}" alt="{{ supplier.name }}" class="w-full h-full object-cover"
+              <img src="{{ supplier.image_url }}" alt="{{ supplier.name }}" loading="lazy" class="w-full h-full object-cover"
                    onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-image').style.display='flex';" />
               <div class="fallback-image w-full h-full bg-gradient-to-br from-orange-500 to-red-600 items-center justify-center" style="display: none;">
                 <span class="text-white text-4xl font-bold">{{ supplier.name|slice:":2"|upper }}</span>
               </div>
             {% elif supplier.logo_url %}
-              <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" class="w-full h-full object-contain bg-gray-50 p-4"
+              <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" loading="lazy" class="w-full h-full object-contain bg-gray-50 p-4"
                    onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-image').style.display='flex';" />
               <div class="fallback-image w-full h-full bg-gradient-to-br from-orange-400 to-red-500 items-center justify-center" style="display: none;">
                 <span class="text-white text-4xl font-bold">{{ supplier.name|slice:":2"|upper }}</span>
@@ -189,7 +189,7 @@
             <!-- Header -->
             <div class="flex items-center mb-4">
               {% if supplier.logo_url %}
-                <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" class="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }}" loading="lazy" class="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
                      onerror="this.style.display='none'; this.parentNode.querySelector('.logo-fallback').style.display='flex';" />
                 <div class="logo-fallback w-12 h-12 bg-yellow-600 rounded-lg flex items-center justify-center text-white font-bold text-lg flex-shrink-0" style="display: none;">
                   {{ supplier.name|slice:":2"|upper }}
@@ -302,7 +302,7 @@
               <div class="book-page left">
                 <div class="book-content">
                   {% if image.image_url %}
-                    <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" class="book-image" 
+                    <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" loading="lazy" class="book-image" 
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="w-full h-full bg-gradient-to-br from-orange-300 to-red-400 flex items-center justify-center" style="display: none;">
                       <span class="text-orange-900 text-center px-4 font-bold">{{ image.title|default:'No Image' }}</span>
@@ -330,7 +330,7 @@
               <div class="book-page right">
                 <div class="book-content">
                   {% if image.image_url %}
-                    <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" class="book-image"
+                    <img src="{{ image.image_url }}" alt="{{ image.title|default:'Showcase Image' }}" loading="lazy" class="book-image"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="w-full h-full bg-gradient-to-br from-orange-300 to-red-400 flex items-center justify-center" style="display: none;">
                       <span class="text-orange-900 text-center px-4 font-bold">{{ image.title|default:'No Image' }}</span>
@@ -473,12 +473,12 @@
           <div class="relative animate-fade-in-down rounded-2xl overflow-hidden p-6 bg-gradient-to-br from-orange-400 via-red-500 to-rose-600 shadow-xl" style="animation-delay: 100ms">
             <div class="grid grid-cols-2 gap-4 relative z-10">
               <div class="space-y-4">
-                <img src="{% static 'images/resized_image_600x300 01.png' %}" alt="Heavy machinery warehouse" class="rounded-xl shadow-xl w-full h-48 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
-                <img src="{% static 'images/resized_image3_600x300 02.png' %}" alt="Construction equipment" class="rounded-xl shadow-xl w-full h-32 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
+                <img src="{% static 'images/resized_image_600x300 01.png' %}" alt="Heavy machinery warehouse" loading="lazy" class="rounded-xl shadow-xl w-full h-48 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
+                <img src="{% static 'images/resized_image3_600x300 02.png' %}" alt="Construction equipment" loading="lazy" class="rounded-xl shadow-xl w-full h-32 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
               </div>
               <div class="space-y-4 pt-8">
-                <img src="{% static 'images/resized_image4_600x300 03.png' %}" alt="Industrial equipment yard" class="rounded-xl shadow-xl w-full h-32 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
-                <img src="{% static 'images/resized_image_1920x1080.png' %}" alt="Machinery operations" class="rounded-xl shadow-xl w-full h-48 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
+                <img src="{% static 'images/resized_image4_600x300 03.png' %}" alt="Industrial equipment yard" loading="lazy" class="rounded-xl shadow-xl w-full h-32 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
+                <img src="{% static 'images/resized_image_1920x1080.png' %}" alt="Machinery operations" loading="lazy" class="rounded-xl shadow-xl w-full h-48 object-cover hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer lazy-load border-4 border-white hover:border-orange-200">
               </div>
             </div>
           </div>
@@ -504,7 +504,7 @@
           </button>
           {% if announcement_image_url %}
               <a id="announce-link" href="{{ announcement.url|default:'#' }}" target="_blank" rel="noopener">
-                  <img src="{{ announcement_image_url }}" class="popup-image" alt="{{ announcement.title }}">
+                  <img src="{{ announcement_image_url }}" loading="lazy" class="popup-image" alt="{{ announcement.title }}">
               </a>
           {% endif %}
           <div class="popup-content">
