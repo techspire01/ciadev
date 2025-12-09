@@ -138,7 +138,7 @@ dmypy.json
 Thumbs.db
 
 # Media files (you may want to track some)
-media/
+#media/
 
 # Static files (collected)
 staticfiles/
