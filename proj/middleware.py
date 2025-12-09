@@ -8,8 +8,10 @@ Logs security-related events including:
 """
 
 import logging
+import os
 from django.utils.deprecation import MiddlewareMixin
 from django.http import HttpResponse
+from django.conf import settings
 
 logger = logging.getLogger('cai_security')
 
