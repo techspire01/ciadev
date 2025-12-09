@@ -68,17 +68,18 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first (after SecurityMiddleware)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',  # Must be last
+    'allauth.account.middleware.AccountMiddleware',  # Added for django-allauth
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'proj.middleware.SecurityLoggingMiddleware',
-    'proj.middleware.CacheControlMiddleware',
+    'proj.middleware.SecurityLoggingMiddleware',  # Security event logging
+    'proj.middleware.CacheControlMiddleware',  # Prevent browser caching of dynamic pages
 ]
 
 ROOT_URLCONF = 'proj.urls'
@@ -303,24 +304,16 @@ SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users after social log
 # HTTPS & Security Headers (for production)
 SECURE_SSL_REDIRECT = False  # Set to True in production
 SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
-SECURE_REFERRER_POLICY = "same-origin"
-SECURE_BROWSER_XSS_FILTER = False
-SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_REFERRER_POLICY = "strict-origin"
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # If behind reverse proxy (Nginx/Load Balancer), tell Django HTTPS is upstream
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# When Django is behind a TLS-terminating proxy (ngrok, Cloudflare Tunnel, Caddy, nginx, etc.)
-# enable honoring forwarded host headers so Django builds correct absolute URLs.
-USE_X_FORWARDED_HOST = True
-
-# Session Cookie Settings
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
-SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access
-SESSION_COOKIE_SAMESITE = 'Lax'  # Allow same-site form submissions
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Logging Configuration
 LOGGING = {
@@ -391,3 +384,4 @@ import os
 _logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(_logs_dir):
     os.makedirs(_logs_dir, exist_ok=True)
+
