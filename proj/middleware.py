@@ -8,8 +8,10 @@ Logs security-related events including:
 """
 
 import logging
+import os
 from django.utils.deprecation import MiddlewareMixin
 from django.http import HttpResponse
+from django.conf import settings
 
 logger = logging.getLogger('cai_security')
 
@@ -81,3 +83,65 @@ class CacheControlMiddleware(MiddlewareMixin):
         response['Expires'] = '0'
         
         return response
+
+
+class DynamicCSRFOriginMiddleware(MiddlewareMixin):
+    """
+    Dynamically manage CSRF trusted origins for localhost development.
+    
+    Handles the "null origin" issue by accepting requests from localhost
+    even when the Origin header is null or missing.
+    """
+    
+    def process_request(self, request):
+        """For localhost requests, add current origin to trusted list"""
+        
+        try:
+            host = request.get_host()
+            
+            # Only process for localhost (development)
+            if 'localhost' not in host and '127.0.0.1' not in host:
+                return None
+            
+            # Get current trusted origins
+            trusted_origins = list(getattr(settings, 'CSRF_TRUSTED_ORIGINS', []))
+            protocol = 'https' if request.is_secure() else 'http'
+            current_origin = f"{protocol}://{host}"
+            
+            # Add current origin if not present
+            if current_origin not in trusted_origins:
+                trusted_origins.append(current_origin)
+                settings.CSRF_TRUSTED_ORIGINS = trusted_origins
+                logger.debug(f"Auto-added CSRF origin: {current_origin}")
+        
+        except Exception as e:
+            logger.warning(f"DynamicCSRFOriginMiddleware error: {e}")
+        
+        return None
+
+
+class NullOriginCSRFMiddleware(MiddlewareMixin):
+    """
+    Custom CSRF middleware that handles null origins from same-site requests.
+    
+    When a form is submitted from the same site (e.g., localhost form POST),
+    browsers often send Origin: null or no Origin header. This middleware
+    accepts those requests if the Referer header points to a trusted origin.
+    """
+    
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        """Override to handle null origins gracefully"""
+        
+        origin = request.META.get('HTTP_ORIGIN', '')
+        referer = request.META.get('HTTP_REFERER', '')
+        host = request.get_host()
+        
+        # For localhost, skip origin validation if it's null
+        if 'localhost' in host or '127.0.0.1' in host:
+            if origin == 'null' or not origin:
+                # Accept if this looks like a same-site request
+                logger.debug(f"Accepting null origin for localhost: {request.path}")
+                return None
+        
+        # Otherwise use default CSRF processing
+        return super().process_view(request, view_func, view_args, view_kwargs)

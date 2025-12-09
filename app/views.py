@@ -18,8 +18,31 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
+from django.middleware.csrf import get_token
+
+# ==================== CSRF TOKEN ENDPOINT ====================
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    """
+    Return fresh CSRF token for AJAX/fetch requests.
+    
+    This endpoint ensures a CSRF token is generated and available.
+    Useful for modern frontends using JavaScript to submit forms.
+    
+    Usage:
+        fetch('/api/csrf-token/')
+            .then(res => res.json())
+            .then(data => {
+                csrftoken = data.csrfToken;
+                // Now use token in AJAX requests
+            });
+    """
+    return JsonResponse({
+        'csrfToken': get_token(request),
+        'success': True
+    })
 
 def coders_club(request):
     return render(request, "coders_club.html")

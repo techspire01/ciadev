@@ -15,6 +15,9 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('cia_networks/', views.cia_networks, name='cia_networks'),
     
+    # CSRF Token Endpoint (for AJAX/fetch requests)
+    path('api/csrf-token/', views.get_csrf_token, name='csrf_token'),
+    
     # Supplier detail page with dynamic URL under cia_networks
     path('cia_networks/<str:supplier_name>/', views.supplier_detail_page, name='supplier_detail_page'),
     
