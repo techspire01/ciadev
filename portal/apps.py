@@ -7,3 +7,7 @@ class PortalConfig(AppConfig):
 
     def ready(self):
         import portal.signals
+        try:
+            import utils.cleanup  # noqa: F401
+        except Exception:
+            pass

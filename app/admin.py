@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.utils import timezone
@@ -142,6 +143,12 @@ class AnnouncementAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content')
     ordering = ('-date',)
     date_hierarchy = 'date'
+    fieldsets = (
+        ('Content', {'fields': ('title', 'content', 'referral_url', 'is_critical', 'is_active')}),
+        ('Image 1', {'fields': ('image1', 'image1_url')}),
+        ('Image 2', {'fields': ('image2', 'image2_url')}),
+        ('Image 3', {'fields': ('image3', 'image3_url')}),
+    )
 
 @admin.register(PhotoGallery)
 class PhotoGalleryAdmin(admin.ModelAdmin):
@@ -151,7 +158,8 @@ class PhotoGalleryAdmin(admin.ModelAdmin):
     ordering = ('-uploaded_at',)
     readonly_fields = ('image_preview_large', 'uploaded_at')
     fieldsets = (
-        (None, {'fields': ('title', 'image_url', 'image_preview_large')}),
+        (None, {'fields': ('title',)}),
+        ('Image', {'fields': ('image', 'image_url', 'image_preview_large')}),
         ('Upload Information', {'fields': ('uploaded_at',)}),
     )
 
@@ -179,7 +187,8 @@ class LeadershipAdmin(admin.ModelAdmin):
     ordering = ('dis_pos', '-created_at')
     readonly_fields = ('photo_preview_large', 'created_at')
     fieldsets = (
-        (None, {'fields': ('name', 'position', 'dis_pos', 'bio', 'photo_url', 'photo_preview_large')}),
+        (None, {'fields': ('name', 'position', 'dis_pos', 'bio')}),
+        ('Photo', {'fields': ('photo', 'photo_url', 'photo_preview_large')}),
         ('Social Media Links', {'fields': ('facebook', 'instagram', 'linkedin', 'twitter', 'email')}),
         ('Timestamps', {'fields': ('created_at',)}),
     )
@@ -208,7 +217,8 @@ class NewspaperGalleryAdmin(admin.ModelAdmin):
     ordering = ('-uploaded_at',)
     readonly_fields = ('image_preview_large', 'uploaded_at')
     fieldsets = (
-        (None, {'fields': ('title', 'image_url', 'date', 'image_preview_large')}),
+        (None, {'fields': ('title', 'date')}),
+        ('Image', {'fields': ('image', 'image_url', 'image_preview_large')}),
         ('Upload Information', {'fields': ('uploaded_at',)}),
     )
 
@@ -236,7 +246,8 @@ class BookShowcaseAdmin(admin.ModelAdmin):
     ordering = ('order', '-created_at',)
     readonly_fields = ('image_preview_large', 'created_at')
     fieldsets = (
-        (None, {'fields': ('title', 'image_url', 'order', 'image_preview_large')}),
+        (None, {'fields': ('title', 'order')}),
+        ('Image', {'fields': ('image', 'image_url', 'image_preview_large')}),
         ('Upload Information', {'fields': ('created_at',)}),
     )
 
