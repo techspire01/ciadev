@@ -89,6 +89,11 @@ def submit_complaint(request):
         return JsonResponse({'error': 'Failed to submit complaint.'}, status=500)
 
 def index(request):
+    # Check if user just logged in and show welcome message only once
+    if request.session.pop('show_welcome_message', False):
+        if request.user.is_authenticated:
+            messages.success(request, f"Welcome back, {request.user.email}!")
+    
     # Fetch 3 random suppliers
     all_suppliers = list(Supplier.objects.all())
     if len(all_suppliers) > 3:
@@ -257,7 +262,8 @@ def login_view(request):
             user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f"Welcome back, {user.email}!")
+                # Set a session flag for the welcome message to show only on index page
+                request.session['show_welcome_message'] = True
                 return redirect('index')
             else:
                 messages.error(request, "Invalid email or password.")
@@ -385,14 +391,40 @@ def request_password_reset(request):
 
 def verify_otp(request):
     if request.method == "POST":
-        email = request.POST["email"]
-        otp = request.POST["otp"]
-        user = CustomUser.objects.get(email=email)
-        otp_obj = PasswordResetOTP.objects.filter(user=user, otp=otp).last()
-        if otp_obj and otp_obj.is_valid():
-            return render(request, "set_new_password.html", {"email": email})
-        else:
-            return render(request, "verify_otp.html", {"error": "Invalid or expired OTP", "email": email})
+        email = request.POST.get("email", "")
+        otp = request.POST.get("otp", "").strip()
+        
+        try:
+            user = CustomUser.objects.get(email=email)
+            # Get the most recent OTP for this user
+            otp_obj = PasswordResetOTP.objects.filter(user=user).order_by('-created_at').first()
+            
+            if not otp_obj:
+                return render(request, "verify_otp.html", {
+                    "error": "No OTP found. Please request a new one.",
+                    "email": email
+                })
+            
+            # Check if OTP is valid (not expired) AND matches entered OTP
+            if otp_obj.is_valid() and otp_obj.otp == otp:
+                # OTP is correct, proceed to password reset
+                otp_obj.delete()  # Delete OTP after successful verification
+                return render(request, "set_new_password.html", {"email": email})
+            elif not otp_obj.is_valid():
+                return render(request, "verify_otp.html", {
+                    "error": "OTP has expired. Please request a new one.",
+                    "email": email
+                })
+            else:
+                return render(request, "verify_otp.html", {
+                    "error": "Invalid OTP. Please check and try again.",
+                    "email": email
+                })
+        except CustomUser.DoesNotExist:
+            return render(request, "verify_otp.html", {
+                "error": "User not found.",
+                "email": email
+            })
     
     # GET request
     email = request.GET.get('email', request.session.get('reset_email', ''))

@@ -68,18 +68,17 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.middleware.cache.UpdateCacheMiddleware',  # Must be first (after SecurityMiddleware)
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',  # Must be last
-    'allauth.account.middleware.AccountMiddleware',  # Added for django-allauth
+    'django.middleware.cache.FetchFromCacheMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'proj.middleware.SecurityLoggingMiddleware',  # Security event logging
-    'proj.middleware.CacheControlMiddleware',  # Prevent browser caching of dynamic pages
+    'proj.middleware.SecurityLoggingMiddleware',
+    'proj.middleware.CacheControlMiddleware',
 ]
 
 ROOT_URLCONF = 'proj.urls'
@@ -304,7 +303,6 @@ SOCIALACCOUNT_LOGIN_ON_GET = True  # Automatically log in users after social log
 # HTTPS & Security Headers (for production)
 SECURE_SSL_REDIRECT = False  # Set to True in production
 SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
-CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
@@ -319,16 +317,10 @@ SECURE_CONTENT_TYPE_NOSNIFF = False
 # enable honoring forwarded host headers so Django builds correct absolute URLs.
 USE_X_FORWARDED_HOST = True
 
-# Add any external HTTPS origins you use for testing (ngrok, tunnels, etc.) here.
-# Example: when using ngrok add the full https URL (e.g. 'https://abcd-1234.ngrok.io').
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:8000',
-    "h"
-    'http://localhost:8000',
-    'https://127.0.0.1',
-    'https://localhost',
-    # 'https://your-ngrok-subdomain.ngrok.io',
-]
+# Session Cookie Settings
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_HTTPONLY = True  # Prevent JavaScript access
+SESSION_COOKIE_SAMESITE = 'Lax'  # Allow same-site form submissions
 
 # Logging Configuration
 LOGGING = {
