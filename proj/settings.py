@@ -308,7 +308,7 @@ CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 SECURE_HSTS_SECONDS = 0  # Set to 31536000 in production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Set to True in production
 SECURE_HSTS_PRELOAD = False  # Set to True in production
-SECURE_REFERRER_POLICY = "no-referrer"
+SECURE_REFERRER_POLICY = "same-origin"
 SECURE_BROWSER_XSS_FILTER = False
 SECURE_CONTENT_TYPE_NOSNIFF = False
 
@@ -322,6 +322,9 @@ USE_X_FORWARDED_HOST = True
 # Add any external HTTPS origins you use for testing (ngrok, tunnels, etc.) here.
 # Example: when using ngrok add the full https URL (e.g. 'https://abcd-1234.ngrok.io').
 CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    "h"
+    'http://localhost:8000',
     'https://127.0.0.1',
     'https://localhost',
     # 'https://your-ngrok-subdomain.ngrok.io',
