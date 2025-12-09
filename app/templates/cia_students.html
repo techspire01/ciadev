@@ -1,11 +1,11 @@
 {% load static %}
-{% load custom_filters %}
+{% load static custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CIA & Students - Training & Entrepreneurship Opportunities</title>
+    <title>CIAnext - Students</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
@@ -81,7 +81,7 @@
         </h2>
         <div class="bg-gradient-to-br from-blue-50 to-orange-50 rounded-2xl p-8 md:p-12 border-2 border-blue-200">
           <p class="text-lg text-gray-700 mb-6 leading-relaxed">
-            <strong>Coimbatore Industrial Association (CIA)</strong> is a premier network of 200+ leading industrial and manufacturing companies in Coimbatore. We are committed to bridging the gap between educational institutions and the industry by providing students with:
+            <strong>Chinnavedampatti Industrial Association (CIA)</strong> is a premier network of 200+ leading industrial and manufacturing companies in Coimbatore. We are committed to bridging the gap between educational institutions and the industry by providing students with:
           </p>
           <ul class="space-y-4 mb-8">
             <li class="flex items-start">
@@ -297,128 +297,39 @@
     </div>
   </section>
 
-  <!-- Sectors & Opportunities -->
-  <section class="py-16 md:py-24 bg-white">
+  <!-- Photo Gallery Section -->
+  <section id="photo-gallery" class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-black mb-4 text-center bg-gradient-to-r from-blue-900 to-orange-700 bg-clip-text text-transparent">
-        Industrial Sectors & Opportunities
-      </h2>
-      <div class="w-32 h-1 bg-gradient-to-r from-blue-500 to-orange-600 rounded-full mx-auto mb-12"></div>
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent mb-4">Photo Gallery</h2>
+        <p class="text-gray-700 max-w-2xl mx-auto font-medium">
+          Glimpses of our events, workshops, and student success stories
+        </p>
+      </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-        <div class="bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-plug text-3xl text-blue-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Electrical</h3>
-          <p class="text-sm text-gray-600 mt-2">Power solutions & equipment</p>
+      <!-- Photo Gallery Grid - 1:1 Aspect Ratio -->
+      <div class="photo-gallery-grid grid grid-cols-3 md:grid-rows-2 gap-6 md:gap-6 gap-2 w-full">
+        <div class="aspect-square flex items-center justify-center bg-gray-100 rounded-lg">
+          <span class="text-gray-400">Photos coming soon</span>
         </div>
-
-        <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-cube text-3xl text-orange-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Plastic</h3>
-          <p class="text-sm text-gray-600 mt-2">Manufacturing & molding</p>
+        <div class="aspect-square flex items-center justify-center bg-gray-100 rounded-lg">
+          <span class="text-gray-400">Photos coming soon</span>
         </div>
-
-        <div class="bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-shirt text-3xl text-purple-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Textile</h3>
-          <p class="text-sm text-gray-600 mt-2">Fabric & garment industry</p>
+        <div class="aspect-square flex items-center justify-center bg-gray-100 rounded-lg">
+          <span class="text-gray-400">Photos coming soon</span>
         </div>
-
-        <div class="bg-gradient-to-br from-red-100 to-red-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-industry text-3xl text-red-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Industrial</h3>
-          <p class="text-sm text-gray-600 mt-2">Heavy equipment</p>
+        <div class="aspect-square flex items-center justify-center bg-gray-100 rounded-lg">
+          <span class="text-gray-400">Photos coming soon</span>
         </div>
-
-        <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-robot text-3xl text-green-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Automation</h3>
-          <p class="text-sm text-gray-600 mt-2">Smart manufacturing</p>
+        <div class="aspect-square flex items-center justify-center bg-gray-100 rounded-lg">
+          <span class="text-gray-400">Photos coming soon</span>
         </div>
-
-        <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-hammer text-3xl text-yellow-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Engineering</h3>
-          <p class="text-sm text-gray-600 mt-2">Technical solutions</p>
-        </div>
-
-        <div class="bg-gradient-to-br from-pink-100 to-pink-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-utensils text-3xl text-pink-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Food Tech</h3>
-          <p class="text-sm text-gray-600 mt-2">Processing & packaging</p>
-        </div>
-
-        <div class="bg-gradient-to-br from-teal-100 to-teal-200 rounded-xl p-6 text-center hover:shadow-lg transition-all">
-          <i class="fas fa-box text-3xl text-teal-600 mb-3"></i>
-          <h3 class="font-bold text-gray-800">Packaging</h3>
-          <p class="text-sm text-gray-600 mt-2">Solutions & systems</p>
+        <div class="aspect-square flex items-center justify-center bg-gray-100 rounded-lg">
+          <span class="text-gray-400">Photos coming soon</span>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- Success Stories -->
-  <section class="py-16 md:py-24 bg-gradient-to-br from-blue-900 via-blue-800 to-orange-800 text-white relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-      <div class="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl"></div>
-    </div>
-    
-    <div class="container mx-auto px-4 relative z-10">
-      <h2 class="text-3xl md:text-4xl font-black mb-12 text-center">
-        Success Stories from Our Students
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        <!-- Story 1 -->
-        <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center text-white font-bold text-lg">A</div>
-            <div class="ml-4">
-              <p class="font-bold">Arun Kumar</p>
-              <p class="text-sm text-blue-200">B.Tech Mechanical</p>
-            </div>
-          </div>
-          <p class="text-blue-100 mb-4">
-            "My internship with a CIA partner company gave me real-world experience that transformed my career. Within 6 months of completing the program, I got placed as a Design Engineer."
-          </p>
-          <p class="text-yellow-300 font-semibold">⭐⭐⭐⭐⭐</p>
-        </div>
-
-        <!-- Story 2 -->
-        <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-400 to-red-400 flex items-center justify-center text-white font-bold text-lg">P</div>
-            <div class="ml-4">
-              <p class="font-bold">Priya Singh</p>
-              <p class="text-sm text-blue-200">B.Tech Electronics</p>
-            </div>
-          </div>
-          <p class="text-blue-100 mb-4">
-            "I not only learned technical skills but also developed entrepreneurial thinking. CIA's mentorship helped me launch my own automation solutions startup!"
-          </p>
-          <p class="text-yellow-300 font-semibold">⭐⭐⭐⭐⭐</p>
-        </div>
-
-        <!-- Story 3 -->
-        <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-          <div class="flex items-center mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-teal-400 flex items-center justify-center text-white font-bold text-lg">R</div>
-            <div class="ml-4">
-              <p class="font-bold">Rahul Patel</p>
-              <p class="text-sm text-blue-200">B.Com Finance</p>
-            </div>
-          </div>
-          <p class="text-blue-100 mb-4">
-            "CIA showed me that non-technical graduates can also thrive in manufacturing. I'm now managing operations for a leading electrical equipment company."
-          </p>
-          <p class="text-yellow-300 font-semibold">⭐⭐⭐⭐⭐</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Call to Action Section -->
-  
 
   <!-- Apply Now Section -->
   <section class="py-20 md:py-32 bg-white text-gray-900 relative overflow-hidden">
