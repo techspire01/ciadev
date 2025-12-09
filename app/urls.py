@@ -66,6 +66,7 @@ urlpatterns = [
 
     # Book showcase page
 
+    path('complaint/', views.complaint_page, name='complaint_page'),
     path('complaint/submit/', views.submit_complaint, name='submit_complaint'),
     path('book-showcase/', views.book_showcase, name='book_showcase'),
 ]

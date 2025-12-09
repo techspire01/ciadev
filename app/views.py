@@ -27,6 +27,9 @@ def coders_club(request):
 def coders_contact(request):
     return render(request, "coders_contact.html")
 
+def complaint_page(request):
+    return render(request, "complain.html")
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def submit_complaint(request):
