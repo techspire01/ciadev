@@ -32,6 +32,10 @@ urlpatterns = [
     # New search API endpoint
     path('api/search/', views.search_api, name='search_api'),
 
+    # Backwards-compatible search URL used by some frontend code
+    # e.g. axios.get("http://127.0.0.1:8000/cia_networks/search/?q=...")
+    path('cia_networks/search/', views.search_api, name='cia_networks_search_api'),
+
     # Search results page
     path('search/', views.search_results, name='search_results'),
 

@@ -786,6 +786,57 @@ def search_api(request):
             "category": "Announcement",
             "score": 0.8
         })
+
+    # Search in portal jobs and internships
+    try:
+        from portal.models import PortalJob, PortalInternship
+
+        job_results = PortalJob.objects.filter(
+            models.Q(title__icontains=query) |
+            models.Q(description__icontains=query) |
+            models.Q(company_name__icontains=query) |
+            models.Q(location__icontains=query) |
+            models.Q(requirements__icontains=query) |
+            models.Q(responsibilities__icontains=query)
+        )[:10]
+
+        for job in job_results:
+            results.append({
+                "type": "job",
+                "id": job.id,
+                "title": job.title,
+                "company": job.company_name,
+                "location": job.location,
+                "description": (job.description[:200] + "...") if len(job.description) > 200 else job.description,
+                "url": f"/job/{job.id}/apply/",
+                "category": "Job",
+                "score": 0.9
+            })
+
+        internship_results = PortalInternship.objects.filter(
+            models.Q(title__icontains=query) |
+            models.Q(description__icontains=query) |
+            models.Q(company_name__icontains=query) |
+            models.Q(location__icontains=query) |
+            models.Q(requirements__icontains=query) |
+            models.Q(responsibilities__icontains=query)
+        )[:10]
+
+        for intern in internship_results:
+            results.append({
+                "type": "internship",
+                "id": intern.id,
+                "title": intern.title,
+                "company": intern.company_name,
+                "location": intern.location,
+                "description": (intern.description[:200] + "...") if len(intern.description) > 200 else intern.description,
+                "url": f"/internship/{intern.id}/apply/",
+                "category": "Internship",
+                "score": 0.85
+            })
+    except Exception:
+        # Avoid breaking search if portal app or models aren't available
+        logger.exception("Failed to include portal job/internship in search")
     
     # Search in HTML content (headings and paragraphs)
     # This is a simplified approach - in production, you might want to use a proper search engine

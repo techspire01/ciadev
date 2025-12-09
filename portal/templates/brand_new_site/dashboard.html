@@ -1434,17 +1434,17 @@
 
       <section class="cards-grid" id="cardsGrid">
         {% for item in vacancies %}
-        <div class="opportunity-card">
+        <div class="opportunity-card" data-id="{{ item.id }}" data-type="{{ item.type }}">
           <div class="card-header">
-            <div class="card-logo" onclick="openDetailView('{{ item.id }}')">
+            <div class="card-logo" onclick="openDetailView('{{ item.id }}', '{{ item.type }}')">
               {{ item.company_name|first }}
             </div>
             <span class="category-badge {% if item.type == 'job' %}work{% endif %}">{{ item.type|title }}</span>
           </div>
           <div class="card-body">
-            <div class="card-company" onclick="openDetailView('{{ item.id }}')">{{ item.company_name }}</div>
-            <p class="card-description" onclick="openDetailView('{{ item.id }}')">{{ item.role }}</p>
-            <p class="card-description" onclick="openDetailView('{{ item.id }}')">{{ item.job_description }}</p>
+            <div class="card-company" onclick="openDetailView('{{ item.id }}', '{{ item.type }}')">{{ item.company_name }}</div>
+            <p class="card-description" onclick="openDetailView('{{ item.id }}', '{{ item.type }}')">{{ item.role }}</p>
+            <p class="card-description" onclick="openDetailView('{{ item.id }}', '{{ item.type }}')">{{ item.job_description }}</p>
             <div class="card-location">
               <svg viewBox="0 0 24 24" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg>
               {% if item.type == 'internship' %}{{ item.package }}{% else %}{{ item.location }}{% endif %}
@@ -1462,7 +1462,7 @@
             </div>
           </div>
           <div class="card-actions">
-            <button class="action-btn" onclick="openDetailView('{{ item.id }}')">Details</button>
+            <button class="action-btn" onclick="openDetailView('{{ item.id }}', '{{ item.type }}')">Details</button>
             <button class="action-btn primary" onclick="applyForPosition('{{ item.id }}', '{{ item.type }}')">Apply Now</button>
           </div>
         </div>
@@ -1521,9 +1521,19 @@
     }
 
     // Open detail view - Navigate to details page
-    function openDetailView(itemId) {
-        const type = document.querySelector(`.opportunity-card[data-id="${itemId}"]`).dataset.type;
-        window.location.href = `{% url 'details' %}?id=${itemId}&type=${type}`;
+    function openDetailView(itemId, type) {
+      try {
+        // Prefer explicit type param; if not provided, read from DOM
+        if (!type) {
+          const el = document.querySelector(`.opportunity-card[data-id="${itemId}"]`);
+          type = el ? el.dataset.type : '';
+        }
+        const base = '{% url "details" %}';
+        const params = new URLSearchParams({ id: itemId, type: type });
+        window.location.href = base + '?' + params.toString();
+      } catch (e) {
+        console.error('Failed to open detail view', e);
+      }
     }
 
     // Apply for position - Navigate to application form

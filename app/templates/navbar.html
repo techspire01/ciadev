@@ -434,12 +434,30 @@
           const data = await response.json();
 
           if (data.results && data.results.length > 0) {
-            desktopResults.innerHTML = data.results.map(result => `
-              <a href="/cia_networks/${encodeURIComponent(result.name)}/" class="block px-4 py-2 hover:bg-yellow-50 border-b border-gray-200 last:border-b-0">
-                <div class="font-medium text-gray-800">${result.name}</div>
-                <div class="text-xs text-gray-600">${result.category || ''} ${result.location ? '• ' + result.location : ''}</div>
-              </a>
-            `).join('');
+            desktopResults.innerHTML = data.results.map(result => {
+              const title = result.title || result.name || '';
+              const desc = result.description || '';
+              // If search result is a job or internship, link to the details page with id and type
+              let url = result.url || ('/search/?q=' + encodeURIComponent(title));
+              try {
+                if ((result.type === 'job' || result.type === 'internship') && result.id) {
+                  const detailsBase = "{% url 'details' %}";
+                  url = detailsBase + '?id=' + encodeURIComponent(result.id) + '&type=' + encodeURIComponent(result.type);
+                }
+              } catch (e) {
+                // If template tag fails for any reason, fall back to provided url
+                console.warn('Could not build details url, falling back', e);
+              }
+              const meta = (result.company ? result.company : result.category) || '';
+              const location = result.location ? (' • ' + result.location) : '';
+              const badge = result.type ? `<span class="text-xs font-semibold text-white px-2 py-0.5 rounded ml-2 ${result.type==='job' ? 'bg-green-600' : result.type==='internship' ? 'bg-blue-600' : 'bg-gray-600'}">${result.type}</span>` : '';
+              return `
+                <a href="${url}" class="block px-4 py-2 hover:bg-yellow-50 border-b border-gray-200 last:border-b-0">
+                  <div class="font-medium text-gray-800">${title} ${badge}</div>
+                  <div class="text-xs text-gray-600">${meta}${location}${desc ? ' — ' + desc.replace(/(<([^>]+)>)/ig, '').slice(0,140) : ''}</div>
+                </a>
+              `;
+            }).join('');
             desktopResults.classList.remove('hidden');
           } else {
             desktopResults.innerHTML = '<div class="px-4 py-2 text-gray-500 text-sm">No results found</div>';
@@ -480,12 +498,30 @@
           const data = await response.json();
 
           if (data.results && data.results.length > 0) {
-            mobileResults.innerHTML = data.results.map(result => `
-              <a href="/cia_networks/${encodeURIComponent(result.name)}/" class="block px-4 py-2 hover:bg-yellow-50 border-b border-gray-200 last:border-b-0">
-                <div class="font-medium text-gray-800">${result.name}</div>
-                <div class="text-xs text-gray-600">${result.category || ''} ${result.location ? '• ' + result.location : ''}</div>
-              </a>
-            `).join('');
+            mobileResults.innerHTML = data.results.map(result => {
+              const title = result.title || result.name || '';
+              const desc = result.description || '';
+              // If search result is a job or internship, link to the details page with id and type
+              let url = result.url || ('/search/?q=' + encodeURIComponent(title));
+              try {
+                if ((result.type === 'job' || result.type === 'internship') && result.id) {
+                  const detailsBase = "{% url 'details' %}";
+                  url = detailsBase + '?id=' + encodeURIComponent(result.id) + '&type=' + encodeURIComponent(result.type);
+                }
+              } catch (e) {
+                // If template tag fails for any reason, fall back to provided url
+                console.warn('Could not build details url, falling back', e);
+              }
+              const meta = (result.company ? result.company : result.category) || '';
+              const location = result.location ? (' • ' + result.location) : '';
+              const badge = result.type ? `<span class="text-xs font-semibold text-white px-2 py-0.5 rounded ml-2 ${result.type==='job' ? 'bg-green-600' : result.type==='internship' ? 'bg-blue-600' : 'bg-gray-600'}">${result.type}</span>` : '';
+              return `
+                <a href="${url}" class="block px-4 py-2 hover:bg-yellow-50 border-b border-gray-200 last:border-b-0">
+                  <div class="font-medium text-gray-800">${title} ${badge}</div>
+                  <div class="text-xs text-gray-600">${meta}${location}${desc ? ' — ' + desc.replace(/(<([^>]+)>)/ig, '').slice(0,140) : ''}</div>
+                </a>
+              `;
+            }).join('');
             mobileResults.classList.remove('hidden');
           } else {
             mobileResults.innerHTML = '<div class="px-4 py-2 text-gray-500 text-sm">No results found</div>';
