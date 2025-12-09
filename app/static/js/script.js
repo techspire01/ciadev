@@ -9,7 +9,7 @@ const containerSets = [
     `
       <!-- Container 1 - Large hero (spans 3x2) -->
       <div class="col-span-3 row-span-2 rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
-        <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Excellence" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-1-1.png" alt="Industrial Excellence" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
         <div class="absolute bottom-8 left-8 text-white">
           <h3 class="text-2xl font-bold mb-2">Industrial Excellence</h3>
@@ -18,7 +18,7 @@ const containerSets = [
       </div>
       <!-- Container 2 - Medium (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg" alt="Electrical Power Equipment" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-1-2.png" alt="Electrical Power Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Electrical</h4>
@@ -27,7 +27,7 @@ const containerSets = [
       </div>
       <!-- Container 3 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-1-3.png" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Plastic</h4>
@@ -36,7 +36,7 @@ const containerSets = [
       </div>
       <!-- Container 4 - Medium tall (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg" alt="Textile Manufacturing" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-1-4.png" alt="Textile Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Textile</h4>
@@ -45,7 +45,7 @@ const containerSets = [
       </div>
       <!-- Container 5 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg" alt="Automation Equipment" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-1-5.png" alt="Automation Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Automation</h4>
@@ -57,7 +57,7 @@ const containerSets = [
     `
       <!-- Container 1 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/33559313/pexels-photo-33559313.jpeg" alt="Engineering Equipment" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-2-1.png" alt="Engineering Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Engineering</h4>
@@ -66,7 +66,7 @@ const containerSets = [
       </div>
       <!-- Container 2 - Large metal working hero (spans 3x2) -->
       <div class="col-span-3 row-span-2 rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
-        <img src="https://images.pexels.com/photos/1145434/pexels-photo-1145434.jpeg" alt="Metal Working Operations" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-2-2.png" alt="Metal Working Operations" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
         <div class="absolute bottom-8 left-8 text-white">
           <h3 class="text-2xl font-bold mb-2">Metal Working & Production</h3>
@@ -75,7 +75,7 @@ const containerSets = [
       </div>
       <!-- Container 3 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/9550574/pexels-photo-9550574.jpeg" alt="Kitchen Equipment" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-2-3.png" alt="Kitchen Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Kitchen</h4>
@@ -84,7 +84,7 @@ const containerSets = [
       </div>
       <!-- Container 4 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/3862627/pexels-photo-3862627.jpeg" alt="Production Systems" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-2-4.png" alt="Production Systems" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Production</h4>
@@ -93,7 +93,7 @@ const containerSets = [
       </div>
       <!-- Container 5 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg" alt="Packaging Equipment" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-2-5.png" alt="Packaging Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Packing</h4>
@@ -105,7 +105,7 @@ const containerSets = [
     `
       <!-- Container 1 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-3-1.png" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Plastic</h4>
@@ -114,7 +114,7 @@ const containerSets = [
       </div>
       <!-- Container 2 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg" alt="Textile Manufacturing" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-3-2.png" alt="Textile Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Textile</h4>
@@ -123,7 +123,7 @@ const containerSets = [
       </div>
       <!-- Container 3 - Large hero (spans 3x2) -->
       <div class="col-span-3 row-span-2 rounded-xl overflow-hidden shadow-lg bg-black relative hero-container cursor-pointer">
-        <img src="https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg" alt="Smart Manufacturing" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-3-3.png" alt="Smart Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
         <div class="absolute bottom-8 left-8 text-white">
           <h3 class="text-2xl font-bold mb-2">Smart Manufacturing</h3>
@@ -132,7 +132,7 @@ const containerSets = [
       </div>
       <!-- Container 4 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg" alt="Electrical Systems" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-3-4.png" alt="Electrical Systems" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Electrical</h4>
@@ -141,7 +141,7 @@ const containerSets = [
       </div>
       <!-- Container 5 - Small (spans 2x1) -->
       <div class="col-span-2 row-span-1 rounded-xl overflow-hidden shadow-lg bg-black relative cursor-pointer">
-        <img src="https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg" alt="Industrial Equipment" class="w-full h-full object-cover" />
+        <img src="/static/images/index-image/image-3-5.png" alt="Industrial Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
           <h4 class="text-lg font-bold">Industrial</h4>
