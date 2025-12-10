@@ -380,26 +380,93 @@ from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
 import os
 
-@receiver(pre_save, sender=Supplier)
-def delete_old_logo_on_change(sender, instance, **kwargs):
-    """Delete old logo file when a new one is uploaded"""
+@receiver(pre_save, sender=Announcement)
+def delete_old_announcement_images_on_change(sender, instance, **kwargs):
+    """Delete old announcement image files when they are changed or cleared"""
     if not instance.pk:
-        return  # New object, no old file to delete
+        return  # New object, no old files to delete
+    
+    try:
+        old_instance = Announcement.objects.get(pk=instance.pk)
+    except Announcement.DoesNotExist:
+        return
+    
+    # List of all image fields for Announcement
+    image_fields = ['image1', 'image2', 'image3']
+    
+    # Check each image field for changes
+    for field_name in image_fields:
+        old_file = getattr(old_instance, field_name, None)
+        new_file = getattr(instance, field_name, None)
+        
+        # If the file was changed (cleared or replaced)
+        if old_file and old_file != new_file:
+            try:
+                if os.path.isfile(old_file.path):
+                    os.remove(old_file.path)
+            except Exception as e:
+                # Log but don't fail the save operation
+                print(f"Error deleting {field_name}: {str(e)}")
+
+@receiver(pre_delete, sender=Announcement)
+def delete_all_announcement_images_on_delete(sender, instance, **kwargs):
+    """Delete all announcement image files when the Announcement object is deleted"""
+    
+    # List of all image fields to delete
+    image_fields = ['image1', 'image2', 'image3']
+    
+    for field_name in image_fields:
+        file_field = getattr(instance, field_name, None)
+        if file_field:
+            try:
+                if os.path.isfile(file_field.path):
+                    os.remove(file_field.path)
+            except Exception as e:
+                # Log but don't fail the delete operation
+                print(f"Error deleting {field_name} on delete: {str(e)}")
+
+@receiver(pre_save, sender=Supplier)
+def delete_old_supplier_files_on_change(sender, instance, **kwargs):
+    """Delete old supplier image files when they are changed or cleared"""
+    if not instance.pk:
+        return  # New object, no old files to delete
     
     try:
         old_instance = Supplier.objects.get(pk=instance.pk)
     except Supplier.DoesNotExist:
         return
     
-    # Check if logo file was changed
-    if old_instance.logo and old_instance.logo != instance.logo:
-        # Delete the old file
-        if os.path.isfile(old_instance.logo.path):
-            os.remove(old_instance.logo.path)
+    # List of all image fields that should be managed for Supplier
+    image_fields = ['logo']
+    
+    # Check each image field for changes
+    for field_name in image_fields:
+        old_file = getattr(old_instance, field_name, None)
+        new_file = getattr(instance, field_name, None)
+        
+        # If the file was changed (cleared or replaced)
+        if old_file and old_file != new_file:
+            try:
+                if os.path.isfile(old_file.path):
+                    os.remove(old_file.path)
+            except Exception as e:
+                # Log but don't fail the save operation
+                print(f"Error deleting {field_name}: {str(e)}")
 
 @receiver(pre_delete, sender=Supplier)
-def delete_logo_on_delete(sender, instance, **kwargs):
-    """Delete logo file when the Supplier object is deleted"""
-    if instance.logo and os.path.isfile(instance.logo.path):
-        os.remove(instance.logo.path)
+def delete_all_supplier_files_on_delete(sender, instance, **kwargs):
+    """Delete all supplier image files when the Supplier object is deleted"""
+    
+    # List of all image fields to delete
+    image_fields = ['logo']
+    
+    for field_name in image_fields:
+        file_field = getattr(instance, field_name, None)
+        if file_field:
+            try:
+                if os.path.isfile(file_field.path):
+                    os.remove(file_field.path)
+            except Exception as e:
+                # Log but don't fail the delete operation
+                print(f"Error deleting {field_name} on delete: {str(e)}")
 
