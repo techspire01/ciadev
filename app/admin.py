@@ -98,8 +98,6 @@ class SupplierAdmin(admin.ModelAdmin):
     readonly_fields = (
         'created_at',
         'logo_preview_large',
-        'image_preview_large',
-        'person_image_preview_large'
     )
     
     fieldsets = (
@@ -110,13 +108,22 @@ class SupplierAdmin(admin.ModelAdmin):
             'fields': ('category', 'sub_category1', 'sub_category2', 'sub_category3', 'sub_category4', 'sub_category5', 'sub_category6')
         }),
         ('Logo & Images', {
-            'fields': ('logo', 'logo_url', 'logo_preview_large', 'image_url', 'image_preview_large', 
-                      'person_image_url', 'person_image_preview_large')
+            'fields': ('logo', 'logo_url', 'logo_preview_large', 'image_url', 'image_upload')
         }),
         ('Products/Services', {
-            'fields': ('product1', 'product2', 'product3', 'product4', 'product5', 'product6', 'product7', 'product8', 'product9', 'product10',
-                      'product_image1_url', 'product_image2_url', 'product_image3_url', 'product_image4_url', 'product_image5_url',
-                      'product_image6_url', 'product_image7_url', 'product_image8_url', 'product_image9_url', 'product_image10_url')
+            'fields': (
+                'product1', 'product2', 'product3', 'product4', 'product5', 'product6', 'product7', 'product8', 'product9', 'product10',
+                'product_image1_url', 'product_image_upload_1',
+                'product_image2_url', 'product_image_upload_2',
+                'product_image3_url', 'product_image_upload_3',
+                'product_image4_url', 'product_image_upload_4',
+                'product_image5_url', 'product_image_upload_5',
+                'product_image6_url', 'product_image_upload_6',
+                'product_image7_url', 'product_image_upload_7',
+                'product_image8_url', 'product_image_upload_8',
+                'product_image9_url', 'product_image_upload_9',
+                'product_image10_url', 'product_image_upload_10',
+            )
         }),
         ('Address', {
             'fields': ('door_number', 'street', 'area', 'city', 'state', 'pin_code')
@@ -140,18 +147,6 @@ class SupplierAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" style="max-width: 400px; max-height: 300px; object-fit: cover; border-radius: 8px;" />', obj.logo_url)
         return "No logo image"
     logo_preview_large.short_description = "Logo Preview"
-
-    def image_preview_large(self, obj):
-        if obj.image_url:
-            return format_html('<img src="{}" style="max-width: 400px; max-height: 300px; object-fit: cover; border-radius: 8px;" />', obj.image_url)
-        return "No company image"
-    image_preview_large.short_description = "Company Image Preview"
-
-    def person_image_preview_large(self, obj):
-        if obj.person_image_url:
-            return format_html('<img src="{}" style="max-width: 400px; max-height: 300px; object-fit: cover; border-radius: 8px;" />', obj.person_image_url)
-        return "No contact person image"
-    person_image_preview_large.short_description = "Contact Person Image Preview"
 
     def business_description_display(self, obj):
         """Display first 50 characters of business description"""

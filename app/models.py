@@ -373,3 +373,33 @@ class EmailConfiguration(models.Model):
 
     def __str__(self):
         return "Email Configuration"
+
+
+# Signal handlers for automatic image deletion
+from django.db.models.signals import pre_delete, pre_save
+from django.dispatch import receiver
+import os
+
+@receiver(pre_save, sender=Supplier)
+def delete_old_logo_on_change(sender, instance, **kwargs):
+    """Delete old logo file when a new one is uploaded"""
+    if not instance.pk:
+        return  # New object, no old file to delete
+    
+    try:
+        old_instance = Supplier.objects.get(pk=instance.pk)
+    except Supplier.DoesNotExist:
+        return
+    
+    # Check if logo file was changed
+    if old_instance.logo and old_instance.logo != instance.logo:
+        # Delete the old file
+        if os.path.isfile(old_instance.logo.path):
+            os.remove(old_instance.logo.path)
+
+@receiver(pre_delete, sender=Supplier)
+def delete_logo_on_delete(sender, instance, **kwargs):
+    """Delete logo file when the Supplier object is deleted"""
+    if instance.logo and os.path.isfile(instance.logo.path):
+        os.remove(instance.logo.path)
+

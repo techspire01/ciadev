@@ -291,16 +291,11 @@
           {% endif %}
         </div>
 
-        <!-- Pagination Info -->
-        <div class="mt-8 text-center text-gray-600 font-semibold animate-fade-in relative z-10">
-          Page <span class="text-orange-600">{{ page_obj.number }}</span> of <span class="text-orange-600">{{ page_obj.paginator.num_pages }}</span> 
-          | Showing <span class="text-orange-600">{{ suppliers|length }}</span> of <span class="text-orange-600">{{ count }}</span> companies
+        <!-- Show only total number of pages (user requested counts removed) -->
+        <div class="mt-4 text-center text-gray-600 font-semibold animate-fade-in relative z-10">
+          Pages: <span class="text-orange-600">{{ page_obj.paginator.num_pages }}</span>
         </div>
-        {% else %}
-        <!-- Total Count (no pagination) -->
-        <div class="mt-8 text-center text-gray-600 font-semibold animate-fade-in relative z-10">
-          Showing <span class="text-orange-600">{{ count }}</span> companies
-        </div>
+
         {% endif %}
 
       {% else %}

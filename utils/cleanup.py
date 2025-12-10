@@ -2,6 +2,7 @@ import shutil
 import os
 import logging
 from django.db.models.signals import post_delete
+from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.conf import settings
 
@@ -83,6 +84,55 @@ try:
     def delete_supplier_bucket(sender, instance, **kwargs):
         path = f"companies/{instance.id}/"
         delete_path(path)
+
+    @receiver(pre_delete, sender=Supplier)
+    def cleanup_supplier_related_files(sender, instance, **kwargs):
+        """
+        Before a Supplier is deleted, explicitly remove files related to its
+        PortalJob, PortalInternship and their application attachments. This
+        avoids cases where bulk deletes bypass model.delete() and leave
+        orphaned files in storage.
+        """
+        try:
+            from django.core.files.storage import default_storage
+            # Jobs and internships
+            jobs = getattr(instance, 'jobs', None)
+            if jobs is not None:
+                for job in jobs.all():
+                    # remove job image
+                    try:
+                        if getattr(job, 'image', None) and job.image.name:
+                            default_storage.delete(job.image.name)
+                    except Exception:
+                        logger.exception('Failed deleting job image file')
+                    # remove applications' files
+                    for app in getattr(job, 'applications', []).all() if getattr(job, 'applications', None) else []:
+                        try:
+                            if getattr(app, 'resume', None) and app.resume.name:
+                                default_storage.delete(app.resume.name)
+                            if getattr(app, 'additional_attachment', None) and app.additional_attachment.name:
+                                default_storage.delete(app.additional_attachment.name)
+                        except Exception:
+                            logger.exception('Failed deleting job application files')
+
+            internships = getattr(instance, 'internships', None)
+            if internships is not None:
+                for internship in internships.all():
+                    try:
+                        if getattr(internship, 'image', None) and internship.image.name:
+                            default_storage.delete(internship.image.name)
+                    except Exception:
+                        logger.exception('Failed deleting internship image file')
+                    for app in getattr(internship, 'applications', []).all() if getattr(internship, 'applications', None) else []:
+                        try:
+                            if getattr(app, 'resume', None) and app.resume.name:
+                                default_storage.delete(app.resume.name)
+                            if getattr(app, 'additional_attachment', None) and app.additional_attachment.name:
+                                default_storage.delete(app.additional_attachment.name)
+                        except Exception:
+                            logger.exception('Failed deleting internship application files')
+        except Exception:
+            logger.exception('cleanup_supplier_related_files: unexpected error')
 
 except Exception:
     # If imports fail (during migrations or missing apps), don't break import

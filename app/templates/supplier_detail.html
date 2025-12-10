@@ -660,16 +660,16 @@
                 <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     <!-- Visual Assets (Left Column) -->
                     <aside class="flex flex-col items-center gap-4 lg:col-span-1">
-                        {% if supplier.logo_url %}
+                        {% if supplier.logo_url or supplier.logo %}
                         <div class="w-full flex items-center justify-center">
-                            <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }} logo" loading="lazy" class="featured-image h-64 w-64 rounded-2xl object-contain">
+                            <img src="{% if supplier.logo_url %}{{ supplier.logo_url }}{% elif supplier.logo %}{{ supplier.logo.url }}{% endif %}" alt="{{ supplier.name }} logo" loading="lazy" class="featured-image h-64 w-64 rounded-2xl object-contain" onerror="this.style.display='none'">
                         </div>
                         {% endif %}
                         {% if supplier.image_url %}
-                        <img src="{{ supplier.image_url }}" alt="{{ supplier.name }} facility" loading="lazy" class="featured-image h-80 w-full rounded-2xl object-cover">
+                        <img src="{{ supplier.image_url }}" alt="{{ supplier.name }} facility" loading="lazy" class="featured-image h-80 w-full rounded-2xl object-cover" onerror="this.style.display='none'">
                         {% endif %}
                         {% if supplier.person_image_url %}
-                        <img src="{{ supplier.person_image_url }}" alt="{{ supplier.contact_person_name }}" loading="lazy" class="featured-image h-40 w-40 rounded-full object-cover">
+                        <img src="{{ supplier.person_image_url }}" alt="{{ supplier.contact_person_name }}" loading="lazy" class="featured-image h-40 w-40 rounded-full object-cover" onerror="this.style.display='none'">
                         {% endif %}
                     </aside>
 
