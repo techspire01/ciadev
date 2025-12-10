@@ -47,7 +47,6 @@ def submit_complaint(request):
             contact_number=contact_number
         )
 
-
         # Prepare email
         subject = f"New Complaint Submitted - #{complaint.id}"
         message = (
@@ -62,32 +61,72 @@ def submit_complaint(request):
         from .utils import get_email_settings
         email_settings = get_email_settings()
         config_email = email_settings.get('host_user') or email_settings.get('default_from_email')
+        
+        # Log email configuration for debugging
+        logger.info(f"Email settings retrieved - config_email: {config_email}")
 
         # Recipients: admin(s) and config email
         recipients = set()
         if config_email:
             recipients.add(config_email)
+        
+        # Add admins from settings
         admins = getattr(settings, 'ADMINS', None)
         if admins:
             for a in admins:
                 try:
                     recipients.add(a[1])
-                except Exception:
+                except Exception as e:
+                    logger.warning(f"Error processing admin email: {e}")
                     continue
 
         # Also add any previous admin_email logic for backward compatibility
         admin_email = getattr(settings, 'EMAIL_HOST_USER', None)
         if admin_email:
             recipients.add(admin_email)
+        
+        logger.info(f"Complaint email recipients: {recipients}")
 
+        # Send email if we have recipients
         if recipients:
             try:
-                send_mail(subject, message, config_email or admin_email or list(recipients)[0], list(recipients), fail_silently=False)
+                from_email = config_email or admin_email or settings.DEFAULT_FROM_EMAIL
+                recipients_list = list(recipients)
+                
+                logger.info(f"Attempting to send complaint email from {from_email} to {recipients_list}")
+                
+                email_sent = send_mail(
+                    subject, 
+                    message, 
+                    from_email, 
+                    recipients_list, 
+                    fail_silently=False
+                )
+                
+                logger.info(f"Complaint email sent successfully. Result: {email_sent}")
+                
             except Exception as e:
-                logger.exception("Failed sending complaint email: %s", e)
+                logger.exception(f"Failed sending complaint email: {str(e)}")
+                # Still return success since complaint was created, but log the error
+                return JsonResponse({
+                    'message': 'Complaint submitted successfully. (Note: Email notification may have failed)',
+                    'complaint_id': complaint.id
+                }, status=201)
+        else:
+            logger.warning("No email recipients configured for complaint notification")
+            return JsonResponse({
+                'message': 'Complaint submitted successfully. (No email notification configured)',
+                'complaint_id': complaint.id
+            }, status=201)
 
-        return JsonResponse({'message': 'Complaint submitted successfully.'}, status=201)
+        return JsonResponse({
+            'message': 'Complaint submitted successfully and notification email sent.',
+            'complaint_id': complaint.id
+        }, status=201)
+        
     except Exception as e:
+        logger.exception(f"Failed to submit complaint: {str(e)}")
+        return JsonResponse({'error': f'Failed to submit complaint: {str(e)}'}, status=500)
         logger.exception("Failed to submit complaint: %s", e)
         return JsonResponse({'error': 'Failed to submit complaint.'}, status=500)
 
@@ -699,6 +738,27 @@ def supplier_detail_page(request, supplier_name):
         
         # Refresh full supplier object for template
         supplier = Supplier.objects.get(pk=supplier.id)
+
+        # Collect sub_categories from supplier
+        sub_categories = []
+        for i in range(1, 7):
+            cat = getattr(supplier, f'sub_category{i}', None)
+            if cat:
+                sub_categories.append(cat)
+
+        # Collect product images from supplier
+        product_images = []
+        for i in range(1, 11):
+            img_url = getattr(supplier, f'product_image{i}_url', None)
+            if img_url:
+                product_images.append(img_url)
+
+        # Collect products from supplier
+        products = []
+        for i in range(1, 11):
+            product = getattr(supplier, f'product{i}', None)
+            if product:
+                products.append(product)
 
         context = {
             'supplier': supplier,

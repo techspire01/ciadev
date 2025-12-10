@@ -295,10 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
     setupImageLoading();
     setupCarouselImageRedirect();
 
-    // Auto-rotate carousel every 3 seconds
+    // Auto-rotate carousel every 6 seconds
     setInterval(() => {
         nextSlide();
-    }, 3000);
+    }, 6000);
 
     // Language Toggle Event Listeners
     const languageToggle = document.getElementById('languageToggle');

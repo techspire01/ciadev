@@ -274,6 +274,7 @@ SOCIALACCOUNT_QUERY_EMAIL = True
 # Email Configuration
 EMAIL_BACKEND = "app.utils.DynamicEmailBackend"
 # EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = 'noreply@cianext.com'  # Default sender email address
 
 # Create a custom SSL context for Gmail SMTP
 _custom_ssl_context = ssl.create_default_context()
