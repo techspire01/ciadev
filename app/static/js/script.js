@@ -231,19 +231,21 @@ function toggleLanguage() {
 
 // Preload carousel images for faster transitions
 function preloadImages() {
-    const imageUrls = [
-        'https://images.pexels.com/photos/532079/pexels-photo-532079.jpeg',
-        'https://images.pexels.com/photos/236089/pexels-photo-236089.jpeg',
-        'https://images.pexels.com/photos/31115985/pexels-photo-31115985.jpeg',
-        'https://images.pexels.com/photos/31199566/pexels-photo-31199566.jpeg',
-        'https://images.pexels.com/photos/8982670/pexels-photo-8982670.jpeg',
-        'https://images.pexels.com/photos/33559313/pexels-photo-33559313.jpeg',
-        'https://images.pexels.com/photos/1145434/pexels-photo-1145434.jpeg',
-        'https://images.pexels.com/photos/9550574/pexels-photo-9550574.jpeg',
-        'https://images.pexels.com/photos/3862627/pexels-photo-3862627.jpeg',
-        'https://images.pexels.com/photos/1267338/pexels-photo-1267338.jpeg'
-    ];
+    const imageUrls = new Set();
 
+    // Extract all unique image URLs from containerSets
+    containerSets.forEach(slide => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = slide;
+        const images = tempDiv.querySelectorAll('img');
+        images.forEach(img => {
+            if (img.src) {
+                imageUrls.add(img.src);
+            }
+        });
+    });
+
+    // Preload each unique image
     imageUrls.forEach(url => {
         const img = new Image();
         img.src = url;
@@ -736,6 +738,7 @@ const carouselCSS = `
     .carousel-dot {
         transition: all 0.3s ease;
         cursor: pointer;
+        transform: rotate(45deg);
     }
 
     .carousel-dot:hover {
