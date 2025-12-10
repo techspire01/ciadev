@@ -105,10 +105,24 @@ def brand_new_site_dashboard(request):
 
         # Include posted_date in the dict for sorting, then remove/keep as needed
         for internship in internships:
+            supplier = internship.supplier
+            company_name = supplier.name if supplier else internship.company_name
+            # Get logo from supplier or use fallback (first letter of company name)
+            logo_url = None
+            if supplier:
+                # Try to get logo from supplier.logo_url (URL field) first
+                if supplier.logo_url:
+                    logo_url = supplier.logo_url
+                # Otherwise try supplier.logo (ImageField)
+                elif supplier.logo:
+                    logo_url = supplier.logo.url
+            
             vacancies.append({
                 'id': internship.id,
                 'role': internship.title,
-                'company_name': internship.supplier.name if internship.supplier else internship.company_name,
+                'company_name': company_name,
+                'company_name_first_letter': company_name[0].upper() if company_name else '?',
+                'logo_url': logo_url,
                 'package': internship.salary,
                 'job_description': internship.description,
                 'type': 'internship',
@@ -119,10 +133,24 @@ def brand_new_site_dashboard(request):
             })
 
         for job in jobs:
+            supplier = job.supplier
+            company_name = supplier.name if supplier else job.company_name
+            # Get logo from supplier or use fallback (first letter of company name)
+            logo_url = None
+            if supplier:
+                # Try to get logo from supplier.logo_url (URL field) first
+                if supplier.logo_url:
+                    logo_url = supplier.logo_url
+                # Otherwise try supplier.logo (ImageField)
+                elif supplier.logo:
+                    logo_url = supplier.logo.url
+            
             vacancies.append({
                 'id': job.id,
                 'role': job.title,
-                'company_name': job.supplier.name if job.supplier else job.company_name,
+                'company_name': company_name,
+                'company_name_first_letter': company_name[0].upper() if company_name else '?',
+                'logo_url': logo_url,
                 'package': job.salary,
                 'job_description': job.description,
                 'type': 'job',
