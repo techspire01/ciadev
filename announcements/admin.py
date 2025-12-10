@@ -6,8 +6,12 @@ from .models import Announcement
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ("title", "is_active", "created_at", "admin_image_preview")
     list_filter = ("is_active",)
-    readonly_fields = ("admin_image_preview",)
-    fields = ("title", "caption", "image", "admin_image_preview", "is_active")
+    readonly_fields = ("admin_image_preview", "created_at")
+    fieldsets = (
+        ('Content', {'fields': ('title', 'description', 'is_active')}),
+        ('Image', {'fields': ('image', 'admin_image_preview')}),
+        ('Timestamps', {'fields': ('created_at',), 'classes': ('collapse',)}),
+    )
 
     actions = ["delete_announcements_and_files"]
 
@@ -30,4 +34,3 @@ class AnnouncementAdmin(admin.ModelAdmin):
             count += 1
         self.message_user(request, f"Deleted {count} flash announcements and their images (if any).")
     delete_announcements_and_files.short_description = "Delete selected flash announcements and their image files"
-

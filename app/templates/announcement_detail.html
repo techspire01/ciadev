@@ -50,13 +50,13 @@
                     {% if announcement.image1 or announcement.image2 or announcement.image3 %}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                         {% if announcement.image1 %}
-                        <img src="{{ announcement.image1.url }}" alt="Announcement Image 1" class="w-full h-48 object-cover rounded-lg">
+                        <img src="{{ announcement.image1.url }}" alt="Announcement Image 1" loading="lazy" class="w-full h-48 object-cover rounded-lg">
                         {% endif %}
                         {% if announcement.image2 %}
-                        <img src="{{ announcement.image2.url }}" alt="Announcement Image 2" class="w-full h-48 object-cover rounded-lg">
+                        <img src="{{ announcement.image2.url }}" alt="Announcement Image 2" loading="lazy" class="w-full h-48 object-cover rounded-lg">
                         {% endif %}
                         {% if announcement.image3 %}
-                        <img src="{{ announcement.image3.url }}" alt="Announcement Image 3" class="w-full h-48 object-cover rounded-lg">
+                        <img src="{{ announcement.image3.url }}" alt="Announcement Image 3" loading="lazy" class="w-full h-48 object-cover rounded-lg">
                         {% endif %}
                     </div>
                     {% endif %}

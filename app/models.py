@@ -4,6 +4,7 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 from django.utils.translation import gettext_lazy as _
+from utils.paths import supplier_logo_upload, photo_gallery_upload, book_upload, newspaper_upload, flash_upload
 
 # Create your models here.
 class Announcement(models.Model):
@@ -13,9 +14,12 @@ class Announcement(models.Model):
     is_critical = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     referral_url = models.TextField(blank=True, null=True)
-    image1 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
-    image2 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
-    image3 = models.ImageField(upload_to="announcements/images/", blank=True, null=True)
+    image1 = models.ImageField(upload_to=flash_upload, blank=True, null=True)
+    image1_url = models.URLField(blank=True, null=True)
+    image2 = models.ImageField(upload_to=flash_upload, blank=True, null=True)
+    image2_url = models.URLField(blank=True, null=True)
+    image3 = models.ImageField(upload_to=flash_upload, blank=True, null=True)
+    image3_url = models.URLField(blank=True, null=True)
 
     class Meta:
         ordering = ['-date']
@@ -29,6 +33,7 @@ class Supplier(models.Model):
 
     website_url = models.TextField(blank=True, null=True)
     logo_url = models.TextField(blank=True, null=True)
+    logo = models.ImageField(upload_to=supplier_logo_upload, blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
     category = models.CharField(max_length=255, blank=True, null=True)
     sub_category1 = models.CharField(max_length=255, blank=True, null=True)
@@ -148,7 +153,7 @@ class PasswordResetOTP(models.Model):
 class PhotoGallery(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to="photogallery/images/", blank=True, null=True)
+    image = models.ImageField(upload_to=photo_gallery_upload, blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
@@ -181,7 +186,7 @@ class Leadership(models.Model):
 class NewspaperGallery(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to="newspapergallery/images/", blank=True, null=True)
+    image = models.ImageField(upload_to=newspaper_upload, blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
     date = models.DateField(blank=True, null=True, help_text="Manually entered date for the newspaper cutting")
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -195,7 +200,7 @@ class NewspaperGallery(models.Model):
 class BookShowcase(models.Model):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to="bookshowcase/images/", blank=True, null=True)
+    image = models.ImageField(upload_to=book_upload, blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
     order = models.PositiveIntegerField(default=0, help_text="Order for display")
     created_at = models.DateTimeField(auto_now_add=True)

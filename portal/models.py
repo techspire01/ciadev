@@ -1,6 +1,11 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from app.models import Supplier
+from utils.paths import (
+    company_application_upload,
+    company_job_upload,
+    company_internship_upload,
+)
 
 # Create your models here.
 
@@ -12,6 +17,8 @@ class PortalInternship(models.Model):
     is_active = models.BooleanField(default=True)
     company_name = models.CharField(max_length=255, blank=True)
     email = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(upload_to=company_internship_upload, null=True, blank=True)
+    image_url = models.URLField(blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True, related_name='internships')
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
@@ -33,6 +40,8 @@ class PortalJob(models.Model):
     is_active = models.BooleanField(default=True)
     company_name = models.CharField(max_length=255, blank=True)
     email = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(upload_to=company_job_upload, null=True, blank=True)
+    image_url = models.URLField(blank=True)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True, related_name='jobs')
     requirements = models.TextField(blank=True)
     responsibilities = models.TextField(blank=True)
@@ -67,7 +76,7 @@ class InternshipApplication(models.Model):
 
     # Resume Upload
     resume = models.FileField(
-        upload_to='applications/resumes/',
+        upload_to=company_application_upload,
         validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])],
         help_text='Max size: 2MB. Accepted formats: PDF, DOCX, DOC'
     )
@@ -102,7 +111,7 @@ class InternshipApplication(models.Model):
 
     # Additional Attachments (Optional)
     additional_attachment = models.FileField(
-        upload_to='applications/attachments/',
+        upload_to=company_application_upload,
         blank=True,
         null=True,
         help_text='Max size: 5MB. Accepted formats: PDF, DOCX, DOC, PNG, JPG'
@@ -118,7 +127,7 @@ class InternshipApplication(models.Model):
 
     def delete(self, *args, **kwargs):
         """
-        Override model delete to remove resume and additional_attachment from Supabase storage.
+        Override model delete to remove resume and additional_attachment from configured storage.
         """
         resume_name = self.resume.name if self.resume else None
         attachment_name = self.additional_attachment.name if self.additional_attachment else None
@@ -161,7 +170,7 @@ class JobApplication(models.Model):
 
     # Resume Upload
     resume = models.FileField(
-        upload_to='applications/resumes/',
+        upload_to=company_application_upload,
         validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])],
         help_text='Max size: 2MB. Accepted formats: PDF, DOCX, DOC'
     )
@@ -197,7 +206,7 @@ class JobApplication(models.Model):
 
     # Additional Attachments (Optional)
     additional_attachment = models.FileField(
-        upload_to='applications/attachments/',
+        upload_to=company_application_upload,
         blank=True,
         null=True,
         help_text='Max size: 5MB. Accepted formats: PDF, DOCX, DOC, PNG, JPG'
@@ -213,7 +222,7 @@ class JobApplication(models.Model):
 
     def delete(self, *args, **kwargs):
         """
-        Override model delete to remove resume and additional_attachment from Supabase storage.
+        Override model delete to remove resume and additional_attachment from configured storage.
         """
         resume_name = self.resume.name if self.resume else None
         attachment_name = self.additional_attachment.name if self.additional_attachment else None

@@ -213,8 +213,9 @@ SUPABASE_SIGNED_URL_EXPIRES = int(os.getenv("SUPABASE_SIGNED_URL_EXPIRES", 3600)
 
 # Django 5.2+ Storage Configuration
 STORAGES = {
+    # Use local filesystem storage by default (stores files under MEDIA_ROOT).
     "default": {
-        "BACKEND": "supastorage.storage.SupabaseStorage",
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",

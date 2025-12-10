@@ -51,6 +51,7 @@ class SupplierForm(forms.ModelForm):
         model = Supplier
         fields = [
             'name', 'founder_name', 'website_url', 'logo_url', 'image_url',
+            'logo',
             'category', 'sub_category1', 'sub_category2', 'sub_category3',
             'email', 'contact_person_name',
             'person_image_url', 'product1', 'product2', 'product3', 'product4', 'product5', 'product6', 'product7', 'product8', 'product9', 'product10',

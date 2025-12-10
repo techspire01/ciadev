@@ -662,14 +662,14 @@
                     <aside class="flex flex-col items-center gap-4 lg:col-span-1">
                         {% if supplier.logo_url %}
                         <div class="w-full flex items-center justify-center">
-                            <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }} logo" class="featured-image h-64 w-64 rounded-2xl object-contain">
+                            <img src="{{ supplier.logo_url }}" alt="{{ supplier.name }} logo" loading="lazy" class="featured-image h-64 w-64 rounded-2xl object-contain">
                         </div>
                         {% endif %}
                         {% if supplier.image_url %}
-                        <img src="{{ supplier.image_url }}" alt="{{ supplier.name }} facility" class="featured-image h-80 w-full rounded-2xl object-cover">
+                        <img src="{{ supplier.image_url }}" alt="{{ supplier.name }} facility" loading="lazy" class="featured-image h-80 w-full rounded-2xl object-cover">
                         {% endif %}
                         {% if supplier.person_image_url %}
-                        <img src="{{ supplier.person_image_url }}" alt="{{ supplier.contact_person_name }}" class="featured-image h-40 w-40 rounded-full object-cover">
+                        <img src="{{ supplier.person_image_url }}" alt="{{ supplier.contact_person_name }}" loading="lazy" class="featured-image h-40 w-40 rounded-full object-cover">
                         {% endif %}
                     </aside>
 
@@ -840,7 +840,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                     {% for image in product_images %}
-                    <img src="{{ image }}" alt="{{ supplier.name }} product image" class="product-gallery-item w-full object-cover shadow-lg" onclick="openImageModal(this.src)">
+                    <img src="{{ image }}" alt="{{ supplier.name }} product image" loading="lazy" class="product-gallery-item w-full object-cover shadow-lg" onclick="openImageModal(this.src)">
                     {% endfor %}
                 </div>
             </section>
@@ -852,7 +852,7 @@
                     <button class="modal-close" onclick="closeImageModal()">
                         <i class="fas fa-times"></i>
                     </button>
-                    <img id="modalImage" src="" alt="Full size product image">
+                    <img id="modalImage" src="" alt="Full size product image" loading="lazy">
                     <button class="modal-nav prev" onclick="previousImage()">
                         <i class="fas fa-chevron-left"></i>
                     </button>
