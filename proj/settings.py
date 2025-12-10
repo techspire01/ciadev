@@ -256,7 +256,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'dashboard'  # Redirect to dashboard after login
-LOGOUT_REDIRECT_URL = 'home'  # Redirect to home after logout
+LOGOUT_REDIRECT_URL = 'index'  # Redirect to home after logout
 
 # Allauth settings
 ACCOUNT_LOGIN_METHODS = {'email'}

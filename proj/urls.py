@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin@cianext/', admin.site.urls),
     path('', include('app.urls')),  # Main app URLs (homepage, suppliers, etc.)
     path('', include('portal.urls')),  # Portal URLs (dashboard, internship, etc.)
     path("accounts/", include("allauth.urls")),  # newly added for the google login
