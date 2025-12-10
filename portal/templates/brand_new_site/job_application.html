@@ -559,6 +559,8 @@
     }
   </style>
 
+{% if user.is_authenticated %}
+
 <div class="bg-container">
     <video autoplay muted loop playsinline class="bg-video">
       <source src="{% static 'brand_new_site/videos/background.mp4' %}" type="video/mp4">
@@ -825,13 +827,32 @@
       </form>
     </main>
 
+    {% else %}
+    <!-- Login Required Modal Overlay (for unauthenticated users) -->
+    <div id="login-overlay" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
+      <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center relative" style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #ea580c 100%); color: white;">
+        <button id="close-popup" type="button" class="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors cursor-pointer bg-white/10 rounded-full w-8 h-8 flex items-center justify-center hover:bg-white/20" title="Close">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+        <div class="mb-4">
+          <i class="fas fa-lock text-6xl opacity-90" style="animation: bounce 2s infinite;"></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-4">Access Restricted</h2>
+        <p class="text-lg mb-6 leading-relaxed">Please login to apply for jobs.</p>
+        <a href="{% url 'login' %}" id="login-btn" class="inline-flex items-center justify-center bg-white text-orange-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 hover:text-orange-700 transition-all duration-300 shadow-lg cursor-pointer w-full">
+          <i class="fas fa-sign-in-alt mr-2"></i>Login Now
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
     <footer class="application-footer">
       <p>&copy; 2025 CIA Incubation Cell. All rights reserved.</p>
     </footer>
   </div>
 
   <script>
-    // Popup functions
+    // Popup functions (use the announcement-style persistent modal)
     function closePopup() {
       var overlay = document.getElementById('popup-overlay');
       if (overlay) overlay.remove();
@@ -842,17 +863,34 @@
       if (existing) existing.remove();
 
       var overlay = document.createElement('div');
-      overlay.className = 'popup-overlay';
       overlay.id = 'popup-overlay';
+      overlay.style.position = 'fixed';
+      overlay.style.inset = '0';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.background = 'rgba(0,0,0,0.45)';
+      overlay.style.zIndex = '99999';
       overlay.innerHTML = `
-        <div class="popup-box ${isSuccess ? 'success' : 'error'}">
-          <div class="popup-icon">${isSuccess ? '✓' : '✕'}</div>
-          <div class="popup-title">${isSuccess ? 'Application Submitted!' : 'Submission Failed'}</div>
-          <div class="popup-message">${message}</div>
-          <button class="popup-close-btn" onclick="closePopup()">OK</button>
+        <div style="width: 100%; max-width: 480px; margin: 0 16px; position: relative;">
+          <div style="background: linear-gradient(135deg, #fff 0%, #fff 100%); border-radius: 20px; padding: 28px; box-shadow: 0 20px 50px rgba(0,0,0,0.25); text-align: center; position: relative;">
+            <button id="popup-close-x" style="position: absolute; top: 12px; right: 12px; width:36px; height:36px; border-radius:999px; background: rgba(0,0,0,0.06); border:none; cursor:pointer;">
+              <i class="fas fa-times" style="color:#333;"></i>
+            </button>
+            <div style="font-size:44px; color:${isSuccess ? '#10b981' : '#ef4444'}; margin-bottom:12px;">${isSuccess ? '\u2714' : '\u2716'}</div>
+            <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">${isSuccess ? 'Application Submitted' : 'Submission Failed'}</h3>
+            <p style="color:#444; margin-bottom:18px;">${message}</p>
+            <div style="display:flex; gap:12px; justify-content:center;">
+              <button id="popup-ok-btn" style="background: linear-gradient(90deg, #F59E0B, #D97706); color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight:600; cursor:pointer;">OK</button>
+            </div>
+          </div>
         </div>
       `;
       document.body.appendChild(overlay);
+
+      document.getElementById('popup-ok-btn').addEventListener('click', closePopup);
+      document.getElementById('popup-close-x').addEventListener('click', closePopup);
+      overlay.addEventListener('click', function(e) { if (e.target === overlay) closePopup(); });
     }
 
     // Parallax effect on mouse move
@@ -881,6 +919,16 @@
 
     // Handle conditional field visibility and work experience management
     document.addEventListener('DOMContentLoaded', function() {
+      // Auth modal handlers (if shown)
+      const closeAuthBtn = document.getElementById('close-popup');
+      const authOverlay = document.getElementById('login-overlay');
+      if (closeAuthBtn && authOverlay) {
+        closeAuthBtn.addEventListener('click', function(e) { e.preventDefault(); authOverlay.style.display = 'none'; });
+      }
+      const loginAuthBtn = document.getElementById('login-btn');
+      if (loginAuthBtn && authOverlay) {
+        loginAuthBtn.addEventListener('click', function(e) { e.preventDefault(); authOverlay.style.display = 'none'; window.location.href = '{% url "login" %}'; });
+      }
       const statusInputs = document.querySelectorAll('input[name="status"]');
       const workExperienceSection = document.getElementById('work-experience-section');
       const workEntriesContainer = document.getElementById('work-entries-container');
