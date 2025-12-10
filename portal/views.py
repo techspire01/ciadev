@@ -1055,18 +1055,24 @@ def delete_job_applicant(request, job_id, application_id):
                         
                         if is_ajax:
                             return JsonResponse({'success': True, 'message': 'Resume deleted successfully'})
+                        else:
+                            return redirect('view_job_applicants', job_id=job_id)
                     except Exception as e:
                         logger.error(f"Error deleting resume from storage: {str(e)}")
                         messages.error(request, f"Error deleting resume: {str(e)}")
                         
                         if is_ajax:
                             return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                        else:
+                            return redirect('view_job_applicants', job_id=job_id)
                 else:
                     msg = "No resume found to delete."
                     messages.warning(request, msg)
                     
                     if is_ajax:
                         return JsonResponse({'success': False, 'error': msg}, status=400)
+                    else:
+                        return redirect('view_job_applicants', job_id=job_id)
             
             elif delete_attachment_only:
                 # Delete only the additional attachment
@@ -1082,18 +1088,24 @@ def delete_job_applicant(request, job_id, application_id):
                         
                         if is_ajax:
                             return JsonResponse({'success': True, 'message': 'Document deleted successfully'})
+                        else:
+                            return redirect('view_job_applicants', job_id=job_id)
                     except Exception as e:
                         logger.error(f"Error deleting attachment from storage: {str(e)}")
                         messages.error(request, f"Error deleting document: {str(e)}")
                         
                         if is_ajax:
                             return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                        else:
+                            return redirect('view_job_applicants', job_id=job_id)
                 else:
                     msg = "No document found to delete."
                     messages.warning(request, msg)
                     
                     if is_ajax:
                         return JsonResponse({'success': False, 'error': msg}, status=400)
+                    else:
+                        return redirect('view_job_applicants', job_id=job_id)
             
             else:
                 # Delete entire application and all files
@@ -1164,18 +1176,24 @@ def delete_internship_applicant(request, internship_id, application_id):
                         
                         if is_ajax:
                             return JsonResponse({'success': True, 'message': 'Resume deleted successfully'})
+                        else:
+                            return redirect('view_internship_applicants', internship_id=internship_id)
                     except Exception as e:
                         logger.error(f"Error deleting resume from storage: {str(e)}")
                         messages.error(request, f"Error deleting resume: {str(e)}")
                         
                         if is_ajax:
                             return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                        else:
+                            return redirect('view_internship_applicants', internship_id=internship_id)
                 else:
                     msg = "No resume found to delete."
                     messages.warning(request, msg)
                     
                     if is_ajax:
                         return JsonResponse({'success': False, 'error': msg}, status=400)
+                    else:
+                        return redirect('view_internship_applicants', internship_id=internship_id)
             
             elif delete_attachment_only:
                 # Delete only the additional attachment
@@ -1191,18 +1209,24 @@ def delete_internship_applicant(request, internship_id, application_id):
                         
                         if is_ajax:
                             return JsonResponse({'success': True, 'message': 'Document deleted successfully'})
+                        else:
+                            return redirect('view_internship_applicants', internship_id=internship_id)
                     except Exception as e:
                         logger.error(f"Error deleting attachment from storage: {str(e)}")
                         messages.error(request, f"Error deleting document: {str(e)}")
                         
                         if is_ajax:
                             return JsonResponse({'success': False, 'error': str(e)}, status=400)
+                        else:
+                            return redirect('view_internship_applicants', internship_id=internship_id)
                 else:
                     msg = "No document found to delete."
                     messages.warning(request, msg)
                     
                     if is_ajax:
                         return JsonResponse({'success': False, 'error': msg}, status=400)
+                    else:
+                        return redirect('view_internship_applicants', internship_id=internship_id)
             
             else:
                 # Delete entire application and all files

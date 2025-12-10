@@ -394,6 +394,10 @@ class ContactInformationAdmin(admin.ModelAdmin):
         ('Contact Details', {
             'fields': ('email', 'phone', 'address')
         }),
+        ('Social Media URLs', {
+            'fields': ('facebook', 'instagram', 'linkedin', 'twitter'),
+            'description': 'Add complete URLs to your social media profiles (e.g., https://facebook.com/yourpage)'
+        }),
         ('Additional Information', {
             'fields': ('description',)
         }),

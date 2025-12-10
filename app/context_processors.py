@@ -1,3 +1,7 @@
+from .models import ContactInformation
+
+def contact_info(request):
+    return {'contact_info': ContactInformation.objects.first()}
 from django.conf import settings
 
 

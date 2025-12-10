@@ -1312,22 +1312,22 @@ img:not([src]) {
 .triangle:hover { transform: scale(.96); }
 .triangle-1 {
   clip-path: polygon(0 0,50% 50%,0 100%);
-  background: url('Images/t1.jpeg') left top/cover;
+  background: url('../images/t1.jpeg') left top/cover;
   border-color: #51566089;
 }
 .triangle-2 {
   clip-path: polygon(100% 0,50% 50%,0 0);
-  background: url('Images/t2.jpeg') right top/cover;
+  background: url('../images/t2.jpeg') right top/cover;
   border-color: #51566089;
 }
 .triangle-3 {
   clip-path: polygon(0 100%,50% 50%,100% 100%);
-  background: url('Images/t3.jpeg') left bottom/cover;
+  background: url('../images/t3.jpeg') left bottom/cover;
   border-color: #51566089;
 }
 .triangle-4 {
   clip-path: polygon(100% 100%,50% 50%,100% 0);
-  background: url('Images/t4.jpeg') right bottom/cover;
+  background: url('../images/t4.jpeg') right bottom/cover;
   border-color: #51566089;
 }
 .triangle.active {
