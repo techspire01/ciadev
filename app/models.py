@@ -101,6 +101,10 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = "CIA Network"
+        verbose_name_plural = "CIA Networks"
 
     def save(self, *args, **kwargs):
         if not self.cia_id:

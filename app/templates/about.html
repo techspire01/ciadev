@@ -761,18 +761,32 @@
             </div>
 
             <!-- Dynamic Photo Gallery Grid -->
-            <div class="photo-gallery-grid grid grid-cols-3 md:grid-rows-2 gap-6 md:gap-6 gap-2 w-full">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
                 {% for photo in latest_photos %}
-                <div class="gallery-item photo-gallery-item">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group">
                     {% if photo.image_url %}
-                        <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ photo.image_url }}" data-title="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
+                        <div class="relative overflow-hidden h-48 sm:h-56 md:h-64">
+                            <img src="{{ photo.image_url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="w-full h-full object-cover gallery-image group-hover:scale-105 transition-transform duration-300" data-src="{{ photo.image_url }}" data-title="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
+                        </div>
                     {% elif photo.image %}
-                        <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ photo.image.url }}" data-title="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
+                        <div class="relative overflow-hidden h-48 sm:h-56 md:h-64">
+                            <img src="{{ photo.image.url }}" alt="{{ photo.title|default:'CIA Photo' }}" class="w-full h-full object-cover gallery-image group-hover:scale-105 transition-transform duration-300" data-src="{{ photo.image.url }}" data-title="{{ photo.title|default:'CIA Photo' }}" loading="lazy" />
+                        </div>
                     {% else %}
-                        <div class="flex h-full w-full items-center justify-center bg-gray-200">
-                            <span class="text-gray-500">No Image</span>
+                        <div class="flex h-48 sm:h-56 md:h-64 w-full items-center justify-center bg-gray-200">
+                            <span class="text-gray-500 text-sm">No Image</span>
                         </div>
                     {% endif %}
+                    <div class="p-3 sm:p-4">
+                        <h3 class="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2">{{ photo.title|default:'CIA Photo' }}</h3>
+                        {% if photo.uploaded_at %}
+                            <p class="text-xs sm:text-sm text-gray-600 mt-1">{{ photo.uploaded_at|date:"M d, Y" }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-12">
+                    <p class="text-gray-500 text-sm md:text-base">No photos available yet.</p>
                 </div>
                 {% endfor %}
             </div>
@@ -798,25 +812,34 @@
             </div>
 
             <!-- Dynamic Newspaper Gallery Grid -->
-            <div class="news-gallery-grid grid grid-cols-3 md:grid-rows-2 gap-6 md:gap-6 gap-2 w-full">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
                 {% for newspaper in latest_newspapers %}
-                <div class="gallery-item news-gallery-item">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group">
                     {% if newspaper.image_url %}
-                        <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ newspaper.image_url }}" data-title="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
+                        <div class="relative overflow-hidden h-48 sm:h-56 md:h-64">
+                            <img src="{{ newspaper.image_url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="w-full h-full object-cover gallery-image group-hover:scale-105 transition-transform duration-300" data-src="{{ newspaper.image_url }}" data-title="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
+                        </div>
                     {% elif newspaper.image %}
-                        <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="h-full w-full cursor-pointer object-cover gallery-image" data-src="{{ newspaper.image.url }}" data-title="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
+                        <div class="relative overflow-hidden h-48 sm:h-56 md:h-64">
+                            <img src="{{ newspaper.image.url }}" alt="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" class="w-full h-full object-cover gallery-image group-hover:scale-105 transition-transform duration-300" data-src="{{ newspaper.image.url }}" data-title="{{ newspaper.title|default:'CIA Newspaper Cutting' }}" loading="lazy" />
+                        </div>
                     {% else %}
-                        <div class="flex h-full w-full items-center justify-center bg-gray-200">
-                            <span class="text-gray-500">No Image</span>
+                        <div class="flex h-48 sm:h-56 md:h-64 w-full items-center justify-center bg-gray-200">
+                            <span class="text-gray-500 text-sm">No Image</span>
                         </div>
                     {% endif %}
-                    <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-2">
+                    <div class="p-3 sm:p-4">
+                        <h3 class="text-sm sm:text-base font-semibold text-gray-800 line-clamp-2">{{ newspaper.title|default:'CIA News' }}</h3>
                         {% if newspaper.date %}
-                            <p class="text-sm">{{ newspaper.date|date:"M d, Y" }}</p>
+                            <p class="text-xs sm:text-sm text-gray-600 mt-1">{{ newspaper.date|date:"M d, Y" }}</p>
                         {% else %}
-                            <p class="text-sm">{{ newspaper.uploaded_at|date:"M d, Y" }}</p>
+                            <p class="text-xs sm:text-sm text-gray-600 mt-1">{{ newspaper.uploaded_at|date:"M d, Y" }}</p>
                         {% endif %}
                     </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-12">
+                    <p class="text-gray-500 text-sm md:text-base">No news articles available yet.</p>
                 </div>
                 {% endfor %}
             </div>
