@@ -92,32 +92,53 @@ def submit_complaint(request):
         return JsonResponse({'error': 'Failed to submit complaint.'}, status=500)
 
 def index(request):
-    # Fetch 3 random suppliers
-    all_suppliers = list(Supplier.objects.all())
+    from django.core.cache import cache
+    
+    # Fetch 3 random suppliers with optimized query
+    cache_key = 'index_suppliers'
+    all_suppliers = cache.get(cache_key)
+    if all_suppliers is None:
+        all_suppliers = list(Supplier.objects.all().values('id', 'name', 'logo_url', 'image_url', 'category'))
+        cache.set(cache_key, all_suppliers, 3600)
+    
     if len(all_suppliers) > 3:
         random_suppliers = random.sample(all_suppliers, 3)
     else:
         random_suppliers = all_suppliers
 
-    # Fetch all unique categories from Supplier model (like in category view)
-    categories = Supplier.objects.values_list('category', flat=True).distinct()
-    categories = [cat for cat in categories if cat]  # Remove None/empty values
+    # Fetch categories with caching
+    categories_cache_key = 'index_categories'
+    categories = cache.get(categories_cache_key)
+    if categories is None:
+        categories = list(Supplier.objects.values_list('category', flat=True).distinct())
+        categories = [cat for cat in categories if cat]
+        cache.set(categories_cache_key, categories, 3600)
 
-    # Count suppliers for each category
+    # Count suppliers for each category (from cache)
     category_counts = {}
     for category_name in categories:
-        count = Supplier.objects.filter(category=category_name).count()
+        count_key = f'category_count:{category_name}'
+        count = cache.get(count_key)
+        if count is None:
+            count = Supplier.objects.filter(category=category_name).count()
+            cache.set(count_key, count, 3600)
         category_counts[category_name] = count
 
-    # Build a dictionary mapping category to its subcategories
-    category_subcategories = {}
-    for category_name in categories:
-        sub_cats = set()
-        suppliers_in_cat = Supplier.objects.filter(category=category_name)
-        for i in range(1, 4):
-            sub_cats.update(suppliers_in_cat.values_list(f'sub_category{i}', flat=True).distinct())
-        sub_cats.discard(None)
-        category_subcategories[category_name] = sorted(sub_cats)
+    # Build category-subcategories map with caching
+    subcat_cache_key = 'index_subcategories'
+    category_subcategories = cache.get(subcat_cache_key)
+    if category_subcategories is None:
+        category_subcategories = {}
+        for category_name in categories:
+            sub_cats = set()
+            suppliers_in_cat = Supplier.objects.filter(category=category_name).values('sub_category1', 'sub_category2', 'sub_category3')
+            for supplier in suppliers_in_cat:
+                for i in range(1, 4):
+                    val = supplier.get(f'sub_category{i}')
+                    if val:
+                        sub_cats.add(val)
+            category_subcategories[category_name] = sorted(sub_cats)
+        cache.set(subcat_cache_key, category_subcategories, 3600)
     
     # Fetch book showcase images
     book_showcase_images = BookShowcase.objects.all()
@@ -135,6 +156,8 @@ def index(request):
             logger.warning(f"Could not generate announcement image URL: {str(e)}")
             announcement_image_url = None
 
+    from .models import ContactInformation
+    contact_info = ContactInformation.objects.first()
     context = {
         'user': request.user,
         'featured_suppliers': random_suppliers,
@@ -144,6 +167,7 @@ def index(request):
         'book_showcase_images': book_showcase_images,
         'announcement': announcement,
         'announcement_image_url': announcement_image_url,
+        'contact_info': contact_info,
     }
     return render(request, "index.html", context)
 
@@ -224,25 +248,41 @@ def announcement_detail(request, announcement_id):
         return redirect('announcement')
 
 def category(request):
-    # Fetch all unique categories from Supplier model
-    categories = Supplier.objects.values_list('category', flat=True).distinct()
-    categories = [cat for cat in categories if cat]  # Remove None/empty values
+    from django.core.cache import cache
+    
+    # Fetch categories with caching
+    categories_cache_key = 'category_all_categories'
+    categories = cache.get(categories_cache_key)
+    if categories is None:
+        categories = list(Supplier.objects.values_list('category', flat=True).distinct())
+        categories = [cat for cat in categories if cat]
+        cache.set(categories_cache_key, categories, 3600)
 
-    # Count suppliers for each category
+    # Count suppliers for each category (from cache)
     category_counts = {}
     for category_name in categories:
-        count = Supplier.objects.filter(category=category_name).count()
+        count_key = f'category_count:{category_name}'
+        count = cache.get(count_key)
+        if count is None:
+            count = Supplier.objects.filter(category=category_name).count()
+            cache.set(count_key, count, 3600)
         category_counts[category_name] = count
 
-    # Build a dictionary mapping category to its subcategories
-    category_subcategories = {}
-    for category_name in categories:
-        sub_cats = set()
-        suppliers_in_cat = Supplier.objects.filter(category=category_name)
-        for i in range(1, 4):
-            sub_cats.update(suppliers_in_cat.values_list(f'sub_category{i}', flat=True).distinct())
-        sub_cats.discard(None)
-        category_subcategories[category_name] = sorted(sub_cats)
+    # Build category-subcategories map with caching
+    subcat_cache_key = 'category_subcategories'
+    category_subcategories = cache.get(subcat_cache_key)
+    if category_subcategories is None:
+        category_subcategories = {}
+        for category_name in categories:
+            sub_cats = set()
+            suppliers_in_cat = Supplier.objects.filter(category=category_name).values('sub_category1', 'sub_category2', 'sub_category3')
+            for supplier in suppliers_in_cat:
+                for i in range(1, 4):
+                    val = supplier.get(f'sub_category{i}')
+                    if val:
+                        sub_cats.add(val)
+            category_subcategories[category_name] = sorted(sub_cats)
+        cache.set(subcat_cache_key, category_subcategories, 3600)
     
     context = {
         'categories': categories,
@@ -273,11 +313,19 @@ def signup_view(request):
     return render(request, "signup.html")
 
 def cia_networks(request):
+    from django.core.cache import cache
+    
     category = request.GET.get('category', '')
     product_filter = request.GET.get('product', '')
     search_query = request.GET.get('search', '')
 
-    suppliers = Supplier.objects.all()
+    # Use only() to limit columns fetched
+    suppliers = Supplier.objects.all().only(
+        'id', 'name', 'logo_url', 'image_url', 'person_image_url',
+        'category', 'sub_category1', 'sub_category2', 'sub_category3',
+        'product1', 'product2', 'product3', 'product4', 'product5',
+        'product6', 'product7', 'product8', 'product9', 'product10'
+    )
 
     if category:
         suppliers = suppliers.filter(
@@ -322,25 +370,38 @@ def cia_networks(request):
 
     count = suppliers.count()
 
-    # Get all categories and subcategories for the filter dropdowns
-    categories = Supplier.objects.values_list('category', flat=True).distinct()
-    sub_categories = set()
-    for i in range(1, 4):
-        sub_categories.update(Supplier.objects.values_list(f'sub_category{i}', flat=True).distinct())
-    sub_categories.discard(None)  # Remove None values
-
-    products = list(set(
-        list(Supplier.objects.values_list('product1', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product2', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product3', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product4', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product5', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product6', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product7', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product8', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product9', flat=True).distinct()) +
-        list(Supplier.objects.values_list('product10', flat=True).distinct())
-    ))
+    # Get filter options from cache
+    filters_cache_key = 'cia_networks_filters'
+    filters = cache.get(filters_cache_key)
+    if filters is None:
+        categories = list(Supplier.objects.values_list('category', flat=True).distinct())
+        sub_categories = set()
+        for i in range(1, 4):
+            sub_categories.update(Supplier.objects.values_list(f'sub_category{i}', flat=True).distinct())
+        sub_categories.discard(None)
+        
+        products = list(set(
+            list(Supplier.objects.values_list('product1', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product2', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product3', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product4', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product5', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product6', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product7', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product8', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product9', flat=True).distinct()) +
+            list(Supplier.objects.values_list('product10', flat=True).distinct())
+        ))
+        filters = {
+            'categories': categories,
+            'sub_categories': sorted(sub_categories),
+            'products': sorted([p for p in products if p])
+        }
+        cache.set(filters_cache_key, filters, 3600)
+    
+    categories = filters['categories']
+    sub_categories = filters['sub_categories']
+    products = filters['products']
     products = [p for p in products if p]  # Remove empty strings
 
     return render(request, "cia_networks.html", {
@@ -556,6 +617,8 @@ def supplier_details(request, supplier_id):
 
 def supplier_detail_page(request, supplier_name):
     """Display full supplier detail page with unique URL based on company name"""
+    from django.core.cache import cache
+    
     try:
         from urllib.parse import unquote
         import re
@@ -563,63 +626,53 @@ def supplier_detail_page(request, supplier_name):
         # Try a few strategies to resolve the supplier name from the slug
         normalized_name = unquote(supplier_name).replace('-', ' ').strip()
 
-        # 1) Direct case-insensitive exact match
-        try:
-            supplier = Supplier.objects.get(name__iexact=normalized_name)
-        except Supplier.DoesNotExist:
-            supplier = None
+        # Check cache first
+        cache_key = f'supplier_detail:{normalized_name}'
+        supplier = cache.get(cache_key)
+        
+        if supplier is None:
+            # 1) Direct case-insensitive exact match
+            try:
+                supplier = Supplier.objects.get(name__iexact=normalized_name)
+            except Supplier.DoesNotExist:
+                supplier = None
 
-        # 2) If not found, try a normalized token-score matching across all suppliers
-        if not supplier:
-            def normalize(s):
-                return re.sub(r'[^a-z0-9 ]', ' ', (s or '').lower()).strip()
+            # 2) If not found, try a normalized token-score matching across all suppliers
+            if not supplier:
+                def normalize(s):
+                    return re.sub(r'[^a-z0-9 ]', ' ', (s or '').lower()).strip()
 
-            target = normalize(normalized_name)
-            if target:
-                target_tokens = set(t for t in target.split() if t)
-                best = None
-                best_score = 0
-                # iterate suppliers and compute token intersection score
-                for cand in Supplier.objects.all():
-                    cand_norm = normalize(cand.name)
-                    cand_tokens = set(t for t in cand_norm.split() if t)
-                    if not cand_tokens:
-                        continue
-                    score = len(target_tokens & cand_tokens)
-                    # boost exact substring matches
-                    if target in cand_norm or cand_norm in target:
-                        score += 1
-                    if score > best_score:
-                        best_score = score
-                        best = cand
-                if best and best_score > 0:
-                    supplier = best
+                target = normalize(normalized_name)
+                if target:
+                    target_tokens = set(t for t in target.split() if t)
+                    best = None
+                    best_score = 0
+                    # iterate suppliers and compute token intersection score
+                    for cand in Supplier.objects.only('id', 'name').all():
+                        cand_norm = normalize(cand.name)
+                        cand_tokens = set(t for t in cand_norm.split() if t)
+                        if not cand_tokens:
+                            continue
+                        score = len(target_tokens & cand_tokens)
+                        # boost exact substring matches
+                        if target in cand_norm or cand_norm in target:
+                            score += 1
+                        if score > best_score:
+                            best_score = score
+                            best = cand
+                    if best and best_score > 0:
+                        supplier = best
+            
+            if supplier:
+                cache.set(cache_key, supplier, 3600)
 
         # If still not found, return 404 now (avoid later NoneType errors)
         if not supplier:
             from django.http import HttpResponseNotFound
             return HttpResponseNotFound('<h1>Supplier Not Found</h1><p>The supplier you are looking for does not exist.</p>')
         
-        # Collect all non-empty subcategories
-        sub_categories = []
-        for i in range(1, 7):
-            sub_category = getattr(supplier, f'sub_category{i}', None)
-            if sub_category:
-                sub_categories.append(sub_category)
-
-        # Prepare product images URLs
-        product_images = []
-        for i in range(1, 11):
-            image_url = getattr(supplier, f'product_image{i}_url', None)
-            if image_url:
-                product_images.append(image_url)
-        
-        # Prepare products list
-        products = []
-        for i in range(1, 11):
-            product = getattr(supplier, f'product{i}', None)
-            if product:
-                products.append(product)
+        # Refresh full supplier object for template
+        supplier = Supplier.objects.get(pk=supplier.id)
 
         context = {
             'supplier': supplier,

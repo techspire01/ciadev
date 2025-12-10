@@ -509,10 +509,16 @@ function deleteFile(fileType) {
         body: formData,
         headers: {
             'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
         },
         credentials: 'same-origin'
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             alert('✅ ' + (fileType === 'resume' ? 'Resume' : 'Document') + ' deleted successfully!');

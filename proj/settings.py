@@ -68,6 +68,7 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.gzip.GZipMiddleware',  # Compress responses
     'django.middleware.cache.UpdateCacheMiddleware',  # Must be first (after SecurityMiddleware)
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -96,6 +97,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # expose SITE_FONT_FAMILY to templates
                 'app.context_processors.site_font',
+                'app.context_processors.contact_info',
             ],
         },
     },
@@ -222,6 +224,10 @@ STORAGES = {
     },
 }
 
+# Use WhiteNoise compressed manifest static files storage (compatible fallback)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Cache static files for 1 year (adjust as needed)
+WHITENOISE_MAX_AGE = 31536000
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

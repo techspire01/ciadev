@@ -322,8 +322,14 @@ class ContactInformation(models.Model):
     email = models.EmailField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-
     description = models.TextField(blank=True, null=True)
+    
+    # Social media URLs
+    facebook = models.URLField(max_length=500, blank=True, null=True, help_text="Facebook profile URL")
+    instagram = models.URLField(max_length=500, blank=True, null=True, help_text="Instagram profile URL")
+    linkedin = models.URLField(max_length=500, blank=True, null=True, help_text="LinkedIn profile URL")
+    twitter = models.URLField(max_length=500, blank=True, null=True, help_text="Twitter profile URL")
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

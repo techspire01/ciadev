@@ -108,8 +108,8 @@ const containerSets = [
         <img src="/static/images/index-image/image-3-1.png" alt="Plastic Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Plastic</h4>
-          <p class="text-sm opacity-80">Manufacturing & molding</p>
+          <h4 class="text-lg font-bold">Industry Ventilation Systems</h4>
+          <p class="text-sm opacity-80">Industrial Environmental Control Systems</p>
         </div>
       </div>
       <!-- Container 2 - Small (spans 2x1) -->
@@ -117,8 +117,8 @@ const containerSets = [
         <img src="/static/images/index-image/image-3-2.png" alt="Textile Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Textile</h4>
-          <p class="text-sm opacity-80">Fabric & garment industry</p>
+          <h4 class="text-lg font-bold">Pumps and Motors</h4>
+          <p class="text-sm opacity-80">Rotating Equipment Systems</p>
         </div>
       </div>
       <!-- Container 3 - Large hero (spans 3x2) -->
@@ -126,8 +126,8 @@ const containerSets = [
         <img src="/static/images/index-image/image-3-3.png" alt="Smart Manufacturing" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/30 w-full h-auto flex-grow"></div>
         <div class="absolute bottom-8 left-8 text-white">
-          <h3 class="text-2xl font-bold mb-2">Smart Manufacturing</h3>
-          <p class="text-base opacity-90">AI-powered automation and intelligent manufacturing systems</p>
+          <h3 class="text-2xl font-bold mb-2">Solar Power</h3>
+          <p class="text-base opacity-90">Renewable Energy Integration in Manufacturing</p>
         </div>
       </div>
       <!-- Container 4 - Small (spans 2x1) -->
@@ -135,8 +135,8 @@ const containerSets = [
         <img src="/static/images/index-image/image-3-4.png" alt="Electrical Systems" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Electrical</h4>
-          <p class="text-sm opacity-80">Power solutions & equipment</p>
+          <h4 class="text-lg font-bold">CNC Machine</h4>
+          <p class="text-sm opacity-80">Precision Machining and Computer Numerical Control Systems</p>
         </div>
       </div>
       <!-- Container 5 - Small (spans 2x1) -->
@@ -144,8 +144,8 @@ const containerSets = [
         <img src="/static/images/index-image/image-3-5.png" alt="Industrial Equipment" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/20"></div>
         <div class="absolute bottom-4 left-4 text-white">
-          <h4 class="text-lg font-bold">Industrial</h4>
-          <p class="text-sm opacity-80">Heavy equipment solutions</p>
+          <h4 class="text-lg font-bold">Industrial Automation</h4>
+          <p class="text-sm opacity-80">Smart Manufacturing and Automation Technologies</p>
         </div>
       </div>
     `

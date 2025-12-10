@@ -308,7 +308,7 @@
                       <span class="text-orange-900 text-center px-4 font-bold">{{ image.title|default:'No Image' }}</span>
                     </div>
                   {% elif image.image %}
-                    <img src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="book-image"
+                    <img loading="lazy" src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="book-image"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="w-full h-full bg-gradient-to-br from-orange-300 to-red-400 flex items-center justify-center" style="display: none;">
                       <span class="text-orange-900 text-center px-4 font-bold">{{ image.title|default:'No Image' }}</span>
@@ -336,7 +336,7 @@
                       <span class="text-orange-900 text-center px-4 font-bold">{{ image.title|default:'No Image' }}</span>
                     </div>
                   {% elif image.image %}
-                    <img src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="book-image"
+                    <img loading="lazy" src="{{ image.image.url }}" alt="{{ image.title|default:'Showcase Image' }}" class="book-image"
                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div class="w-full h-full bg-gradient-to-br from-orange-300 to-red-400 flex items-center justify-center" style="display: none;">
                       <span class="text-orange-900 text-center px-4 font-bold">{{ image.title|default:'No Image' }}</span>
