@@ -251,15 +251,58 @@
           {% endfor %}
         </div>
 <!---->
-        <!-- Pagination Info -->
-        <div class="mt-12 text-center animate-fade-in relative z-10">
-          <p class="text-gray-700 font-semibold text-lg">
-           
-            {% if suppliers|length != count %}
-              <!-- Add pagination controls here if needed -->
-            {% endif %}
-          </p>
+        <!-- Pagination Section -->
+        {% if page_obj.has_other_pages %}
+        <div class="mt-12 flex justify-center items-center gap-2 animate-fade-in relative z-10">
+          <!-- Previous button -->
+          {% if page_obj.has_previous %}
+            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.product %}&product={{ request.GET.product }}{% endif %}" 
+               class="px-3 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold hover:shadow-lg transition-all">
+              <i class="fas fa-chevron-left"></i> First
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.product %}&product={{ request.GET.product }}{% endif %}" 
+               class="px-3 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold hover:shadow-lg transition-all">
+              <i class="fas fa-chevron-left"></i> Prev
+            </a>
+          {% endif %}
+
+          <!-- Page numbers -->
+          <div class="flex gap-1">
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <span class="px-3 py-2 rounded-lg bg-gradient-to-r from-red-600 to-orange-600 text-white font-bold">{{ num }}</span>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.product %}&product={{ request.GET.product }}{% endif %}" 
+                   class="px-3 py-2 rounded-lg bg-gray-200 text-gray-800 font-semibold hover:bg-orange-200 transition-all">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Next button -->
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.product %}&product={{ request.GET.product }}{% endif %}" 
+               class="px-3 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold hover:shadow-lg transition-all">
+              Next <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.product %}&product={{ request.GET.product }}{% endif %}" 
+               class="px-3 py-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold hover:shadow-lg transition-all">
+              Last <i class="fas fa-chevron-right"></i>
+            </a>
+          {% endif %}
         </div>
+
+        <!-- Pagination Info -->
+        <div class="mt-8 text-center text-gray-600 font-semibold animate-fade-in relative z-10">
+          Page <span class="text-orange-600">{{ page_obj.number }}</span> of <span class="text-orange-600">{{ page_obj.paginator.num_pages }}</span> 
+          | Showing <span class="text-orange-600">{{ suppliers|length }}</span> of <span class="text-orange-600">{{ count }}</span> companies
+        </div>
+        {% else %}
+        <!-- Total Count (no pagination) -->
+        <div class="mt-8 text-center text-gray-600 font-semibold animate-fade-in relative z-10">
+          Showing <span class="text-orange-600">{{ count }}</span> companies
+        </div>
+        {% endif %}
+
       {% else %}
       
         <!-- Empty State -->
@@ -291,6 +334,35 @@
   {% include 'partials/image_lightbox.html' %}
   {% include 'partials/floating_buttons.html' %}
   <script src="{% static 'js/lightbox.js' %}"></script>
+
+  <script>
+    // Lazy load images when they come into viewport
+    if ('IntersectionObserver' in window) {
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+              observer.unobserve(img);
+            }
+          }
+        });
+      }, {
+        rootMargin: '50px'
+      });
+
+      document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+    }
+
+    // Performance optimization: defer non-critical scripts
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize only visible supplier cards
+      const cards = document.querySelectorAll('.supplier-card-modern');
+      console.log(`CIA Networks: Loaded ${cards.length} supplier cards`);
+    });
+  </script>
 
   <script>
     function openSupplierModal(supplierId) {

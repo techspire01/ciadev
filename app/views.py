@@ -314,18 +314,21 @@ def signup_view(request):
 
 def cia_networks(request):
     from django.core.cache import cache
+    from django.core.paginator import Paginator
     
     category = request.GET.get('category', '')
     product_filter = request.GET.get('product', '')
     search_query = request.GET.get('search', '')
 
-    # Use only() to limit columns fetched
+    # Use only() to limit columns fetched and order by name for consistency
     suppliers = Supplier.objects.all().only(
         'id', 'name', 'logo_url', 'image_url', 'person_image_url',
         'category', 'sub_category1', 'sub_category2', 'sub_category3',
         'product1', 'product2', 'product3', 'product4', 'product5',
-        'product6', 'product7', 'product8', 'product9', 'product10'
-    )
+        'product6', 'product7', 'product8', 'product9', 'product10',
+        'contact_person_name', 'city', 'state', 'phone_number',
+        'business_description'
+    ).order_by('name')
 
     if category:
         suppliers = suppliers.filter(
@@ -368,48 +371,71 @@ def cia_networks(request):
             models.Q(sub_category3__icontains=search_query)
         )
 
-    count = suppliers.count()
+    total_count = suppliers.count()
 
-    # Get filter options from cache
+    # PAGINATION: Load 12 suppliers per page
+    paginator = Paginator(suppliers, 12)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_obj = paginator.page(page_number)
+        suppliers_page = page_obj.object_list
+    except:
+        page_obj = paginator.page(1)
+        suppliers_page = page_obj.object_list
+
+    # Get filter options from cache (efficient single query approach)
     filters_cache_key = 'cia_networks_filters'
     filters = cache.get(filters_cache_key)
     if filters is None:
-        categories = list(Supplier.objects.values_list('category', flat=True).distinct())
+        # Use efficient aggregation - combine all categories and products
+        from django.db.models import Q, Value
+        from django.db.models.functions import Concat
+        
+        all_suppliers = Supplier.objects.all()
+        
+        # Get unique categories
+        categories = sorted(set(
+            list(all_suppliers.values_list('category', flat=True).distinct()) or []
+        ))
+        
+        # Get unique sub_categories from all three fields
         sub_categories = set()
         for i in range(1, 4):
-            sub_categories.update(Supplier.objects.values_list(f'sub_category{i}', flat=True).distinct())
+            sub_categories.update(
+                all_suppliers.values_list(f'sub_category{i}', flat=True).distinct()
+            )
         sub_categories.discard(None)
+        sub_categories.discard('')
         
-        products = list(set(
-            list(Supplier.objects.values_list('product1', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product2', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product3', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product4', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product5', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product6', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product7', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product8', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product9', flat=True).distinct()) +
-            list(Supplier.objects.values_list('product10', flat=True).distinct())
-        ))
+        # Get unique products - combine all product fields efficiently
+        products = set()
+        for i in range(1, 11):
+            products.update(
+                all_suppliers.values_list(f'product{i}', flat=True).distinct()
+            )
+        products.discard(None)
+        products.discard('')
+        
         filters = {
-            'categories': categories,
-            'sub_categories': sorted(sub_categories),
-            'products': sorted([p for p in products if p])
+            'categories': [c for c in categories if c],
+            'sub_categories': sorted(list(sub_categories)),
+            'products': sorted(list(products))
         }
+        # Cache for 1 hour
         cache.set(filters_cache_key, filters, 3600)
     
     categories = filters['categories']
     sub_categories = filters['sub_categories']
     products = filters['products']
-    products = [p for p in products if p]  # Remove empty strings
 
     return render(request, "cia_networks.html", {
-        "suppliers": suppliers,
+        "suppliers": suppliers_page,
+        "page_obj": page_obj,
         "categories": categories,
         "sub_categories": sub_categories,
         "products": products,
-        "count": count,
+        "count": total_count,
+        "current_page": page_number,
     })
 
 def create_supplier(request):
