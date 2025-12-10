@@ -7,9 +7,9 @@
         <!-- Company Info -->
         <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:text-left flex flex-col justify-center">
           <div class="flex items-center justify-center md:justify-start mb-0.125 md:mb-0.25">
-            <img
+            <img loading="lazy"
               src="{% static 'images/CIA logo.png' %}"
-              alt="CIA MachineryHub logo"
+              alt="CIAnext logo"
               class="h-4 md:h-5 w-4 md:w-5 mr-0.5 rounded"
             />
             <div>
@@ -18,26 +18,42 @@
             </div>
           </div>
           <div class="flex justify-center md:justify-start space-x-0.125 md:space-x-0.25">
+            {% if contact_info.facebook %}
             <a
-              href="#"
+              href="{{ contact_info.facebook }}"
+              target="_blank"
+              rel="noopener noreferrer"
               class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
               ><i class="fab fa-facebook-f text-4xs"></i
             ></a>
+            {% endif %}
+            {% if contact_info.twitter %}
             <a
-              href="#"
+              href="{{ contact_info.twitter }}"
+              target="_blank"
+              rel="noopener noreferrer"
               class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
               ><i class="fab fa-twitter text-4xs"></i
             ></a>
+            {% endif %}
+            {% if contact_info.linkedin %}
             <a
-              href="#"
+              href="{{ contact_info.linkedin }}"
+              target="_blank"
+              rel="noopener noreferrer"
               class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
               ><i class="fab fa-linkedin-in text-4xs"></i
             ></a>
+            {% endif %}
+            {% if contact_info.instagram %}
             <a
-              href="#"
+              href="{{ contact_info.instagram }}"
+              target="_blank"
+              rel="noopener noreferrer"
               class="w-1.5 h-1.5 md:w-2 md:h-2 bg-gray-300 hover:bg-yellow-500 text-gray-700 hover:text-white rounded-full flex items-center justify-center transition-all duration-300 text-4xs"
               ><i class="fab fa-instagram text-4xs"></i
             ></a>
+            {% endif %}
           </div>
         </div>
 
@@ -99,18 +115,28 @@
         <div class="rounded p-0.125 md:p-0.25 border border-gray-100 text-center md:text-center">
           <h4 class="text-4xs md:text-3xs font-bold mb-0.125 text-gray-800">Contact</h4>
           <div class="space-y-0.05 md:space-y-0.06 text-4xs">
-            <div class="flex items-start justify-center text-4xs">
-              <i class="fas fa-map-marker-alt text-yellow-600 mr-0.125 mt-0.0625 flex-shrink-0 text-4xs"></i>
-              <span class="text-gray-600 text-4xs">CIA Coimbatore</span>
-            </div>
-            <div class="flex items-center justify-center text-4xs">
-              <i class="fas fa-phone-alt text-yellow-600 mr-0.125 mt-0.0625 flex-shrink-0 text-4xs"></i>
-              <a href="tel:+919087133005" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs">+91 9087133005</a>
-            </div>
-            <div class="flex items-center justify-center text-4xs">
-              <i class="fas fa-envelope text-yellow-600 mr-0.125 flex-shrink-0 text-4xs"></i>
-              <a href="mailto:contact@machineryhub.com" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs truncate">contact@cia.com</a>
-            </div>
+            {% if contact_info %}
+              {% if contact_info.address %}
+              <div class="flex items-start justify-center text-4xs">
+                <i class="fas fa-map-marker-alt text-yellow-600 mr-0.125 mt-0.0625 flex-shrink-0 text-4xs"></i>
+                <span class="text-gray-600 text-4xs">{{ contact_info.address }}</span>
+              </div>
+              {% endif %}
+              {% if contact_info.phone %}
+              <div class="flex items-center justify-center text-4xs">
+                <i class="fas fa-phone-alt text-yellow-600 mr-0.125 mt-0.0625 flex-shrink-0 text-4xs"></i>
+                <a href="tel:{{ contact_info.phone }}" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs">{{ contact_info.phone }}</a>
+              </div>
+              {% endif %}
+              {% if contact_info.email %}
+              <div class="flex items-center justify-center text-4xs">
+                <i class="fas fa-envelope text-yellow-600 mr-0.125 flex-shrink-0 text-4xs"></i>
+                <a href="mailto:{{ contact_info.email }}" class="text-gray-600 hover:text-yellow-600 transition-colors duration-300 text-4xs truncate">{{ contact_info.email }}</a>
+              </div>
+              {% endif %}
+            {% else %}
+              <div class="flex items-center justify-center text-4xs text-gray-400">Contact info not available</div>
+            {% endif %}
         </div>
       </div>
     </div>
@@ -119,9 +145,9 @@
     <div class="border-t border-gray-300 mt-1 md:mt-3 pt-1 md:pt-2">
       <div class="flex flex-wrap items-center justify-center gap-1 py-0.5 text-xs text-gray-500">
         <p class="flex flex-nowrap items-center justify-center gap-1 text-center">
-          <span>© 2025 CIA. All rights reserved. | Developed by - </span>
+          <span>© 2025 CIAnext. All rights reserved.  </span><!--
           <span><a href= "{% url 'coders_club' %}" class="text-yellow-600 hover:text-yellow-700 font-semibold transition-colors duration-300">Coders Club</a></span>
-        </p>
+        --> </p>
       </div>
     </div>
   </div>

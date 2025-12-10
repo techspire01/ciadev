@@ -295,10 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
     setupImageLoading();
     setupCarouselImageRedirect();
 
-    // Auto-rotate carousel every 6 seconds
+    // Auto-rotate carousel every 10 seconds
     setInterval(() => {
         nextSlide();
-    }, 6000);
+    }, 10000);
 
     // Language Toggle Event Listeners
     const languageToggle = document.getElementById('languageToggle');
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isPageVisible) {
                 nextSlide();
             }
-        }, 3000); // Auto-rotate every 3 seconds
+        }, 10000); // Auto-rotate every 10 seconds
     }
 
     function stopCarousel() {
@@ -658,7 +658,7 @@ function toggleProfileLogout() {
                 logoutBtn.classList.add('hidden');
                 isLogoutMode = false;
             }
-        }, 3000);
+        }, 10000);
     }
 }
 
